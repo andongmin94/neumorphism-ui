@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "title": "Tooltip",
+  "description": "A dependency-free tooltip for short, supplementary descriptions.",
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/src/components/ui/tooltip.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { cn } from \"../../lib/utils\";\n\ninterface TooltipProps extends Omit<React.ComponentProps<\"span\">, \"content\"> {\n  content: React.ReactNode;\n  children: React.ReactElement<React.HTMLAttributes<HTMLElement>>;\n}\n\nfunction Tooltip({ content, children, className, ...props }: TooltipProps) {\n  const tooltipId = React.useId();\n  const describedBy = [children.props[\"aria-describedby\"], tooltipId].filter(Boolean).join(\" \");\n  const trigger = React.cloneElement(children, {\n    \"aria-describedby\": describedBy,\n  });\n\n  return (\n    <span\n      data-slot=\"tooltip\"\n      className={cn(\"group/tooltip relative inline-flex\", className)}\n      {...props}\n    >\n      {trigger}\n      <span\n        id={tooltipId}\n        role=\"tooltip\"\n        data-slot=\"tooltip-content\"\n        className=\"pointer-events-none absolute bottom-[calc(100%+0.625rem)] left-1/2 z-50 w-max max-w-64 -translate-x-1/2 translate-y-1 rounded-[calc(var(--neu-radius-surface)*0.55)] border border-[color:var(--neu-edge)] bg-[var(--popover)] px-3 py-2 text-xs font-medium text-[var(--popover-foreground)] opacity-0 [box-shadow:var(--neu-shadow-raised-sm)] transition-[opacity,transform] duration-[var(--neu-duration)] group-focus-within/tooltip:translate-y-0 group-focus-within/tooltip:opacity-100 group-hover/tooltip:translate-y-0 group-hover/tooltip:opacity-100\"\n      >\n        {content}\n      </span>\n    </span>\n  );\n}\n\nexport { Tooltip };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

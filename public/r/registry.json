@@ -1,0 +1,277 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "neumorphism-ui",
+  "homepage": "https://neumorphism-ui.dev",
+  "author": "Neumorphism UI",
+  "items": [
+    {
+      "name": "neumorphism-ui",
+      "title": "Neumorphism UI",
+      "description": "The light and dark design tokens for the Neumorphism UI registry.",
+      "type": "registry:base",
+      "extends": "none",
+      "config": {
+        "style": "base-nova",
+        "iconLibrary": "lucide",
+        "rsc": true,
+        "tsx": true,
+        "tailwind": {
+          "baseColor": "neutral",
+          "css": "app/globals.css"
+        },
+        "aliases": {
+          "components": "@/components",
+          "utils": "@/lib/utils",
+          "ui": "@/components/ui",
+          "lib": "@/lib",
+          "hooks": "@/hooks"
+        }
+      },
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "cssVars": {
+        "light": {
+          "background": "#e9eef4",
+          "foreground": "#172033",
+          "card": "#e9eef4",
+          "card-foreground": "#172033",
+          "popover": "#eef3f8",
+          "popover-foreground": "#172033",
+          "primary": "#1267f4",
+          "primary-foreground": "#ffffff",
+          "secondary": "#dfe6ee",
+          "secondary-foreground": "#233047",
+          "muted": "#dfe6ee",
+          "muted-foreground": "#606d80",
+          "accent": "#e3eaf2",
+          "accent-foreground": "#1267f4",
+          "destructive": "#d94a5a",
+          "border": "rgb(103 119 145 / 0.22)",
+          "input": "rgb(103 119 145 / 0.18)",
+          "ring": "#1267f4",
+          "radius": "1rem",
+          "neu-surface": "#e9eef4",
+          "neu-surface-soft": "#f4f7fa",
+          "neu-surface-low": "#dce3eb",
+          "neu-edge": "rgb(255 255 255 / 0.7)",
+          "neu-shadow-dark": "rgb(16 35 62 / 0.16)",
+          "neu-shadow-light": "rgb(255 255 255 / 0.96)",
+          "neu-shadow-raised": "10px 10px 20px rgb(16 35 62 / 0.16), -10px -10px 20px rgb(255 255 255 / 0.96)",
+          "neu-shadow-raised-sm": "5px 5px 11px rgb(16 35 62 / 0.14), -5px -5px 11px rgb(255 255 255 / 0.92)",
+          "neu-shadow-inset": "inset 4px 4px 9px rgb(16 35 62 / 0.13), inset -4px -4px 9px rgb(255 255 255 / 0.92)",
+          "neu-shadow-primary": "5px 6px 12px rgb(16 35 62 / 0.14), -4px -4px 10px rgb(255 255 255 / 0.72), 0 6px 14px rgb(18 103 244 / 0.2)",
+          "neu-radius-control": "999px",
+          "neu-radius-surface": "1.25rem",
+          "neu-duration": "180ms"
+        },
+        "dark": {
+          "background": "#151a22",
+          "foreground": "#e9f0fa",
+          "card": "#1b222c",
+          "card-foreground": "#e9f0fa",
+          "popover": "#1b222c",
+          "popover-foreground": "#e9f0fa",
+          "primary": "#5aa2ff",
+          "primary-foreground": "#07111f",
+          "secondary": "#202a36",
+          "secondary-foreground": "#e9f0fa",
+          "muted": "#202a36",
+          "muted-foreground": "#8fa1b7",
+          "accent": "#202a36",
+          "accent-foreground": "#5aa2ff",
+          "destructive": "#ff7685",
+          "border": "rgb(255 255 255 / 0.1)",
+          "input": "rgb(255 255 255 / 0.12)",
+          "ring": "#5aa2ff",
+          "radius": "1rem",
+          "neu-surface": "#1b222c",
+          "neu-surface-soft": "#242d39",
+          "neu-surface-low": "#141922",
+          "neu-edge": "rgb(255 255 255 / 0.08)",
+          "neu-shadow-dark": "rgb(0 0 0 / 0.42)",
+          "neu-shadow-light": "rgb(255 255 255 / 0.045)",
+          "neu-shadow-raised": "10px 10px 20px rgb(0 0 0 / 0.42), -10px -10px 20px rgb(255 255 255 / 0.045)",
+          "neu-shadow-raised-sm": "5px 5px 11px rgb(0 0 0 / 0.38), -5px -5px 11px rgb(255 255 255 / 0.04)",
+          "neu-shadow-inset": "inset 4px 4px 9px rgb(0 0 0 / 0.42), inset -4px -4px 9px rgb(255 255 255 / 0.04)",
+          "neu-shadow-primary": "6px 6px 13px rgb(0 0 0 / 0.34), -5px -5px 11px rgb(255 255 255 / 0.035), 0 6px 15px rgb(90 162 255 / 0.2)",
+          "neu-radius-control": "999px",
+          "neu-radius-surface": "1.25rem",
+          "neu-duration": "180ms"
+        },
+        "theme": {
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)",
+          "radius-sm": "calc(var(--radius) - 4px)",
+          "radius-md": "calc(var(--radius) - 2px)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) + 4px)",
+          "shadow-neu-raised": "var(--neu-shadow-raised)",
+          "shadow-neu-raised-sm": "var(--neu-shadow-raised-sm)",
+          "shadow-neu-inset": "var(--neu-shadow-inset)",
+          "shadow-neu-primary": "var(--neu-shadow-primary)"
+        }
+      },
+      "css": {
+        "@layer base": {
+          "*": {
+            "@apply border-border outline-ring/50": {}
+          },
+          "body": {
+            "@apply bg-background text-foreground": {},
+            "background": "var(--background)"
+          }
+        },
+        "@layer components": {
+          ".neu-raised": {
+            "background": "var(--neu-surface)",
+            "box-shadow": "var(--neu-shadow-raised)"
+          },
+          ".neu-raised-sm": {
+            "background": "var(--neu-surface)",
+            "box-shadow": "var(--neu-shadow-raised-sm)"
+          },
+          ".neu-inset": {
+            "background": "var(--neu-surface)",
+            "box-shadow": "var(--neu-shadow-inset)"
+          },
+          ".neu-primary": {
+            "background": "var(--primary)",
+            "color": "var(--primary-foreground)",
+            "box-shadow": "var(--neu-shadow-primary)"
+          }
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          ".neu-raised, .neu-raised-sm, .neu-inset, .neu-primary": {
+            "transition-duration": "0.01ms !important"
+          }
+        }
+      }
+    },
+    {
+      "name": "utils",
+      "title": "Class name utility",
+      "description": "A dependency-free class name utility used by Neumorphism UI components.",
+      "type": "registry:lib",
+      "files": [
+        {
+          "path": "registry/src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "title": "Button",
+      "description": "A tactile neumorphic button with raised and pressed states.",
+      "type": "registry:ui",
+      "registryDependencies": [
+        "@neumorphism-ui/neumorphism-ui",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/src/components/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "title": "Card",
+      "description": "A composable raised, flat, or inset neumorphic surface.",
+      "type": "registry:ui",
+      "registryDependencies": [
+        "@neumorphism-ui/neumorphism-ui",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/src/components/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "title": "Input",
+      "description": "An inset neumorphic text input with accessible focus and error states.",
+      "type": "registry:ui",
+      "registryDependencies": [
+        "@neumorphism-ui/neumorphism-ui",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/src/components/ui/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "title": "Badge",
+      "description": "A compact neumorphic status label.",
+      "type": "registry:ui",
+      "registryDependencies": [
+        "@neumorphism-ui/neumorphism-ui",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/src/components/ui/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "title": "Skeleton",
+      "description": "A softly inset loading placeholder.",
+      "type": "registry:ui",
+      "registryDependencies": [
+        "@neumorphism-ui/neumorphism-ui",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/src/components/ui/skeleton.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "title": "Tooltip",
+      "description": "A dependency-free tooltip for short, supplementary descriptions.",
+      "type": "registry:ui",
+      "registryDependencies": [
+        "@neumorphism-ui/neumorphism-ui",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/src/components/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
