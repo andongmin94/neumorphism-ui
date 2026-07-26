@@ -109,11 +109,37 @@ test("renders the component catalog and installation guide", async () => {
     assert.match(componentsHtml, new RegExp(`>${componentName}<`));
   }
   assert.match(componentsHtml, /26개 세트/);
+  assert.match(componentsHtml, /href="\/components\/button"/);
+  assert.match(componentsHtml, /예제와 API 보기/);
 
   assert.match(installationHtml, /@neumorphism-ui/);
   assert.match(installationHtml, /components\.json/);
   assert.match(installationHtml, /shadcn@latest/);
   assert.match(installationHtml, /https:\/\/neumorphism-ui\.dev\/r\/\{name\}\.json/);
+});
+
+test("renders full per-component reference pages", async () => {
+  for (const [slug, title] of [
+    ["button", "Button"],
+    ["dialog", "Dialog"],
+    ["input-group", "Input Group"],
+    ["table", "Table"],
+  ]) {
+    const response = await render(`/components/${slug}`);
+    assert.equal(response.status, 200);
+
+    const html = await response.text();
+    assert.match(html, new RegExp(`<h1>${title}</h1>`));
+    assert.match(html, /Interactive example/);
+    assert.match(html, />Preview</);
+    assert.match(html, />Installation</);
+    assert.match(html, />CLI</);
+    assert.match(html, />Manual</);
+    assert.match(html, />Usage</);
+    assert.match(html, />API Reference</);
+    assert.match(html, />Accessibility</);
+    assert.match(html, new RegExp(`/r/${slug}\\.json`));
+  }
 });
 
 test("serves a complete shadcn registry catalog", async () => {
