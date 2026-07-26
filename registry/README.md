@@ -21,8 +21,10 @@ npm run sync:docs
 - `validate-registry.mjs` checks registry metadata, dependencies, paths, and source files.
 - The scoped TypeScript check validates only Registry source components.
 - `build` delegates to the official shadcn CLI, creates canonical installable
-  item JSON in `public/r`, and synchronizes that JSON to `../docs/public/r`.
-- The docs imports this workspace package for live previews; UI source is not
+  item JSON in `public/r`.
+- `sync:docs` is the repository integration step that copies generated JSON to
+  `../docs/public/r`.
+- The docs imports this sibling package for live previews; UI source is not
   copied into the docs app.
 
 ## Consumer configuration
