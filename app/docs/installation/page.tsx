@@ -3,11 +3,12 @@ import Link from "next/link";
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { InstallCommand } from "@/components/docs/install-command";
 import {
-  COMPONENTS_JSON_REGISTRY,
-  REGISTRY_ADD_COMMAND,
+  getComponentsJsonRegistry,
+  getRegistryAddCommand,
+  getRegistryUrlTemplate,
   REGISTRY_NAMESPACE,
-  REGISTRY_URL_TEMPLATE,
 } from "@/components/docs/registry-config";
+import { getRequestOrigin } from "@/components/docs/request-origin";
 
 export const metadata: Metadata = {
   title: "설치",
@@ -16,7 +17,10 @@ export const metadata: Metadata = {
 
 const initCommand = "npx shadcn@latest init";
 
-export default function InstallationPage() {
+export default async function InstallationPage() {
+  const requestOrigin = await getRequestOrigin();
+  const registryUrlTemplate = getRegistryUrlTemplate(requestOrigin);
+
   return (
     <div className="docs-page site-shell">
       <aside className="docs-sidebar" aria-label="문서 목차">
@@ -73,7 +77,7 @@ export default function InstallationPage() {
               공식 CLI로 namespace와 배포 URL을 프로젝트에 등록합니다.
             </p>
             <CopyableCode
-              code={REGISTRY_ADD_COMMAND}
+              code={getRegistryAddCommand(requestOrigin)}
               label="Registry 등록 명령"
             />
             <h3 className="docs-inline-heading">수동 설정</h3>
@@ -82,7 +86,7 @@ export default function InstallationPage() {
               Registry 매핑을 추가하세요.
             </p>
             <CopyableCode
-              code={COMPONENTS_JSON_REGISTRY}
+              code={getComponentsJsonRegistry(requestOrigin)}
               label="components.json Registry 설정"
               multiline
             />
@@ -90,7 +94,7 @@ export default function InstallationPage() {
               <span aria-hidden="true">i</span>
               <p>
                 namespace는 <code>{REGISTRY_NAMESPACE}</code>, URL 템플릿은{" "}
-                <code>{REGISTRY_URL_TEMPLATE}</code>입니다.
+                <code>{registryUrlTemplate}</code>입니다.
               </p>
             </div>
           </div>

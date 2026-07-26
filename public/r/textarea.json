@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "A resizable inset text area with focus and validation states.",
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/src/components/ui/textarea.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/registry/src/lib/utils\";\n\nfunction Textarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      className={cn(\n        \"min-h-24 w-full resize-y rounded-[calc(var(--neu-radius-surface)*0.7)] border border-transparent bg-[var(--neu-surface)] px-4 py-3 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[box-shadow,border-color] duration-[var(--neu-duration)] placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-[var(--destructive)] aria-invalid:ring-2 aria-invalid:ring-[color:var(--destructive)]/20\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Textarea };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

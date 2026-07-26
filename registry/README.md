@@ -4,6 +4,9 @@ This directory is the single source of truth for the `@neumorphism-ui` shadcn
 registry. The visual language is a general-purpose neumorphic design system; it
 does not include stock-market APIs or business logic.
 
+The catalog currently contains 26 installable UI components plus the base
+theme and class-name utility.
+
 ## Commands
 
 ```bash

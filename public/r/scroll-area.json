@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-area",
+  "title": "Scroll Area",
+  "description": "A compact scrollable surface with themed native scrollbars.",
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/src/components/ui/scroll-area.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/registry/src/lib/utils\";\n\nfunction ScrollArea({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"scroll-area\"\n      className={cn(\n        \"relative overflow-auto rounded-[var(--neu-radius-surface)] [scrollbar-color:var(--muted-foreground)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[var(--muted-foreground)]/45 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:size-2\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction ScrollBar({\n  orientation = \"vertical\",\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  orientation?: \"horizontal\" | \"vertical\";\n}) {\n  return (\n    <div\n      aria-hidden=\"true\"\n      data-slot=\"scroll-bar\"\n      data-orientation={orientation}\n      className={cn(\"hidden\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { ScrollArea, ScrollBar };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
