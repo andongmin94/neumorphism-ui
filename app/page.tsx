@@ -41,7 +41,7 @@ export default function Home() {
             <InstallCommand name="button" label="Button 설치 명령" />
             <ul className="hero-proof" aria-label="주요 특징">
               <li>
-                <span aria-hidden="true">✓</span> 복사 가능한 소스
+                <span aria-hidden="true">✓</span> 26개 컴포넌트
               </li>
               <li>
                 <span aria-hidden="true">✓</span> Light &amp; Dark
@@ -114,7 +114,7 @@ export default function Home() {
               <h2 id="component-title">작게 설치하고, 자유롭게 조합하세요.</h2>
             </div>
             <Link className="text-link" href="/components">
-              전체 컴포넌트 <span aria-hidden="true">↗</span>
+              전체 26개 컴포넌트 <span aria-hidden="true">↗</span>
             </Link>
           </div>
 

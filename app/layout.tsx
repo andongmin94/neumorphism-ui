@@ -1,25 +1,14 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { SiteFooter } from "@/components/docs/site-footer";
 import { SiteHeader } from "@/components/docs/site-header";
+import { getRequestOrigin } from "@/components/docs/request-origin";
 import "./globals.css";
 
 const description =
   "뉴모피즘의 표면과 깊이를 shadcn 프로젝트에 설치하는 소스 기반 UI Registry.";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const forwardedHost = requestHeaders.get("x-forwarded-host")?.split(",")[0]?.trim();
-  const host = forwardedHost ?? requestHeaders.get("host") ?? "neumorphism-ui.dev";
-  const forwardedProtocol = requestHeaders.get("x-forwarded-proto")?.split(",")[0]?.trim();
-  const protocol =
-    forwardedProtocol === "http" || forwardedProtocol === "https"
-      ? forwardedProtocol
-      : host.startsWith("localhost") || host.startsWith("127.")
-        ? "http"
-        : "https";
-  const origin = `${protocol}://${host}`;
-  const metadataBase = new URL(URL.canParse(origin) ? origin : "https://neumorphism-ui.dev");
+  const metadataBase = new URL(await getRequestOrigin());
 
   return {
     metadataBase,

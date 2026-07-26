@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "title": "Tabs",
+  "description": "Keyboard-accessible tabs with raised active controls and inset lists.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/src/components/ui/tabs.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Tabs as TabsPrimitive } from \"radix-ui\";\n\nimport { cn } from \"@/registry/src/lib/utils\";\n\nfunction Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {\n  return (\n    <TabsPrimitive.Root\n      data-slot=\"tabs\"\n      className={cn(\n        \"flex w-full flex-col gap-3 data-[orientation=vertical]:flex-row\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {\n  return (\n    <TabsPrimitive.List\n      data-slot=\"tabs-list\"\n      className={cn(\n        \"inline-flex h-11 w-fit items-center justify-center gap-1 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-1 [box-shadow:var(--neu-shadow-inset)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TabsTrigger({\n  className,\n  ...props\n}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {\n  return (\n    <TabsPrimitive.Trigger\n      data-slot=\"tabs-trigger\"\n      className={cn(\n        \"inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[var(--neu-radius-control)] border border-transparent px-4 text-sm font-semibold whitespace-nowrap text-[var(--muted-foreground)] outline-none transition-[color,background-color,box-shadow,transform] duration-[var(--neu-duration)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-[color:var(--neu-edge)] data-[state=active]:bg-[var(--neu-surface)] data-[state=active]:text-[var(--foreground)] data-[state=active]:[box-shadow:var(--neu-shadow-raised-sm)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TabsContent({\n  className,\n  ...props\n}: React.ComponentProps<typeof TabsPrimitive.Content>) {\n  return (\n    <TabsPrimitive.Content\n      data-slot=\"tabs-content\"\n      className={cn(\n        \"flex-1 rounded-[var(--neu-radius-surface)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Tabs, TabsContent, TabsList, TabsTrigger };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

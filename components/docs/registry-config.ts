@@ -1,17 +1,21 @@
 export const REGISTRY_NAMESPACE = "@neumorphism-ui";
 
-export const REGISTRY_URL_TEMPLATE =
-  "https://neumorphism-ui.dev/r/{name}.json";
-
-export const REGISTRY_ADD_COMMAND =
-  `npx shadcn@latest registry add ${REGISTRY_NAMESPACE}=${REGISTRY_URL_TEMPLATE}`;
+export function getRegistryUrlTemplate(origin = "https://neumorphism-ui.dev") {
+  return `${origin.replace(/\/+$/, "")}/r/{name}.json`;
+}
 
 export function getInstallCommand(name: string) {
   return `npx shadcn@latest add ${REGISTRY_NAMESPACE}/${name}`;
 }
 
-export const COMPONENTS_JSON_REGISTRY = `{
+export function getRegistryAddCommand(origin?: string) {
+  return `npx shadcn@latest registry add ${REGISTRY_NAMESPACE}=${getRegistryUrlTemplate(origin)}`;
+}
+
+export function getComponentsJsonRegistry(origin?: string) {
+  return `{
   "registries": {
-    "${REGISTRY_NAMESPACE}": "${REGISTRY_URL_TEMPLATE}"
+    "${REGISTRY_NAMESPACE}": "${getRegistryUrlTemplate(origin)}"
   }
 }`;
+}

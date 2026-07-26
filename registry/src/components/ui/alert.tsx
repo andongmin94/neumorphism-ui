@@ -1,0 +1,59 @@
+import * as React from "react";
+
+import { cn } from "@/registry/src/lib/utils";
+
+const alertVariants = {
+  default:
+    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]",
+  destructive:
+    "border-[color:var(--destructive)]/35 bg-[color:var(--destructive)]/8 text-[var(--destructive)] [box-shadow:var(--neu-shadow-raised-sm)]",
+  success:
+    "border-emerald-600/25 bg-emerald-500/8 text-emerald-800 [box-shadow:var(--neu-shadow-raised-sm)] dark:text-emerald-300",
+} as const;
+
+type AlertVariant = keyof typeof alertVariants;
+
+interface AlertProps extends React.ComponentProps<"div"> {
+  variant?: AlertVariant;
+}
+
+function Alert({ className, variant = "default", ...props }: AlertProps) {
+  return (
+    <div
+      data-slot="alert"
+      data-variant={variant}
+      role="alert"
+      className={cn(
+        "relative grid w-full grid-cols-[0_1fr] items-start gap-y-1 rounded-[var(--neu-radius-surface)] border px-4 py-3 text-sm has-[>svg]:grid-cols-[1.125rem_1fr] has-[>svg]:gap-x-3 [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:text-current",
+        alertVariants[variant],
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn("col-start-2 min-h-4 font-semibold leading-none tracking-tight", className)}
+      {...props}
+    />
+  );
+}
+
+function AlertDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn(
+        "col-start-2 grid justify-items-start gap-1 text-sm leading-relaxed text-current/80 [&_p]:leading-relaxed",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export { Alert, AlertDescription, AlertTitle, alertVariants };

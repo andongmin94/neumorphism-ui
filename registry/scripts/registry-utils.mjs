@@ -123,12 +123,17 @@ export function validateRegistry(registry) {
       'The "neumorphism-ui" item must be registry:base.',
     );
 
-    for (const coreName of ["button", "card", "input", "badge", "skeleton", "tooltip"]) {
-      const coreItem = registry.items.find((item) => item.name === coreName);
-      assert(coreItem?.type === "registry:ui", `Core registry:ui item is missing: ${coreName}`);
+    const uiItems = registry.items.filter((item) => item.type === "registry:ui");
+    assert(uiItems.length > 0, "At least one registry:ui item is required.");
+
+    for (const uiItem of uiItems) {
       assert(
-        coreItem.registryDependencies?.includes("@neumorphism-ui/neumorphism-ui"),
-        `${coreName} must depend on @neumorphism-ui/neumorphism-ui.`,
+        uiItem.registryDependencies?.includes("@neumorphism-ui/neumorphism-ui"),
+        `${uiItem.name} must depend on @neumorphism-ui/neumorphism-ui.`,
+      );
+      assert(
+        uiItem.registryDependencies?.includes("@neumorphism-ui/utils"),
+        `${uiItem.name} must depend on @neumorphism-ui/utils.`,
       );
     }
 

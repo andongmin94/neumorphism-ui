@@ -78,13 +78,42 @@ test("renders the component catalog and installation guide", async () => {
     installationResponse.text(),
   ]);
 
-  for (const componentName of ["Button", "Card", "Input", "Badge", "Skeleton", "Tooltip"]) {
+  for (const componentName of [
+    "Accordion",
+    "Alert",
+    "Avatar",
+    "Badge",
+    "Breadcrumb",
+    "Button",
+    "Card",
+    "Checkbox",
+    "Dialog",
+    "Dropdown Menu",
+    "Input",
+    "Input Group",
+    "Label",
+    "Pagination",
+    "Progress",
+    "Radio Group",
+    "Scroll Area",
+    "Select",
+    "Separator",
+    "Skeleton",
+    "Slider",
+    "Switch",
+    "Table",
+    "Tabs",
+    "Textarea",
+    "Tooltip",
+  ]) {
     assert.match(componentsHtml, new RegExp(`>${componentName}<`));
   }
+  assert.match(componentsHtml, /26개 세트/);
 
   assert.match(installationHtml, /@neumorphism-ui/);
   assert.match(installationHtml, /components\.json/);
   assert.match(installationHtml, /shadcn@latest/);
+  assert.match(installationHtml, /https:\/\/neumorphism-ui\.dev\/r\/\{name\}\.json/);
 });
 
 test("serves a complete shadcn registry catalog", async () => {
@@ -105,6 +134,26 @@ test("serves a complete shadcn registry catalog", async () => {
     "badge",
     "skeleton",
     "tooltip",
+    "accordion",
+    "alert",
+    "avatar",
+    "breadcrumb",
+    "checkbox",
+    "dialog",
+    "dropdown-menu",
+    "input-group",
+    "label",
+    "pagination",
+    "progress",
+    "radio-group",
+    "scroll-area",
+    "select",
+    "separator",
+    "slider",
+    "switch",
+    "table",
+    "tabs",
+    "textarea",
   ];
   assert.deepEqual(
     registry.items.map((item) => item.name),
@@ -122,6 +171,18 @@ test("serves a complete shadcn registry catalog", async () => {
   const button = await readFile(path.join(publicRoot, "r", "button.json"), "utf8");
   assert.match(button, /--neu-shadow-raised-sm/);
   assert.doesNotMatch(button, /Upbit|Yahoo|Hyperliquid|watchlist/i);
+
+  const utils = JSON.parse(
+    await readFile(path.join(publicRoot, "r", "utils.json"), "utf8"),
+  );
+  assert.equal(utils.files[0].target, "@lib/utils.ts");
+
+  for (const itemName of ["slider", "tooltip"]) {
+    const item = JSON.parse(
+      await readFile(path.join(publicRoot, "r", `${itemName}.json`), "utf8"),
+    );
+    assert.ok(item.dependencies.includes("radix-ui"));
+  }
 });
 
 test("removes every disposable starter artifact", async () => {

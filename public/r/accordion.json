@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "title": "Accordion",
+  "description": "A keyboard-accessible disclosure group with inset open states.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/src/components/ui/accordion.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Accordion as AccordionPrimitive } from \"radix-ui\";\n\nimport { cn } from \"@/registry/src/lib/utils\";\n\nfunction Accordion(props: React.ComponentProps<typeof AccordionPrimitive.Root>) {\n  return <AccordionPrimitive.Root data-slot=\"accordion\" {...props} />;\n}\n\nfunction AccordionItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Item>) {\n  return (\n    <AccordionPrimitive.Item\n      data-slot=\"accordion-item\"\n      className={cn(\n        \"mb-3 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] last:mb-0 data-[state=open]:[box-shadow:var(--neu-shadow-inset)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction AccordionTrigger({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {\n  return (\n    <AccordionPrimitive.Header className=\"flex\">\n      <AccordionPrimitive.Trigger\n        data-slot=\"accordion-trigger\"\n        className={cn(\n          \"group/accordion-trigger flex flex-1 items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-[var(--foreground)] outline-none transition-colors duration-[var(--neu-duration)] hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]_.accordion-indicator]:rotate-45\",\n          className,\n        )}\n        {...props}\n      >\n        {children}\n        <span\n          className=\"accordion-indicator pointer-events-none grid size-6 shrink-0 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-base leading-none text-[var(--primary)] [box-shadow:var(--neu-shadow-raised-sm)] transition-transform duration-[var(--neu-duration)]\"\n          aria-hidden=\"true\"\n        >\n          +\n        </span>\n      </AccordionPrimitive.Trigger>\n    </AccordionPrimitive.Header>\n  );\n}\n\nfunction AccordionContent({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Content>) {\n  return (\n    <AccordionPrimitive.Content\n      data-slot=\"accordion-content\"\n      className=\"h-[var(--radix-accordion-content-height)] overflow-hidden text-sm text-[var(--muted-foreground)] transition-[height] duration-[var(--neu-duration)] ease-out data-[state=closed]:h-0\"\n      {...props}\n    >\n      <div className={cn(\"px-5 pt-0 pb-5 leading-relaxed\", className)}>{children}</div>\n    </AccordionPrimitive.Content>\n  );\n}\n\nexport { Accordion, AccordionContent, AccordionItem, AccordionTrigger };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

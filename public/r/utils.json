@@ -8,7 +8,7 @@
       "path": "registry/src/lib/utils.ts",
       "content": "export type ClassValue = string | false | null | undefined;\n\nexport function cn(...inputs: ClassValue[]) {\n  return inputs.filter(Boolean).join(\" \");\n}\n",
       "type": "registry:lib",
-      "target": "lib/utils.ts"
+      "target": "@lib/utils.ts"
     }
   ],
   "type": "registry:lib"

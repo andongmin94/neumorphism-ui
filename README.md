@@ -28,15 +28,16 @@ Then install only the source you need:
 npx shadcn@latest add @neumorphism-ui/button
 ```
 
-Available items:
+Available items include the base theme, utility, and 26 UI components:
 
 - `neumorphism-ui` (`registry:base`)
-- `button`
-- `card`
-- `input`
-- `badge`
-- `skeleton`
-- `tooltip`
+- Actions and overlays: `button`, `dialog`, `dropdown-menu`
+- Forms and selection: `input`, `input-group`, `textarea`, `label`,
+  `checkbox`, `switch`, `radio-group`, `select`, `slider`
+- Navigation and disclosure: `accordion`, `breadcrumb`, `pagination`, `tabs`,
+  `tooltip`
+- Data and feedback: `alert`, `avatar`, `badge`, `card`, `progress`,
+  `scroll-area`, `separator`, `skeleton`, `table`
 
 ## Project Structure
 

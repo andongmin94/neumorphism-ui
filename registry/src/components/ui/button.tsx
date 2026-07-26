@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "../../lib/utils";
+import { cn } from "@/registry/src/lib/utils";
 
 const buttonVariants = {
   default:

@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "registry/src/components/ui/skeleton.tsx",
-      "content": "import * as React from \"react\";\n\nimport { cn } from \"../../lib/utils\";\n\nfunction Skeleton({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"skeleton\"\n      aria-hidden=\"true\"\n      className={cn(\n        \"animate-pulse rounded-[calc(var(--neu-radius-surface)*0.65)] bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Skeleton };\n",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/registry/src/lib/utils\";\n\nfunction Skeleton({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"skeleton\"\n      aria-hidden=\"true\"\n      className={cn(\n        \"animate-pulse rounded-[calc(var(--neu-radius-surface)*0.65)] bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Skeleton };\n",
       "type": "registry:ui"
     }
   ],

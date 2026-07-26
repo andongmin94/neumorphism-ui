@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "description": "A controlled or uncontrolled switch with clear pressed depth.",
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/src/components/ui/switch.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { cn } from \"@/registry/src/lib/utils\";\n\ninterface SwitchProps\n  extends Omit<React.ComponentProps<\"input\">, \"onChange\" | \"size\" | \"type\"> {\n  onChange?: React.ChangeEventHandler<HTMLInputElement>;\n  onCheckedChange?: (checked: boolean) => void;\n}\n\nfunction Switch({\n  className,\n  disabled,\n  onChange,\n  onCheckedChange,\n  ...props\n}: SwitchProps) {\n  return (\n    <span\n      data-slot=\"switch-root\"\n      className={cn(\"relative inline-flex h-6 w-11 shrink-0 align-middle\", className)}\n    >\n      <input\n        type=\"checkbox\"\n        role=\"switch\"\n        data-slot=\"switch\"\n        className=\"peer absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed\"\n        disabled={disabled}\n        onChange={(event) => {\n          onChange?.(event);\n          onCheckedChange?.(event.currentTarget.checked);\n        }}\n        {...props}\n      />\n      <span\n        aria-hidden=\"true\"\n        className=\"flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-checked:[&>span]:translate-x-5\"\n      >\n        <span className=\"size-5 rounded-full bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)] transition-transform duration-[var(--neu-duration)]\" />\n      </span>\n    </span>\n  );\n}\n\nexport { Switch };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
