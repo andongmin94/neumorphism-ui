@@ -9,16 +9,21 @@ theme and class-name utility.
 
 ## Commands
 
+From this directory:
+
 ```bash
-node registry/scripts/validate-registry.mjs
-npx tsc --project registry/tsconfig.json
-npm run registry:build
+npm run validate
+npm run typecheck
+npm run build
+npm run sync:docs
 ```
 
 - `validate-registry.mjs` checks registry metadata, dependencies, paths, and source files.
 - The scoped TypeScript check validates only Registry source components.
-- `registry:build` delegates to the official shadcn CLI and creates installable
-  item JSON in `public/r`.
+- `build` delegates to the official shadcn CLI, creates canonical installable
+  item JSON in `public/r`, and synchronizes that JSON to `../docs/public/r`.
+- The docs imports this workspace package for live previews; UI source is not
+  copied into the docs app.
 
 ## Consumer configuration
 

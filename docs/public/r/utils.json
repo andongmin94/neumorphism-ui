@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "title": "Class name utility",
+  "description": "A Tailwind-aware class name utility that resolves conflicting utilities.",
+  "dependencies": [
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/lib/utils.ts",
+      "content": "import { twMerge, type ClassNameValue } from \"tailwind-merge\";\n\nexport type ClassValue = ClassNameValue;\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(...inputs);\n}\n\nexport function mergeClassName<State>(\n  baseClassName: string,\n  className: string | ((state: State) => string | undefined) | undefined,\n) {\n  return typeof className === \"function\"\n    ? (state: State) => cn(baseClassName, className(state))\n    : cn(baseClassName, className);\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/utils.ts"
+    }
+  ],
+  "type": "registry:lib"
+}

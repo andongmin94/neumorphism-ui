@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn } from "@/lib/utils";
 
 const alertVariants = {
   default:
-    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]",
+    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] shadow-none",
   destructive:
-    "border-[color:var(--destructive)]/35 bg-[color:var(--destructive)]/8 text-[var(--destructive)] [box-shadow:var(--neu-shadow-raised-sm)]",
+    "border-[color:var(--destructive)]/35 bg-[color:var(--destructive)]/8 text-[var(--destructive)] shadow-none",
   success:
-    "border-emerald-600/25 bg-emerald-500/8 text-emerald-800 [box-shadow:var(--neu-shadow-raised-sm)] dark:text-emerald-300",
+    "border-[color:var(--success)]/30 bg-[color:var(--success)]/8 text-[var(--success)] shadow-none",
 } as const;
 
 type AlertVariant = keyof typeof alertVariants;

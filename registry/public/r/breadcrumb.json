@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breadcrumb",
+  "title": "Breadcrumb",
+  "description": "A compact path navigation pattern with current-page semantics.",
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/breadcrumb.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\nfunction Breadcrumb(props: React.ComponentProps<\"nav\">) {\n  return <nav aria-label=\"breadcrumb\" data-slot=\"breadcrumb\" {...props} />;\n}\n\nfunction BreadcrumbList({\n  className,\n  ...props\n}: React.ComponentProps<\"ol\">) {\n  return (\n    <ol\n      data-slot=\"breadcrumb-list\"\n      className={cn(\n        \"flex flex-wrap items-center gap-2 text-sm text-[var(--muted-foreground)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction BreadcrumbItem({\n  className,\n  ...props\n}: React.ComponentProps<\"li\">) {\n  return (\n    <li\n      data-slot=\"breadcrumb-item\"\n      className={cn(\"inline-flex items-center gap-2\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction BreadcrumbLink({\n  className,\n  ...props\n}: React.ComponentProps<\"a\">) {\n  return (\n    <a\n      data-slot=\"breadcrumb-link\"\n      className={cn(\n        \"rounded-md outline-none transition-colors hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--ring)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction BreadcrumbPage({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      aria-current=\"page\"\n      data-slot=\"breadcrumb-page\"\n      className={cn(\"font-semibold text-[var(--foreground)]\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction BreadcrumbSeparator({\n  children,\n  className,\n  ...props\n}: React.ComponentProps<\"li\">) {\n  return (\n    <li\n      aria-hidden=\"true\"\n      role=\"presentation\"\n      data-slot=\"breadcrumb-separator\"\n      className={cn(\"select-none text-[var(--muted-foreground)]/70\", className)}\n      {...props}\n    >\n      {children ?? <span aria-hidden=\"true\">/</span>}\n    </li>\n  );\n}\n\nfunction BreadcrumbEllipsis({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      aria-hidden=\"true\"\n      data-slot=\"breadcrumb-ellipsis\"\n      className={cn(\n        \"inline-flex size-8 items-center justify-center rounded-full bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset)]\",\n        className,\n      )}\n      {...props}\n    >\n      <span aria-hidden=\"true\">•••</span>\n      <span className=\"sr-only\">More</span>\n    </span>\n  );\n}\n\nexport {\n  Breadcrumb,\n  BreadcrumbEllipsis,\n  BreadcrumbItem,\n  BreadcrumbLink,\n  BreadcrumbList,\n  BreadcrumbPage,\n  BreadcrumbSeparator,\n};\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

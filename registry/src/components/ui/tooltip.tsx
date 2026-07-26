@@ -1,49 +1,61 @@
 "use client";
 
-import * as React from "react";
-import { Tooltip as TooltipPrimitive } from "radix-ui";
+import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 
-import { cn } from "@/registry/src/lib/utils";
+import { mergeClassName } from "@/lib/utils";
 
 function TooltipProvider({
-  delayDuration = 250,
+  delay = 250,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+}: TooltipPrimitive.Provider.Props) {
   return (
     <TooltipPrimitive.Provider
       data-slot="tooltip-provider"
-      delayDuration={delayDuration}
+      delay={delay}
       {...props}
     />
   );
 }
 
-function Tooltip(props: React.ComponentProps<typeof TooltipPrimitive.Root>) {
+function Tooltip(props: TooltipPrimitive.Root.Props) {
   return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
 }
 
-function TooltipTrigger(
-  props: React.ComponentProps<typeof TooltipPrimitive.Trigger>,
-) {
+function TooltipTrigger(props: TooltipPrimitive.Trigger.Props) {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 
+type TooltipPositionerProps = Pick<
+  TooltipPrimitive.Positioner.Props,
+  "align" | "alignOffset" | "side" | "sideOffset"
+>;
+
 function TooltipContent({
   className,
+  align = "center",
+  alignOffset = 0,
+  side = "top",
   sideOffset = 8,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: TooltipPrimitive.Popup.Props & TooltipPositionerProps) {
   return (
     <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content
-        data-slot="tooltip-content"
+      <TooltipPrimitive.Positioner
+        align={align}
+        alignOffset={alignOffset}
+        className="isolate z-50 outline-none"
+        side={side}
         sideOffset={sideOffset}
-        className={cn(
-          "z-50 w-max max-w-64 origin-[var(--radix-tooltip-content-transform-origin)] rounded-[calc(var(--neu-radius-surface)*0.55)] border border-[color:var(--neu-edge)] bg-[var(--popover)] px-3 py-2 text-xs font-medium text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=instant-open]:scale-100 data-[state=instant-open]:opacity-100 data-[state=delayed-open]:scale-100 data-[state=delayed-open]:opacity-100",
-          className,
-        )}
-        {...props}
-      />
+      >
+        <TooltipPrimitive.Popup
+          data-slot="tooltip-content"
+          className={mergeClassName<TooltipPrimitive.Popup.State>(
+            "w-max max-w-64 origin-[var(--transform-origin)] rounded-[calc(var(--neu-radius-surface)*0.55)] border border-[color:var(--neu-edge)] bg-[var(--popover)] px-3 py-2 text-xs font-medium text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] transition-[transform,opacity] duration-[var(--neu-duration)] data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            className,
+          )}
+          {...props}
+        />
+      </TooltipPrimitive.Positioner>
     </TooltipPrimitive.Portal>
   );
 }

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "title": "Separator",
+  "description": "A horizontal or vertical divider for grouping related content.",
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/separator.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\ninterface SeparatorProps extends React.ComponentProps<\"div\"> {\n  decorative?: boolean;\n  orientation?: \"horizontal\" | \"vertical\";\n}\n\nfunction Separator({\n  className,\n  decorative = true,\n  orientation = \"horizontal\",\n  ...props\n}: SeparatorProps) {\n  return (\n    <div\n      role={decorative ? \"none\" : \"separator\"}\n      aria-hidden={decorative || undefined}\n      aria-orientation={decorative ? undefined : orientation}\n      data-slot=\"separator\"\n      data-orientation={orientation}\n      className={cn(\n        \"shrink-0 bg-[var(--neu-shadow-dark)] opacity-70 [box-shadow:1px_1px_0_var(--neu-shadow-light)]\",\n        orientation === \"horizontal\" ? \"h-px w-full\" : \"h-full min-h-4 w-px\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Separator };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

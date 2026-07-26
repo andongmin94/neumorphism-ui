@@ -1,35 +1,35 @@
 "use client";
 
 import * as React from "react";
-import { Dialog as DialogPrimitive } from "radix-ui";
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn, mergeClassName } from "@/lib/utils";
 
-function Dialog(props: React.ComponentProps<typeof DialogPrimitive.Root>) {
+function Dialog(props: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
-function DialogTrigger(props: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
-function DialogPortal(props: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+function DialogPortal(props: DialogPrimitive.Portal.Props) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
-function DialogClose(props: React.ComponentProps<typeof DialogPrimitive.Close>) {
+function DialogClose(props: DialogPrimitive.Close.Props) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
 function DialogOverlay({
   className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+}: DialogPrimitive.Backdrop.Props) {
   return (
-    <DialogPrimitive.Overlay
+    <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
-      className={cn(
-        "fixed inset-0 z-50 bg-[color:var(--background)]/65 backdrop-blur-md transition-opacity duration-[var(--neu-duration)] data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
+      className={mergeClassName<DialogPrimitive.Backdrop.State>(
+        "fixed inset-0 isolate z-50 bg-[var(--neu-overlay)] backdrop-blur-sm transition-opacity duration-[var(--neu-duration)] data-closed:opacity-0 data-open:opacity-100",
         className,
       )}
       {...props}
@@ -37,23 +37,25 @@ function DialogOverlay({
   );
 }
 
-interface DialogContentProps extends React.ComponentProps<typeof DialogPrimitive.Content> {
+interface DialogContentProps extends DialogPrimitive.Popup.Props {
+  overlayClassName?: DialogPrimitive.Backdrop.Props["className"];
   showCloseButton?: boolean;
 }
 
 function DialogContent({
   className,
   children,
+  overlayClassName,
   showCloseButton = true,
   ...props
 }: DialogContentProps) {
   return (
     <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Content
+      <DialogOverlay className={overlayClassName} />
+      <DialogPrimitive.Popup
         data-slot="dialog-content"
-        className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100",
+        className={mergeClassName<DialogPrimitive.Popup.State>(
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
           className,
         )}
         {...props}
@@ -61,13 +63,14 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
+            data-slot="dialog-close"
             className="absolute top-4 right-4 grid size-8 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[color,box-shadow,transform] duration-[var(--neu-duration)] hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] disabled:pointer-events-none"
           >
             <span aria-hidden="true">×</span>
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}
-      </DialogPrimitive.Content>
+      </DialogPrimitive.Popup>
     </DialogPortal>
   );
 }
@@ -98,11 +101,14 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
 function DialogTitle({
   className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+}: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg leading-none font-semibold tracking-tight", className)}
+      className={mergeClassName<DialogPrimitive.Title.State>(
+        "text-lg leading-none font-semibold tracking-tight",
+        className,
+      )}
       {...props}
     />
   );
@@ -111,11 +117,14 @@ function DialogTitle({
 function DialogDescription({
   className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+}: DialogPrimitive.Description.Props) {
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-sm leading-relaxed text-[var(--muted-foreground)]", className)}
+      className={mergeClassName<DialogPrimitive.Description.State>(
+        "text-sm leading-relaxed text-[var(--muted-foreground)]",
+        className,
+      )}
       {...props}
     />
   );

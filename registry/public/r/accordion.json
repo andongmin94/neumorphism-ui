@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "title": "Accordion",
+  "description": "A keyboard-accessible disclosure group with inset open states.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/neumorphism-ui",
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/accordion.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Accordion as AccordionPrimitive } from \"@base-ui/react/accordion\";\n\nimport { mergeClassName } from \"@/lib/utils\";\n\nfunction Accordion({\n  className,\n  ...props\n}: AccordionPrimitive.Root.Props) {\n  return (\n    <AccordionPrimitive.Root\n      data-slot=\"accordion\"\n      className={mergeClassName<AccordionPrimitive.Root.State>(\n        \"flex w-full flex-col\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction AccordionItem({\n  className,\n  ...props\n}: AccordionPrimitive.Item.Props) {\n  return (\n    <AccordionPrimitive.Item\n      data-slot=\"accordion-item\"\n      className={mergeClassName<AccordionPrimitive.Item.State>(\n        \"mb-3 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] last:mb-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction AccordionTrigger({\n  className,\n  children,\n  ...props\n}: AccordionPrimitive.Trigger.Props) {\n  return (\n    <AccordionPrimitive.Header className=\"flex\">\n      <AccordionPrimitive.Trigger\n        data-slot=\"accordion-trigger\"\n        className={mergeClassName<AccordionPrimitive.Trigger.State>(\n          \"group/accordion-trigger flex flex-1 items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-[var(--foreground)] outline-none transition-colors duration-[var(--neu-duration)] hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50\",\n          className,\n        )}\n        {...props}\n      >\n        {children}\n        <span\n          className=\"accordion-indicator pointer-events-none grid size-6 shrink-0 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-base leading-none text-[var(--primary)] [box-shadow:var(--neu-shadow-raised-sm)] transition-[box-shadow,transform] duration-[var(--neu-duration)] group-aria-expanded/accordion-trigger:rotate-45 group-aria-expanded/accordion-trigger:[box-shadow:var(--neu-shadow-inset)]\"\n          aria-hidden=\"true\"\n        >\n          +\n        </span>\n      </AccordionPrimitive.Trigger>\n    </AccordionPrimitive.Header>\n  );\n}\n\nfunction AccordionContent({\n  className,\n  children,\n  ...props\n}: AccordionPrimitive.Panel.Props) {\n  return (\n    <AccordionPrimitive.Panel\n      data-slot=\"accordion-content\"\n      className={mergeClassName<AccordionPrimitive.Panel.State>(\n        \"h-[var(--accordion-panel-height)] overflow-hidden text-sm text-[var(--muted-foreground)] transition-[height] duration-[var(--neu-duration)] ease-out data-[ending-style]:h-0 data-[starting-style]:h-0\",\n        className,\n      )}\n      {...props}\n    >\n      <div className=\"px-5 pt-0 pb-5 leading-relaxed\">{children}</div>\n    </AccordionPrimitive.Panel>\n  );\n}\n\nexport { Accordion, AccordionContent, AccordionItem, AccordionTrigger };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

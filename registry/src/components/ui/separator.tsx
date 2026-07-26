@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface SeparatorProps extends React.ComponentProps<"div"> {
   decorative?: boolean;
