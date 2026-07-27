@@ -112,6 +112,7 @@ function ShowcaseHeader({
 }
 
 export function RegistryShowcase() {
+  const [showDepthGrid, setShowDepthGrid] = React.useState(true);
   const [volume, setVolume] = React.useState(64);
 
   return (
@@ -330,9 +331,12 @@ export function RegistryShowcase() {
                 <DropdownMenuItem>
                   Duplicate <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuCheckboxItem defaultChecked>
-                  Show depth grid
-                </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={showDepthGrid}
+                onCheckedChange={setShowDepthGrid}
+              >
+                Show depth grid
+              </DropdownMenuCheckboxItem>
                 <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -201,8 +201,8 @@ export default function ComponentsPage() {
             <h2 id="component-index-title">필요한 것만 골라서 설치하세요.</h2>
           </div>
           <p>
-            모든 카드는 실제 Registry 항목과 연결됩니다. 복사 버튼은 해당
-            컴포넌트의 CLI 명령을 그대로 복사합니다.
+            각 카드에서 실제 예제, 설치, 사용 코드, API와 접근성 문서까지
+            확인할 수 있습니다. 복사 버튼은 CLI 명령을 그대로 복사합니다.
           </p>
         </div>
 
@@ -225,10 +225,23 @@ export default function ComponentsPage() {
                   <article className="component-index-card" key={component.name}>
                     <div>
                       <span className="component-file">{component.name}.tsx</span>
-                      <h4>{component.title}</h4>
+                      <h4>
+                        <Link href={`/components/${component.name}`}>
+                          {component.title}
+                          <span aria-hidden="true">↗</span>
+                        </Link>
+                      </h4>
                       <p>{component.description}</p>
                     </div>
-                    <InstallCommand compact name={component.name} />
+                    <div className="component-index-actions">
+                      <Link
+                        className="component-doc-link"
+                        href={`/components/${component.name}`}
+                      >
+                        예제와 API 보기 <span aria-hidden="true">→</span>
+                      </Link>
+                      <InstallCommand compact name={component.name} />
+                    </div>
                   </article>
                 ))}
               </div>
