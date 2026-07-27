@@ -30,3 +30,6 @@ jobs:
 
       - name: Build and test
         run: npm test
+
+      - name: Verify generated Registry output
+        run: git diff --exit-code -- registry/public/r docs/public/r

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface SwitchProps
   extends Omit<React.ComponentProps<"input">, "onChange" | "size" | "type"> {
@@ -36,7 +36,7 @@ function Switch({
       />
       <span
         aria-hidden="true"
-        className="flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-checked:[&>span]:translate-x-5"
+        className="flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-checked:[&>span]:translate-x-5"
       >
         <span className="size-5 rounded-full bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)] transition-transform duration-[var(--neu-duration)]" />
       </span>

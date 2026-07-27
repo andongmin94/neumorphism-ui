@@ -2,8 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const workspaceRoot = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
-export const registryPath = path.join(workspaceRoot, "registry", "registry.json");
+export const registryRoot = path.resolve(
+  fileURLToPath(new URL("..", import.meta.url)),
+);
+export const registryPath = path.join(registryRoot, "registry.json");
 
 const allowedItemTypes = new Set([
   "registry:base",
@@ -37,14 +39,14 @@ function isPlainObject(value) {
 }
 
 function resolveSourcePath(relativePath) {
-  const sourcePath = path.resolve(workspaceRoot, relativePath);
-  const relative = path.relative(workspaceRoot, sourcePath);
+  const sourcePath = path.resolve(registryRoot, relativePath);
+  const relative = path.relative(registryRoot, sourcePath);
 
   assert(
-    relative.startsWith(`registry${path.sep}`) &&
+    relative.startsWith(`src${path.sep}`) &&
       !relative.startsWith("..") &&
       !path.isAbsolute(relative),
-    `File path must stay under the registry directory: ${relativePath}`,
+    `File path must stay under the registry src directory: ${relativePath}`,
   );
 
   return sourcePath;

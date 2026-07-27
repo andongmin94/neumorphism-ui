@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Avatar as AvatarPrimitive } from "radix-ui";
+import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn, mergeClassName } from "@/lib/utils";
 
 const avatarSizes = {
   sm: "size-8 text-xs",
@@ -13,7 +13,7 @@ const avatarSizes = {
 
 type AvatarSize = keyof typeof avatarSizes;
 
-interface AvatarProps extends React.ComponentProps<typeof AvatarPrimitive.Root> {
+interface AvatarProps extends AvatarPrimitive.Root.Props {
   size?: AvatarSize;
 }
 
@@ -22,9 +22,11 @@ function Avatar({ className, size = "default", ...props }: AvatarProps) {
     <AvatarPrimitive.Root
       data-slot="avatar"
       data-size={size}
-      className={cn(
-        "group/avatar relative flex shrink-0 overflow-hidden rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]",
-        avatarSizes[size],
+      className={mergeClassName<AvatarPrimitive.Root.State>(
+        cn(
+          "group/avatar relative flex shrink-0 overflow-hidden rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]",
+          avatarSizes[size],
+        ),
         className,
       )}
       {...props}
@@ -32,11 +34,14 @@ function Avatar({ className, size = "default", ...props }: AvatarProps) {
   );
 }
 
-function AvatarImage({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
-      className={cn("aspect-square size-full object-cover", className)}
+      className={mergeClassName<AvatarPrimitive.Image.State>(
+        "aspect-square size-full object-cover",
+        className,
+      )}
       {...props}
     />
   );
@@ -45,11 +50,11 @@ function AvatarImage({ className, ...props }: React.ComponentProps<typeof Avatar
 function AvatarFallback({
   className,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+}: AvatarPrimitive.Fallback.Props) {
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
-      className={cn(
+      className={mergeClassName<AvatarPrimitive.Fallback.State>(
         "flex size-full items-center justify-center rounded-full bg-[var(--neu-surface-low)] font-semibold text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-inset)]",
         className,
       )}

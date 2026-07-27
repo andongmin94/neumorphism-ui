@@ -1,17 +1,18 @@
 import * as React from "react";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn } from "@/lib/utils";
 
 const buttonVariants = {
   default:
-    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:-translate-y-0.5 hover:[box-shadow:var(--neu-shadow-raised)]",
+    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:[box-shadow:var(--neu-shadow-raised)] active:[box-shadow:var(--neu-shadow-inset)]",
   primary:
-    "border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-primary)] hover:brightness-105",
-  soft: "border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:-translate-y-0.5",
+    "border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-primary)] hover:brightness-105 active:[box-shadow:var(--neu-shadow-primary-inset)]",
+  soft:
+    "border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] active:[box-shadow:var(--neu-shadow-inset)]",
   ghost:
-    "border-transparent bg-transparent text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface-soft)]",
+    "border-transparent bg-transparent text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface-soft)] active:bg-[var(--neu-surface-low)] active:[box-shadow:var(--neu-shadow-inset)]",
   destructive:
-    "border-transparent bg-[var(--destructive)] text-white [box-shadow:var(--neu-shadow-raised-sm)] hover:brightness-105",
+    "border-transparent bg-[var(--destructive)] text-white [box-shadow:var(--neu-shadow-raised-sm)] hover:brightness-105 active:[box-shadow:var(--neu-shadow-destructive-inset)]",
 } as const;
 
 const buttonSizes = {
@@ -43,7 +44,7 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold outline-none transition-[transform,box-shadow,filter,background-color,color] duration-[var(--neu-duration)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold outline-none transition-[box-shadow,filter,background-color,color] duration-[var(--neu-duration)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         buttonVariants[variant],
         buttonSizes[size],
         className,

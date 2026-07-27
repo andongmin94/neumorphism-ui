@@ -1,11 +1,11 @@
 import * as React from "react";
 
-import { cn } from "@/registry/src/lib/utils";
+import { cn } from "@/lib/utils";
 
 const cardVariants = {
   raised: "bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised)]",
   soft: "bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)]",
-  inset: "bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset)]",
+  inset: "bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)]",
   flat: "border border-[color:var(--border)] bg-[var(--neu-surface)]",
 } as const;
 
