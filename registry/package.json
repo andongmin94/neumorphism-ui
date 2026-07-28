@@ -17,12 +17,20 @@
     "lint": "npm run validate && npm run typecheck",
     "sync:docs": "node scripts/sync-docs-public.mjs"
   },
-  "devDependencies": {
+  "dependencies": {
     "@base-ui/react": "^1.6.0",
+    "tailwind-merge": "^3.6.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
     "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "react": "19.2.6",
+    "react-dom": "19.2.6",
     "shadcn": "^4.15.0",
-    "tailwind-merge": "^3.6.0",
     "typescript": "5.9.3"
   }
 }

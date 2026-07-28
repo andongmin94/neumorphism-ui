@@ -1,4 +1,4 @@
-# Neumorphism UI
+# Neumorphism UI Documentation
 
 An installable shadcn Registry and its documentation site, built around a
 tactile neumorphic design system.
@@ -42,64 +42,59 @@ Available items include the base theme, utility, and 26 UI components:
 ## Project Structure
 
 ```text
-.github/workflows/ci.yml      Workspace CI
-docs/                         Vinext documentation and preview application
+.github/workflows/ci.yml      Repository CI
+docs/                         Independent documentation package
 docs/app/                     Localized documentation routes
 docs/components/docs/         Documentation navigation and examples
 docs/public/r/                Registry endpoints served by the docs site
-registry/                     Standalone shadcn Registry workspace
+registry/                     Independent shadcn Registry package
 registry/registry.json        Registry catalog
 registry/src/                 Source of truth for installable components
 registry/public/r/            Canonical generated Registry output
 registry/scripts/             Validation, build, and docs synchronization
 ```
 
-The npm workspaces are intentionally separate. `registry/src` and
-`registry/registry.json` are the source of truth. A Registry build writes the
-canonical item JSON to `registry/public/r`, then synchronizes only those JSON
-endpoints into the documentation workspace. The docs imports the private
-Registry workspace directly for previews, so installable UI source is not
-duplicated. Do not edit `docs/public/r` by hand.
+`docs` and `registry` are standalone npm packages with their own manifests and
+lockfiles. `registry/src` and `registry/registry.json` are the source of truth.
+A Registry build writes the canonical item JSON to `registry/public/r`.
+`npm run sync:docs` synchronizes only those JSON endpoints into the
+documentation package. The docs uses the sibling Registry package for previews,
+so installable UI source is not duplicated. Do not edit `docs/public/r` by hand.
 
 ## Development
 
 Requires Node.js 22.13 or newer.
 
 ```bash
+cd registry
+npm ci
+npm run build
+npm run sync:docs
+
+cd ../docs
 npm ci
 npm run dev
-```
-
-The root scripts delegate to the appropriate workspace:
-
-```bash
-npm run build
-npm run start
-npm run lint
-npm test
 ```
 
 When changing Registry source or metadata, rebuild and synchronize it before
 reviewing the docs:
 
 ```bash
-npm run registry:validate
-npm run registry:typecheck
-npm run registry:build
-npm run registry:sync-docs
+cd registry
+npm run lint
+npm run build
+npm run sync:docs
+
+cd ../docs
+npm run lint
+npm run build
+npm run test:ssr
 ```
 
-Workspace commands can also be run directly:
-
-```bash
-npm run dev --workspace @neumorphism-ui/docs
-npm run build --workspace @neumorphism-ui/registry
-```
-
-`npm run build` rebuilds the Registry, synchronizes
-`registry/public/r` to `docs/public/r`, and then builds the Vinext documentation
-site. `npm test` runs the Registry checks and the documentation SSR regression
-suite through the root workspace lockfile.
+The Registry build validates and typechecks its source and generates
+`registry/public/r`. Synchronization is a separate repository-level integration
+step, so the Registry package can also build on its own. Build and synchronize
+the Registry before the docs whenever component source or metadata changes.
 
 ## Local Registry
 

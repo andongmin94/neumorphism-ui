@@ -4,13 +4,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const registryRoot = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
-const workspaceRoot = path.dirname(registryRoot);
 const outputDir = path.join(registryRoot, "public", "r");
 
 function run(executable, args, local = false) {
   const command = local
     ? path.join(
-        workspaceRoot,
+        registryRoot,
         "node_modules",
         ".bin",
         process.platform === "win32" ? `${executable}.cmd` : executable,
@@ -51,4 +50,3 @@ run("tsc", ["--project", "tsconfig.json"], true);
 
 fs.rmSync(outputDir, { force: true, recursive: true });
 run("shadcn", ["build", "registry.json", "--output", "public/r"], true);
-run(process.execPath, ["scripts/sync-docs-public.mjs"]);
