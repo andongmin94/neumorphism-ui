@@ -18,7 +18,7 @@ jobs:
           node-version: 22
       - name: Prepare reviewed component sources on main
         run: |
-          git fetch origin 2cbada1b212815a707fa1dc5d39363033f370a63
+          git fetch origin 6cdaf1f391074e30d7172f810d0fbded1845f34e
           git restore --source=FETCH_HEAD --staged --worktree -- docs registry scripts AGENTS.md README.md QUALITY.md
           node scripts/integrate-workflow-ui.mjs
           node scripts/finish-workflow-ui.mjs
