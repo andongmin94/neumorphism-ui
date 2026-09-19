@@ -16,24 +16,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Remove the two obsolete work branches
+      - name: Prepare reviewed component sources on main
         run: |
-          for branch in work/registry-foundation work/ui-expansion; do
-            if test -n "$(git ls-remote --heads origin "refs/heads/$branch")"; then
-              git push origin --delete "$branch"
-            fi
-          done
-      - name: Prepare reviewed component sources without creating a branch
-        run: |
-          git fetch origin 712216abb666d59ffe617755e54114c71c8a0628
+          git fetch origin 2cbada1b212815a707fa1dc5d39363033f370a63
           git restore --source=FETCH_HEAD --staged --worktree -- docs registry scripts AGENTS.md README.md QUALITY.md
           node scripts/integrate-workflow-ui.mjs
           node scripts/finish-workflow-ui.mjs
-      - name: Install declared dependencies and update locks
+      - name: Install dependencies and update locks
         run: |
           npm install --prefix registry --no-audit --no-fund
           npm install --prefix docs --no-audit --no-fund
-      - name: Build and verify registry source contracts
+      - name: Build and verify registry contracts
         run: |
           npm run lint --prefix registry
           npm run build --prefix registry
