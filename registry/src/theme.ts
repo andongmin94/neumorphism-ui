@@ -464,6 +464,8 @@ export function buildThemeVariables(
   );
 
   return {
+    "--neu-font-sans": '"Pretendard Variable", Pretendard, sans-serif',
+    "--neu-font-mono": "Consolas, monospace",
     "--background": tokens.background,
     "--foreground": tokens.foreground,
     "--card": tokens.surface,

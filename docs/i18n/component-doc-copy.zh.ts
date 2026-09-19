@@ -451,7 +451,11 @@ export const componentDocCopyZh = defineComponentDocCopy({
 "form": {"summary":"协调字段验证和提交错误的原生表单。","description":"协调字段验证和提交错误的原生表单。 区分保存与重置。示例只更新本地状态，不包含服务器持久化。","props":["接收验证后的值，并阻止原生提交。","按字段名称关联外部错误。","选择执行验证的时机。"],"accessibility":["区分保存与重置。示例只更新本地状态，不包含服务器持久化。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "number-field": {"summary":"支持范围、步长和本地化格式的数字输入。","description":"支持范围、步长和本地化格式的数字输入。 为增加和减少按钮分别命名。检查边界值以及直接输入。","props":["设置最小值与最大值。","按钮和键盘操作的增减步长。","配置本地化数字格式。"],"accessibility":["为增加和减少按钮分别命名。检查边界值以及直接输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "meter": {"summary":"在已知范围内表示测量值的计量条。","description":"在已知范围内表示测量值的计量条。 任务完成进度请用 Progress。配合 MeterLabel 显示可见数值。","props":["范围内的当前测量值。","设置最小值与最大值。","配置本地化数字格式。"],"accessibility":["任务完成进度请用 Progress。配合 MeterLabel 显示可见数值。","修改 render 或 className 时保留标签关联和可见焦点。"]},
-"combobox": {"summary":"支持过滤、空结果及键盘选择的搜索输入。","description":"支持过滤、空结果及键盘选择的搜索输入。 提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","props":["用于过滤与选择的原始选项。","设置受控状态或初始状态。","允许多项选择。"],"accessibility":["提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"combobox": {"summary":"支持过滤、空结果及键盘选择的搜索输入。","description":"支持过滤、空结果及键盘选择的搜索输入。 提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","props":["用于过滤与选择的原始选项。","设置受控状态或初始状态。","允许多项选择。"],"accessibility":["提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},"calendar": {"summary":"用于单日和范围选择的新拟态日历。","description":"使用 DayPicker v10 的日期计算和键盘导航。选中端点使用内凹效果，范围内部使用连续表面。","props":["指定选择模式。","连接选中值及更改回调。","设置禁用日期、语言及可导航月份。"],"accessibility":["用方向键移动，用 Enter 或 Space 选择。","保留起止日期、今天和禁用日期的无障碍标签。"]},
+"date-picker": {"summary":"在弹出层中选择并清除日期。","description":"由父组件管理选择值。设置 name 后，以本地 YYYY-MM-DD 提交隐藏字段，避免 UTC 转换改变日期。重置也由父状态处理。","props":["当前日期和更改回调，空值为undefined。","按钮名称、表单字段名和说明元素ID。","禁用日期及月份导航范围。"],"accessibility":["打开时聚焦日历，关闭时恢复触发器焦点。","在父表单验证必填值，使用invalid和describedBy关联错误。"]},
+"data-table": {"summary":"组合搜索、筛选、排序、行选择及分页。","description":"调用方的TanStack Table管理数据和状态，组件负责渲染。示例用稳定行ID在筛选和翻页后保留选择，数据均为示意。","props":["包含行模型和状态的TanStack Table实例。","表格标题、空结果文本及搜索筛选工具。","本地化分页文本并设置每页行数。"],"accessibility":["提供表格标题、aria-sort及键盘可聚焦的滚动区域。","区分当前页选择和总选择数量，服务端分页需由调用方管理选择状态。"]},
+"toast": {"summary":"提供结果消息和撤销操作的通知。","description":"使用已有Base UI Toast管理生命周期和无障碍行为。本地示例展示成功、错误、撤销和自动关闭，不执行服务器保存。","props":["显示时间、数量上限及外部管理器。0禁用自动关闭。","创建、关闭、更新并跟踪异步通知状态。","通知区域和关闭按钮的无障碍名称。"],"accessibility":["F6可进入通知区域。请使用标题和说明传达结果，而不只依赖颜色。","重要恢复操作也应在页面中保留，示例默认手动关闭以便查看。"]},
+
 });
 
 export default componentDocCopyZh;

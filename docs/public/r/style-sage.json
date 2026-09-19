@@ -5,6 +5,8 @@
   "description": "A restrained green Neumorphism UI style with subtle top-right light and soft controls.",
   "cssVars": {
     "light": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#e7eee9",
       "foreground": "#1a2b24",
       "card": "#e7eee9",
@@ -53,6 +55,8 @@
       "neu-shadow-floating": "0 16px 40px rgb(26 56 43 / 0.15), 0 3px 8px rgb(26 56 43 / 0.15), inset -1px 1px 0 rgb(255 255 255 / 0.72)"
     },
     "dark": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#121b17",
       "foreground": "#e9f5ee",
       "card": "#19251f",

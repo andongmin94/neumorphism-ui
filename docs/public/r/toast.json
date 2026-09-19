@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "title": "Toast",
+  "description": "Accessible notifications with manual dismissal, timeout and undo actions, using Base UI.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/toast.tsx",
+      "content": "\"use client\";\n\nimport { Toast as Primitive } from \"@base-ui/react/toast\";\nimport { cn } from \"@/lib/utils\";\n\nconst ToastProvider = Primitive.Provider;\nconst useToast = Primitive.useToastManager;\nconst createToastManager = Primitive.createToastManager;\ntype ToasterProps = { className?: string; label?: string; closeLabel?: string };\n\nfunction Toaster({ className, label = \"Notifications\", closeLabel = \"Dismiss notification\" }: ToasterProps) {\n  const { toasts } = useToast();\n  return <Primitive.Portal>\n    <Primitive.Viewport aria-label={label} className={cn(\"fixed end-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[100] flex w-96 max-w-[calc(100vw-2rem)] flex-col gap-3 outline-none\", className)}>\n      {toasts.map(toast => <Primitive.Root key={toast.id} toast={toast} data-slot=\"toast\" data-kind={toast.type} swipeDirection=\"right\" className=\"relative rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-4 font-sans text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[limited]:hidden data-[kind=error]:border-[var(--destructive)] data-[kind=success]:border-[var(--success)] [transform:translateX(var(--toast-swipe-movement-x,0px))]\">\n        <Primitive.Content className=\"grid grid-cols-[1fr_auto] items-start gap-3\">\n          <div className=\"grid min-w-0 gap-1\"><Primitive.Title className=\"text-sm font-semibold leading-relaxed [overflow-wrap:anywhere]\" /><Primitive.Description className=\"text-sm leading-relaxed text-[var(--muted-foreground)] [overflow-wrap:anywhere]\" />{toast.actionProps && <Primitive.Action className=\"mt-2 w-fit rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-3 py-2 text-sm font-semibold [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]\" />}</div>\n          <Primitive.Close aria-label={closeLabel} className=\"grid size-8 place-items-center rounded-lg text-lg text-[var(--foreground)] outline-none hover:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-[var(--ring)]\"><span aria-hidden=\"true\">×</span></Primitive.Close>\n        </Primitive.Content>\n      </Primitive.Root>)}\n    </Primitive.Viewport>\n  </Primitive.Portal>;\n}\n\nexport { ToastProvider, Toaster, useToast, createToastManager };\nexport type { ToasterProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

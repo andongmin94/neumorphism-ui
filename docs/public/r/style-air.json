@@ -5,6 +5,8 @@
   "description": "The default cool blue Neumorphism UI style with balanced depth and soft controls.",
   "cssVars": {
     "light": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#e5ebf1",
       "foreground": "#172033",
       "card": "#e9eef4",
@@ -53,6 +55,8 @@
       "neu-shadow-floating": "0 16px 40px rgb(30 48 72 / 0.14), 0 3px 8px rgb(30 48 72 / 0.14), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
     },
     "dark": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#151a22",
       "foreground": "#e9f0fa",
       "card": "#1b222c",

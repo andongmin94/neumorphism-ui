@@ -1,7 +1,7 @@
 # Neumorphism UI Registry
 
-The registry provides 40 installable UI components, five light/dark theme presets,
-one base, and one class-name utility: 47 catalog items in total.
+The registry provides 44 installable UI components, five light/dark theme presets,
+one base, and one class-name utility: 51 catalog items in total.
 
 ## Source ownership
 
@@ -42,3 +42,9 @@ npx shadcn@latest add @neumorphism-ui/style-sage
 
 See the root README for initial setup, including the separate scaffold-button
 replacement step, and QUALITY.md for executed checks and remaining release gates.
+
+After installing the base, import the packaged font stylesheet once in the application entry: `app/layout.tsx` (or `src/app/layout.tsx`) for Next.js, and `src/main.tsx` for Vite. This lets the bundler self-host the font assets. Component installation intentionally does not overwrite your layout.
+
+```tsx
+import "pretendard/dist/web/variable/pretendardvariable.css";
+```

@@ -5,12 +5,14 @@ import { buildThemeCss, buildThemeVariables, defaultThemeSettings, themePresets 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const colors = ["background", "foreground", "card", "card-foreground", "popover", "popover-foreground", "primary", "primary-foreground", "secondary", "secondary-foreground", "muted", "muted-foreground", "accent", "accent-foreground", "destructive", "destructive-foreground", "success", "border", "input", "ring"];
 const theme = {
+  "font-sans": "var(--neu-font-sans)",
+  "font-mono": "var(--neu-font-mono)",
   ...Object.fromEntries(colors.map((name) => [`color-${name}`, `var(--${name})`])),
   "radius-sm": "calc(var(--radius) - 4px)", "radius-md": "calc(var(--radius) - 2px)", "radius-lg": "var(--radius)", "radius-xl": "calc(var(--radius) + 4px)",
   ...Object.fromEntries(["raised", "raised-sm", "inset", "primary"].map((name) => [`shadow-neu-${name}`, `var(--neu-shadow-${name})`])),
 };
 const css = {
-  "@layer base": { "*": { "@apply border-border outline-ring/50": {} }, body: { "@apply bg-background text-foreground": {} } },
+  "@layer base": { "*": { "@apply border-border outline-ring/50": {} }, body: { "@apply bg-background text-foreground": {}, "font-family": "var(--neu-font-sans)" }, "code, pre, kbd, samp": { "font-family": "var(--neu-font-mono)" } },
   "@layer components": {
     ".neu-raised": { background: "var(--neu-surface)", "box-shadow": "var(--neu-shadow-raised)" },
     ".neu-raised-sm": { background: "var(--neu-surface)", "box-shadow": "var(--neu-shadow-raised-sm)" },

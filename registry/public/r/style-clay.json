@@ -5,6 +5,8 @@
   "description": "A warm sand and coral Neumorphism UI style with compact rounded controls.",
   "cssVars": {
     "light": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#efe8df",
       "foreground": "#35271f",
       "card": "#efe8df",
@@ -53,6 +55,8 @@
       "neu-shadow-floating": "0 16px 40px rgb(76 50 33 / 0.16), 0 3px 8px rgb(76 50 33 / 0.16), inset 1px 1px 0 rgb(255 255 255 / 0.68)"
     },
     "dark": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#211814",
       "foreground": "#f8eee6",
       "card": "#2a1f19",

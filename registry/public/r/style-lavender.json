@@ -5,6 +5,8 @@
   "description": "A low-depth violet Neumorphism UI style with relaxed motion and pill controls.",
   "cssVars": {
     "light": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#ebe9f4",
       "foreground": "#252036",
       "card": "#ebe9f4",
@@ -53,6 +55,8 @@
       "neu-shadow-floating": "0 16px 40px rgb(45 32 76 / 0.16), 0 3px 8px rgb(45 32 76 / 0.16), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
     },
     "dark": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#171520",
       "foreground": "#f1edff",
       "card": "#1e1a2a",

@@ -502,6 +502,10 @@ test("serves a complete shadcn registry catalog", async () => {
     "number-field",
     "meter",
     "combobox",
+    "calendar",
+    "date-picker",
+    "data-table",
+    "toast",
   ];
   assert.deepEqual(
     registry.items.map((item) => item.name),
@@ -562,7 +566,7 @@ test("serves a complete shadcn registry catalog", async () => {
   const baseStyle = JSON.parse(
     await readFile(path.join(publicRoot, "r", "neumorphism-ui.json"), "utf8"),
   );
-  assert.equal(baseStyle.dependencies, undefined);
+  assert.deepEqual(baseStyle.dependencies, ["pretendard@1.3.9"]);
   assert.ok(!baseStyle.dependencies?.includes("radix-ui"));
   const airStyle = JSON.parse(
     await readFile(path.join(publicRoot, "r", "style-air.json"), "utf8"),

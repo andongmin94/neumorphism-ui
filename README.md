@@ -8,7 +8,7 @@ submitted or approved. See [QUALITY.md](QUALITY.md) for implemented work and rem
 
 ## Components and interaction design
 
-The collection includes 40 UI components and five light/dark presets. Alongside
+The collection includes 44 UI components and five light/dark presets. Alongside
 actions, navigation and data-display basics, it now includes confirmation dialogs,
 popovers, hover cards, sheets, collapsible content, toggles and toggle groups,
 toolbars, field/fieldset/form primitives, number fields, meters and a searchable
@@ -97,3 +97,15 @@ independent-install or accessibility audit for every component and state.
 `registry/registry.json`, both `public/r` directories, `docs/app/theme.css`, and the
 theme bootstrap module are generated. Never edit them by hand. Rebuild and sync the
 registry before reviewing docs; the docs dev/build scripts do this automatically.
+
+## Typography and development branch
+
+Use `main` only; do not create work branches. Body and controls use the packaged Pretendard Variable font. Code blocks and keyboard labels prefer the locally installed Consolas font, with the generic monospace fallback on systems without it. Consolas font files are not distributed.
+
+Calendar and Date Picker use `@daypicker/react`; Data Table renders a caller-owned TanStack table; Toast uses the existing Base UI dependency. Their live, localized examples also supply the displayed and type-checked usage code.
+
+After installing the base, import the packaged font stylesheet once in the application entry: `app/layout.tsx` (or `src/app/layout.tsx`) for Next.js, and `src/main.tsx` for Vite. This lets the bundler self-host the font assets. Component installation intentionally does not overwrite your layout.
+
+```tsx
+import "pretendard/dist/web/variable/pretendardvariable.css";
+```

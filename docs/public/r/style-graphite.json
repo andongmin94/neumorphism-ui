@@ -5,6 +5,8 @@
   "description": "A high-contrast neutral Neumorphism UI style with deep shadows and quick motion.",
   "cssVars": {
     "light": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#e6e8eb",
       "foreground": "#1d232b",
       "card": "#e6e8eb",
@@ -53,6 +55,8 @@
       "neu-shadow-floating": "0 16px 40px rgb(31 39 50 / 0.17), 0 3px 8px rgb(31 39 50 / 0.17), inset 1px 1px 0 rgb(255 255 255 / 0.70)"
     },
     "dark": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#111419",
       "foreground": "#edf1f6",
       "card": "#181c22",

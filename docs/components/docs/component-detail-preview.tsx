@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { WorkflowComponentPreview, workflowSlugs, type WorkflowSlug } from "./workflow-component-preview";
 import { ExpandedComponentPreview, expandedSlugs, type ExpandedSlug } from "./expanded-component-preview";
 
 import { localeHref, type Locale } from "@/i18n/config";
@@ -191,6 +192,7 @@ export function ComponentDetailPreview({
   const [sliderValue, setSliderValue] = React.useState([32, 72]);
   const [switchValue, setSwitchValue] = React.useState(true);
 
+  if (workflowSlugs.includes(slug as WorkflowSlug)) return <WorkflowComponentPreview slug={slug as WorkflowSlug} locale={locale} />;
   if (expandedSlugs.includes(slug as ExpandedSlug)) return <ExpandedComponentPreview slug={slug as ExpandedSlug} locale={locale} />;
 
   switch (slug) {

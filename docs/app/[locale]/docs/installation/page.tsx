@@ -109,6 +109,8 @@ export default async function InstallationPage({
           <h2>{messages.installationPage.componentTitle}</h2>
           <p>{messages.installationPage.componentBody}</p>
           <InstallCommand name="neumorphism-ui" />
+          <p>{{ ko: "기본 테마 설치 후 Next.js의 app/layout.tsx 또는 Vite의 src/main.tsx에서 폰트 CSS를 한 번 가져옵니다. 앱 번들러가 폰트 파일을 함께 제공합니다.", en: "After installing the base, import the font CSS once in app/layout.tsx (Next.js) or src/main.tsx (Vite). Your bundler serves the font assets with your application.", ja: "基本テーマの後、Next.jsのapp/layout.tsxまたはViteのsrc/main.tsxでフォントCSSを一度読み込みます。", zh: "安装基础主题后，在Next.js的app/layout.tsx或Vite的src/main.tsx中导入一次字体CSS。" }[locale]}</p>
+          <CopyableCode code={'import "pretendard/dist/web/variable/pretendardvariable.css";'} label="Pretendard" />
           <CopyableCode code={`${getInstallCommand("button")} --overwrite`} label={messages.installationPage.installLabel} />
           <p className="docs-section-note">
             {messages.installationPage.componentNote}

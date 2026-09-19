@@ -82,7 +82,7 @@ function serializeCss(
         return `${indentation}${property}: ${value};`;
       }
 
-      if (property.startsWith("@apply ") && Object.keys(value).length === 0) {
+      if ((property.startsWith("@apply ") || property.startsWith("@import ")) && Object.keys(value).length === 0) {
         return `${indentation}${property};`;
       }
 

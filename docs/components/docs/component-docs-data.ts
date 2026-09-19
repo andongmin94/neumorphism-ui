@@ -2124,6 +2124,138 @@ import {
     "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
   ]
 },
+{
+  "slug": "calendar",
+  "title": "Calendar",
+  "category": "forms-selection",
+  "summary": "단일 날짜와 기간을 선택하는 뉴모피즘 달력.",
+  "description": "DayPicker v10의 날짜 계산과 키보드 탐색을 유지합니다. 선택한 날짜는 inset으로, 기간의 중간 날짜는 연결된 표면으로 구분합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport type { DateRange } from \"@daypicker/react\";\nimport { enUS, ko, ja, zhCN } from \"@daypicker/react/locale\";\nimport { Calendar } from \"@/components/ui/calendar\";\nimport { Button } from \"@/components/ui/button\";",
+  "usageCode": "const locales = { en: enUS, ko, ja, zh: zhCN };\nconst copy = {\n  en: { single: \"Single date\", range: \"Date range\", clear: \"Clear range\", empty: \"No date selected\" },\n  ko: { single: \"날짜 선택\", range: \"기간 선택\", clear: \"기간 초기화\", empty: \"선택한 날짜 없음\" },\n  ja: { single: \"日付選択\", range: \"期間選択\", clear: \"期間をクリア\", empty: \"日付未選択\" },\n  zh: { single: \"选择日期\", range: \"选择范围\", clear: \"清除范围\", empty: \"未选择日期\" },\n};\nfunction stamp(date: Date) {\n  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, \"0\")}-${String(date.getDate()).padStart(2, \"0\")}`;\n}\n\nexport default function CalendarExample({ locale = \"ko\" }: { locale?: keyof typeof copy }) {\n  const text = copy[locale];\n  const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 8, 15));\n  const [range, setRange] = React.useState<DateRange | undefined>({ from: new Date(2026, 8, 12), to: new Date(2026, 8, 17) });\n  return <div className=\"flex max-w-full flex-wrap items-start gap-6\">\n    <section data-calendar=\"single\" aria-label={text.single} className=\"grid max-w-full gap-3\"><h3 className=\"text-sm font-semibold\">{text.single}</h3><Calendar mode=\"single\" selected={date} onSelect={setDate} defaultMonth={new Date(2026, 8)} today={new Date(2026, 8, 15)} disabled={new Date(2026, 8, 20)} locale={locales[locale]} /><output aria-live=\"polite\" data-testid=\"calendar-value\" className=\"text-sm text-[var(--muted-foreground)]\">{date ? stamp(date) : text.empty}</output></section>\n    <section data-calendar=\"range\" aria-label={text.range} className=\"grid max-w-full gap-3\"><h3 className=\"text-sm font-semibold\">{text.range}</h3><Calendar mode=\"range\" selected={range} onSelect={setRange} defaultMonth={new Date(2026, 8)} today={new Date(2026, 8, 15)} locale={locales[locale]} /><output aria-live=\"polite\" data-testid=\"calendar-range\" className=\"text-sm text-[var(--muted-foreground)]\">{range?.from ? `${stamp(range.from)} / ${range.to ? stamp(range.to) : \"…\"}` : text.empty}</output><Button size=\"sm\" onClick={() => setRange(undefined)}>{text.clear}</Button></section>\n  </div>;\n}",
+  "props": [
+    {
+      "component": "Calendar",
+      "name": "mode",
+      "type": "\"single\" | \"multiple\" | \"range\"",
+      "description": "날짜 선택 방식을 지정합니다."
+    },
+    {
+      "component": "Calendar",
+      "name": "selected / onSelect",
+      "type": "Date | Date[] | DateRange / callback",
+      "description": "선택 값과 변경 콜백을 연결합니다."
+    },
+    {
+      "component": "Calendar",
+      "name": "disabled / locale / startMonth / endMonth",
+      "type": "DayPickerProps",
+      "description": "비활성 날짜, 언어, 이동 가능한 월을 지정합니다."
+    }
+  ],
+  "accessibility": [
+    "방향키로 날짜를 이동하고 Enter 또는 Space로 선택합니다.",
+    "기간의 시작·끝, 오늘, 비활성 날짜를 별도로 표시합니다. 라이브러리의 접근성 라벨을 유지하세요."
+  ]
+},
+{
+  "slug": "date-picker",
+  "title": "Date Picker",
+  "category": "forms-selection",
+  "summary": "팝오버에서 날짜를 고르고 지우는 날짜 입력.",
+  "description": "상위 컴포넌트가 선택 값을 관리합니다. name을 지정하면 숨겨진 입력에 현지 날짜를 YYYY-MM-DD 형식으로 기록하며 UTC 변환으로 날짜가 바뀌지 않습니다. 예제의 초기화도 상위 상태를 갱신합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { enUS, ko, ja, zhCN } from \"@daypicker/react/locale\";\nimport { DatePicker } from \"@/components/ui/date-picker\";\nimport { Button } from \"@/components/ui/button\";",
+  "usageCode": "const locales = { en: enUS, ko, ja, zh: zhCN };\nconst copy = {\n  en: { label: \"Due date\", choose: \"Select date\", clear: \"Clear date\", locked: \"Locked date\", reset: \"Reset date\", hint: \"Dates are stored as local calendar dates, not UTC timestamps.\" },\n  ko: { label: \"마감일\", choose: \"날짜 선택\", clear: \"날짜 지우기\", locked: \"변경 불가 날짜\", reset: \"날짜 초기화\", hint: \"날짜는 UTC 시각이 아닌 현지 달력의 날짜로 저장됩니다.\" },\n  ja: { label: \"期限\", choose: \"日付を選択\", clear: \"日付をクリア\", locked: \"変更不可の日付\", reset: \"日付をリセット\", hint: \"UTC時刻ではなく、現地のカレンダー日付として保存します。\" },\n  zh: { label: \"截止日期\", choose: \"选择日期\", clear: \"清除日期\", locked: \"锁定日期\", reset: \"重置日期\", hint: \"日期按本地日历保存，而非 UTC 时间戳。\" },\n};\n\nexport default function DatePickerExample({ locale = \"ko\" }: { locale?: keyof typeof copy }) {\n  const text = copy[locale];\n  const id = React.useId();\n  const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 8, 15));\n  return <form className=\"grid w-full max-w-sm gap-4\" onSubmit={event => event.preventDefault()} onReset={() => setDate(new Date(2026, 8, 15))}>\n    <label htmlFor={id} className=\"text-sm font-semibold\">{text.label}</label>\n    <DatePicker id={id} name=\"dueDate\" label={text.label} value={date} onValueChange={setDate} locale={locales[locale]} placeholder={text.choose} clearLabel={text.clear} describedBy={`${id}-hint`} disabledDates={{ before: new Date(2026, 8, 10) }} startMonth={new Date(2026, 8)} endMonth={new Date(2027, 11)} />\n    <p id={`${id}-hint`} className=\"text-sm leading-relaxed text-[var(--muted-foreground)]\">{text.hint}</p>\n    <Button type=\"reset\" size=\"sm\" className=\"w-fit\">{text.reset}</Button>\n    <DatePicker label={text.locked} value={new Date(2026, 8, 15)} onValueChange={() => {}} disabled locale={locales[locale]} clearLabel={text.clear} />\n  </form>;\n}",
+  "props": [
+    {
+      "component": "DatePicker",
+      "name": "value / onValueChange",
+      "type": "Date | undefined / callback",
+      "description": "현재 날짜와 변경 콜백입니다. 빈 값은 undefined입니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "label / name / describedBy",
+      "type": "string",
+      "description": "버튼 이름, 폼 필드 이름, 설명 요소 ID입니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "disabledDates / startMonth / endMonth",
+      "type": "Matcher | Matcher[] / Date",
+      "description": "선택 불가 날짜와 달력 이동 범위를 지정합니다."
+    }
+  ],
+  "accessibility": [
+    "열리면 달력으로 포커스가 이동하고 닫히면 트리거로 돌아옵니다.",
+    "폼의 필수값 검증은 상위 폼에서 처리하세요. invalid와 describedBy로 오류를 연결할 수 있습니다."
+  ]
+},
+{
+  "slug": "data-table",
+  "title": "Data Table",
+  "category": "data-feedback",
+  "summary": "검색·필터·정렬·선택·페이지 이동을 조합하는 데이터 표.",
+  "description": "데이터와 상태는 TanStack Table 인스턴스가 소유하며 UI는 표의 렌더링을 담당합니다. 예제는 고정된 행 ID로 페이지와 필터가 바뀌어도 선택을 유지합니다. 데이터는 예시입니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel, getPaginationRowModel, type ColumnDef } from \"@tanstack/react-table\";\nimport { DataTable, DataTableColumnHeader, DataTablePagination } from \"@/components/ui/data-table\";\nimport { Checkbox } from \"@/components/ui/checkbox\";\nimport { Input } from \"@/components/ui/input\";\nimport { Select, SelectItem } from \"@/components/ui/select\";\nimport { Button } from \"@/components/ui/button\";",
+  "usageCode": "type Project = { id: string; name: string; status: \"active\" | \"paused\"; seats: number };\nconst data: Project[] = [\n  { id: \"p1\", name: \"Atlas\", status: \"active\", seats: 12 },\n  { id: \"p2\", name: \"Beacon\", status: \"paused\", seats: 4 },\n  { id: \"p3\", name: \"Cedar\", status: \"active\", seats: 8 },\n  { id: \"p4\", name: \"Delta\", status: \"active\", seats: 20 },\n  { id: \"p5\", name: \"Echo\", status: \"paused\", seats: 6 },\n  { id: \"p6\", name: \"Foxtrot\", status: \"active\", seats: 16 },\n  { id: \"p7\", name: \"Grove\", status: \"active\", seats: 3 },\n  { id: \"p8\", name: \"Harbor\", status: \"paused\", seats: 10 },\n];\nconst copy = {\n  en: { name: \"Project\", status: \"Status\", seats: \"Seats\", search: \"Search projects\", all: \"All statuses\", active: \"Active\", paused: \"Paused\", selectPage: \"Select current page\", select: \"Select\", selected: \"Selected across all pages\", clear: \"Clear selection\", empty: \"No matching projects.\", caption: \"Workspace projects — illustrative data\", previous: \"Previous\", next: \"Next\", rows: \"Rows per page\", page: \"Page\" },\n  ko: { name: \"프로젝트\", status: \"상태\", seats: \"좌석\", search: \"프로젝트 검색\", all: \"전체 상태\", active: \"활성\", paused: \"일시 중지\", selectPage: \"현재 페이지 전체 선택\", select: \"선택\", selected: \"전체 페이지에서 선택됨\", clear: \"선택 해제\", empty: \"일치하는 프로젝트가 없습니다.\", caption: \"워크스페이스 프로젝트 — 예시 데이터\", previous: \"이전\", next: \"다음\", rows: \"페이지당 행\", page: \"페이지\" },\n  ja: { name: \"プロジェクト\", status: \"状態\", seats: \"座席\", search: \"プロジェクトを検索\", all: \"すべての状態\", active: \"有効\", paused: \"一時停止\", selectPage: \"現在のページを選択\", select: \"選択\", selected: \"全ページの選択数\", clear: \"選択解除\", empty: \"一致するプロジェクトはありません。\", caption: \"ワークスペース — サンプルデータ\", previous: \"前へ\", next: \"次へ\", rows: \"ページあたりの行\", page: \"ページ\" },\n  zh: { name: \"项目\", status: \"状态\", seats: \"座位\", search: \"搜索项目\", all: \"全部状态\", active: \"活跃\", paused: \"暂停\", selectPage: \"选择当前页\", select: \"选择\", selected: \"所有页面已选\", clear: \"清除选择\", empty: \"没有匹配的项目。\", caption: \"工作区项目 — 示例数据\", previous: \"上一页\", next: \"下一页\", rows: \"每页行数\", page: \"页\" },\n};\n\nexport default function DataTableExample({ locale = \"ko\" }: { locale?: keyof typeof copy }) {\n  const text = copy[locale];\n  const columns = React.useMemo<ColumnDef<Project>[]>(() => [\n    { id: \"selection\", enableSorting: false, enableGlobalFilter: false,\n      header: ({ table }) => <Checkbox aria-label={text.selectPage} checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? \"indeterminate\" : false} onCheckedChange={checked => table.toggleAllPageRowsSelected(checked === true)} />,\n      cell: ({ row }) => <Checkbox aria-label={`${text.select} ${row.original.name}`} checked={row.getIsSelected()} onCheckedChange={checked => row.toggleSelected(checked === true)} /> },\n    { accessorKey: \"name\", header: ({ column }) => <DataTableColumnHeader column={column} title={text.name} /> },\n    { accessorKey: \"status\", header: text.status, enableSorting: false, filterFn: \"equalsString\", cell: ({ row }) => <span className=\"inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border)] px-2.5 py-1 text-xs font-medium\"><span aria-hidden=\"true\">{row.original.status === \"active\" ? \"●\" : \"Ⅱ\"}</span>{text[row.original.status]}</span> },\n    { accessorKey: \"seats\", header: ({ column }) => <DataTableColumnHeader column={column} title={text.seats} />, cell: ({ row }) => <span className=\"tabular-nums\">{row.original.seats}</span> },\n  ], [text]);\n  const table = useReactTable({ data, columns, getRowId: row => row.id, getCoreRowModel: getCoreRowModel(), getFilteredRowModel: getFilteredRowModel(), getSortedRowModel: getSortedRowModel(), getPaginationRowModel: getPaginationRowModel(), initialState: { pagination: { pageIndex: 0, pageSize: 5 } } });\n  return <div className=\"grid w-full min-w-0 gap-4\">\n    <DataTable table={table} caption={text.caption} emptyMessage={text.empty}>\n      <div className=\"flex flex-wrap items-center gap-3\"><Input aria-label={text.search} placeholder={text.search} className=\"min-w-0 flex-1 basis-44\" value={(table.getState().globalFilter as string) ?? \"\"} onChange={event => { table.setGlobalFilter(event.target.value); table.setPageIndex(0); }} /><div className=\"w-40 max-w-full\"><Select aria-label={text.status} value={(table.getColumn(\"status\")?.getFilterValue() as string) ?? \"\"} onChange={event => { table.getColumn(\"status\")?.setFilterValue(event.target.value || undefined); table.setPageIndex(0); }}><SelectItem value=\"\">{text.all}</SelectItem><SelectItem value=\"active\">{text.active}</SelectItem><SelectItem value=\"paused\">{text.paused}</SelectItem></Select></div></div>\n    </DataTable>\n    <div className=\"flex flex-wrap items-center justify-between gap-2\"><output data-testid=\"selected-rows\" className=\"text-sm text-[var(--muted-foreground)]\">{text.selected}: {table.getSelectedRowModel().rows.length}</output><Button variant=\"ghost\" size=\"sm\" disabled={!table.getSelectedRowModel().rows.length} onClick={() => table.resetRowSelection()}>{text.clear}</Button></div>\n    <DataTablePagination table={table} labels={{ previous: text.previous, next: text.next, rowsPerPage: text.rows, page: (current, total) => `${text.page} ${current} / ${total}` }} />\n  </div>;\n}",
+  "props": [
+    {
+      "component": "DataTable",
+      "name": "table",
+      "type": "Table<TData>",
+      "description": "행 모델과 상태를 가진 TanStack Table 인스턴스입니다."
+    },
+    {
+      "component": "DataTable",
+      "name": "caption / emptyMessage / children",
+      "type": "string / ReactNode",
+      "description": "표 제목, 빈 결과 문구, 검색·필터 도구를 전달합니다."
+    },
+    {
+      "component": "DataTablePagination",
+      "name": "labels / pageSizes",
+      "type": "PaginationLabels / number[]",
+      "description": "이전·다음 버튼, 페이지 문구와 페이지 크기를 지정합니다."
+    }
+  ],
+  "accessibility": [
+    "표 제목과 열의 aria-sort, 키보드로 접근할 수 있는 스크롤 영역을 제공합니다.",
+    "현재 페이지 선택과 전체 선택 개수를 구분하세요. 서버 페이지 방식에서는 선택 상태를 별도로 관리해야 합니다."
+  ]
+},
+{
+  "slug": "toast",
+  "title": "Toast",
+  "category": "data-feedback",
+  "summary": "결과 안내와 실행 취소를 제공하는 알림.",
+  "description": "기존 Base UI Toast로 알림 수명과 접근성을 처리합니다. 예제는 성공·오류·실행 취소와 자동 닫힘을 보여주며 서버에 저장하지 않습니다. 알림 본문은 읽기 쉬운 전경색을 유지합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { ToastProvider, Toaster, useToast } from \"@/components/ui/toast\";",
+  "usageCode": "const copy = {\n  en: { save: \"Show success\", success: \"Changes saved\", body: \"This is a local demonstration. No server request was made.\", fail: \"Show error\", error: \"Could not save\", retry: \"Your changes are retained. Try again.\", archive: \"Archive draft\", archived: \"Draft archived\", undo: \"Undo\", undone: \"Archive undone\", idle: \"Draft available\", timed: \"Show timed toast\", quick: \"Quick update\", region: \"Notifications\", close: \"Dismiss notification\" },\n  ko: { save: \"성공 알림\", success: \"변경 사항 저장됨\", body: \"로컬 예제이며 서버 요청은 전송하지 않습니다.\", fail: \"오류 알림\", error: \"저장하지 못했습니다\", retry: \"변경 사항은 유지됩니다. 다시 시도하세요.\", archive: \"초안 보관\", archived: \"초안이 보관되었습니다\", undo: \"실행 취소\", undone: \"보관을 취소했습니다\", idle: \"초안 사용 가능\", timed: \"자동 닫힘 알림\", quick: \"업데이트 알림\", region: \"알림\", close: \"알림 닫기\" },\n  ja: { save: \"成功通知\", success: \"変更を保存しました\", body: \"ローカル例です。サーバーへの送信は行いません。\", fail: \"エラー通知\", error: \"保存できませんでした\", retry: \"変更は保持されています。再試行してください。\", archive: \"下書きを保管\", archived: \"下書きを保管しました\", undo: \"元に戻す\", undone: \"保管を取り消しました\", idle: \"下書き利用可能\", timed: \"自動で閉じる通知\", quick: \"更新通知\", region: \"通知\", close: \"通知を閉じる\" },\n  zh: { save: \"成功通知\", success: \"更改已保存\", body: \"这是本地示例，未发送服务器请求。\", fail: \"错误通知\", error: \"保存失败\", retry: \"更改仍然保留，请重试。\", archive: \"归档草稿\", archived: \"草稿已归档\", undo: \"撤销\", undone: \"已撤销归档\", idle: \"草稿可用\", timed: \"自动关闭通知\", quick: \"更新通知\", region: \"通知\", close: \"关闭通知\" },\n};\n\nfunction ToastActions({ locale }: { locale: keyof typeof copy }) {\n  const text = copy[locale];\n  const manager = useToast();\n  const [status, setStatus] = React.useState<string>(text.idle);\n  return <div className=\"grid gap-4\"><div className=\"flex flex-wrap gap-3\">\n    <Button onClick={() => manager.add({ title: text.success, description: text.body, type: \"success\" })}>{text.save}</Button>\n    <Button onClick={() => manager.add({ title: text.error, description: text.retry, type: \"error\" })}>{text.fail}</Button>\n    <Button onClick={() => { setStatus(text.archived); const id = manager.add({ title: text.archived, description: text.body, actionProps: { children: text.undo, onClick: () => { setStatus(text.undone); manager.close(id); } } }); }}>{text.archive}</Button>\n    <Button onClick={() => manager.add({ title: text.quick, timeout: 1200 })}>{text.timed}</Button>\n  </div><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{status}</p></div>;\n}\n\nexport default function ToastExample({ locale = \"ko\" }: { locale?: keyof typeof copy }) {\n  // Keep examples available for inspection; the timed example overrides this.\n  return <ToastProvider timeout={0}><ToastActions locale={locale} /><Toaster label={copy[locale].region} closeLabel={copy[locale].close} /></ToastProvider>;\n}",
+  "props": [
+    {
+      "component": "ToastProvider",
+      "name": "timeout / limit / toastManager",
+      "type": "number / ToastManager",
+      "description": "표시 시간, 최대 표시 개수와 선택적 외부 매니저입니다. timeout 0은 자동 닫힘을 끕니다."
+    },
+    {
+      "component": "useToast",
+      "name": "add / close / update / promise",
+      "type": "Base UI toast manager methods",
+      "description": "알림 생성·닫기·갱신·비동기 상태를 제어합니다."
+    },
+    {
+      "component": "Toaster",
+      "name": "label / closeLabel",
+      "type": "string",
+      "description": "알림 영역과 닫기 버튼의 접근성 문구입니다."
+    }
+  ],
+  "accessibility": [
+    "F6로 알림 영역에 접근할 수 있습니다. 색상만이 아닌 제목과 설명으로 결과를 전달하세요.",
+    "중요한 복구 동작은 알림에만 두지 말고 화면에도 제공하세요. 예제는 검토를 위해 수동 닫힘을 기본으로 사용합니다."
+  ]
+},
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

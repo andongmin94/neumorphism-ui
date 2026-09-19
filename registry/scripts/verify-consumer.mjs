@@ -1,4 +1,5 @@
 import { run } from "./consumer-command.mjs";
+import { decorateWorkflowFixture, workflowItems, exerciseWorkflow } from "./workflow-consumer.mjs";
 import { decorateFixture, expandedItems, assertExpandedFiles, exerciseExpanded } from "./expanded-consumer.mjs";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
@@ -75,6 +76,7 @@ function fixture(directory, target, registryOrigin) {
     write(directory, "src/main.tsx", 'import {createRoot} from "react-dom/client"; import Consumer from "./consumer"; import "./globals.css"; createRoot(document.getElementById("root")!).render(<Consumer/>);');
     write(directory, "vite.config.ts", 'import {defineConfig} from "vite"; import react from "@vitejs/plugin-react"; import {fileURLToPath, URL} from "node:url"; export default defineConfig({plugins:[react()],resolve:{alias:{"@":fileURLToPath(new URL("./src",import.meta.url))}}});');
   }
+  decorateWorkflowFixture(directory);
 }
 async function waitForServer(origin, processRef) {
   const end = Date.now() + 60_000;
@@ -116,6 +118,7 @@ async function browserChecks(directory, target, scenario) {
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "horizontal overflow"); assert.deepEqual(errors, []);
           try {
             await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
+            await exerciseWorkflow(page, { target, scenario, engineName, mode, evidenceRoot });
           } catch (error) {
             fs.mkdirSync(evidenceRoot, { recursive: true });
             const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-failure`);
@@ -146,7 +149,7 @@ try {
     const cssPath = path.join(directory, "src/globals.css"); const buttonPath = path.join(directory, "src/design-system/ui/button.tsx");
     if (scenario === "existing") { fs.appendFileSync(cssPath, "\n:root, .dark { --radius: 23px; }\n.consumer-owned { border-top: 7px solid currentColor; }\n"); fs.appendFileSync(buttonPath, "\n// Application-owned customization must survive later installs.\n"); }
     const beforeCss = fs.readFileSync(cssPath, "utf8"); const beforeButton = fs.readFileSync(buttonPath, "utf8"); const beforeApp = fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8");
-    await add("input", "dialog", ...expandedItems);
+    await add("input", "dialog", ...expandedItems, ...workflowItems, "checkbox");
     assertExpandedFiles(directory);
     assert.equal(fs.readFileSync(cssPath, "utf8"), beforeCss, "adding UI changed theme or custom CSS"); assert.equal(fs.readFileSync(buttonPath, "utf8"), beforeButton, "adding UI overwrote a customized button"); assert.equal(fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8"), beforeApp);
     await run(npm, ["run", "build"], directory); await browserChecks(directory, target, scenario);

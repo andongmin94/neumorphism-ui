@@ -3,14 +3,6 @@
 
 @source "../../registry/src/components";
 
-@font-face {
-  font-family: "Pretendard Variable";
-  src: url("/fonts/PretendardVariable.woff2") format("woff2");
-  font-display: swap;
-  font-style: normal;
-  font-weight: 45 930;
-}
-
 :root {
   --surface: var(--neu-surface);
   --surface-soft: var(--neu-surface-soft);
@@ -36,11 +28,8 @@
   --radius-md: 18px;
   --radius-lg: 28px;
   --radius-pill: 999px;
-  --site-font-sans:
-    "Pretendard Variable", Pretendard, "Noto Sans KR", "Apple SD Gothic Neo",
-    "Malgun Gothic", sans-serif;
-  --site-font-mono:
-    "SFMono-Regular", Consolas, "Liberation Mono", "Roboto Mono", monospace;
+  --site-font-sans: var(--neu-font-sans);
+  --site-font-mono: var(--neu-font-mono);
   --font-sans: var(--site-font-sans);
   --font-mono: var(--site-font-mono);
 }
@@ -315,7 +304,7 @@ a {
   padding-bottom: 1.15rem;
   border-bottom: 1px solid var(--line);
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.67rem;
 }
 
@@ -638,7 +627,7 @@ a {
 .field-heading output,
 .field-heading strong {
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.68rem;
 }
 
@@ -1060,7 +1049,7 @@ a {
   gap: 0.55rem;
   margin-bottom: 2.5rem;
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.66rem;
 }
 
@@ -1120,7 +1109,7 @@ a {
 .component-doc-section-heading > span {
   padding-top: 0.5rem;
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.58rem;
   font-weight: 750;
   letter-spacing: 0.04em;
@@ -1169,7 +1158,7 @@ a {
 .component-example-toolbar > span {
   padding-right: 0.5rem;
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   text-transform: uppercase;
 }
@@ -1336,7 +1325,7 @@ a {
 
 .component-preview-progress strong {
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.66rem;
 }
 
@@ -1561,7 +1550,7 @@ a {
   border-radius: 50%;
   background: var(--docs-accent);
   color: #fff;
-  font-family: serif;
+  font-family: var(--font-sans);
   font-size: 0.68rem;
   font-weight: 800;
 }
@@ -1630,7 +1619,7 @@ a {
   background: var(--surface);
   box-shadow: var(--shadow-soft);
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.55rem;
 }
 
@@ -1661,14 +1650,14 @@ a {
 
 .component-source-file > div span {
   color: var(--foreground-soft);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.65rem;
   font-weight: 760;
 }
 
 .component-source-file > div small {
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.55rem;
 }
 
@@ -1787,7 +1776,7 @@ a {
   background: var(--surface-low);
   box-shadow: var(--shadow-inset);
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.55rem;
 }
 
@@ -2354,14 +2343,14 @@ a {
 }
 
 .component-directory-filters button span {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.55rem;
 }
 
 .component-directory-count {
   padding: 1.7rem 0 0.8rem;
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.65rem;
 }
 
@@ -2398,7 +2387,7 @@ a {
 
 .component-directory-groups header > span {
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.62rem;
 }
 
@@ -2686,7 +2675,7 @@ a {
 .theme-studio-panel-heading span,
 .theme-output-heading span {
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.57rem;
   font-weight: 760;
   letter-spacing: 0.08em;
@@ -2704,7 +2693,7 @@ a {
   border-radius: 9px;
   background: transparent;
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.58rem;
   cursor: pointer;
 }
@@ -2926,7 +2915,7 @@ a {
   gap: 1rem;
   padding: 0 0.2rem 0.8rem;
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.6rem;
   text-transform: uppercase;
 }
@@ -2953,7 +2942,7 @@ a {
   border-radius: 6px;
   background: transparent;
   color: inherit;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   text-transform: uppercase;
   cursor: pointer;
@@ -3031,7 +3020,7 @@ a {
 
 .theme-preview-progress small {
   color: var(--docs-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.55rem;
 }
 
@@ -3161,7 +3150,7 @@ a {
 
 .theme-registry-commands > div > span {
   color: var(--docs-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.55rem;
   font-weight: 760;
 }
@@ -4775,7 +4764,7 @@ html {
   border: 1px solid var(--line);
   border-radius: 7px;
   color: var(--foreground-soft);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.68rem;
   text-align: center;
 }
@@ -5951,3 +5940,5 @@ html {
     right: 0.75rem;
   }
 }
+
+pre, code, kbd, samp { font-family: var(--neu-font-mono); font-variant-ligatures: none; }

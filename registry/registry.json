@@ -30,8 +30,13 @@
       "registryDependencies": [
         "@neumorphism-ui/utils"
       ],
+      "dependencies": [
+        "pretendard@1.3.9"
+      ],
       "cssVars": {
         "theme": {
+          "font-sans": "var(--neu-font-sans)",
+          "font-mono": "var(--neu-font-mono)",
           "color-background": "var(--background)",
           "color-foreground": "var(--foreground)",
           "color-card": "var(--card)",
@@ -62,6 +67,8 @@
           "shadow-neu-primary": "var(--neu-shadow-primary)"
         },
         "light": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#e5ebf1",
           "foreground": "#172033",
           "card": "#e9eef4",
@@ -110,6 +117,8 @@
           "neu-shadow-floating": "0 16px 40px rgb(30 48 72 / 0.14), 0 3px 8px rgb(30 48 72 / 0.14), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#151a22",
           "foreground": "#e9f0fa",
           "card": "#1b222c",
@@ -164,7 +173,11 @@
             "@apply border-border outline-ring/50": {}
           },
           "body": {
-            "@apply bg-background text-foreground": {}
+            "@apply bg-background text-foreground": {},
+            "font-family": "var(--neu-font-sans)"
+          },
+          "code, pre, kbd, samp": {
+            "font-family": "var(--neu-font-mono)"
           }
         },
         "@layer components": {
@@ -631,6 +644,8 @@
       "type": "registry:style",
       "cssVars": {
         "light": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#e5ebf1",
           "foreground": "#172033",
           "card": "#e9eef4",
@@ -679,6 +694,8 @@
           "neu-shadow-floating": "0 16px 40px rgb(30 48 72 / 0.14), 0 3px 8px rgb(30 48 72 / 0.14), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#151a22",
           "foreground": "#e9f0fa",
           "card": "#1b222c",
@@ -735,6 +752,8 @@
       "type": "registry:style",
       "cssVars": {
         "light": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#ebe9f4",
           "foreground": "#252036",
           "card": "#ebe9f4",
@@ -783,6 +802,8 @@
           "neu-shadow-floating": "0 16px 40px rgb(45 32 76 / 0.16), 0 3px 8px rgb(45 32 76 / 0.16), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#171520",
           "foreground": "#f1edff",
           "card": "#1e1a2a",
@@ -839,6 +860,8 @@
       "type": "registry:style",
       "cssVars": {
         "light": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#e7eee9",
           "foreground": "#1a2b24",
           "card": "#e7eee9",
@@ -887,6 +910,8 @@
           "neu-shadow-floating": "0 16px 40px rgb(26 56 43 / 0.15), 0 3px 8px rgb(26 56 43 / 0.15), inset -1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#121b17",
           "foreground": "#e9f5ee",
           "card": "#19251f",
@@ -943,6 +968,8 @@
       "type": "registry:style",
       "cssVars": {
         "light": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#efe8df",
           "foreground": "#35271f",
           "card": "#efe8df",
@@ -991,6 +1018,8 @@
           "neu-shadow-floating": "0 16px 40px rgb(76 50 33 / 0.16), 0 3px 8px rgb(76 50 33 / 0.16), inset 1px 1px 0 rgb(255 255 255 / 0.68)"
         },
         "dark": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#211814",
           "foreground": "#f8eee6",
           "card": "#2a1f19",
@@ -1047,6 +1076,8 @@
       "type": "registry:style",
       "cssVars": {
         "light": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#e6e8eb",
           "foreground": "#1d232b",
           "card": "#e6e8eb",
@@ -1095,6 +1126,8 @@
           "neu-shadow-floating": "0 16px 40px rgb(31 39 50 / 0.17), 0 3px 8px rgb(31 39 50 / 0.17), inset 1px 1px 0 rgb(255 255 255 / 0.70)"
         },
         "dark": {
+          "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+          "neu-font-mono": "Consolas, monospace",
           "background": "#111419",
           "foreground": "#edf1f6",
           "card": "#181c22",
@@ -1438,6 +1471,84 @@
       "files": [
         {
           "path": "src/components/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "title": "Calendar",
+      "description": "Single, multiple and range selection with keyboard navigation and neumorphic selected days.",
+      "type": "registry:ui",
+      "dependencies": [
+        "@daypicker/react@^10.0.0"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/calendar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "title": "Date Picker",
+      "description": "A controlled date-only picker with local form serialization, clearing and constrained dates.",
+      "type": "registry:ui",
+      "dependencies": [
+        "@daypicker/react@^10.0.0"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/calendar",
+        "@neumorphism-ui/popover"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/date-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "title": "Data Table",
+      "description": "Semantic TanStack table rendering, sortable headers and pagination; the application owns data and state.",
+      "type": "registry:ui",
+      "dependencies": [
+        "@tanstack/react-table@^8.21.3"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/select",
+        "@neumorphism-ui/table"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/data-table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "title": "Toast",
+      "description": "Accessible notifications with manual dismissal, timeout and undo actions, using Base UI.",
+      "type": "registry:ui",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toast.tsx",
           "type": "registry:ui"
         }
       ]

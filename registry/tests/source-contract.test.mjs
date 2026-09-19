@@ -24,7 +24,7 @@ test("every installable import is covered by that item's declared dependency clo
   for (const item of catalog.items) {
     const dependencies = [...closure(item)].map(name => items.get(name));
     const files = new Set(dependencies.flatMap(entry => (entry.files ?? []).map(file => file.path)));
-    const packages = new Set(["react", "react-dom", ...dependencies.flatMap(entry => entry.dependencies ?? [])]);
+    const packages = new Set(["react", "react-dom", ...dependencies.flatMap(entry => (entry.dependencies ?? []).map(spec => { const index = spec.lastIndexOf("@"); return index > 0 ? spec.slice(0, index) : spec; }))]);
     for (const file of item.files ?? []) {
       const source = fs.readFileSync(path.join(root, file.path), "utf8");
       const parsed = ts.createSourceFile(file.path, source, ts.ScriptTarget.Latest, true);

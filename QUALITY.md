@@ -6,8 +6,8 @@ visual clone. Directory submission and production readiness are not approved.
 
 ## Implemented collection
 
-The catalog has **40 UI components**, five presets, one base and one utility:
-47 registry items. This replaces the previous 26-component scope.
+The catalog has **44 UI components**, five presets, one base and one utility:
+51 registry items. This replaces the previous 26-component scope.
 
 The expansion adds Alert Dialog, Popover, Hover Card, Sheet, Collapsible, Toggle,
 Toggle Group, Toolbar, Field, Fieldset, Form, Number Field, Meter and Combobox.

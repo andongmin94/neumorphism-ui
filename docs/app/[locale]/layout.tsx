@@ -15,6 +15,7 @@ import { LocaleProvider } from "@/i18n/locale-provider";
 import { getLocalizedComponentDocGroups } from "@/i18n/localized-component-docs";
 import { createLocalizedMetadata } from "@/i18n/metadata";
 import { getMessages } from "@/i18n/messages";
+import "pretendard/dist/web/variable/pretendardvariable.css";
 import "@/app/globals.css";
 
 type LocaleLayoutProps = {

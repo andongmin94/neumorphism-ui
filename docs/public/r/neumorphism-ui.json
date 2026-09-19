@@ -4,11 +4,16 @@
   "name": "neumorphism-ui",
   "title": "Neumorphism UI",
   "description": "The light and dark design tokens for the Neumorphism UI registry.",
+  "dependencies": [
+    "pretendard@1.3.9"
+  ],
   "registryDependencies": [
     "@neumorphism-ui/utils"
   ],
   "cssVars": {
     "theme": {
+      "font-sans": "var(--neu-font-sans)",
+      "font-mono": "var(--neu-font-mono)",
       "color-background": "var(--background)",
       "color-foreground": "var(--foreground)",
       "color-card": "var(--card)",
@@ -39,6 +44,8 @@
       "shadow-neu-primary": "var(--neu-shadow-primary)"
     },
     "light": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#e5ebf1",
       "foreground": "#172033",
       "card": "#e9eef4",
@@ -87,6 +94,8 @@
       "neu-shadow-floating": "0 16px 40px rgb(30 48 72 / 0.14), 0 3px 8px rgb(30 48 72 / 0.14), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
     },
     "dark": {
+      "neu-font-sans": "\"Pretendard Variable\", Pretendard, sans-serif",
+      "neu-font-mono": "Consolas, monospace",
       "background": "#151a22",
       "foreground": "#e9f0fa",
       "card": "#1b222c",
@@ -141,7 +150,11 @@
         "@apply border-border outline-ring/50": {}
       },
       "body": {
-        "@apply bg-background text-foreground": {}
+        "@apply bg-background text-foreground": {},
+        "font-family": "var(--neu-font-sans)"
+      },
+      "code, pre, kbd, samp": {
+        "font-family": "var(--neu-font-mono)"
       }
     },
     "@layer components": {
