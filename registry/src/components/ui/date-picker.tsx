@@ -43,7 +43,7 @@ function DatePicker({ label, value, onValueChange, id, name, className, placehol
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto gap-0 p-1">
         <PopoverTitle className="sr-only">{label}</PopoverTitle>
-        <Calendar mode="single" required autoFocus selected={value} defaultMonth={value ?? startMonth} onSelect={date => { onValueChange(date); setOpen(false); }} locale={locale} disabled={disabledDates} startMonth={startMonth} endMonth={endMonth} className="border-0 shadow-none" />
+        <Calendar mode="single" required autoFocus selected={value} defaultMonth={value ?? startMonth} onSelect={date => { onValueChange(date); setOpen(false); }} locale={locale} disabled={disabledDates} startMonth={startMonth} endMonth={endMonth} className="border-0 [box-shadow:none]" />
       </PopoverContent>
     </Popover>
     {value && <Button variant="ghost" size="icon" disabled={disabled} aria-label={clearLabel} onClick={() => { onValueChange(undefined); trigger.current?.focus(); }}><span aria-hidden="true">×</span></Button>}

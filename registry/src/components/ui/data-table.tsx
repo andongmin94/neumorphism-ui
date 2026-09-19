@@ -41,7 +41,7 @@ function DataTablePagination<TData>({ table, labels = defaultLabels, pageSizes =
   const size = table.getState().pagination.pageSize;
   const sizes = Array.from(new Set([size, ...pageSizes])).sort((a, b) => a - b);
   return <div data-slot="data-table-pagination" className="flex flex-wrap items-center justify-between gap-3 text-sm">
-    <div className="flex items-center gap-2"><label htmlFor={id} className="text-[var(--muted-foreground)]">{labels.rowsPerPage}</label><Select id={id} value={size} className="h-9 w-20" onChange={event => table.setPageSize(Number(event.target.value))}>{sizes.map(value => <SelectItem key={value} value={value}>{value}</SelectItem>)}</Select></div>
+    <div className="flex items-center gap-2"><label htmlFor={id} className="whitespace-nowrap text-[var(--muted-foreground)]">{labels.rowsPerPage}</label><div className="w-20 shrink-0"><Select id={id} value={size} className="h-9" onChange={event => table.setPageSize(Number(event.target.value))}>{sizes.map(value => <SelectItem key={value} value={value}>{value}</SelectItem>)}</Select></div></div>
     <div className="flex flex-wrap items-center gap-3"><span aria-live="polite" className="tabular-nums text-[var(--muted-foreground)]">{labels.page(count ? table.getState().pagination.pageIndex + 1 : 0, count)}</span><Button size="sm" disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>{labels.previous}</Button><Button size="sm" disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>{labels.next}</Button></div>
   </div>;
 }
