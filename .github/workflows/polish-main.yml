@@ -1,0 +1,49 @@
+name: Polish verified main UI
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/polish-main.yml]
+permissions:
+  contents: write
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix registry
+      - name: Align pagination wrapper and embedded calendar shadow
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          function edit(file, before, after) {
+            const source = fs.readFileSync(file, 'utf8');
+            assert.ok(source.includes(before), file + ': missing expected source');
+            fs.writeFileSync(file, source.replace(before, after));
+          }
+          edit('registry/src/components/ui/date-picker.tsx', 'className="border-0 shadow-none"', 'className="border-0 [box-shadow:none]"');
+          edit('registry/src/components/ui/data-table.tsx', '<label htmlFor={id} className="text-[var(--muted-foreground)]">', '<label htmlFor={id} className="whitespace-nowrap text-[var(--muted-foreground)]">');
+          edit('registry/src/components/ui/data-table.tsx', '<Select id={id} value={size} className="h-9 w-20"', '<div className="w-20 shrink-0"><Select id={id} value={size} className="h-9"');
+          edit('registry/src/components/ui/data-table.tsx', '</SelectItem>)}</Select></div>', '</SelectItem>)}</Select></div></div>');
+          JS
+      - name: Generate and verify actual installable output
+        run: |
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          git diff --check
+      - name: Commit on main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add registry/src/components/ui registry/registry.json registry/public/r docs/public/r docs/app/theme.css docs/components/docs/theme-bootstrap.ts
+          git commit -m 'fix: align page size selector and remove nested calendar shadow'
+          git push origin HEAD:main
+          git rev-parse HEAD
