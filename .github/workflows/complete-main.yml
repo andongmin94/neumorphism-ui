@@ -1,0 +1,82 @@
+name: Complete main-only UI expansion
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/complete-main.yml]
+permissions:
+  contents: write
+jobs:
+  complete:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Remove the two obsolete work branches
+        run: |
+          for branch in work/registry-foundation work/ui-expansion; do
+            if test -n "$(git ls-remote --heads origin "refs/heads/$branch")"; then
+              git push origin --delete "$branch"
+            fi
+          done
+      - name: Prepare reviewed component sources without creating a branch
+        run: |
+          git fetch origin 105261b548f35a310b882d9a531885a7558997f6
+          git restore --source=FETCH_HEAD --staged --worktree -- docs registry scripts AGENTS.md README.md QUALITY.md
+          node scripts/integrate-workflow-ui.mjs
+          node scripts/finish-workflow-ui.mjs
+      - name: Install declared dependencies and update locks
+        run: |
+          npm install --prefix registry --no-audit --no-fund
+          npm install --prefix docs --no-audit --no-fund
+      - name: Build and verify registry source contracts
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+      - name: Verify documentation and usage sources
+        run: |
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run test:ssr --prefix docs
+      - name: Install browser engines
+        working-directory: docs
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Test independent installations and interactions
+        run: npm run consumer:verify --prefix registry
+      - name: Test localized pages and date-only time zones
+        working-directory: docs
+        run: npm run test:browser
+      - name: Commit verified application changes directly to main
+        run: |
+          npm run check:generated --prefix registry
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: add calendar date picker data table and toast with Pretendard typography'
+          git push origin HEAD:main
+          git rev-parse HEAD
+      - name: Export inspectable source without fonts or dependencies
+        if: always()
+        run: tar -czf "$RUNNER_TEMP/workflow-source.tar.gz" --exclude='*/node_modules' --exclude='docs/public/fonts' --exclude='*.woff*' --exclude='*.ttf' --exclude='*.otf' --exclude='docs/dist' --exclude='docs/.next' --exclude='docs/.wrangler' --exclude='docs/test-results' docs registry README.md QUALITY.md AGENTS.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: main-component-source
+          path: ${{ runner.temp }}/workflow-source.tar.gz
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: main-component-evidence
+          path: docs/test-results
+          retention-days: 7
+          if-no-files-found: ignore
