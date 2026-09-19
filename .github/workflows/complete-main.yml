@@ -18,10 +18,11 @@ jobs:
           node-version: 22
       - name: Prepare reviewed component sources on main
         run: |
-          git fetch origin 6cdaf1f391074e30d7172f810d0fbded1845f34e
+          git fetch origin 27fd51024a46396ddf880b21e93a4faef4aa470b
           git restore --source=FETCH_HEAD --staged --worktree -- docs registry scripts AGENTS.md README.md QUALITY.md
           node scripts/integrate-workflow-ui.mjs
           node scripts/finish-workflow-ui.mjs
+          node scripts/finish-fixture.mjs
       - name: Install dependencies and update locks
         run: |
           npm install --prefix registry --no-audit --no-fund
