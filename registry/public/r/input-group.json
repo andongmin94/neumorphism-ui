@@ -4,7 +4,6 @@
   "title": "Input Group",
   "description": "A composable inset field with addons, actions, and text or textarea controls.",
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [

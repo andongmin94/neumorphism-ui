@@ -108,7 +108,8 @@ export default async function InstallationPage({
         <section className="docs-content-section" id="component">
           <h2>{messages.installationPage.componentTitle}</h2>
           <p>{messages.installationPage.componentBody}</p>
-          <InstallCommand name="button" />
+          <InstallCommand name="neumorphism-ui" />
+          <CopyableCode code={`${getInstallCommand("button")} --overwrite`} label={messages.installationPage.installLabel} />
           <p className="docs-section-note">
             {messages.installationPage.componentNote}
           </p>

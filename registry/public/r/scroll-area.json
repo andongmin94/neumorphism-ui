@@ -4,7 +4,6 @@
   "title": "Scroll Area",
   "description": "A compact scrollable surface with themed native scrollbars.",
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [

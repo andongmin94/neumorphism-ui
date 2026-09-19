@@ -8,7 +8,7 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="skeleton"
       aria-hidden="true"
       className={cn(
-        "animate-pulse rounded-[calc(var(--neu-radius-surface)*0.65)] bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)]",
+        "animate-pulse motion-reduce:animate-none rounded-[calc(var(--neu-radius-surface)*0.65)] bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)]",
         className,
       )}
       {...props}

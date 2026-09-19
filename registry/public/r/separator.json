@@ -4,7 +4,6 @@
   "title": "Separator",
   "description": "A horizontal or vertical divider for grouping related content.",
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [

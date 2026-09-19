@@ -29,7 +29,7 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={mergeClassName<DialogPrimitive.Backdrop.State>(
-        "fixed inset-0 isolate z-50 bg-[var(--neu-overlay)] backdrop-blur-sm transition-opacity duration-[var(--neu-duration)] data-closed:opacity-0 data-open:opacity-100",
+        "fixed inset-0 isolate z-50 bg-[var(--neu-overlay)] backdrop-blur-sm transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:opacity-0 data-open:opacity-100",
         className,
       )}
       {...props}
@@ -40,6 +40,7 @@ function DialogOverlay({
 interface DialogContentProps extends DialogPrimitive.Popup.Props {
   overlayClassName?: DialogPrimitive.Backdrop.Props["className"];
   showCloseButton?: boolean;
+  closeLabel?: string;
 }
 
 function DialogContent({
@@ -47,6 +48,7 @@ function DialogContent({
   children,
   overlayClassName,
   showCloseButton = true,
+  closeLabel = "Close",
   ...props
 }: DialogContentProps) {
   return (
@@ -55,7 +57,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={mergeClassName<DialogPrimitive.Popup.State>(
-          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
           className,
         )}
         {...props}
@@ -64,10 +66,10 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-4 right-4 grid size-8 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[color,box-shadow,transform] duration-[var(--neu-duration)] hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] disabled:pointer-events-none"
+            className="absolute top-4 right-4 grid size-8 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] disabled:pointer-events-none"
           >
             <span aria-hidden="true">×</span>
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{closeLabel}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

@@ -130,8 +130,8 @@ export function validateRegistry(registry) {
 
     for (const uiItem of uiItems) {
       assert(
-        uiItem.registryDependencies?.includes("@neumorphism-ui/neumorphism-ui"),
-        `${uiItem.name} must depend on @neumorphism-ui/neumorphism-ui.`,
+        !uiItem.registryDependencies?.includes("@neumorphism-ui/neumorphism-ui"),
+        `${uiItem.name} must not reinstall the base theme.`,
       );
       assert(
         uiItem.registryDependencies?.includes("@neumorphism-ui/utils"),

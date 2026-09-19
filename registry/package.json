@@ -8,28 +8,35 @@
   },
   "exports": {
     "./ui/*": "./src/components/ui/*.tsx",
-    "./utils": "./src/lib/utils.ts"
+    "./utils": "./src/lib/utils.ts",
+    "./theme": "./src/theme.ts"
   },
   "scripts": {
     "build": "node scripts/build-registry.mjs",
     "validate": "node scripts/validate-registry.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "lint": "npm run validate && npm run typecheck",
-    "sync:docs": "node scripts/sync-docs-public.mjs"
+    "sync:docs": "node scripts/sync-docs-public.mjs",
+    "generate": "node --experimental-strip-types scripts/generate-registry.mjs",
+    "prebuild": "npm run generate",
+    "prevalidate": "npm run generate",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "consumer:verify": "node scripts/verify-consumer.mjs",
+    "check:generated": "node --experimental-strip-types scripts/check-generated.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "tailwind-merge": "^3.6.0"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": ">=19.0.0 <20.0.0",
+    "react-dom": ">=19.0.0 <20.0.0"
   },
   "devDependencies": {
-    "@types/react": "19.2.14",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "shadcn": "^4.15.0",
     "typescript": "5.9.3"
   }

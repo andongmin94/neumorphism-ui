@@ -7,7 +7,6 @@
     "@base-ui/react"
   ],
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [

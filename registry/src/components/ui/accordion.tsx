@@ -47,14 +47,14 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={mergeClassName<AccordionPrimitive.Trigger.State>(
-          "group/accordion-trigger flex flex-1 items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-[var(--foreground)] outline-none transition-colors duration-[var(--neu-duration)] hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
+          "group/accordion-trigger flex flex-1 items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-[var(--foreground)] outline-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
           className,
         )}
         {...props}
       >
         {children}
         <span
-          className="accordion-indicator pointer-events-none grid size-6 shrink-0 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-base leading-none text-[var(--primary)] [box-shadow:var(--neu-shadow-raised-sm)] transition-[box-shadow,transform] duration-[var(--neu-duration)] group-aria-expanded/accordion-trigger:rotate-45 group-aria-expanded/accordion-trigger:[box-shadow:var(--neu-shadow-inset)]"
+          className="accordion-indicator pointer-events-none grid size-6 shrink-0 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-base leading-none text-[var(--primary)] [box-shadow:var(--neu-shadow-raised-sm)] transition-[box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none group-aria-expanded/accordion-trigger:rotate-45 group-aria-expanded/accordion-trigger:[box-shadow:var(--neu-shadow-inset)]"
           aria-hidden="true"
         >
           +
@@ -73,7 +73,7 @@ function AccordionContent({
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
       className={mergeClassName<AccordionPrimitive.Panel.State>(
-        "h-[var(--accordion-panel-height)] overflow-hidden text-sm text-[var(--muted-foreground)] transition-[height] duration-[var(--neu-duration)] ease-out data-[ending-style]:h-0 data-[starting-style]:h-0",
+        "h-[var(--accordion-panel-height)] overflow-hidden text-sm text-[var(--muted-foreground)] transition-[height] duration-[var(--neu-duration)] motion-reduce:transition-none ease-out data-[ending-style]:h-0 data-[starting-style]:h-0",
         className,
       )}
       {...props}

@@ -8,7 +8,7 @@ function Select({ className, children, ...props }: React.ComponentProps<"select"
       <select
         data-slot="select"
         className={cn(
-          "h-10 w-full appearance-none rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] py-2 pl-4 pr-10 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[box-shadow,border-color] duration-[var(--neu-duration)] focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-[var(--destructive)] aria-invalid:ring-2 aria-invalid:ring-[color:var(--destructive)]/20",
+          "h-10 w-full appearance-none rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] py-2 pl-4 pr-10 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[box-shadow,border-color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-[var(--destructive)] aria-invalid:ring-2 aria-invalid:ring-[color:var(--destructive)]/20",
           className,
         )}
         {...props}

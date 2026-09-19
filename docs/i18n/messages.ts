@@ -128,9 +128,9 @@ const ko = {
     configLabel: "components.json Registry 설정",
     componentTitle: "3. 컴포넌트 추가",
     componentBody:
-      "필요한 항목만 설치합니다. 의존 컴포넌트와 공통 base 토큰은 CLI가 함께 처리합니다.",
+      "공통 기본 테마는 처음 한 번 설치합니다. 이후 부품 추가는 선택한 테마를 다시 설치하지 않습니다.",
     componentNote:
-      "설치 후 @/components/ui/button에서 일반 shadcn 컴포넌트처럼 import할 수 있습니다.",
+      "처음 생성된 기본 버튼을 교체할 때만 --overwrite를 사용합니다. 이미 수정한 버튼은 먼저 커밋하고 변경 내용을 검토하세요.",
     themeTitle: "4. 테마 적용",
     themeBody:
       "style item은 컴포넌트 코드를 변경하지 않고 팔레트, 그림자, 모서리 반경 토큰만 덮어씁니다. 설치 전에 dry-run으로 변경점을 확인할 수 있습니다.",
@@ -398,9 +398,9 @@ const en: Messages = {
     configLabel: "components.json Registry configuration",
     componentTitle: "3. Add a component",
     componentBody:
-      "Install only what you need. The CLI resolves dependent components and shared base tokens.",
+      "Install the shared base once. Adding components afterward does not reinstall your selected theme.",
     componentNote:
-      "After installation, import it from @/components/ui/button like any other shadcn component.",
+      "Use --overwrite only to replace the initially scaffolded button. Commit and review an existing customized button before replacing it.",
     themeTitle: "4. Apply a theme",
     themeBody:
       "A style item overrides palette, shadow, and radius tokens without changing component source. Use a dry run to review changes before installation.",
@@ -655,9 +655,9 @@ const zh: Messages = {
     configLabel: "components.json Registry 配置",
     componentTitle: "3. 添加组件",
     componentBody:
-      "只安装需要的项目。CLI 会同时处理依赖组件和共享 base token。",
+      "共通の基本テーマは最初に一度インストールします。その後の部品追加で選択済みのテーマを再インストールしません。",
     componentNote:
-      "安装后可从 @/components/ui/button 导入，与普通 shadcn 组件一致。",
+      "--overwrite は初期ボタンを置き換える場合にのみ使います。変更済みのボタンは先にコミットして内容を確認してください。",
     themeTitle: "4. 应用主题",
     themeBody:
       "style item 不会更改组件源码，只覆盖调色板、阴影和圆角 token。安装前可通过 dry-run 查看变更。",
@@ -911,9 +911,9 @@ const ja: Messages = {
     configLabel: "components.json の Registry 設定",
     componentTitle: "3. コンポーネントを追加",
     componentBody:
-      "必要な項目だけを導入します。依存コンポーネントと共通 base token は CLI が処理します。",
+      "共享基础主题只需首次安装。之后添加组件不会重新安装所选主题。",
     componentNote:
-      "導入後は通常の shadcn コンポーネントと同様に @/components/ui/button から import できます。",
+      "仅在替换初始生成的按钮时使用 --overwrite。替换自定义按钮前，请先提交并检查更改。",
     themeTitle: "4. テーマを適用",
     themeBody:
       "style item はコンポーネントのソースを変えずに、パレット、シャドウ、角丸 token を上書きします。導入前に dry-run で変更内容を確認できます。",

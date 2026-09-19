@@ -4,7 +4,6 @@
   "title": "Label",
   "description": "An accessible form label with disabled-state styling.",
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [

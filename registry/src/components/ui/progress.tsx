@@ -40,7 +40,7 @@ function Progress({
       >
         <ProgressPrimitive.Indicator
           data-slot="progress-indicator"
-          className="h-full rounded-[inherit] bg-[var(--primary)] [box-shadow:inset_0_1px_rgb(255_255_255_/_0.24)] transition-[width] duration-[var(--neu-duration)] ease-out group-data-[indeterminate]/progress:w-1/3 group-data-[indeterminate]/progress:animate-pulse"
+          className="h-full rounded-[inherit] bg-[var(--primary)] [box-shadow:inset_0_1px_rgb(255_255_255_/_0.24)] transition-[width] duration-[var(--neu-duration)] motion-reduce:transition-none ease-out group-data-[indeterminate]/progress:w-1/3 group-data-[indeterminate]/progress:animate-pulse motion-reduce:animate-none"
         />
       </ProgressPrimitive.Track>
     </ProgressPrimitive.Root>

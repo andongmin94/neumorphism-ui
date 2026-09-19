@@ -540,16 +540,16 @@ test("serves a complete shadcn registry catalog", async () => {
   );
   assert.equal(sageStyle.type, "registry:style");
   assert.ok(
-    sageStyle.registryDependencies.includes("@neumorphism-ui/neumorphism-ui"),
+    !sageStyle.registryDependencies?.includes("@neumorphism-ui/neumorphism-ui"),
   );
-  assert.equal(sageStyle.cssVars.light["neu-radius-control"], "16px");
+  assert.equal(sageStyle.cssVars.light["neu-radius-control"], "12px");
   assert.match(sageStyle.cssVars.dark["neu-shadow-raised"], /-4px 4px 10px/);
 
   const baseStyle = JSON.parse(
     await readFile(path.join(publicRoot, "r", "neumorphism-ui.json"), "utf8"),
   );
-  assert.ok(baseStyle.dependencies.includes("@base-ui/react"));
-  assert.ok(!baseStyle.dependencies.includes("radix-ui"));
+  assert.equal(baseStyle.dependencies, undefined);
+  assert.ok(!baseStyle.dependencies?.includes("radix-ui"));
   const airStyle = JSON.parse(
     await readFile(path.join(publicRoot, "r", "style-air.json"), "utf8"),
   );

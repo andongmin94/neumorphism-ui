@@ -75,7 +75,7 @@ function Checkbox({
       />
       <span
         aria-hidden="true"
-        className="relative flex size-5 items-center justify-center rounded-md border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-indeterminate:bg-[var(--primary)] peer-indeterminate:[box-shadow:var(--neu-shadow-primary-inset)] peer-checked:[&_[data-check]]:opacity-100 peer-indeterminate:[&_[data-indeterminate]]:opacity-100"
+        className="relative flex size-5 items-center justify-center rounded-md border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-indeterminate:bg-[var(--primary)] peer-indeterminate:[box-shadow:var(--neu-shadow-primary-inset)] peer-checked:[&_[data-check]]:opacity-100 peer-indeterminate:[&_[data-indeterminate]]:opacity-100"
       >
         <span
           data-check=""

@@ -1,0 +1,55 @@
+name: Verify
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - run: npm ci --prefix registry && npm ci --prefix docs
+      - name: Registry build and contracts
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+      - name: Documentation verification
+        run: |
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run test:ssr --prefix docs
+      - name: Browser engines
+        working-directory: docs
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Installed applications without documentation CSS
+        run: npm run consumer:verify --prefix registry
+      - name: Generation must leave the repository clean
+        run: |
+          npm run check:generated --prefix registry
+          git diff --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Save installed-application evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: installed-consumers
+          path: docs/test-results/installed-consumers
+          if-no-files-found: ignore

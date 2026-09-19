@@ -12,7 +12,7 @@ const buttonVariants = {
   ghost:
     "border-transparent bg-transparent text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface-soft)] active:bg-[var(--neu-surface-low)] active:[box-shadow:var(--neu-shadow-inset)]",
   destructive:
-    "border-transparent bg-[var(--destructive)] text-white [box-shadow:var(--neu-shadow-raised-sm)] hover:brightness-105 active:[box-shadow:var(--neu-shadow-destructive-inset)]",
+    "border-transparent bg-[var(--destructive)] text-[var(--destructive-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:brightness-105 active:[box-shadow:var(--neu-shadow-destructive-inset)]",
 } as const;
 
 const buttonSizes = {
@@ -44,7 +44,7 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold outline-none transition-[box-shadow,filter,background-color,color] duration-[var(--neu-duration)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold outline-none transition-[box-shadow,filter,background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         buttonVariants[variant],
         buttonSizes[size],
         className,

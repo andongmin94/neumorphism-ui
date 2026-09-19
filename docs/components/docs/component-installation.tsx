@@ -130,7 +130,7 @@ export function ComponentInstallation({ slug }: { slug: string }) {
         const item = await fetchRegistryItem(slug, controller.signal);
         const dependencyNames = Array.from(
           new Set(
-            (item.registryDependencies ?? []).map(getDependencySlug),
+            ["neumorphism-ui", ...(item.registryDependencies ?? []).map(getDependencySlug)],
           ),
         );
         const dependencies = await Promise.all(

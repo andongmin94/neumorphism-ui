@@ -71,7 +71,7 @@ function Slider({
             data-slot="slider-thumb"
             key={index}
             index={index}
-            className="block size-5 shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[box-shadow] duration-[var(--neu-duration)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-3 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50"
+            className="block size-5 shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-3 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50"
           />
         ))}
       </SliderPrimitive.Control>

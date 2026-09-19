@@ -12,7 +12,6 @@ import {
   clearThemeSettings,
   defaultThemeSettings,
   getThemePreset,
-  LEGACY_THEME_STORAGE_KEY,
   parseThemeSettings,
   type ThemeControlShape,
   type ThemeDepth,
@@ -125,7 +124,6 @@ export function ThemeStudio() {
 
   React.useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      localStorage.removeItem(LEGACY_THEME_STORAGE_KEY);
       const stored = parseThemeSettings(localStorage.getItem(THEME_STORAGE_KEY));
       setSettings(stored ?? defaultThemeSettings);
       setReady(true);
@@ -147,7 +145,6 @@ export function ThemeStudio() {
 
   function resetTheme() {
     localStorage.removeItem(THEME_STORAGE_KEY);
-    localStorage.removeItem(LEGACY_THEME_STORAGE_KEY);
     clearThemeSettings();
     applyThemeSettings(defaultThemeSettings);
     setSettings(defaultThemeSettings);

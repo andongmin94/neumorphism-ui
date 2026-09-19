@@ -133,9 +133,9 @@ function RadioGroupItem({
       />
       <span
         aria-hidden="true"
-        className="flex size-5 items-center justify-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset)] transition-[box-shadow] duration-[var(--neu-duration)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-checked:[&>span]:opacity-100"
+        className="flex size-5 items-center justify-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset)] transition-[box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-checked:[&>span]:opacity-100"
       >
-        <span className="size-2.5 rounded-full bg-[var(--primary)] opacity-0 transition-opacity duration-[var(--neu-duration)]" />
+        <span className="size-2.5 rounded-full bg-[var(--primary)] opacity-0 transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none" />
       </span>
     </span>
   );

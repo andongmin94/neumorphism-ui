@@ -21,7 +21,7 @@ function Card({ className, variant = "raised", ...props }: CardProps) {
       data-slot="card"
       data-variant={variant}
       className={cn(
-        "flex flex-col gap-5 rounded-[var(--neu-radius-surface)] border border-transparent py-6 text-[var(--card-foreground)] transition-[transform,box-shadow] duration-[var(--neu-duration)]",
+        "flex flex-col gap-5 rounded-[var(--neu-radius-surface)] border border-transparent py-6 text-[var(--card-foreground)] transition-[transform,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none",
         cardVariants[variant],
         className,
       )}

@@ -4,7 +4,6 @@
   "title": "Alert",
   "description": "A raised status message with default, success, and destructive variants.",
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [

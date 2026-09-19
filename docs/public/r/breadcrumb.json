@@ -4,7 +4,6 @@
   "title": "Breadcrumb",
   "description": "A compact path navigation pattern with current-page semantics.",
   "registryDependencies": [
-    "@neumorphism-ui/neumorphism-ui",
     "@neumorphism-ui/utils"
   ],
   "files": [
