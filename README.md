@@ -1,27 +1,20 @@
 # Neumorphism UI
 
-Source-owned React components with soft surfaces, clear actions, and visible focus.
-Install the source with the shadcn CLI, then edit it in your application.
+Source-owned React components with soft surfaces, clear actions and visible focus.
+Install components with the shadcn CLI and edit their source in your application.
+
+The collection includes **44 UI components and five light/dark presets**. Calendar,
+Date Picker, Data Table and Toast join the existing form, selection, navigation,
+overlay and feedback controls. Documentation and live examples are available in
+Korean, English, Japanese and Chinese.
 
 This project is being prepared for the shadcn registry directory. It has not been
-submitted or approved. See [QUALITY.md](QUALITY.md) for implemented work and remaining gates.
-
-## Components and interaction design
-
-The collection includes 44 UI components and five light/dark presets. Alongside
-actions, navigation and data-display basics, it now includes confirmation dialogs,
-popovers, hover cards, sheets, collapsible content, toggles and toggle groups,
-toolbars, field/fieldset/form primitives, number fields, meters and a searchable
-combobox. These are installable components, not documentation-only mockups.
-
-Raised actions press inward; persistent selections remain inset after the pointer
-leaves. Shared tokens control directional highlights, hover elevation, floating
-overlays and error labels. Visible keyboard focus and reduced motion remain distinct
-from these depth effects. See the component documentation for composition and states.
+submitted or approved. See [QUALITY.md](QUALITY.md) for verification scope and
+remaining release work.
 
 ## First installation
 
-Use React 19 and Tailwind CSS 4. Initialize shadcn and select Base UI:
+Use React 19, Tailwind CSS 4 and an initialized shadcn project. Select Base UI:
 
 ```bash
 npx shadcn@latest init
@@ -30,31 +23,64 @@ npx shadcn@latest add @neumorphism-ui/neumorphism-ui
 npx shadcn@latest add @neumorphism-ui/button --overwrite
 ```
 
-The shared base changes project-wide design tokens and CSS. Install it deliberately,
-not every time a new component is added. Commit existing work first. `--overwrite`
-is only for replacing the button scaffold created by initialization; review an
-already customized button before replacing it.
+The shared base changes project-wide tokens and CSS. Commit existing work first.
+`--overwrite` is for replacing the initially scaffolded button; review and commit
+an already customized button before replacing it. Later component installation
+does not reinstall the base or the selected theme.
+
+The base installs the Pretendard package. Import its stylesheet **once** in your
+application entry: `app/layout.tsx` or `src/app/layout.tsx` for Next.js, or
+`src/main.tsx` for Vite. Your bundler self-hosts the font files. Component installation
+does not rewrite your layout.
+
+```tsx
+import "pretendard/dist/web/variable/pretendardvariable.css";
+```
+
+Then render a component:
 
 ```tsx
 import { Button } from "@/components/ui/button";
+
 export default function Example() {
   return <Button variant="primary">Save changes</Button>;
 }
 ```
 
-Add more components or select a preset without reinstalling the base:
+Body and controls use Pretendard Variable. Code blocks, inline code and keyboard
+labels use `Consolas, monospace`. Consolas is not distributed; systems without it
+use their default monospace font.
+
+Add components or change the visual preset:
 
 ```bash
-npx shadcn@latest add @neumorphism-ui/dialog
+npx shadcn@latest add @neumorphism-ui/calendar
+npx shadcn@latest add @neumorphism-ui/date-picker
+npx shadcn@latest add @neumorphism-ui/data-table
+npx shadcn@latest add @neumorphism-ui/toast
 npx shadcn@latest add @neumorphism-ui/style-sage
 ```
 
-The namespace above uses the configured public domain. Repository checks use the
-built local registry; passing them alone is not evidence that production has deployed it.
+The URL above is the configured public domain. Repository verification uses the
+locally built registry; it does not establish that a production deployment has
+already updated.
+
+## Design and composition
+
+Raised actions press inward. Persistent selections stay inset after pointer exit.
+Directional highlights, hover elevation, overlay shadows and visible keyboard
+focus use shared tokens. Reduced motion is separate from depth styling.
+
+Calendar uses DayPicker v10. Date Picker is controlled and submits local date-only
+values. Data Table renders a caller-owned TanStack Table instance rather than
+introducing another state API. Toast uses the existing Base UI implementation.
+The examples show actual date selection, filtering, sorting, pagination, selection,
+notification dismissal and undo. Example data and saved state are local only.
 
 ## Development
 
-Use Node.js 22.13 or newer in the Node 22 release line and npm.
+Work on **`main` only**; do not create additional branches. Use Node.js 22.13 or
+newer in the Node 22 release line and npm.
 
 ```bash
 npm ci --prefix registry
@@ -69,7 +95,7 @@ npm run test:ssr --prefix docs
 npm run check:generated --prefix registry
 ```
 
-For installed-consumer and documentation-browser verification:
+Install the browser engines and run interaction checks:
 
 ```bash
 cd docs
@@ -79,33 +105,18 @@ npm run consumer:verify --prefix registry
 npm run test:browser --prefix docs
 ```
 
-This creates independent Next.js and Vite applications with custom aliases. It installs
-actual registry JSON through the CLI, checks source/CSS preservation, builds the apps,
-and exercises representative controls in Chromium, Firefox, and WebKit without docs CSS.
-The docs browser suite also exercises hydrated previews, mobile reflow, form recovery,
-Theme Studio output and source-loading navigation. It is not an exhaustive
-independent-install or accessibility audit for every component and state.
+Independent Next.js/Vite applications install the actual registry JSON, retain
+custom aliases and application-owned CSS/source, build and run without docs CSS.
+Documentation checks exercise hydrated previews, theme output, form recovery,
+local date serialization and combined data-table operations.
 
 ## Source ownership
 
-- `registry/src/theme.ts`: preset data, settings validation, token calculation, CSS export.
-- `registry/catalog.json`: registry metadata and source/dependency declarations.
-- `registry/src/components/ui`: installable component source.
-- `registry/scripts`: generation, source contracts, and installed-application checks.
-- `docs`: localized documentation and previews, using the same theme and UI sources.
+`registry/src/components/ui` owns components. `registry/src/theme.ts` owns presets,
+settings validation and token generation. `registry/catalog.json` owns metadata
+and dependency declarations. `docs` imports these sources for its live previews.
 
-`registry/registry.json`, both `public/r` directories, `docs/app/theme.css`, and the
-theme bootstrap module are generated. Never edit them by hand. Rebuild and sync the
-registry before reviewing docs; the docs dev/build scripts do this automatically.
-
-## Typography and development branch
-
-Use `main` only; do not create work branches. Body and controls use the packaged Pretendard Variable font. Code blocks and keyboard labels prefer the locally installed Consolas font, with the generic monospace fallback on systems without it. Consolas font files are not distributed.
-
-Calendar and Date Picker use `@daypicker/react`; Data Table renders a caller-owned TanStack table; Toast uses the existing Base UI dependency. Their live, localized examples also supply the displayed and type-checked usage code.
-
-After installing the base, import the packaged font stylesheet once in the application entry: `app/layout.tsx` (or `src/app/layout.tsx`) for Next.js, and `src/main.tsx` for Vite. This lets the bundler self-host the font assets. Component installation intentionally does not overwrite your layout.
-
-```tsx
-import "pretendard/dist/web/variable/pretendardvariable.css";
-```
+`registry/registry.json`, both `public/r` directories, `docs/app/theme.css` and the
+theme bootstrap module are generated. Do not edit them manually. Docs dev/build
+scripts regenerate and synchronize these outputs first. See [AGENTS.md](AGENTS.md)
+for the branch and typography rules used by subsequent development sessions.

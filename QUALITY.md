@@ -1,115 +1,97 @@
 # Product readiness
 
-The target is an independently installable neumorphic UI collection with the
-practical scope and verification discipline of `andongmin94/neobrutal-ui`, not a
-visual clone. Directory submission and production readiness are not approved.
+Target: a source-owned neumorphic collection with the practical scope and quality
+of `andongmin94/neobrutal-ui`. The registry has 44 UI components, five presets,
+one base and one utility: 51 catalog items. Directory approval and production
+readiness are not implied by a passing build.
 
-## Implemented collection
+## Current implementation
 
-The catalog has **44 UI components**, five presets, one base and one utility:
-51 registry items. This replaces the previous 26-component scope.
+Calendar uses `@daypicker/react` v10 for date calculations, selection modes and
+keyboard navigation. Range endpoints are inset; intermediate dates share a
+connected surface. Date Picker composes Calendar with the existing Base UI
+Popover, exposes a controlled value and submits local YYYY-MM-DD dates without
+UTC conversion. Required-field validation belongs to the caller's form.
 
-The expansion adds Alert Dialog, Popover, Hover Card, Sheet, Collapsible, Toggle,
-Toggle Group, Toolbar, Field, Fieldset, Form, Number Field, Meter and Combobox.
-Interactive wrappers use the existing Base UI dependency. Source lives under
-`registry/src/components/ui`; previews and installation endpoints use those files.
-New documentation includes usage, API and accessibility guidance in the four
-existing locales. The English displayed examples also compile as consumer code.
+Data Table renders a caller-owned TanStack Table instance with semantic captions,
+sort states, keyboard-accessible horizontal scrolling and pagination. The example
+combines search, status filtering, sorting and stable-ID selection across pages.
+Rendering boundaries opt out of React Compiler memoization because the table
+instance is a stable mutable handle, not an immutable state snapshot.
 
-The shared theme engine now defines raised/primary surface fills, restrained inner
-highlights, hover elevation, floating-overlay shadows, persistent selection fills
-and error-label colors. Shadow and fill directions follow the same light setting.
-Button hover changes elevation, not text brightness. Momentary press, persistent
-selection, keyboard focus and disabled controls have separate visual treatment.
-Status alerts retain full-opacity foreground text on their tinted backgrounds.
-These changes extend the existing shared preset/token/bootstrap architecture;
-there is no second rendering implementation for installed components.
+Toast uses the existing Base UI dependency for announcements, keyboard entry,
+close actions and timers. The example exercises success/error messages, undo and
+timed dismissal. Samples use illustrative data and local state, not server storage.
 
-Form examples demonstrate validation, correction, a local saved baseline and reset.
-They are examples, not a hosted persistence service or an installable page template.
+These four additions extend the previous 40-component collection. Their preview
+source also produces localized displayed code and executable English examples.
+Documentation includes Korean, English, Japanese and Chinese versions.
 
-## Verification boundaries
+## Typography and source ownership
 
-The foundation's main Verify run 35463037009 passed at commit `08f99d6`.
-Expansion work run 35465938462 passed at `5730dbc`. Additional rendered-state and
-hydrated-documentation checks passed in work run 35466485617 on materialized tree
-`6f70c02555bef0c60e16ef493282f7ca12eecdaf`. Source-loading recovery and exact
-Theme Studio CSS output also passed in work run 35466827624 on materialized tree
-`2f99bb76e6a29495e4598fbc8f45b0fcc21f4c0d`. Later changes require their own run.
-The Verify run attached to the final commit is the authoritative execution record.
+Only `main` is used for development. Obsolete work branches have been deleted.
+`AGENTS.md` records the branch and typography rules for subsequent sessions.
 
-Current checks include:
+Body and UI use Pretendard Variable. The base installs the `pretendard` package
+and defines shared font tokens. Import the package stylesheet once from the
+application entry as shown in the README. Application bundlers self-host the font
+assets; component installation does not overwrite a user's layout. The docs use
+the same import. Code/pre/kbd/samp use `Consolas, monospace`. Consolas is a local
+font and is not distributed; an OS without it uses its generic monospace font.
 
-- Registry validation and source/example type checking; 19 regression tests for
-  themes, parser/bootstrap behavior, dependency declarations, token supply,
-  representative text contrast, source/example equality and CLI process handling.
-- Equality of source, built JSON, document tokens, bootstrap and both endpoint copies.
-- Documentation lint/type checking/build and 11 server-rendered test cases,
-  including the expanded pages across all four locales.
-- Real CLI installations in four independent applications: Next.js/Vite each with
-  fresh and existing-project scenarios, custom aliases and application-owned source.
-  Later installs must retain custom CSS, selected theme and a modified button.
-  The test declines only the known overwrite prompt and waits for complete installation;
-  an early exit, unexpected prompt or stalled process fails.
-- Twenty-four installed-app browser contexts: three engines, both frameworks and
-  scenarios, desktop-light/mobile-dark. They operate overlays, searching/selecting,
-  empty combobox results, numeric limits, form recovery/reset, keyboard toolbar
-  navigation, focus return and disabled controls without documentation CSS.
-  Actual computed shadows distinguish hover, held press, keyboard focus and
-  persistent toggle selection. Reduced-motion controls are checked in the browser.
-- Hydrated document checks for the 14 expanded English pages and representative
-  Korean/Japanese/Chinese form and combobox pages. They operate preview/code tabs,
-  check horizontal reflow and runtime errors, exercise form save/reset, check
-  Theme Studio token/export/persistence consistency, and exercise recovery from a
-  source-fetch failure when navigating to another component.
-- Default collection captures for all five presets in both modes. These are not
-  exhaustive state coverage for every palette, component, browser and viewport.
+`registry/src` and `registry/catalog.json` own source and metadata. The theme
+engine supplies previews, CSS export, bootstrap and installation tokens. Generated
+JSON/CSS and endpoint copies must not be manually edited. Temporary source-edit
+scripts and workflows are not part of the final main tree.
 
-Browser evidence is saved under `docs/test-results`; CI uploads it as `ui-verification`.
-Inspect captures as well as assertions. Reviewed samples include the ten palette
-collection views, representative open overlays and form-error states, selected
-controls, desktop Korean Form and mobile dark Number Field documentation.
-The 14 new default English documentation pages were also inspected together at
-desktop-light/mobile-dark. This is not an assistive-technology audit or a full
-visual approval of all 40 items. Existing Badge and Dropdown Menu destructive
-color states remain part of the full rendered-contrast review; these selected
-token tests are not a blanket assertion that all color/state combinations pass.
-Korean text filling does not constitute testing real IME composition.
+## Executed verification and boundaries
 
-## Remaining release blockers
+Run 35470095989 passed all stages before committing the materialized application
+as `9e3413dd6e161555ea7e98b215f4e7c2a5f8bc2c` directly to main. Its artifact
+contains 24 successful installed-app contexts and 84 successful documentation
+browser tests, with no skipped or unexpected cases. Later commits must be judged
+by their own permanent Verify run, not this earlier execution.
 
-The last recorded dependency audit found zero registry warnings and nine docs
-build/hosting-chain findings (eight high, one low). The old Vinext/Cloudflare/
-Wrangler dependency chain is still a release blocker. Functional Verify does not
-run or replace a security audit. Inspect supported upstream versions, update the
-actual affected dependencies, and rerun the complete product checks; do not hide
-findings with arbitrary overrides or blind forced upgrades.
+The suite includes registry/source/example type checks, 22 regression tests,
+generated-source equality checks, documentation lint/type checks/build, and
+11 server-rendered tests covering the localized component catalog.
 
-The published domain, deployed commit, live registry endpoints, actual README
-`shadcn init` flow and scaffold replacement, license/attribution and directory
-metadata still require review. These checks use locally served generated JSON.
-The consumer fixture supplies an initialized `components.json`. An aggregate
-installation plus import analysis does not prove every item installs independently.
+Four independent apps (Next.js and Vite, fresh and existing-project scenarios)
+install actual local registry JSON through the shadcn CLI. Existing-project cases
+retain custom aliases, a selected theme, application CSS and a modified button.
+Each app runs in Chromium, Firefox and WebKit, desktop-light and mobile-dark:
+24 contexts. They test the earlier controls plus date selection/ranges, disabled
+dates, clearing/reset, table search/filter/sort/selection, empty results, page
+sizes, toast keyboard entry, close/undo and timed dismissal. Pretendard must actually
+load; presence in a CSS font stack is insufficient. Consolas-first CSS is checked,
+not native Consolas rendering on the Linux runner.
 
-## Next product work
+The 84 documentation browser cases cover hydrated preview/code switching,
+source-fetch recovery, Theme Studio output/persistence, all four new components in
+all four locales, compiled Data Table interactions, and date-only form submission
+in Asia/Seoul and America/Los_Angeles. Runtime errors and viewport reflow are checked
+at desktop-light and mobile-dark widths.
 
-1. Extend the collection with the missing high-value navigation, date selection,
-   data-table and feedback components; retain a working installable collection at
-   each step rather than adding undocumented stubs for a numerical target.
-2. Build an installable settings/profile flow with validation, failed-submit
-   recovery, changed-state indication and save/discard. Extend it into data
-   management with combined search/filter/sort/selection/pagination.
-3. Add registry-owned analytical charts and complete page templates, with exact
-   displayed-source/preview/installation contracts.
-4. Review all public variants/states at supported widths and palettes, including
-   non-text contrast, real touch/IME, nested overlays, controlled/uncontrolled
-   behavior, ref/event composition and screen-reader use.
-5. Complete the security, independent-installation and production/directory gates.
+Assertions and screenshots are separate evidence. Captures are emitted under
+`docs/test-results` and uploaded as `ui-verification`. These tests are not a blanket
+visual or accessibility approval of all 44 components and every state/palette.
+Korean text filling is not real IME composition. Aggregate installation does not
+prove every item installs independently in every supported environment.
 
-## Source and workflow rules
+## Remaining release work
 
-Keep docs and registry modular. Prefer the dependencies already in use. Remove
-obsolete paths instead of adding compatibility layers or migrations. Generated
-JSON/CSS/bootstrap files are never manually edited. Implementation, executed
-checks and visual review are separate statuses. Temporary source-edit workflows
-must not remain in the shipped main tree.
+The earlier audit reported nine docs toolchain findings in the older
+Vinext/Cloudflare/Wrangler dependency chain. This component/typography change does
+not resolve or re-certify that chain. Rerun the audit after reviewing supported
+upstream upgrades; functional Verify is not a security audit.
+
+The live domain/deployed commit/endpoints, full README initialization path,
+individual-item installation coverage, license/attribution and shadcn directory
+metadata still need release review. Local generated-registry checks do not establish
+that the public deployment serves the new version.
+
+Remaining product work includes missing navigation components, installable
+settings/profile and data-management screens, analytical charts and complete page
+templates. Extend from the current working collection, not undocumented stubs.
+Review all variants/states for text/non-text contrast, controlled/uncontrolled
+behavior, touch, real IME, nested overlays, focus and assistive-technology use.
