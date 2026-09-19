@@ -90,17 +90,24 @@
           "neu-shadow-dark": "rgb(30 48 72 / 0.14)",
           "neu-shadow-light": "rgb(255 255 255 / 0.88)",
           "neu-shadow-raised": "6px 6px 15px rgb(30 48 72 / 0.14), -6px -6px 15px rgb(255 255 255 / 0.88)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.72)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(30 48 72 / 0.14), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(30 48 72 / 0.14), inset -1px -1px 3px rgb(255 255 255 / 0.88)",
-          "neu-shadow-primary": "2px 3px 7px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #1267f4 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #1267f4 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #1267f4 68%, black), inset -2px -2px 5px color-mix(in srgb, #1267f4 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #b92e43 68%, black), inset -2px -2px 5px color-mix(in srgb, #b92e43 78%, white)",
           "neu-overlay": "rgb(15 23 42 / 0.28)",
           "neu-radius-control": "12px",
           "neu-radius-surface": "18px",
           "neu-radius-overlay": "calc(18px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #f3f6f9 28%, #e9eef4), #e9eef4)",
+          "neu-fill-primary": "linear-gradient(135deg, #1267f4, color-mix(in srgb, #1267f4 94%, black))",
+          "neu-selected": "color-mix(in srgb, #1267f4 8%, #e9eef4)",
+          "neu-selected-border": "color-mix(in srgb, #1267f4 44%, rgb(83 99 123 / 0.18))",
+          "neu-error-text": "color-mix(in srgb, #b92e43 76%, #172033)",
+          "neu-shadow-hover": "3px 3px 9px rgb(30 48 72 / 0.14), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(30 48 72 / 0.14), 0 3px 8px rgb(30 48 72 / 0.14), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
           "background": "#151a22",
@@ -131,17 +138,24 @@
           "neu-shadow-dark": "rgb(0 0 0 / 0.34)",
           "neu-shadow-light": "rgb(255 255 255 / 0.065)",
           "neu-shadow-raised": "6px 6px 15px rgb(0 0 0 / 0.34), -6px -6px 15px rgb(255 255 255 / 0.065)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.07)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(0 0 0 / 0.34), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(0 0 0 / 0.34), inset -1px -1px 3px rgb(255 255 255 / 0.065)",
-          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #5aa2ff 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #5aa2ff 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #5aa2ff 68%, black), inset -2px -2px 5px color-mix(in srgb, #5aa2ff 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #ff7685 68%, black), inset -2px -2px 5px color-mix(in srgb, #ff7685 78%, white)",
           "neu-overlay": "rgb(0 0 0 / 0.55)",
           "neu-radius-control": "12px",
           "neu-radius-surface": "18px",
           "neu-radius-overlay": "calc(18px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #242d39 28%, #1b222c), #1b222c)",
+          "neu-fill-primary": "linear-gradient(135deg, color-mix(in srgb, #5aa2ff 94%, white), #5aa2ff)",
+          "neu-selected": "color-mix(in srgb, #5aa2ff 8%, #1b222c)",
+          "neu-selected-border": "color-mix(in srgb, #5aa2ff 44%, rgb(255 255 255 / 0.10))",
+          "neu-error-text": "#ff7685",
+          "neu-shadow-hover": "3px 3px 9px rgb(0 0 0 / 0.34), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(0 0 0 / 0.34), 0 3px 8px rgb(0 0 0 / 0.34), inset 1px 1px 0 rgb(255 255 255 / 0.07)"
         }
       },
       "css": {
@@ -645,17 +659,24 @@
           "neu-shadow-dark": "rgb(30 48 72 / 0.14)",
           "neu-shadow-light": "rgb(255 255 255 / 0.88)",
           "neu-shadow-raised": "6px 6px 15px rgb(30 48 72 / 0.14), -6px -6px 15px rgb(255 255 255 / 0.88)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.72)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(30 48 72 / 0.14), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(30 48 72 / 0.14), inset -1px -1px 3px rgb(255 255 255 / 0.88)",
-          "neu-shadow-primary": "2px 3px 7px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #1267f4 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(30 48 72 / 0.14), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #1267f4 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #1267f4 68%, black), inset -2px -2px 5px color-mix(in srgb, #1267f4 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #b92e43 68%, black), inset -2px -2px 5px color-mix(in srgb, #b92e43 78%, white)",
           "neu-overlay": "rgb(15 23 42 / 0.28)",
           "neu-radius-control": "12px",
           "neu-radius-surface": "18px",
           "neu-radius-overlay": "calc(18px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #f3f6f9 28%, #e9eef4), #e9eef4)",
+          "neu-fill-primary": "linear-gradient(135deg, #1267f4, color-mix(in srgb, #1267f4 94%, black))",
+          "neu-selected": "color-mix(in srgb, #1267f4 8%, #e9eef4)",
+          "neu-selected-border": "color-mix(in srgb, #1267f4 44%, rgb(83 99 123 / 0.18))",
+          "neu-error-text": "color-mix(in srgb, #b92e43 76%, #172033)",
+          "neu-shadow-hover": "3px 3px 9px rgb(30 48 72 / 0.14), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.88) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(30 48 72 / 0.14), 0 3px 8px rgb(30 48 72 / 0.14), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
           "background": "#151a22",
@@ -686,17 +707,24 @@
           "neu-shadow-dark": "rgb(0 0 0 / 0.34)",
           "neu-shadow-light": "rgb(255 255 255 / 0.065)",
           "neu-shadow-raised": "6px 6px 15px rgb(0 0 0 / 0.34), -6px -6px 15px rgb(255 255 255 / 0.065)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.07)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(0 0 0 / 0.34), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(0 0 0 / 0.34), inset -1px -1px 3px rgb(255 255 255 / 0.065)",
-          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #5aa2ff 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.34), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #5aa2ff 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #5aa2ff 68%, black), inset -2px -2px 5px color-mix(in srgb, #5aa2ff 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #ff7685 68%, black), inset -2px -2px 5px color-mix(in srgb, #ff7685 78%, white)",
           "neu-overlay": "rgb(0 0 0 / 0.55)",
           "neu-radius-control": "12px",
           "neu-radius-surface": "18px",
           "neu-radius-overlay": "calc(18px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #242d39 28%, #1b222c), #1b222c)",
+          "neu-fill-primary": "linear-gradient(135deg, color-mix(in srgb, #5aa2ff 94%, white), #5aa2ff)",
+          "neu-selected": "color-mix(in srgb, #5aa2ff 8%, #1b222c)",
+          "neu-selected-border": "color-mix(in srgb, #5aa2ff 44%, rgb(255 255 255 / 0.10))",
+          "neu-error-text": "#ff7685",
+          "neu-shadow-hover": "3px 3px 9px rgb(0 0 0 / 0.34), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.065) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(0 0 0 / 0.34), 0 3px 8px rgb(0 0 0 / 0.34), inset 1px 1px 0 rgb(255 255 255 / 0.07)"
         }
       }
     },
@@ -735,17 +763,24 @@
           "neu-shadow-dark": "rgb(45 32 76 / 0.16)",
           "neu-shadow-light": "rgb(255 255 255 / 0.96)",
           "neu-shadow-raised": "4px 4px 10px rgb(45 32 76 / 0.16), -4px -4px 10px rgb(255 255 255 / 0.96)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(45 32 76 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.96) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(45 32 76 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.96) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.72)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(45 32 76 / 0.16), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.96) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(45 32 76 / 0.16), inset -1px -1px 3px rgb(255 255 255 / 0.96)",
-          "neu-shadow-primary": "2px 3px 7px rgb(45 32 76 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.96) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #7557df 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(45 32 76 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.96) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #7557df 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #7557df 68%, black), inset -2px -2px 5px color-mix(in srgb, #7557df 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #cf5368 68%, black), inset -2px -2px 5px color-mix(in srgb, #cf5368 78%, white)",
           "neu-overlay": "rgb(15 23 42 / 0.28)",
           "neu-radius-control": "999px",
           "neu-radius-surface": "26px",
           "neu-radius-overlay": "calc(26px + 4px)",
-          "neu-duration": "260ms"
+          "neu-duration": "260ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #f6f3fb 28%, #ebe9f4), #ebe9f4)",
+          "neu-fill-primary": "linear-gradient(135deg, #7557df, color-mix(in srgb, #7557df 94%, black))",
+          "neu-selected": "color-mix(in srgb, #7557df 8%, #ebe9f4)",
+          "neu-selected-border": "color-mix(in srgb, #7557df 44%, rgb(111 102 128 / 0.22))",
+          "neu-error-text": "color-mix(in srgb, #cf5368 76%, #252036)",
+          "neu-shadow-hover": "3px 3px 9px rgb(45 32 76 / 0.16), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.96) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(45 32 76 / 0.16), 0 3px 8px rgb(45 32 76 / 0.16), inset 1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
           "background": "#171520",
@@ -776,17 +811,24 @@
           "neu-shadow-dark": "rgb(0 0 0 / 0.44)",
           "neu-shadow-light": "rgb(255 255 255 / 0.045)",
           "neu-shadow-raised": "4px 4px 10px rgb(0 0 0 / 0.44), -4px -4px 10px rgb(255 255 255 / 0.045)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.44), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.44), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.08)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(0 0 0 / 0.44), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.045) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(0 0 0 / 0.44), inset -1px -1px 3px rgb(255 255 255 / 0.045)",
-          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.44), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #a98cff 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.44), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #a98cff 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #a98cff 68%, black), inset -2px -2px 5px color-mix(in srgb, #a98cff 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #ff7891 68%, black), inset -2px -2px 5px color-mix(in srgb, #ff7891 78%, white)",
           "neu-overlay": "rgb(0 0 0 / 0.55)",
           "neu-radius-control": "999px",
           "neu-radius-surface": "26px",
           "neu-radius-overlay": "calc(26px + 4px)",
-          "neu-duration": "260ms"
+          "neu-duration": "260ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #292339 28%, #1e1a2a), #1e1a2a)",
+          "neu-fill-primary": "linear-gradient(135deg, color-mix(in srgb, #a98cff 94%, white), #a98cff)",
+          "neu-selected": "color-mix(in srgb, #a98cff 8%, #1e1a2a)",
+          "neu-selected-border": "color-mix(in srgb, #a98cff 44%, rgb(255 255 255 / 0.10))",
+          "neu-error-text": "#ff7891",
+          "neu-shadow-hover": "3px 3px 9px rgb(0 0 0 / 0.44), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(0 0 0 / 0.44), 0 3px 8px rgb(0 0 0 / 0.44), inset 1px 1px 0 rgb(255 255 255 / 0.08)"
         }
       }
     },
@@ -825,17 +867,24 @@
           "neu-shadow-dark": "rgb(26 56 43 / 0.15)",
           "neu-shadow-light": "rgb(255 255 255 / 0.94)",
           "neu-shadow-raised": "-4px 4px 10px rgb(26 56 43 / 0.15), 4px -4px 10px rgb(255 255 255 / 0.94)",
-          "neu-shadow-raised-sm": "-2px 2px 6px rgb(26 56 43 / 0.15), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent)",
+          "neu-shadow-raised-sm": "-2px 2px 6px rgb(26 56 43 / 0.15), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent), inset -1px 1px 0 rgb(255 255 255 / 0.72)",
           "neu-shadow-inset": "inset -2px 2px 6px rgb(26 56 43 / 0.15), inset 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.94) 97%, transparent)",
           "neu-shadow-inset-sm": "inset -1px 1px 3px rgb(26 56 43 / 0.15), inset 1px -1px 3px rgb(255 255 255 / 0.94)",
-          "neu-shadow-primary": "-2px 3px 7px rgb(26 56 43 / 0.15), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #23856b 72%, white)",
+          "neu-shadow-primary": "-2px 3px 7px rgb(26 56 43 / 0.15), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent), inset -1px 1px 0 color-mix(in srgb, #23856b 72%, white)",
           "neu-shadow-primary-inset": "inset -2px 2px 5px color-mix(in srgb, #23856b 68%, black), inset 2px -2px 5px color-mix(in srgb, #23856b 78%, white)",
           "neu-shadow-destructive-inset": "inset -2px 2px 5px color-mix(in srgb, #cf5962 68%, black), inset 2px -2px 5px color-mix(in srgb, #cf5962 78%, white)",
           "neu-overlay": "rgb(15 23 42 / 0.28)",
           "neu-radius-control": "12px",
           "neu-radius-surface": "18px",
           "neu-radius-overlay": "calc(18px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(225deg, color-mix(in srgb, #f2f7f3 28%, #e7eee9), #e7eee9)",
+          "neu-fill-primary": "linear-gradient(225deg, #23856b, color-mix(in srgb, #23856b 94%, black))",
+          "neu-selected": "color-mix(in srgb, #23856b 8%, #e7eee9)",
+          "neu-selected-border": "color-mix(in srgb, #23856b 44%, rgb(95 116 106 / 0.22))",
+          "neu-error-text": "color-mix(in srgb, #cf5962 76%, #1a2b24)",
+          "neu-shadow-hover": "-3px 3px 9px rgb(26 56 43 / 0.15), 3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(26 56 43 / 0.15), 0 3px 8px rgb(26 56 43 / 0.15), inset -1px 1px 0 rgb(255 255 255 / 0.72)"
         },
         "dark": {
           "background": "#121b17",
@@ -866,17 +915,24 @@
           "neu-shadow-dark": "rgb(0 0 0 / 0.44)",
           "neu-shadow-light": "rgb(255 255 255 / 0.04)",
           "neu-shadow-raised": "-4px 4px 10px rgb(0 0 0 / 0.44), 4px -4px 10px rgb(255 255 255 / 0.04)",
-          "neu-shadow-raised-sm": "-2px 2px 6px rgb(0 0 0 / 0.44), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent)",
+          "neu-shadow-raised-sm": "-2px 2px 6px rgb(0 0 0 / 0.44), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent), inset -1px 1px 0 rgb(255 255 255 / 0.075)",
           "neu-shadow-inset": "inset -2px 2px 6px rgb(0 0 0 / 0.44), inset 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 97%, transparent)",
           "neu-shadow-inset-sm": "inset -1px 1px 3px rgb(0 0 0 / 0.44), inset 1px -1px 3px rgb(255 255 255 / 0.04)",
-          "neu-shadow-primary": "-2px 3px 7px rgb(0 0 0 / 0.44), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #62c8a7 72%, white)",
+          "neu-shadow-primary": "-2px 3px 7px rgb(0 0 0 / 0.44), 2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent), inset -1px 1px 0 color-mix(in srgb, #62c8a7 72%, white)",
           "neu-shadow-primary-inset": "inset -2px 2px 5px color-mix(in srgb, #62c8a7 68%, black), inset 2px -2px 5px color-mix(in srgb, #62c8a7 78%, white)",
           "neu-shadow-destructive-inset": "inset -2px 2px 5px color-mix(in srgb, #ff7b82 68%, black), inset 2px -2px 5px color-mix(in srgb, #ff7b82 78%, white)",
           "neu-overlay": "rgb(0 0 0 / 0.55)",
           "neu-radius-control": "12px",
           "neu-radius-surface": "18px",
           "neu-radius-overlay": "calc(18px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(225deg, color-mix(in srgb, #223129 28%, #19251f), #19251f)",
+          "neu-fill-primary": "linear-gradient(225deg, color-mix(in srgb, #62c8a7 94%, white), #62c8a7)",
+          "neu-selected": "color-mix(in srgb, #62c8a7 8%, #19251f)",
+          "neu-selected-border": "color-mix(in srgb, #62c8a7 44%, rgb(255 255 255 / 0.10))",
+          "neu-error-text": "#ff7b82",
+          "neu-shadow-hover": "-3px 3px 9px rgb(0 0 0 / 0.44), 3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(0 0 0 / 0.44), 0 3px 8px rgb(0 0 0 / 0.44), inset -1px 1px 0 rgb(255 255 255 / 0.075)"
         }
       }
     },
@@ -915,17 +971,24 @@
           "neu-shadow-dark": "rgb(76 50 33 / 0.16)",
           "neu-shadow-light": "rgb(255 255 255 / 0.90)",
           "neu-shadow-raised": "6px 6px 15px rgb(76 50 33 / 0.16), -6px -6px 15px rgb(255 255 255 / 0.90)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(76 50 33 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.90) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(76 50 33 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.90) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.68)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(76 50 33 / 0.16), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.90) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(76 50 33 / 0.16), inset -1px -1px 3px rgb(255 255 255 / 0.90)",
-          "neu-shadow-primary": "2px 3px 7px rgb(76 50 33 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.90) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #d46b4c 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(76 50 33 / 0.16), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.90) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #d46b4c 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #d46b4c 68%, black), inset -2px -2px 5px color-mix(in srgb, #d46b4c 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #c84851 68%, black), inset -2px -2px 5px color-mix(in srgb, #c84851 78%, white)",
           "neu-overlay": "rgb(15 23 42 / 0.28)",
           "neu-radius-control": "10px",
           "neu-radius-surface": "14px",
           "neu-radius-overlay": "calc(14px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #faf4ec 28%, #efe8df), #efe8df)",
+          "neu-fill-primary": "linear-gradient(135deg, color-mix(in srgb, #d46b4c 94%, white), #d46b4c)",
+          "neu-selected": "color-mix(in srgb, #d46b4c 8%, #efe8df)",
+          "neu-selected-border": "color-mix(in srgb, #d46b4c 44%, rgb(128 110 98 / 0.22))",
+          "neu-error-text": "color-mix(in srgb, #c84851 76%, #35271f)",
+          "neu-shadow-hover": "3px 3px 9px rgb(76 50 33 / 0.16), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.90) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(76 50 33 / 0.16), 0 3px 8px rgb(76 50 33 / 0.16), inset 1px 1px 0 rgb(255 255 255 / 0.68)"
         },
         "dark": {
           "background": "#211814",
@@ -956,17 +1019,24 @@
           "neu-shadow-dark": "rgb(0 0 0 / 0.46)",
           "neu-shadow-light": "rgb(255 255 255 / 0.04)",
           "neu-shadow-raised": "6px 6px 15px rgb(0 0 0 / 0.46), -6px -6px 15px rgb(255 255 255 / 0.04)",
-          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.46), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent)",
+          "neu-shadow-raised-sm": "2px 2px 6px rgb(0 0 0 / 0.46), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.075)",
           "neu-shadow-inset": "inset 2px 2px 6px rgb(0 0 0 / 0.46), inset -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(0 0 0 / 0.46), inset -1px -1px 3px rgb(255 255 255 / 0.04)",
-          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.46), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #f08b6b 72%, white)",
+          "neu-shadow-primary": "2px 3px 7px rgb(0 0 0 / 0.46), -2px -2px 6px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #f08b6b 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #f08b6b 68%, black), inset -2px -2px 5px color-mix(in srgb, #f08b6b 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #ff7378 68%, black), inset -2px -2px 5px color-mix(in srgb, #ff7378 78%, white)",
           "neu-overlay": "rgb(0 0 0 / 0.55)",
           "neu-radius-control": "10px",
           "neu-radius-surface": "14px",
           "neu-radius-overlay": "calc(14px + 4px)",
-          "neu-duration": "180ms"
+          "neu-duration": "180ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #382920 28%, #2a1f19), #2a1f19)",
+          "neu-fill-primary": "linear-gradient(135deg, color-mix(in srgb, #f08b6b 94%, white), #f08b6b)",
+          "neu-selected": "color-mix(in srgb, #f08b6b 8%, #2a1f19)",
+          "neu-selected-border": "color-mix(in srgb, #f08b6b 44%, rgb(255 255 255 / 0.10))",
+          "neu-error-text": "#ff7378",
+          "neu-shadow-hover": "3px 3px 9px rgb(0 0 0 / 0.46), -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.04) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(0 0 0 / 0.46), 0 3px 8px rgb(0 0 0 / 0.46), inset 1px 1px 0 rgb(255 255 255 / 0.075)"
         }
       }
     },
@@ -1005,17 +1075,24 @@
           "neu-shadow-dark": "rgb(31 39 50 / 0.17)",
           "neu-shadow-light": "rgb(255 255 255 / 0.94)",
           "neu-shadow-raised": "10px 10px 22px rgb(31 39 50 / 0.17), -10px -10px 22px rgb(255 255 255 / 0.94)",
-          "neu-shadow-raised-sm": "4px 4px 10px rgb(31 39 50 / 0.17), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent)",
+          "neu-shadow-raised-sm": "4px 4px 10px rgb(31 39 50 / 0.17), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.70)",
           "neu-shadow-inset": "inset 3px 3px 9px rgb(31 39 50 / 0.17), inset -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.94) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(31 39 50 / 0.17), inset -1px -1px 3px rgb(255 255 255 / 0.94)",
-          "neu-shadow-primary": "4px 5px 11px rgb(31 39 50 / 0.17), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #3f536f 72%, white)",
+          "neu-shadow-primary": "4px 5px 11px rgb(31 39 50 / 0.17), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #3f536f 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #3f536f 68%, black), inset -2px -2px 5px color-mix(in srgb, #3f536f 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #c8545f 68%, black), inset -2px -2px 5px color-mix(in srgb, #c8545f 78%, white)",
           "neu-overlay": "rgb(15 23 42 / 0.28)",
           "neu-radius-control": "10px",
           "neu-radius-surface": "8px",
           "neu-radius-overlay": "calc(8px + 4px)",
-          "neu-duration": "120ms"
+          "neu-duration": "120ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #f1f3f5 28%, #e6e8eb), #e6e8eb)",
+          "neu-fill-primary": "linear-gradient(135deg, #3f536f, color-mix(in srgb, #3f536f 94%, black))",
+          "neu-selected": "color-mix(in srgb, #3f536f 8%, #e6e8eb)",
+          "neu-selected-border": "color-mix(in srgb, #3f536f 44%, rgb(98 107 118 / 0.22))",
+          "neu-error-text": "color-mix(in srgb, #c8545f 76%, #1d232b)",
+          "neu-shadow-hover": "5px 5px 13px rgb(31 39 50 / 0.17), -5px -5px 13px color-mix(in srgb, rgb(255 255 255 / 0.94) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(31 39 50 / 0.17), 0 3px 8px rgb(31 39 50 / 0.17), inset 1px 1px 0 rgb(255 255 255 / 0.70)"
         },
         "dark": {
           "background": "#111419",
@@ -1046,19 +1123,324 @@
           "neu-shadow-dark": "rgb(0 0 0 / 0.48)",
           "neu-shadow-light": "rgb(255 255 255 / 0.045)",
           "neu-shadow-raised": "10px 10px 22px rgb(0 0 0 / 0.48), -10px -10px 22px rgb(255 255 255 / 0.045)",
-          "neu-shadow-raised-sm": "4px 4px 10px rgb(0 0 0 / 0.48), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent)",
+          "neu-shadow-raised-sm": "4px 4px 10px rgb(0 0 0 / 0.48), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent), inset 1px 1px 0 rgb(255 255 255 / 0.08)",
           "neu-shadow-inset": "inset 3px 3px 9px rgb(0 0 0 / 0.48), inset -3px -3px 9px color-mix(in srgb, rgb(255 255 255 / 0.045) 97%, transparent)",
           "neu-shadow-inset-sm": "inset 1px 1px 3px rgb(0 0 0 / 0.48), inset -1px -1px 3px rgb(255 255 255 / 0.045)",
-          "neu-shadow-primary": "4px 5px 11px rgb(0 0 0 / 0.48), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent), inset 0 1px 0 color-mix(in srgb, #b2c2d8 72%, white)",
+          "neu-shadow-primary": "4px 5px 11px rgb(0 0 0 / 0.48), -4px -4px 10px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent), inset 1px 1px 0 color-mix(in srgb, #b2c2d8 72%, white)",
           "neu-shadow-primary-inset": "inset 2px 2px 5px color-mix(in srgb, #b2c2d8 68%, black), inset -2px -2px 5px color-mix(in srgb, #b2c2d8 78%, white)",
           "neu-shadow-destructive-inset": "inset 2px 2px 5px color-mix(in srgb, #ff7885 68%, black), inset -2px -2px 5px color-mix(in srgb, #ff7885 78%, white)",
           "neu-overlay": "rgb(0 0 0 / 0.55)",
           "neu-radius-control": "10px",
           "neu-radius-surface": "8px",
           "neu-radius-overlay": "calc(8px + 4px)",
-          "neu-duration": "120ms"
+          "neu-duration": "120ms",
+          "neu-fill-raised": "linear-gradient(135deg, color-mix(in srgb, #222831 28%, #181c22), #181c22)",
+          "neu-fill-primary": "linear-gradient(135deg, color-mix(in srgb, #b2c2d8 94%, white), #b2c2d8)",
+          "neu-selected": "color-mix(in srgb, #b2c2d8 8%, #181c22)",
+          "neu-selected-border": "color-mix(in srgb, #b2c2d8 44%, rgb(255 255 255 / 0.10))",
+          "neu-error-text": "#ff7885",
+          "neu-shadow-hover": "5px 5px 13px rgb(0 0 0 / 0.48), -5px -5px 13px color-mix(in srgb, rgb(255 255 255 / 0.045) 94%, transparent)",
+          "neu-shadow-floating": "0 16px 40px rgb(0 0 0 / 0.48), 0 3px 8px rgb(0 0 0 / 0.48), inset 1px 1px 0 rgb(255 255 255 / 0.08)"
         }
       }
+    },
+    {
+      "name": "alert-dialog",
+      "title": "Alert Dialog",
+      "description": "An explicit confirmation for an irreversible action.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/alert-dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "title": "Popover",
+      "description": "An anchored panel for contextual settings.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "hover-card",
+      "title": "Hover Card",
+      "description": "A supplemental preview of a link destination.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/hover-card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "title": "Sheet",
+      "description": "A scrollable task panel attached to a viewport edge.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/dialog"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/sheet.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "title": "Collapsible",
+      "description": "Reveal or hide one group of optional settings.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/collapsible.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle",
+      "title": "Toggle",
+      "description": "A standalone button with a persistent pressed state.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toggle.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "title": "Toggle Group",
+      "description": "A keyboard-navigable group of single or multiple selections.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/toggle"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toggle-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toolbar",
+      "title": "Toolbar",
+      "description": "An arrow-key-navigable set of document actions.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toolbar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "title": "Field",
+      "description": "Connect a control with its label, description, and validation errors.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "fieldset",
+      "title": "Fieldset",
+      "description": "Group related controls under a shared legend and disabled state.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/fieldset.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form",
+      "title": "Form",
+      "description": "A native form coordinating field validation and submission errors.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/form.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "number-field",
+      "title": "Number Field",
+      "description": "Numeric entry with bounds, steps, and locale-aware formatting.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/number-field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "meter",
+      "title": "Meter",
+      "description": "Represent a measurement within a known range.",
+      "type": "registry:ui",
+      "categories": [
+        "data-feedback"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/meter.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "title": "Combobox",
+      "description": "Searchable selection with filtering, empty results, and keyboard interaction.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

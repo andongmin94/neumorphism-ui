@@ -76,7 +76,7 @@ export function ComponentDirectory() {
           onClick={() => setCategory("all")}
           type="button"
         >
-          {messages.directory.all} <span>26</span>
+          {messages.directory.all} <span>{componentDocGroups.reduce((count, group) => count + group.items.length, 0)}</span>
         </button>
         {componentDocGroups.map((group) => (
           <button

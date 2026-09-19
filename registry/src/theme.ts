@@ -452,7 +452,7 @@ export function buildThemeVariables(
         : "10px";
   const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 94%, transparent)`;
   const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 97%, transparent)`;
-  const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset 0 1px 0 color-mix(in srgb, ${primary} 72%, white)`;
+  const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 0 color-mix(in srgb, ${primary} 72%, white)`;
   const primaryInsetShadow = shadowValue(
     x,
     y,
@@ -506,7 +506,7 @@ export function buildThemeVariables(
       profile.smallBlur,
       tokens.shadowDark,
       raisedSmallLight,
-    ),
+    ) + `, inset ${x}px ${y}px 0 ${tokens.edge}`,
     "--neu-shadow-inset": shadowValue(
       x,
       y,
@@ -542,6 +542,15 @@ export function buildThemeVariables(
     "--neu-radius-surface": `${settings.surfaceRadius}px`,
     "--neu-radius-overlay": `calc(${settings.surfaceRadius}px + 4px)`,
     "--neu-duration": `${settings.motion}ms`,
+    "--neu-fill-raised": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceSoft} 28%, ${tokens.surface}), ${tokens.surface})`,
+    "--neu-fill-primary": primaryForeground === "#ffffff"
+      ? `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, ${primary}, color-mix(in srgb, ${primary} 94%, black))`
+      : `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${primary} 94%, white), ${primary})`,
+    "--neu-selected": `color-mix(in srgb, ${primary} 8%, ${tokens.surface})`,
+    "--neu-selected-border": `color-mix(in srgb, ${primary} 44%, ${tokens.border})`,
+    "--neu-error-text": mode === "light" ? `color-mix(in srgb, ${tokens.destructive} 76%, ${tokens.foreground})` : tokens.destructive,
+    "--neu-shadow-hover": shadowValue(x, y, profile.smallOffset + 1, profile.smallBlur + 3, tokens.shadowDark, raisedSmallLight),
+    "--neu-shadow-floating": `0 16px 40px ${tokens.shadowDark}, 0 3px 8px ${tokens.shadowDark}, inset ${x}px ${y}px 0 ${tokens.edge}`,
   };
 }
 

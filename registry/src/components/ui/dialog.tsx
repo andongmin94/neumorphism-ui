@@ -57,7 +57,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={mergeClassName<DialogPrimitive.Popup.State>(
-          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
           className,
         )}
         {...props}

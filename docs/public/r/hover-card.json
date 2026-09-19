@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hover-card",
+  "title": "Hover Card",
+  "description": "A supplemental preview of a link destination.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/hover-card.tsx",
+      "content": "\"use client\";\n\nimport { PreviewCard as Primitive } from \"@base-ui/react/preview-card\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nconst HoverCard = Primitive.Root;\nconst HoverCardTrigger = Primitive.Trigger;\n\ntype HoverCardContentProps = Primitive.Popup.Props & {\n  side?: Primitive.Positioner.Props[\"side\"];\n  align?: Primitive.Positioner.Props[\"align\"];\n  sideOffset?: number;\n};\n\nfunction HoverCardContent({ className, side = \"bottom\", align = \"center\", sideOffset = 10, ...props }: HoverCardContentProps) {\n  return (\n    <Primitive.Portal>\n      <Primitive.Positioner side={side} align={align} sideOffset={sideOffset} className=\"z-50 outline-none\">\n        <Primitive.Popup data-slot=\"hover-card-content\" className={mergeClassName<Primitive.Popup.State>(\n          \"grid w-80 max-w-[calc(100vw-2rem)] max-h-[var(--available-height)] gap-3 overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-5 text-sm leading-relaxed text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0\", className,\n        )} {...props} />\n      </Primitive.Positioner>\n    </Primitive.Portal>\n  );\n}\n\nexport { HoverCard, HoverCardTrigger, HoverCardContent };\nexport type { HoverCardContentProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "actions-overlays"
+  ],
+  "type": "registry:ui"
+}

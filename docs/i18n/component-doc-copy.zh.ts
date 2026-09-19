@@ -438,6 +438,20 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "Base UI 会让 Tooltip 在 hover 和 keyboard focus 时打开，并支持用 Escape 关闭。",
     ],
   },
+"alert-dialog": {"summary":"对不可撤销操作进行明确确认的对话框。","description":"对不可撤销操作进行明确确认的对话框。 先放置取消按钮。异步操作成功后再关闭受控对话框。","props":["设置受控状态或初始状态。","选择打开时的焦点目标。","处理同步确认，异步操作应控制打开状态。"],"accessibility":["先放置取消按钮。异步操作成功后再关闭受控对话框。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"popover": {"summary":"依附按钮、保留上下文的设置面板。","description":"依附按钮、保留上下文的设置面板。 提供 PopoverTitle 和说明，并检查键盘关闭操作。","props":["设置受控状态或初始状态。","设置考虑视口边界的面板位置或间距。","组合现有元素、事件和 ref。"],"accessibility":["提供 PopoverTitle 和说明，并检查键盘关闭操作。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"hover-card": {"summary":"补充说明链接目标的预览卡片。","description":"补充说明链接目标的预览卡片。 不要把必要信息或操作只放在悬停内容中。原始链接仍应含义明确。","props":["设置受控状态或初始状态。","打开与关闭的延迟，单位为毫秒。","设置考虑视口边界的面板位置或间距。"],"accessibility":["不要把必要信息或操作只放在悬停内容中。原始链接仍应含义明确。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"sheet": {"summary":"从视口边缘打开的可滚动操作面板。","description":"从视口边缘打开的可滚动操作面板。 包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","props":["设置考虑视口边界的面板位置或间距。","关闭按钮的可访问名称。","设置受控状态或初始状态。"],"accessibility":["包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"collapsible": {"summary":"展开或折叠一组可选设置的容器。","description":"展开或折叠一组可选设置的容器。 触发按钮名称应说明内容。检查 Enter 和 Space 展开操作。","props":["设置受控状态或初始状态。","禁用用户操作。","关闭时仍将面板保留在 DOM 中。"],"accessibility":["触发按钮名称应说明内容。检查 Enter 和 Space 展开操作。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"toggle": {"summary":"保持按下选择状态的独立切换按钮。","description":"保持按下选择状态的独立切换按钮。 为纯图标按钮提供标签。通过内凹表面和边框辅助表示选择，而非只用颜色。","props":["设置受控状态或初始状态。","选择控件尺寸。","禁用用户操作。"],"accessibility":["为纯图标按钮提供标签。通过内凹表面和边框辅助表示选择，而非只用颜色。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"toggle-group": {"summary":"可通过键盘导航的单选或多选切换组。","description":"可通过键盘导航的单选或多选切换组。 标记组和每个选项。区分方向键焦点移动与选择状态。","props":["设置受控状态或初始状态。","允许多项选择。","设置布局和键盘导航方向。"],"accessibility":["标记组和每个选项。区分方向键焦点移动与选择状态。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"toolbar": {"summary":"集中呈现文档操作、支持方向键导航的工具栏。","description":"集中呈现文档操作、支持方向键导航的工具栏。 为 Toolbar 命名。禁用项默认可通过方向键聚焦，但不能执行。设置 focusableWhenDisabled={false} 可将其排除在导航之外。","props":["设置布局和键盘导航方向。","在两端循环键盘焦点。","禁用用户操作。"],"accessibility":["为 Toolbar 命名。禁用项默认可通过方向键聚焦，但不能执行。设置 focusableWhenDisabled={false} 可将其排除在导航之外。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"field": {"summary":"把控件与标签、说明和验证错误关联起来。","description":"把控件与标签、说明和验证错误关联起来。 使用 FieldControl 或通过 render 组合输入。除了错误颜色，还应提供 FieldError 文本。","props":["关联表单值与外部错误的字段名称。","返回自定义验证结果。","选择执行验证的时机。"],"accessibility":["使用 FieldControl 或通过 render 组合输入。除了错误颜色，还应提供 FieldError 文本。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"fieldset": {"summary":"为相关控件提供共用标题和禁用状态的组。","description":"为相关控件提供共用标题和禁用状态的组。 用 FieldsetLegend 说明组的用途，同时保留各控件的标签。","props":["禁用用户操作。","为相关字段组命名。","扩展样式，也可使用状态回调。"],"accessibility":["用 FieldsetLegend 说明组的用途，同时保留各控件的标签。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"form": {"summary":"协调字段验证和提交错误的原生表单。","description":"协调字段验证和提交错误的原生表单。 区分保存与重置。示例只更新本地状态，不包含服务器持久化。","props":["接收验证后的值，并阻止原生提交。","按字段名称关联外部错误。","选择执行验证的时机。"],"accessibility":["区分保存与重置。示例只更新本地状态，不包含服务器持久化。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"number-field": {"summary":"支持范围、步长和本地化格式的数字输入。","description":"支持范围、步长和本地化格式的数字输入。 为增加和减少按钮分别命名。检查边界值以及直接输入。","props":["设置最小值与最大值。","按钮和键盘操作的增减步长。","配置本地化数字格式。"],"accessibility":["为增加和减少按钮分别命名。检查边界值以及直接输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"meter": {"summary":"在已知范围内表示测量值的计量条。","description":"在已知范围内表示测量值的计量条。 任务完成进度请用 Progress。配合 MeterLabel 显示可见数值。","props":["范围内的当前测量值。","设置最小值与最大值。","配置本地化数字格式。"],"accessibility":["任务完成进度请用 Progress。配合 MeterLabel 显示可见数值。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"combobox": {"summary":"支持过滤、空结果及键盘选择的搜索输入。","description":"支持过滤、空结果及键盘选择的搜索输入。 提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","props":["用于过滤与选择的原始选项。","设置受控状态或初始状态。","允许多项选择。"],"accessibility":["提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 });
 
 export default componentDocCopyZh;

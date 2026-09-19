@@ -23,7 +23,7 @@ jobs:
             registry/package-lock.json
             docs/package-lock.json
       - run: npm ci --prefix registry && npm ci --prefix docs
-      - name: Registry build and contracts
+      - name: Registry build, examples, and source contracts
         run: |
           npm run lint --prefix registry
           npm run build --prefix registry
@@ -39,17 +39,21 @@ jobs:
       - name: Browser engines
         working-directory: docs
         run: npx playwright install --with-deps chromium firefox webkit
-      - name: Installed applications without documentation CSS
+      - name: Installed components and rendered interaction states
         run: npm run consumer:verify --prefix registry
+      - name: Hydrated documentation, theme output, and source recovery
+        working-directory: docs
+        run: npm run test:browser
       - name: Generation must leave the repository clean
         run: |
           npm run check:generated --prefix registry
           git diff --exit-code
           test -z "$(git ls-files --others --exclude-standard)"
-      - name: Save installed-application evidence
+      - name: Save UI verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: installed-consumers
-          path: docs/test-results/installed-consumers
+          name: ui-verification
+          path: docs/test-results
+          retention-days: 7
           if-no-files-found: ignore

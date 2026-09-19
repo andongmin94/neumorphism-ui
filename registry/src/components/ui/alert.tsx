@@ -6,9 +6,9 @@ const alertVariants = {
   default:
     "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] shadow-none",
   destructive:
-    "border-[color:var(--destructive)]/35 bg-[color:var(--destructive)]/8 text-[var(--destructive)] shadow-none",
+    "border-[color:var(--destructive)]/35 bg-[color:var(--destructive)]/8 text-[var(--foreground)] shadow-none",
   success:
-    "border-[color:var(--success)]/30 bg-[color:var(--success)]/8 text-[var(--success)] shadow-none",
+    "border-[color:var(--success)]/30 bg-[color:var(--success)]/8 text-[var(--foreground)] shadow-none",
 } as const;
 
 type AlertVariant = keyof typeof alertVariants;
@@ -48,7 +48,7 @@ function AlertDescription({ className, ...props }: React.ComponentProps<"div">) 
     <div
       data-slot="alert-description"
       className={cn(
-        "col-start-2 grid justify-items-start gap-1 text-sm leading-relaxed text-current/80 [&_p]:leading-relaxed",
+        "col-start-2 grid justify-items-start gap-1 text-sm leading-relaxed text-current [&_p]:leading-relaxed",
         className,
       )}
       {...props}

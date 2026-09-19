@@ -1,3 +1,5 @@
+import { run } from "./consumer-command.mjs";
+import { decorateFixture, expandedItems, assertExpandedFiles, exerciseExpanded } from "./expanded-consumer.mjs";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
@@ -20,15 +22,6 @@ const results = [];
 function write(directory, file, content) { const destination = path.join(directory, file); fs.mkdirSync(path.dirname(destination), { recursive: true }); fs.writeFileSync(destination, content); }
 function writeJson(directory, file, content) { write(directory, file, JSON.stringify(content, null, 2) + "\n"); }
 function readJson(file) { return JSON.parse(fs.readFileSync(file, "utf8")); }
-function run(command, args, cwd, timeout = 300_000) {
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { cwd, stdio: ["ignore", "inherit", "inherit"], env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" } });
-    let timedOut = false;
-    const timer = setTimeout(() => { timedOut = true; child.kill("SIGKILL"); }, timeout);
-    child.once("error", (error) => { clearTimeout(timer); reject(error); });
-    child.once("close", (code, signal) => { clearTimeout(timer); if (code === 0 && !timedOut) resolve(); else reject(new Error(`${command} ${args.join(" ")}: ${timedOut ? "timeout" : `exit ${code}, signal ${signal}`}`)); });
-  });
-}
 async function listen(server) { await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); }); return server.address().port; }
 const registryServer = http.createServer((request, response) => {
   const pathname = new URL(request.url, "http://localhost").pathname;
@@ -73,6 +66,7 @@ function fixture(directory, target, registryOrigin) {
   write(directory, "postcss.config.mjs", 'export default { plugins: { "@tailwindcss/postcss": {} } };\n');
   write(directory, "src/globals.css", '@import "tailwindcss";\n@custom-variant dark (&:is(.dark *));\n');
   write(directory, "src/consumer.tsx", application());
+  decorateFixture(directory);
   if (next) {
     write(directory, "src/app/layout.tsx", 'import "../globals.css"; export default function Layout({ children }: {children: React.ReactNode}) { return <html lang="en"><body>{children}</body></html>; }');
     write(directory, "src/app/page.tsx", 'export { default } from "../consumer";');
@@ -113,13 +107,24 @@ async function browserChecks(directory, target, scenario) {
           if (scenario === "existing") assert.equal(metrics.rootRadius, "23px");
           const foreground = await page.getByTestId("destructive").evaluate((element) => getComputedStyle(element).color);
           if (mode === "dark") assert.notEqual(foreground, "rgb(255, 255, 255)", "the dark destructive foreground must not remain fixed white");
-          await page.getByLabel("Display name").fill("설치 검증"); assert.equal(await page.getByLabel("Display name").inputValue(), "설치 검증");
+          await page.locator("#name").fill("설치 검증"); assert.equal(await page.locator("#name").inputValue(), "설치 검증");
           await page.getByRole("button", { name: "Open settings", exact: true }).click(); await page.getByRole("dialog").waitFor();
           const bounds = await page.getByRole("dialog").boundingBox(); assert.ok(bounds && bounds.y >= 0 && bounds.y + bounds.height <= viewport.height + 1);
           await page.getByTestId("dialog-last").scrollIntoViewIfNeeded(); assert.ok(await page.getByTestId("dialog-last").isVisible());
           await page.keyboard.press("Escape"); await page.getByRole("dialog").waitFor({ state: "hidden" });
           assert.equal(await page.evaluate(() => document.activeElement?.textContent), "Open settings");
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "horizontal overflow"); assert.deepEqual(errors, []);
+          try {
+            await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
+          } catch (error) {
+            fs.mkdirSync(evidenceRoot, { recursive: true });
+            const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-failure`);
+            await page.screenshot({ path: prefix + ".png", fullPage: false });
+            const activeElement = await page.evaluate(() => document.activeElement?.outerHTML);
+            fs.writeFileSync(prefix + ".json", JSON.stringify({ message: String(error), errors, activeElement }, null, 2));
+            throw error;
+          }
+          assert.deepEqual(errors, []);
           const file = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}.png`); fs.mkdirSync(evidenceRoot, { recursive: true }); await page.screenshot({ path: file, fullPage: true });
           results.push({ target, scenario, engine: engineName, mode, metrics, errors }); await context.close();
         }
@@ -134,14 +139,15 @@ try {
   const registryOrigin = `http://127.0.0.1:${await listen(registryServer)}`;
   for (const target of ["vite", "next"]) for (const scenario of ["fresh", "existing"]) {
     const directory = path.join(temporaryRoot, `${target}-${scenario}`); fixture(directory, target, registryOrigin); await run(npm, ["install", "--no-audit", "--no-fund"], directory);
-    const add = (...names) => run(process.execPath, [cli, "add", "--yes", "--cwd", directory, ...names.map((name) => `@neumorphism-ui/${name}`)], root);
+    const add = (...names) => run(process.execPath, [cli, "add", "--yes", "--cwd", directory, ...names.map((name) => `@neumorphism-ui/${name}`)], root, 300_000, scenario === "existing" && names.includes("alert-dialog") ? "button.tsx" : null);
     const aliases = readJson(path.join(directory, "components.json")).aliases;
     await add("neumorphism-ui"); assert.deepEqual(readJson(path.join(directory, "components.json")).aliases, aliases, "base reset custom aliases");
     await add("button"); if (scenario === "existing") await add("style-sage");
     const cssPath = path.join(directory, "src/globals.css"); const buttonPath = path.join(directory, "src/design-system/ui/button.tsx");
     if (scenario === "existing") { fs.appendFileSync(cssPath, "\n:root, .dark { --radius: 23px; }\n.consumer-owned { border-top: 7px solid currentColor; }\n"); fs.appendFileSync(buttonPath, "\n// Application-owned customization must survive later installs.\n"); }
     const beforeCss = fs.readFileSync(cssPath, "utf8"); const beforeButton = fs.readFileSync(buttonPath, "utf8"); const beforeApp = fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8");
-    await add("input", "dialog");
+    await add("input", "dialog", ...expandedItems);
+    assertExpandedFiles(directory);
     assert.equal(fs.readFileSync(cssPath, "utf8"), beforeCss, "adding UI changed theme or custom CSS"); assert.equal(fs.readFileSync(buttonPath, "utf8"), beforeButton, "adding UI overwrote a customized button"); assert.equal(fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8"), beforeApp);
     await run(npm, ["run", "build"], directory); await browserChecks(directory, target, scenario);
     console.log(`PASS ${target}/${scenario}: install, preservation, build, and three browser engines.`);

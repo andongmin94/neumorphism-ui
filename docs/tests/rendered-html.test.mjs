@@ -488,6 +488,20 @@ test("serves a complete shadcn registry catalog", async () => {
     "style-sage",
     "style-clay",
     "style-graphite",
+    "alert-dialog",
+    "popover",
+    "hover-card",
+    "sheet",
+    "collapsible",
+    "toggle",
+    "toggle-group",
+    "toolbar",
+    "field",
+    "fieldset",
+    "form",
+    "number-field",
+    "meter",
+    "combobox",
   ];
   assert.deepEqual(
     registry.items.map((item) => item.name),
@@ -597,4 +611,15 @@ test("removes every disposable starter artifact", async () => {
   const packageJson = await readFile(path.join(projectRoot, "package.json"), "utf8");
   assert.doesNotMatch(packageJson, /react-loading-skeleton|site-creator-vinext-starter/);
   await assert.rejects(access(path.join(projectRoot, "app", "_sites-preview")));
+});
+
+
+test("renders every expanded component in all documentation locales", async () => {
+  for (const {locale} of localeCases) for (const slug of ["alert-dialog","popover","hover-card","sheet","collapsible","toggle","toggle-group","toolbar","field","fieldset","form","number-field","meter","combobox"]) {
+    const response = await render(`/${locale}/components/${slug}`);
+    assert.equal(response.status, 200, `${locale}/${slug}`);
+    const html = await response.text();
+    assert.ok(html.includes(`/r/${slug}.json`));
+    assert.ok(html.includes("data-slot="));
+  }
 });

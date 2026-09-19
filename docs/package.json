@@ -14,7 +14,8 @@
     "test:ssr": "node --test tests/rendered-html.test.mjs",
     "predev": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
     "prebuild": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

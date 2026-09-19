@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group",
+  "title": "Toggle Group",
+  "description": "A keyboard-navigable group of single or multiple selections.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils",
+    "@neumorphism-ui/toggle"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/toggle-group.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup as Primitive } from \"@base-ui/react/toggle-group\";\nimport { Toggle } from \"./toggle\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nfunction ToggleGroup({ className, ...props }: Primitive.Props) {\n  return <Primitive data-slot=\"toggle-group\" className={mergeClassName<Primitive.State>(\"inline-flex w-fit max-w-full flex-wrap gap-2 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface-low)] p-2 [box-shadow:var(--neu-shadow-inset-sm)] data-[orientation=vertical]:flex-col\", className)} {...props} />;\n}\nconst ToggleGroupItem = Toggle;\nexport { ToggleGroup, ToggleGroupItem };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "forms-selection"
+  ],
+  "type": "registry:ui"
+}

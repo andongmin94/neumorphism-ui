@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fieldset",
+  "title": "Fieldset",
+  "description": "Group related controls under a shared legend and disabled state.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/fieldset.tsx",
+      "content": "\"use client\";\n\nimport { Fieldset as Primitive } from \"@base-ui/react/fieldset\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nfunction Fieldset({ className, ...props }: Primitive.Root.Props) {\n  return <Primitive.Root data-slot=\"fieldset\" className={mergeClassName<Primitive.Root.State>(\"grid min-w-0 gap-5 rounded-[var(--neu-radius-surface)] border border-[color:var(--border)] bg-[var(--neu-surface)] p-5 [box-shadow:var(--neu-shadow-raised-sm)]\", className)} {...props} />;\n}\nfunction FieldsetLegend({ className, ...props }: Primitive.Legend.Props) {\n  return <Primitive.Legend data-slot=\"fieldset-legend\" className={mergeClassName<Primitive.Legend.State>(\"px-2 text-sm font-semibold tracking-tight text-[var(--foreground)]\", className)} {...props} />;\n}\nexport { Fieldset, FieldsetLegend };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "forms-selection"
+  ],
+  "type": "registry:ui"
+}

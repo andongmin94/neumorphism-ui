@@ -45,7 +45,7 @@ function DropdownMenuContent({
         <DropdownMenuPrimitive.Popup
           data-slot="dropdown-menu-content"
           className={mergeClassName<DropdownMenuPrimitive.Popup.State>(
-            "max-h-[var(--available-height)] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-[calc(var(--neu-radius-surface)*0.8)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "max-h-[var(--available-height)] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-[calc(var(--neu-radius-surface)*0.8)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
             className,
           )}
           {...props}
@@ -240,7 +240,7 @@ function DropdownMenuSubContent({
         <DropdownMenuPrimitive.Popup
           data-slot="dropdown-menu-sub-content"
           className={mergeClassName<DropdownMenuPrimitive.Popup.State>(
-            "min-w-36 origin-[var(--transform-origin)] overflow-hidden rounded-[calc(var(--neu-radius-surface)*0.8)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-raised)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "min-w-36 origin-[var(--transform-origin)] overflow-hidden rounded-[calc(var(--neu-radius-surface)*0.8)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
             className,
           )}
           {...props}

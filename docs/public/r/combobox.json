@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox",
+  "title": "Combobox",
+  "description": "Searchable selection with filtering, empty results, and keyboard interaction.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/combobox.tsx",
+      "content": "\"use client\";\n\nimport { Combobox as Primitive } from \"@base-ui/react/combobox\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nconst Combobox = Primitive.Root;\nconst ComboboxTrigger = Primitive.Trigger;\nconst ComboboxValue = Primitive.Value;\nconst ComboboxClear = Primitive.Clear;\nfunction ComboboxInput({ className, ...props }: Primitive.Input.Props) {\n  return <Primitive.Input data-slot=\"combobox-input\" className={mergeClassName<Primitive.Input.State>(\"h-10 w-full min-w-0 rounded-[var(--neu-radius-control)] border border-[color:var(--input)] bg-[var(--neu-surface)] px-3.5 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[border-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/25 disabled:opacity-50\", className)} {...props} />;\n}\ntype ComboboxContentProps = Primitive.Popup.Props & { sideOffset?: number; align?: Primitive.Positioner.Props[\"align\"] };\nfunction ComboboxContent({ className, sideOffset = 8, align = \"start\", ...props }: ComboboxContentProps) {\n  return <Primitive.Portal><Primitive.Positioner sideOffset={sideOffset} align={align} className=\"z-50 outline-none\">\n    <Primitive.Popup data-slot=\"combobox-content\" className={mergeClassName<Primitive.Popup.State>(\"w-[var(--anchor-width)] min-w-48 max-w-[calc(100vw-2rem)] rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-sm text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0\", className)} {...props} />\n  </Primitive.Positioner></Primitive.Portal>;\n}\nfunction ComboboxList({ className, ...props }: Primitive.List.Props) {\n  return <Primitive.List data-slot=\"combobox-list\" className={mergeClassName<Primitive.List.State>(\"max-h-[min(18rem,var(--available-height))] overflow-y-auto overscroll-contain scroll-py-1 outline-none empty:p-0\", className)} {...props} />;\n}\nfunction ComboboxItem({ className, children, ...props }: Primitive.Item.Props) {\n  return <Primitive.Item data-slot=\"combobox-item\" className={mergeClassName<Primitive.Item.State>(\"relative flex min-h-10 cursor-default items-center gap-2 rounded-[calc(var(--neu-radius-control)-3px)] border border-transparent py-2 pr-3 pl-8 outline-none data-highlighted:border-[color:var(--neu-selected-border)] data-highlighted:bg-[var(--neu-selected)] data-selected:font-semibold data-disabled:opacity-40 data-disabled:pointer-events-none\", className)} {...props}>\n    <Primitive.ItemIndicator className=\"absolute left-2.5 inline-flex size-3.5 items-center justify-center\"><span aria-hidden=\"true\">✓</span></Primitive.ItemIndicator>{children}\n  </Primitive.Item>;\n}\nfunction ComboboxEmpty({ className, ...props }: Primitive.Empty.Props) {\n  return <Primitive.Empty data-slot=\"combobox-empty\" className={mergeClassName<Primitive.Empty.State>(\"px-3 py-5 text-center text-sm text-[var(--muted-foreground)] empty:hidden\", className)} {...props} />;\n}\nfunction ComboboxLabel({ className, ...props }: Primitive.Label.Props) {\n  return <Primitive.Label data-slot=\"combobox-label\" className={mergeClassName<Primitive.Label.State>(\"mb-2 block text-sm font-semibold text-[var(--foreground)]\", className)} {...props} />;\n}\nconst ComboboxGroup = Primitive.Group;\nfunction ComboboxGroupLabel({ className, ...props }: Primitive.GroupLabel.Props) {\n  return <Primitive.GroupLabel data-slot=\"combobox-group-label\" className={mergeClassName<Primitive.GroupLabel.State>(\"px-3 py-2 text-xs font-semibold text-[var(--muted-foreground)]\", className)} {...props} />;\n}\nexport { Combobox, ComboboxInput, ComboboxTrigger, ComboboxContent, ComboboxList, ComboboxItem, ComboboxEmpty, ComboboxLabel, ComboboxValue, ComboboxClear, ComboboxGroup, ComboboxGroupLabel };\nexport type { ComboboxContentProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "forms-selection"
+  ],
+  "type": "registry:ui"
+}

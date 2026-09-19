@@ -1,103 +1,115 @@
-# Product readiness and handoff
+# Product readiness
 
-Target: a shadcn-installable neumorphic UI product with the practical scope and
-verification discipline of `andongmin94/neobrutal-ui`, not a visual clone.
-No directory submission or production-readiness approval is implied by this file.
+The target is an independently installable neumorphic UI collection with the
+practical scope and verification discipline of `andongmin94/neobrutal-ui`, not a
+visual clone. Directory submission and production readiness are not approved.
 
-## Foundation implementation
+## Implemented collection
 
-One shared theme engine supplies presets, CSS export, documentation defaults,
-pre-hydration initialization, and the registry's installable tokens. Site-only
-aliases no longer repurpose the application's muted/accent semantics. Sage control
-radius is consistently 12px. Destructive buttons use an explicit foreground token.
-Muted text colors are checked against both surface and muted backgrounds.
+The catalog has **40 UI components**, five presets, one base and one utility:
+47 registry items. This replaces the previous 26-component scope.
 
-Base installation is explicit. Adding a UI item or changing a preset must not
-reinstall the base. React 19 is the declared consumer range. Installed controls
-honor reduced motion. Dialog supports a custom close label and viewport-bounded scrolling.
+The expansion adds Alert Dialog, Popover, Hover Card, Sheet, Collapsible, Toggle,
+Toggle Group, Toolbar, Field, Fieldset, Form, Number Field, Meter and Combobox.
+Interactive wrappers use the existing Base UI dependency. Source lives under
+`registry/src/components/ui`; previews and installation endpoints use those files.
+New documentation includes usage, API and accessibility guidance in the four
+existing locales. The English displayed examples also compile as consumer code.
 
-The existing four documentation locales and five visual presets remain in scope.
-The current documentation framework is retained. Component source is not duplicated.
-The catalog still has 26 UI components, five presets, one base, and one utility.
-No installable settings template, data-management template, or chart is added by
-this foundation change.
+The shared theme engine now defines raised/primary surface fills, restrained inner
+highlights, hover elevation, floating-overlay shadows, persistent selection fills
+and error-label colors. Shadow and fill directions follow the same light setting.
+Button hover changes elevation, not text brightness. Momentary press, persistent
+selection, keyboard focus and disabled controls have separate visual treatment.
+Status alerts retain full-opacity foreground text on their tinted backgrounds.
+These changes extend the existing shared preset/token/bootstrap architecture;
+there is no second rendering implementation for installed components.
 
-## Executed foundation checks
+Form examples demonstrate validation, correction, a local saved baseline and reset.
+They are examples, not a hosted persistence service or an installable page template.
 
-Work run [35462576686](https://github.com/andongmin94/neumorphism-ui/actions/runs/35462576686)
-passed all steps. It started at `0d6610ee96683f1f3f69c920af85138cbb8dbac4`,
-materialized and committed `a915be87602dc87e07e3224378d4278697423a30`, then
-executed the checks on that materialized tree. The temporary materialization
-workflow is removed from the final foundation commit. Use that commit's own
-Verify run, not the older work-run trigger SHA, for subsequent changes.
+## Verification boundaries
 
-Executed checks include:
+The foundation's main Verify run 35463037009 passed at commit `08f99d6`.
+Expansion work run 35465938462 passed at `5730dbc`. Additional rendered-state and
+hydrated-documentation checks passed in work run 35466485617 on materialized tree
+`6f70c02555bef0c60e16ef493282f7ca12eecdaf`. Source-loading recovery and exact
+Theme Studio CSS output also passed in work run 35466827624 on materialized tree
+`2f99bb76e6a29495e4598fbc8f45b0fcc21f4c0d`. Later changes require their own run.
+The Verify run attached to the final commit is the authoritative execution record.
 
-- Registry validation/type checking/build, six theme and settings test cases, and
-  source/content/token/endpoint consistency for all 33 registry items.
-- Documentation lint, explicit TypeScript checking, production build, and the
-  existing localized server-rendered HTML suite.
-- Four independent consumer applications: Next.js and Vite, each with a fresh and
-  an existing-project scenario. Actual shadcn CLI installation, custom aliases,
-  application-owned source/CSS preservation, and production builds passed.
-- Twenty-four browser contexts: the four applications in Chromium, Firefox, and
-  WebKit, each at desktop-light and mobile-dark. Checks cover installed theme
-  colors/radius/shadows, reduced motion, text entry, long-dialog scrolling and
-  viewport bounds, Escape dismissal, trigger-focus restoration, page errors,
-  and horizontal overflow.
-- Regeneration left tracked files unchanged and introduced no untracked files.
+Current checks include:
 
-The `foundation-consumer-evidence` artifact contains the 24 captures and measured
-results. A contact-sheet inspection of all captures found no obvious differences
-between matching Next.js/Vite scenarios or browser engines. These are simple
-installed-component fixtures, not product templates or a full visual audit.
-The captures are taken after closing the dialog; its open state was checked by
-automated bounds/scroll/focus assertions, not approved from these captures.
+- Registry validation and source/example type checking; 19 regression tests for
+  themes, parser/bootstrap behavior, dependency declarations, token supply,
+  representative text contrast, source/example equality and CLI process handling.
+- Equality of source, built JSON, document tokens, bootstrap and both endpoint copies.
+- Documentation lint/type checking/build and 11 server-rendered test cases,
+  including the expanded pages across all four locales.
+- Real CLI installations in four independent applications: Next.js/Vite each with
+  fresh and existing-project scenarios, custom aliases and application-owned source.
+  Later installs must retain custom CSS, selected theme and a modified button.
+  The test declines only the known overwrite prompt and waits for complete installation;
+  an early exit, unexpected prompt or stalled process fails.
+- Twenty-four installed-app browser contexts: three engines, both frameworks and
+  scenarios, desktop-light/mobile-dark. They operate overlays, searching/selecting,
+  empty combobox results, numeric limits, form recovery/reset, keyboard toolbar
+  navigation, focus return and disabled controls without documentation CSS.
+  Actual computed shadows distinguish hover, held press, keyboard focus and
+  persistent toggle selection. Reduced-motion controls are checked in the browser.
+- Hydrated document checks for the 14 expanded English pages and representative
+  Korean/Japanese/Chinese form and combobox pages. They operate preview/code tabs,
+  check horizontal reflow and runtime errors, exercise form save/reset, check
+  Theme Studio token/export/persistence consistency, and exercise recovery from a
+  source-fetch failure when navigating to another component.
+- Default collection captures for all five presets in both modes. These are not
+  exhaustive state coverage for every palette, component, browser and viewport.
 
-Consumer fixtures currently supply an initialized `components.json`. The
-README's `shadcn init` and scaffold-button replacement flow is not yet executed
-by this suite. Filling an input with Korean text is not an actual IME composition
-test. Token contrast checks do not establish WCAG conformance, non-text contrast,
-or accessibility of all component states.
+Browser evidence is saved under `docs/test-results`; CI uploads it as `ui-verification`.
+Inspect captures as well as assertions. Reviewed samples include the ten palette
+collection views, representative open overlays and form-error states, selected
+controls, desktop Korean Form and mobile dark Number Field documentation.
+The 14 new default English documentation pages were also inspected together at
+desktop-light/mobile-dark. This is not an assistive-technology audit or a full
+visual approval of all 40 items. Existing Badge and Dropdown Menu destructive
+color states remain part of the full rendered-contrast review; these selected
+token tests are not a blanket assertion that all color/state combinations pass.
+Korean text filling does not constitute testing real IME composition.
 
-## Known release blockers and next handoff
+## Remaining release blockers
 
-The latest work-run dependency audit reported zero registry vulnerabilities and
-nine documentation-toolchain findings (one low and eight high). Core React/RSC,
-Next.js, Vite, and compatible transitive fixes were applied, but the older
-Vinext/Cloudflare/Wrangler dependency chain still reports image parsing and
-transitive dependency advisories. Passing Verify is not a passing security audit.
+The last recorded dependency audit found zero registry warnings and nine docs
+build/hosting-chain findings (eight high, one low). The old Vinext/Cloudflare/
+Wrangler dependency chain is still a release blocker. Functional Verify does not
+run or replace a security audit. Inspect supported upstream versions, update the
+actual affected dependencies, and rerun the complete product checks; do not hide
+findings with arbitrary overrides or blind forced upgrades.
 
-Next work must inspect supported upstream releases, update the affected hosting
-and build dependencies without blind `audit fix --force` or arbitrary overrides,
-and rerun documentation and installed-consumer checks. The audit recommended
-Vinext `1.0.0-beta.10` and Cloudflare's Vite plugin `1.56.0` at the time of this
-run; verify their current documentation and migration requirements before use.
-An obsolete experimental runtime must not be retained solely for compatibility.
-Record a clean audit or a specifically reviewed remaining exposure before release.
+The published domain, deployed commit, live registry endpoints, actual README
+`shadcn init` flow and scaffold replacement, license/attribution and directory
+metadata still require review. These checks use locally served generated JSON.
+The consumer fixture supplies an initialized `components.json`. An aggregate
+installation plus import analysis does not prove every item installs independently.
 
-After that, proceed with the product gates below. Do not interpret this foundation
-as feature parity with neobrutal-ui or readiness for the directory submission.
+## Next product work
 
-## Remaining product gates
+1. Extend the collection with the missing high-value navigation, date selection,
+   data-table and feedback components; retain a working installable collection at
+   each step rather than adding undocumented stubs for a numerical target.
+2. Build an installable settings/profile flow with validation, failed-submit
+   recovery, changed-state indication and save/discard. Extend it into data
+   management with combined search/filter/sort/selection/pagination.
+3. Add registry-owned analytical charts and complete page templates, with exact
+   displayed-source/preview/installation contracts.
+4. Review all public variants/states at supported widths and palettes, including
+   non-text contrast, real touch/IME, nested overlays, controlled/uncontrolled
+   behavior, ref/event composition and screen-reader use.
+5. Complete the security, independent-installation and production/directory gates.
 
-1. Review every public component variant/state at relevant widths in all themes.
-   Check non-text contrast, keyboard/touch, real IME, disabled/error/loading states,
-   nested overlays, ref/event composition, and form reset behavior.
-2. Build one installable settings/profile flow end to end with validation, recovery,
-   dirty state, and save/discard; add only the shared pieces needed for that flow.
-3. Extend to data management with combined search/filter/sort/selection/pagination.
-4. Add installable analytical charts and complete page templates using registry-owned
-   sources; make preview, displayed code, and installation demonstrably identical.
-5. Extend independent installation coverage to every advertised component and run the
-   documented init flow with the current CLI, including an existing scaffold button.
-6. Audit remaining installation copy/API examples, legal licensing and attribution,
-   directory metadata, domain ownership, deployed commit/endpoints/headers, and live installs.
+## Source and workflow rules
 
-## Operating rules
-
-Keep `docs` and `registry` modular. Do not introduce compatibility paths, legacy
-migrations, or temporary product abstractions. Do not copy neobrutal styling or
-add components solely to increase the count. Do not edit generated output manually.
-A phase is complete only after implementation, actual execution, and explicit review
-are recorded separately. Prepared checks are not passed checks.
+Keep docs and registry modular. Prefer the dependencies already in use. Remove
+obsolete paths instead of adding compatibility layers or migrations. Generated
+JSON/CSS/bootstrap files are never manually edited. Implementation, executed
+checks and visual review are separate statuses. Temporary source-edit workflows
+must not remain in the shipped main tree.

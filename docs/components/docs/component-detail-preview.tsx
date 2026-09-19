@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { ExpandedComponentPreview, expandedSlugs, type ExpandedSlug } from "./expanded-component-preview";
 
 import { localeHref, type Locale } from "@/i18n/config";
 import type { ComponentPreviewMessages } from "@/i18n/component-preview-messages";
@@ -189,6 +190,8 @@ export function ComponentDetailPreview({
   const [showDepthGrid, setShowDepthGrid] = React.useState(true);
   const [sliderValue, setSliderValue] = React.useState([32, 72]);
   const [switchValue, setSwitchValue] = React.useState(true);
+
+  if (expandedSlugs.includes(slug as ExpandedSlug)) return <ExpandedComponentPreview slug={slug as ExpandedSlug} locale={locale} />;
 
   switch (slug) {
     case "accordion":

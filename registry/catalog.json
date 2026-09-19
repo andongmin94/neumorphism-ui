@@ -490,6 +490,304 @@
       "title": "Graphite",
       "description": "A high-contrast neutral Neumorphism UI style with deep shadows and quick motion.",
       "type": "registry:style"
+    },
+    {
+      "name": "alert-dialog",
+      "title": "Alert Dialog",
+      "description": "An explicit confirmation for an irreversible action.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/alert-dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "title": "Popover",
+      "description": "An anchored panel for contextual settings.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "hover-card",
+      "title": "Hover Card",
+      "description": "A supplemental preview of a link destination.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/hover-card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "title": "Sheet",
+      "description": "A scrollable task panel attached to a viewport edge.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/dialog"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/sheet.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "title": "Collapsible",
+      "description": "Reveal or hide one group of optional settings.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/collapsible.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle",
+      "title": "Toggle",
+      "description": "A standalone button with a persistent pressed state.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toggle.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "title": "Toggle Group",
+      "description": "A keyboard-navigable group of single or multiple selections.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/toggle"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toggle-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toolbar",
+      "title": "Toolbar",
+      "description": "An arrow-key-navigable set of document actions.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/toolbar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "title": "Field",
+      "description": "Connect a control with its label, description, and validation errors.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "fieldset",
+      "title": "Fieldset",
+      "description": "Group related controls under a shared legend and disabled state.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/fieldset.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form",
+      "title": "Form",
+      "description": "A native form coordinating field validation and submission errors.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/form.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "number-field",
+      "title": "Number Field",
+      "description": "Numeric entry with bounds, steps, and locale-aware formatting.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/number-field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "meter",
+      "title": "Meter",
+      "description": "Represent a measurement within a known range.",
+      "type": "registry:ui",
+      "categories": [
+        "data-feedback"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/meter.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "title": "Combobox",
+      "description": "Searchable selection with filtering, empty results, and keyboard interaction.",
+      "type": "registry:ui",
+      "categories": [
+        "forms-selection"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

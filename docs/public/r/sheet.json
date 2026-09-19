@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sheet",
+  "title": "Sheet",
+  "description": "A scrollable task panel attached to a viewport edge.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils",
+    "@neumorphism-ui/button",
+    "@neumorphism-ui/dialog"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/sheet.tsx",
+      "content": "\"use client\";\n\nimport { Dialog as Primitive } from \"@base-ui/react/dialog\";\nimport { Button } from \"./button\";\nimport { DialogOverlay, DialogPortal, DialogTitle, DialogDescription, DialogHeader, DialogFooter } from \"./dialog\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nconst Sheet = Primitive.Root;\nconst SheetTrigger = Primitive.Trigger;\nconst SheetClose = Primitive.Close;\nconst SheetTitle = DialogTitle;\nconst SheetDescription = DialogDescription;\nconst SheetHeader = DialogHeader;\nconst SheetFooter = DialogFooter;\nconst sides = {\n  right: \"inset-y-0 right-0 h-dvh w-[min(28rem,calc(100vw-1rem))] rounded-l-[var(--neu-radius-overlay)] data-[starting-style]:translate-x-full data-[ending-style]:translate-x-full\",\n  left: \"inset-y-0 left-0 h-dvh w-[min(28rem,calc(100vw-1rem))] rounded-r-[var(--neu-radius-overlay)] data-[starting-style]:-translate-x-full data-[ending-style]:-translate-x-full\",\n  bottom: \"inset-x-0 bottom-0 max-h-[calc(100dvh-1rem)] rounded-t-[var(--neu-radius-overlay)] data-[starting-style]:translate-y-full data-[ending-style]:translate-y-full\",\n  top: \"inset-x-0 top-0 max-h-[calc(100dvh-1rem)] rounded-b-[var(--neu-radius-overlay)] data-[starting-style]:-translate-y-full data-[ending-style]:-translate-y-full\",\n} as const;\ntype SheetContentProps = Primitive.Popup.Props & { side?: keyof typeof sides; closeLabel?: string };\nfunction SheetContent({ className, side = \"right\", closeLabel = \"Close\", children, ...props }: SheetContentProps) {\n  return <DialogPortal><DialogOverlay />\n    <Primitive.Popup data-slot=\"sheet-content\" data-side={side} className={mergeClassName<Primitive.Popup.State>(\n      `fixed z-50 flex flex-col gap-6 overflow-y-auto overscroll-contain border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 pt-16 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none ${sides[side]}`, className,\n    )} {...props}>\n      {children}\n      <Primitive.Close render={<Button size=\"icon\" variant=\"soft\" />} className=\"absolute top-4 right-4\" aria-label={closeLabel}><span aria-hidden=\"true\">×</span></Primitive.Close>\n    </Primitive.Popup>\n  </DialogPortal>;\n}\nexport { Sheet, SheetTrigger, SheetClose, SheetContent, SheetTitle, SheetDescription, SheetHeader, SheetFooter };\nexport type { SheetContentProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "actions-overlays"
+  ],
+  "type": "registry:ui"
+}

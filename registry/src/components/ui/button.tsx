@@ -4,15 +4,15 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = {
   default:
-    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:[box-shadow:var(--neu-shadow-raised)] active:[box-shadow:var(--neu-shadow-inset)]",
+    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:none] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)]",
   primary:
-    "border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-primary)] hover:brightness-105 active:[box-shadow:var(--neu-shadow-primary-inset)]",
+    "border-transparent bg-[var(--primary)] [background-image:var(--neu-fill-primary)] active:[background-image:none] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-primary)] hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-primary-inset)]",
   soft:
     "border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] active:[box-shadow:var(--neu-shadow-inset)]",
   ghost:
     "border-transparent bg-transparent text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface-soft)] active:bg-[var(--neu-surface-low)] active:[box-shadow:var(--neu-shadow-inset)]",
   destructive:
-    "border-transparent bg-[var(--destructive)] text-[var(--destructive-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:brightness-105 active:[box-shadow:var(--neu-shadow-destructive-inset)]",
+    "border-transparent bg-[var(--destructive)] text-[var(--destructive-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-destructive-inset)]",
 } as const;
 
 const buttonSizes = {

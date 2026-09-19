@@ -119,8 +119,9 @@ async function fetchRegistryItem(name: string, signal: AbortSignal) {
 
 export function ComponentInstallation({ slug }: { slug: string }) {
   const { messages } = useLocale();
-  const [bundle, setBundle] = React.useState<ManualBundle | null>(null);
-  const [error, setError] = React.useState(false);
+  const [source, setSource] = React.useState<{ slug: string; bundle: ManualBundle | null; error: boolean } | null>(null);
+  const bundle = source?.slug === slug ? source.bundle : null;
+  const error = source?.slug === slug && source.error;
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -128,18 +129,19 @@ export function ComponentInstallation({ slug }: { slug: string }) {
     async function loadSource() {
       try {
         const item = await fetchRegistryItem(slug, controller.signal);
-        const dependencyNames = Array.from(
-          new Set(
-            ["neumorphism-ui", ...(item.registryDependencies ?? []).map(getDependencySlug)],
-          ),
-        );
-        const dependencies = await Promise.all(
-          dependencyNames.map((name) =>
-            fetchRegistryItem(name, controller.signal),
-          ),
-        );
+        const dependencies: RegistryItem[] = [];
+        const visited = new Set([slug]);
+        async function visit(name: string) {
+          if (visited.has(name)) return;
+          visited.add(name);
+          const dependency = await fetchRegistryItem(name, controller.signal);
+          for (const child of dependency.registryDependencies ?? []) await visit(getDependencySlug(child));
+          dependencies.push(dependency);
+        }
+        await visit("neumorphism-ui");
+        for (const dependency of item.registryDependencies ?? []) await visit(getDependencySlug(dependency));
 
-        setBundle({ dependencies, item });
+        if (!controller.signal.aborted) setSource({ slug, bundle: { dependencies, item }, error: false });
       } catch (sourceError) {
         if (
           sourceError instanceof DOMException &&
@@ -148,7 +150,7 @@ export function ComponentInstallation({ slug }: { slug: string }) {
           return;
         }
 
-        setError(true);
+        if (!controller.signal.aborted) setSource({ slug, bundle: null, error: true });
       }
     }
 
@@ -156,6 +158,8 @@ export function ComponentInstallation({ slug }: { slug: string }) {
 
     return () => controller.abort();
   }, [slug]);
+
+  const packages = Array.from(new Set([...(bundle?.dependencies ?? []), ...(bundle ? [bundle.item] : [])].flatMap(item => item.dependencies ?? [])));
 
   return (
     <Tabs className="component-installation" defaultValue="cli">
@@ -184,8 +188,8 @@ export function ComponentInstallation({ slug }: { slug: string }) {
               <div>
                 <span>{messages.installationPanel.packages}</span>
                 <code>
-                  {bundle.item.dependencies?.length
-                    ? bundle.item.dependencies.join(", ")
+                  {packages.length
+                    ? packages.join(", ")
                     : "—"}
                 </code>
               </div>
@@ -212,9 +216,9 @@ export function ComponentInstallation({ slug }: { slug: string }) {
                   <p>{messages.installationPanel.packagesBody}</p>
                 </div>
               </div>
-              {bundle.item.dependencies?.length ? (
+              {packages.length ? (
                 <CopyableCode
-                  code={`npm install ${bundle.item.dependencies.join(" ")}`}
+                  code={`npm install ${packages.join(" ")}`}
                   label={`${slug} ${messages.installationPanel.packages}`}
                 />
               ) : (

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field",
+  "title": "Field",
+  "description": "Connect a control with its label, description, and validation errors.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/field.tsx",
+      "content": "\"use client\";\n\nimport { Field as Primitive } from \"@base-ui/react/field\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nfunction Field({ className, ...props }: Primitive.Root.Props) {\n  return <Primitive.Root data-slot=\"field\" className={mergeClassName<Primitive.Root.State>(\"grid min-w-0 gap-2\", className)} {...props} />;\n}\nfunction FieldLabel({ className, ...props }: Primitive.Label.Props) {\n  return <Primitive.Label data-slot=\"field-label\" className={mergeClassName<Primitive.Label.State>(\"w-fit text-sm font-semibold text-[var(--foreground)] data-disabled:opacity-50\", className)} {...props} />;\n}\nfunction FieldControl({ className, ...props }: Primitive.Control.Props) {\n  return <Primitive.Control data-slot=\"field-control\" className={mergeClassName<Primitive.Control.State>(\n    \"h-10 w-full min-w-0 rounded-[var(--neu-radius-control)] border border-[color:var(--input)] bg-[var(--neu-surface)] px-3.5 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[box-shadow,border-color] duration-[var(--neu-duration)] motion-reduce:transition-none placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/25 data-invalid:border-[var(--destructive)] disabled:cursor-not-allowed disabled:opacity-50\", className,\n  )} {...props} />;\n}\nfunction FieldDescription({ className, ...props }: Primitive.Description.Props) {\n  return <Primitive.Description data-slot=\"field-description\" className={mergeClassName<Primitive.Description.State>(\"text-sm leading-relaxed text-[var(--muted-foreground)]\", className)} {...props} />;\n}\nfunction FieldError({ className, ...props }: Primitive.Error.Props) {\n  return <Primitive.Error data-slot=\"field-error\" className={mergeClassName<Primitive.Error.State>(\"text-sm leading-relaxed font-medium text-[var(--neu-error-text)]\", className)} {...props} />;\n}\nconst FieldValidity = Primitive.Validity;\nconst FieldItem = Primitive.Item;\nexport { Field, FieldLabel, FieldControl, FieldDescription, FieldError, FieldValidity, FieldItem };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "forms-selection"
+  ],
+  "type": "registry:ui"
+}

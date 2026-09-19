@@ -1662,6 +1662,468 @@ import {
       "Base UI가 hover뿐 아니라 keyboard focus에서 열고 Escape로 닫는 동작을 제공합니다.",
     ],
   },
+{
+  "slug": "alert-dialog",
+  "title": "Alert Dialog",
+  "category": "actions-overlays",
+  "summary": "되돌릴 수 없는 작업을 명시적으로 확인하는 대화상자.",
+  "description": "되돌릴 수 없는 작업을 명시적으로 확인하는 대화상자. Cancel을 먼저 배치하세요. 비동기 작업은 성공 후 controlled 상태를 닫으세요.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from \"@/components/ui/alert-dialog\";",
+  "usageCode": "export default function Example() {\n  const [message, setMessage] = React.useState(\"\");\n  return (<div className=\"grid gap-3\"><AlertDialog><AlertDialogTrigger render={<Button variant=\"destructive\" />}>{\"초안 삭제\"}</AlertDialogTrigger><AlertDialogContent><AlertDialogTitle>{\"초안을 삭제할까요?\"}</AlertDialogTitle><AlertDialogDescription>{\"이 작업은 되돌릴 수 없습니다. 계속하려면 직접 확인하세요.\"}</AlertDialogDescription><AlertDialogFooter><AlertDialogCancel>{\"돌아가기\"}</AlertDialogCancel><AlertDialogAction onClick={() => setMessage(\"초안을 삭제했습니다.\")}>{\"초안 삭제\"}</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message}</p></div>);\n}",
+  "props": [
+    {
+      "component": "AlertDialog",
+      "name": "open / defaultOpen",
+      "type": "boolean",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "AlertDialogContent",
+      "name": "initialFocus",
+      "type": "boolean | React.RefObject | function",
+      "description": "열릴 때 포커스를 받을 요소를 지정합니다."
+    },
+    {
+      "component": "AlertDialogAction",
+      "name": "onClick",
+      "type": "React.MouseEventHandler",
+      "description": "확인 버튼의 동기 동작입니다. 비동기 저장에는 controlled 상태를 사용하세요."
+    }
+  ],
+  "accessibility": [
+    "Cancel을 먼저 배치하세요. 비동기 작업은 성공 후 controlled 상태를 닫으세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "popover",
+  "title": "Popover",
+  "category": "actions-overlays",
+  "summary": "버튼 옆에서 맥락을 유지하는 작은 설정 패널.",
+  "description": "버튼 옆에서 맥락을 유지하는 작은 설정 패널. PopoverTitle과 설명을 제공하고 키보드로 닫기 동작을 확인하세요.",
+  "importCode": "\"use client\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { Popover, PopoverTrigger, PopoverContent, PopoverTitle, PopoverDescription, PopoverClose } from \"@/components/ui/popover\";",
+  "usageCode": "export default function Example() {\n\n  return (<Popover><PopoverTrigger render={<Button />}>{\"알림 설정\"}</PopoverTrigger><PopoverContent><PopoverTitle>{\"알림을 조절하세요\"}</PopoverTitle><PopoverDescription>{\"중요한 업데이트만 받아 집중을 유지하세요.\"}</PopoverDescription><PopoverClose render={<Button variant=\"primary\" />}>{\"닫기\"}</PopoverClose></PopoverContent></Popover>);\n}",
+  "props": [
+    {
+      "component": "Popover",
+      "name": "open / defaultOpen",
+      "type": "boolean",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "PopoverContent",
+      "name": "side / align",
+      "type": "Positioner.Props",
+      "description": "화면 경계를 고려한 패널 위치와 간격입니다."
+    },
+    {
+      "component": "PopoverTrigger",
+      "name": "render",
+      "type": "React.ReactElement | function",
+      "description": "기존 요소와 이벤트·ref를 합성합니다."
+    }
+  ],
+  "accessibility": [
+    "PopoverTitle과 설명을 제공하고 키보드로 닫기 동작을 확인하세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "hover-card",
+  "title": "Hover Card",
+  "category": "actions-overlays",
+  "summary": "링크의 목적지를 보조적으로 설명하는 미리보기 카드.",
+  "description": "링크의 목적지를 보조적으로 설명하는 미리보기 카드. 필수 정보나 행동을 hover에만 두지 마세요. 원래 링크만으로도 목적지를 알 수 있어야 합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { HoverCard, HoverCardTrigger, HoverCardContent } from \"@/components/ui/hover-card\";",
+  "usageCode": "export default function Example() {\n  const id = React.useId();\n  return (<HoverCard><HoverCardTrigger href=\"#profile-preview\" className=\"inline-flex items-center gap-3 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-4 py-3 font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]\">{\"프로필 미리보기\"} <span aria-hidden=\"true\">↗</span></HoverCardTrigger><HoverCardContent><strong id=\"profile-preview\">Alex Kim</strong><p>{\"제품 디자이너 · 서울\"}</p></HoverCardContent></HoverCard>);\n}",
+  "props": [
+    {
+      "component": "HoverCard",
+      "name": "open / defaultOpen",
+      "type": "boolean",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "HoverCardTrigger",
+      "name": "delay / closeDelay",
+      "type": "number",
+      "description": "열기와 닫기의 지연 시간(ms)입니다."
+    },
+    {
+      "component": "HoverCardContent",
+      "name": "sideOffset",
+      "type": "number",
+      "description": "화면 경계를 고려한 패널 위치와 간격입니다."
+    }
+  ],
+  "accessibility": [
+    "필수 정보나 행동을 hover에만 두지 마세요. 원래 링크만으로도 목적지를 알 수 있어야 합니다.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "sheet",
+  "title": "Sheet",
+  "category": "actions-overlays",
+  "summary": "화면 가장자리에서 여는 스크롤 가능한 작업 패널.",
+  "description": "화면 가장자리에서 여는 스크롤 가능한 작업 패널. SheetTitle과 설명을 포함하세요. 작은 화면에서도 닫기와 마지막 필드에 도달할 수 있어야 합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription, SheetClose } from \"@/components/ui/sheet\";\nimport { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from \"@/components/ui/field\";",
+  "usageCode": "export default function Example() {\n  const [name, setName] = React.useState(\"Alex\");\n  const nameField = <Field name=\"displayName\"><FieldLabel>{\"표시 이름\"}</FieldLabel><FieldControl required value={name} onValueChange={setName} /><FieldDescription>{\"프로필에 표시할 이름을 입력하세요.\"}</FieldDescription><FieldError match=\"valueMissing\">{\"이름을 입력하세요.\"}</FieldError></Field>;\n  return (<Sheet><SheetTrigger render={<Button />}>{\"프로필 설정\"}</SheetTrigger><SheetContent closeLabel={\"닫기\"}><SheetTitle>{\"프로필 설정\"}</SheetTitle><SheetDescription>{\"프로필에 표시할 이름을 입력하세요.\"}</SheetDescription>{nameField}<SheetClose render={<Button variant=\"primary\" />}>{\"닫기\"}</SheetClose></SheetContent></Sheet>);\n}",
+  "props": [
+    {
+      "component": "SheetContent",
+      "name": "side",
+      "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
+      "description": "화면 경계를 고려한 패널 위치와 간격입니다."
+    },
+    {
+      "component": "SheetContent",
+      "name": "closeLabel",
+      "type": "string",
+      "description": "닫기 버튼의 접근 가능한 이름입니다."
+    },
+    {
+      "component": "Sheet",
+      "name": "open / onOpenChange",
+      "type": "Dialog.Root.Props",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    }
+  ],
+  "accessibility": [
+    "SheetTitle과 설명을 포함하세요. 작은 화면에서도 닫기와 마지막 필드에 도달할 수 있어야 합니다.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "collapsible",
+  "title": "Collapsible",
+  "category": "navigation-disclosure",
+  "summary": "추가 설정 한 묶음을 펼치거나 접는 컨테이너.",
+  "description": "추가 설정 한 묶음을 펼치거나 접는 컨테이너. 트리거의 이름은 내용과 관계를 설명해야 합니다. Enter와 Space로 펼침을 확인하세요.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Collapsible, CollapsibleTrigger, CollapsibleContent } from \"@/components/ui/collapsible\";",
+  "usageCode": "export default function Example() {\n  const [expanded, setExpanded] = React.useState(false);\n  return (<Collapsible open={expanded} onOpenChange={setExpanded}><CollapsibleTrigger>{\"세부 설정\"}<span aria-hidden=\"true\">{expanded ? \"−\" : \"+\"}</span></CollapsibleTrigger><CollapsibleContent><div>{\"기본 동작은 그대로 두고 추가 설정만 펼칩니다.\"}</div></CollapsibleContent></Collapsible>);\n}",
+  "props": [
+    {
+      "component": "Collapsible",
+      "name": "open / defaultOpen",
+      "type": "boolean",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "CollapsibleTrigger",
+      "name": "disabled",
+      "type": "boolean",
+      "description": "사용자 조작을 비활성화합니다."
+    },
+    {
+      "component": "CollapsibleContent",
+      "name": "keepMounted",
+      "type": "boolean",
+      "description": "접혀 있을 때도 패널을 DOM에 유지합니다."
+    }
+  ],
+  "accessibility": [
+    "트리거의 이름은 내용과 관계를 설명해야 합니다. Enter와 Space로 펼침을 확인하세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "toggle",
+  "title": "Toggle",
+  "category": "forms-selection",
+  "summary": "눌린 선택 상태가 유지되는 독립 토글 버튼.",
+  "description": "눌린 선택 상태가 유지되는 독립 토글 버튼. 아이콘만 쓰면 aria-label을 제공하세요. 색뿐 아니라 inset과 테두리로 선택 상태를 표시합니다.",
+  "importCode": "\"use client\";\n\nimport { Toggle } from \"@/components/ui/toggle\";",
+  "usageCode": "export default function Example() {\n\n  return (<div className=\"flex flex-wrap gap-3\"><Toggle aria-label={\"고정\"}><span aria-hidden=\"true\">◆</span>{\"고정\"}</Toggle><Toggle defaultPressed>{\"고정\"}</Toggle><Toggle disabled>{\"잠김\"}</Toggle></div>);\n}",
+  "props": [
+    {
+      "component": "Toggle",
+      "name": "pressed / defaultPressed",
+      "type": "boolean",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "Toggle",
+      "name": "size",
+      "type": "\"sm\" | \"default\" | \"lg\"",
+      "description": "컨트롤 크기를 선택합니다."
+    },
+    {
+      "component": "Toggle",
+      "name": "disabled",
+      "type": "boolean",
+      "description": "사용자 조작을 비활성화합니다."
+    }
+  ],
+  "accessibility": [
+    "아이콘만 쓰면 aria-label을 제공하세요. 색뿐 아니라 inset과 테두리로 선택 상태를 표시합니다.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "toggle-group",
+  "title": "Toggle Group",
+  "category": "forms-selection",
+  "summary": "단일 또는 복수 선택을 묶는 키보드 탐색 토글 그룹.",
+  "description": "단일 또는 복수 선택을 묶는 키보드 탐색 토글 그룹. 그룹의 aria-label과 각 항목 이름을 제공하세요. 방향키 이동과 선택 상태를 구분합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";",
+  "usageCode": "export default function Example() {\n  const text = {\"open\":\"알림 설정\",\"title\":\"알림을 조절하세요\",\"body\":\"중요한 업데이트만 받아 집중을 유지하세요.\",\"close\":\"닫기\",\"discard\":\"초안 삭제\",\"confirm\":\"초안을 삭제할까요?\",\"warning\":\"이 작업은 되돌릴 수 없습니다. 계속하려면 직접 확인하세요.\",\"cancel\":\"돌아가기\",\"done\":\"초안을 삭제했습니다.\",\"profile\":\"프로필 미리보기\",\"person\":\"제품 디자이너 · 서울\",\"details\":\"세부 설정\",\"detailBody\":\"기본 동작은 그대로 두고 추가 설정만 펼칩니다.\",\"pin\":\"고정\",\"locked\":\"잠김\",\"align\":\"정렬\",\"left\":\"왼쪽\",\"center\":\"가운데\",\"right\":\"오른쪽\",\"tools\":\"문서 도구\",\"undo\":\"실행 취소\",\"redo\":\"다시 실행\",\"save\":\"변경 저장\",\"saved\":\"로컬 예제를 저장했습니다.\",\"name\":\"표시 이름\",\"hint\":\"프로필에 표시할 이름을 입력하세요.\",\"required\":\"이름을 입력하세요.\",\"settings\":\"프로필 설정\",\"quantity\":\"좌석 수\",\"increase\":\"좌석 늘리기\",\"decrease\":\"좌석 줄이기\",\"storage\":\"저장 공간\",\"city\":\"도시 검색\",\"empty\":\"일치하는 도시가 없습니다.\",\"reset\":\"초기화\",\"editing\":\"저장 전 변경 사항\",\"quiet\":\"저장된 상태\"};\n  const [alignment, setAlignment] = React.useState<string[]>([\"left\"]);\n  return (<div className=\"grid gap-3\"><ToggleGroup aria-label={\"정렬\"} value={alignment} onValueChange={setAlignment}><ToggleGroupItem value=\"left\">{\"왼쪽\"}</ToggleGroupItem><ToggleGroupItem value=\"center\">{\"가운데\"}</ToggleGroupItem><ToggleGroupItem value=\"right\">{\"오른쪽\"}</ToggleGroupItem></ToggleGroup><output className=\"text-sm text-[var(--muted-foreground)]\">{alignment.map(value => text[value as \"left\" | \"center\" | \"right\"]).join(\", \")}</output></div>);\n}",
+  "props": [
+    {
+      "component": "ToggleGroup",
+      "name": "value / defaultValue",
+      "type": "readonly string[]",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "ToggleGroup",
+      "name": "multiple",
+      "type": "boolean",
+      "description": "복수 항목 선택을 허용합니다."
+    },
+    {
+      "component": "ToggleGroup",
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "description": "배치 방향과 키보드 이동 방향입니다."
+    }
+  ],
+  "accessibility": [
+    "그룹의 aria-label과 각 항목 이름을 제공하세요. 방향키 이동과 선택 상태를 구분합니다.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "toolbar",
+  "title": "Toolbar",
+  "category": "navigation-disclosure",
+  "summary": "문서 작업을 한 곳에 묶는 방향키 탐색 도구 모음.",
+  "description": "문서 작업을 한 곳에 묶는 방향키 탐색 도구 모음. Toolbar에 이름을 제공하세요. 비활성 항목도 기본적으로 방향키로 탐색되지만 실행되지 않습니다. 필요하면 focusableWhenDisabled={false}로 탐색에서 제외하세요.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Toolbar, ToolbarGroup, ToolbarButton, ToolbarSeparator } from \"@/components/ui/toolbar\";",
+  "usageCode": "export default function Example() {\n  const [message, setMessage] = React.useState(\"\");\n  return (<div className=\"grid gap-3\"><Toolbar aria-label={\"문서 도구\"}><ToolbarGroup><ToolbarButton onClick={() => setMessage(\"실행 취소\")}>{\"실행 취소\"}</ToolbarButton><ToolbarButton disabled>{\"다시 실행\"}</ToolbarButton></ToolbarGroup><ToolbarSeparator /><ToolbarButton onClick={() => setMessage(\"로컬 예제를 저장했습니다.\")}>{\"변경 저장\"}</ToolbarButton></Toolbar><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message}</p></div>);\n}",
+  "props": [
+    {
+      "component": "Toolbar",
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "description": "배치 방향과 키보드 이동 방향입니다."
+    },
+    {
+      "component": "Toolbar",
+      "name": "loopFocus",
+      "type": "boolean",
+      "description": "끝에서 처음으로 키보드 포커스를 순환합니다."
+    },
+    {
+      "component": "ToolbarButton",
+      "name": "disabled",
+      "type": "boolean",
+      "description": "사용자 조작을 비활성화합니다."
+    }
+  ],
+  "accessibility": [
+    "Toolbar에 이름을 제공하세요. 비활성 항목도 기본적으로 방향키로 탐색되지만 실행되지 않습니다. 필요하면 focusableWhenDisabled={false}로 탐색에서 제외하세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "field",
+  "title": "Field",
+  "category": "forms-selection",
+  "summary": "라벨·설명·오류를 입력과 연결하는 검증 단위.",
+  "description": "라벨·설명·오류를 입력과 연결하는 검증 단위. FieldControl 또는 render로 연결한 입력을 사용하세요. 오류는 색 외에 FieldError 텍스트로 제공합니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from \"@/components/ui/field\";",
+  "usageCode": "export default function Example() {\n  const [name, setName] = React.useState(\"Alex\");\n  const nameField = <Field name=\"displayName\"><FieldLabel>{\"표시 이름\"}</FieldLabel><FieldControl required value={name} onValueChange={setName} /><FieldDescription>{\"프로필에 표시할 이름을 입력하세요.\"}</FieldDescription><FieldError match=\"valueMissing\">{\"이름을 입력하세요.\"}</FieldError></Field>;\n  return (<div className=\"grid w-full max-w-sm gap-5\">{nameField}<Field invalid><FieldLabel>{\"표시 이름\"}</FieldLabel><FieldControl defaultValue=\"\" /><FieldError match>{\"이름을 입력하세요.\"}</FieldError></Field></div>);\n}",
+  "props": [
+    {
+      "component": "Field",
+      "name": "name",
+      "type": "string",
+      "description": "폼 값과 서버 오류를 연결하는 필드 이름입니다."
+    },
+    {
+      "component": "Field",
+      "name": "validate",
+      "type": "(value) => string | string[] | null | Promise",
+      "description": "사용자 정의 검증 결과를 반환합니다."
+    },
+    {
+      "component": "Field",
+      "name": "validationMode",
+      "type": "\"onSubmit\" | \"onBlur\" | \"onChange\"",
+      "description": "검증을 실행할 시점을 선택합니다."
+    }
+  ],
+  "accessibility": [
+    "FieldControl 또는 render로 연결한 입력을 사용하세요. 오류는 색 외에 FieldError 텍스트로 제공합니다.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "fieldset",
+  "title": "Fieldset",
+  "category": "forms-selection",
+  "summary": "관련 입력에 공통 제목과 비활성 상태를 제공하는 그룹.",
+  "description": "관련 입력에 공통 제목과 비활성 상태를 제공하는 그룹. FieldsetLegend로 그룹의 목적을 설명하고 개별 입력에도 라벨을 남겨 두세요.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from \"@/components/ui/field\";\nimport { Fieldset, FieldsetLegend } from \"@/components/ui/fieldset\";",
+  "usageCode": "export default function Example() {\n  const [name, setName] = React.useState(\"Alex\");\n  const nameField = <Field name=\"displayName\"><FieldLabel>{\"표시 이름\"}</FieldLabel><FieldControl required value={name} onValueChange={setName} /><FieldDescription>{\"프로필에 표시할 이름을 입력하세요.\"}</FieldDescription><FieldError match=\"valueMissing\">{\"이름을 입력하세요.\"}</FieldError></Field>;\n  return (<Fieldset className=\"w-full max-w-sm\"><FieldsetLegend>{\"프로필 설정\"}</FieldsetLegend>{nameField}</Fieldset>);\n}",
+  "props": [
+    {
+      "component": "Fieldset",
+      "name": "disabled",
+      "type": "boolean",
+      "description": "사용자 조작을 비활성화합니다."
+    },
+    {
+      "component": "FieldsetLegend",
+      "name": "children",
+      "type": "React.ReactNode",
+      "description": "관련 필드 그룹의 제목입니다."
+    },
+    {
+      "component": "Fieldset",
+      "name": "className",
+      "type": "string | function",
+      "description": "기본 스타일을 확장하며 상태 함수도 지원합니다."
+    }
+  ],
+  "accessibility": [
+    "FieldsetLegend로 그룹의 목적을 설명하고 개별 입력에도 라벨을 남겨 두세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "form",
+  "title": "Form",
+  "category": "forms-selection",
+  "summary": "필드 검증과 제출 오류를 함께 다루는 네이티브 폼.",
+  "description": "필드 검증과 제출 오류를 함께 다루는 네이티브 폼. 저장과 초기화를 명확히 구분하세요. 예제는 로컬 상태만 갱신하며 서버 저장은 별도 구현입니다.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from \"@/components/ui/field\";\nimport { Form } from \"@/components/ui/form\";",
+  "usageCode": "export default function Example() {\n  const [message, setMessage] = React.useState(\"\");\n  const [name, setName] = React.useState(\"Alex\");\n  const [savedName, setSavedName] = React.useState(\"Alex\");\n  const nameField = <Field name=\"displayName\"><FieldLabel>{\"표시 이름\"}</FieldLabel><FieldControl required value={name} onValueChange={setName} /><FieldDescription>{\"프로필에 표시할 이름을 입력하세요.\"}</FieldDescription><FieldError match=\"valueMissing\">{\"이름을 입력하세요.\"}</FieldError></Field>;\n  return (<Form className=\"w-full max-w-sm\" onFormSubmit={() => { setSavedName(name); setMessage(\"로컬 예제를 저장했습니다.\"); }} onReset={() => { setName(savedName); setMessage(\"\"); }}>\n      {nameField}<div className=\"flex flex-wrap gap-3\"><Button type=\"submit\" variant=\"primary\">{\"변경 저장\"}</Button><Button type=\"reset\">{\"초기화\"}</Button></div><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{name !== savedName ? \"저장 전 변경 사항\" : message || \"저장된 상태\"}</p>\n    </Form>);\n}",
+  "props": [
+    {
+      "component": "Form",
+      "name": "onFormSubmit",
+      "type": "(values, eventDetails) => void",
+      "description": "검증된 폼 값을 받습니다. 네이티브 제출은 방지됩니다."
+    },
+    {
+      "component": "Form",
+      "name": "errors",
+      "type": "Record<string, string | string[]>",
+      "description": "필드 이름별 외부 오류를 연결합니다."
+    },
+    {
+      "component": "Form",
+      "name": "validationMode",
+      "type": "\"onSubmit\" | \"onBlur\" | \"onChange\"",
+      "description": "검증을 실행할 시점을 선택합니다."
+    }
+  ],
+  "accessibility": [
+    "저장과 초기화를 명확히 구분하세요. 예제는 로컬 상태만 갱신하며 서버 저장은 별도 구현입니다.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "number-field",
+  "title": "Number Field",
+  "category": "forms-selection",
+  "summary": "범위·간격·지역별 표시를 지원하는 수량 입력.",
+  "description": "범위·간격·지역별 표시를 지원하는 수량 입력. 증감 버튼마다 이름을 제공하세요. 최솟값·최댓값과 직접 입력을 함께 확인하세요.",
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { NumberField, NumberFieldGroup, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } from \"@/components/ui/number-field\";",
+  "usageCode": "export default function Example() {\n  const id = React.useId();\n  return (<NumberField id={id} defaultValue={3} min={1} max={8}><label htmlFor={id} className=\"text-sm font-semibold\">{\"좌석 수\"}</label><NumberFieldGroup><NumberFieldDecrement aria-label={\"좌석 줄이기\"} /><NumberFieldInput /><NumberFieldIncrement aria-label={\"좌석 늘리기\"} /></NumberFieldGroup></NumberField>);\n}",
+  "props": [
+    {
+      "component": "NumberField",
+      "name": "min / max",
+      "type": "number",
+      "description": "허용하는 최솟값과 최댓값입니다."
+    },
+    {
+      "component": "NumberField",
+      "name": "step",
+      "type": "number",
+      "description": "버튼과 키보드의 증감 간격입니다."
+    },
+    {
+      "component": "NumberField",
+      "name": "locale / format",
+      "type": "string | Intl.NumberFormatOptions",
+      "description": "숫자의 지역별 표시 형식을 설정합니다."
+    }
+  ],
+  "accessibility": [
+    "증감 버튼마다 이름을 제공하세요. 최솟값·최댓값과 직접 입력을 함께 확인하세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "meter",
+  "title": "Meter",
+  "category": "data-feedback",
+  "summary": "알려진 범위 안에서 사용량을 나타내는 측정 막대.",
+  "description": "알려진 범위 안에서 사용량을 나타내는 측정 막대. 작업 진행률에는 Progress를 사용하세요. MeterLabel과 숫자 표시를 함께 제공하세요.",
+  "importCode": "\"use client\";\n\nimport { Meter, MeterLabel, MeterValue, MeterTrack, MeterIndicator } from \"@/components/ui/meter\";",
+  "usageCode": "export default function Example() {\n\n  return (<Meter value={64} className=\"w-full max-w-sm\"><div className=\"flex justify-between gap-4\"><MeterLabel>{\"저장 공간\"}</MeterLabel><MeterValue /></div><MeterTrack><MeterIndicator /></MeterTrack><p className=\"text-xs text-[var(--muted-foreground)]\">64 GB / 100 GB</p></Meter>);\n}",
+  "props": [
+    {
+      "component": "Meter",
+      "name": "value",
+      "type": "number",
+      "description": "범위 안의 현재 측정값입니다."
+    },
+    {
+      "component": "Meter",
+      "name": "min / max",
+      "type": "number",
+      "description": "허용하는 최솟값과 최댓값입니다."
+    },
+    {
+      "component": "Meter",
+      "name": "format",
+      "type": "Intl.NumberFormatOptions",
+      "description": "숫자의 지역별 표시 형식을 설정합니다."
+    }
+  ],
+  "accessibility": [
+    "작업 진행률에는 Progress를 사용하세요. MeterLabel과 숫자 표시를 함께 제공하세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
+{
+  "slug": "combobox",
+  "title": "Combobox",
+  "category": "forms-selection",
+  "summary": "필터링·빈 결과·키보드 선택을 지원하는 검색형 입력.",
+  "description": "필터링·빈 결과·키보드 선택을 지원하는 검색형 입력. ComboboxLabel과 빈 결과 문구를 제공하세요. 방향키·Enter·Escape 및 실제 IME 입력을 확인하세요.",
+  "importCode": "\"use client\";\n\nimport { Combobox, ComboboxLabel, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem, ComboboxEmpty } from \"@/components/ui/combobox\";",
+  "usageCode": "export default function Example() {\n  const cities = [\"Busan\", \"London\", \"Seoul\", \"Tokyo\"];\n  return (<div className=\"w-full max-w-sm\"><Combobox items={cities}><ComboboxLabel>{\"도시 검색\"}</ComboboxLabel><ComboboxInput placeholder={\"도시 검색\"} /><ComboboxContent><ComboboxEmpty>{\"일치하는 도시가 없습니다.\"}</ComboboxEmpty><ComboboxList>{(city: string) => <ComboboxItem key={city} value={city}>{city}</ComboboxItem>}</ComboboxList></ComboboxContent></Combobox></div>);\n}",
+  "props": [
+    {
+      "component": "Combobox",
+      "name": "items",
+      "type": "unknown[]",
+      "description": "검색하고 선택할 원본 항목입니다."
+    },
+    {
+      "component": "Combobox",
+      "name": "value / onValueChange",
+      "type": "Combobox.Root.Props",
+      "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "Combobox",
+      "name": "multiple",
+      "type": "boolean",
+      "description": "복수 항목 선택을 허용합니다."
+    }
+  ],
+  "accessibility": [
+    "ComboboxLabel과 빈 결과 문구를 제공하세요. 방향키·Enter·Escape 및 실제 IME 입력을 확인하세요.",
+    "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
+  ]
+},
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

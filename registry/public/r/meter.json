@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter",
+  "title": "Meter",
+  "description": "Represent a measurement within a known range.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/meter.tsx",
+      "content": "\"use client\";\n\nimport { Meter as Primitive } from \"@base-ui/react/meter\";\nimport { mergeClassName } from \"@/lib/utils\";\n\nfunction Meter({ className, ...props }: Primitive.Root.Props) {\n  return <Primitive.Root data-slot=\"meter\" className={mergeClassName<Primitive.Root.State>(\"grid w-full min-w-0 gap-2\", className)} {...props} />;\n}\nfunction MeterLabel({ className, ...props }: Primitive.Label.Props) {\n  return <Primitive.Label data-slot=\"meter-label\" className={mergeClassName<Primitive.Label.State>(\"text-sm font-medium text-[var(--foreground)]\", className)} {...props} />;\n}\nfunction MeterValue({ className, ...props }: Primitive.Value.Props) {\n  return <Primitive.Value data-slot=\"meter-value\" className={mergeClassName<Primitive.Value.State>(\"text-sm font-semibold tabular-nums text-[var(--foreground)]\", className)} {...props} />;\n}\nfunction MeterTrack({ className, ...props }: Primitive.Track.Props) {\n  return <Primitive.Track data-slot=\"meter-track\" className={mergeClassName<Primitive.Track.State>(\"h-2.5 overflow-hidden rounded-full bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset-sm)]\", className)} {...props} />;\n}\nfunction MeterIndicator({ className, ...props }: Primitive.Indicator.Props) {\n  return <Primitive.Indicator data-slot=\"meter-indicator\" className={mergeClassName<Primitive.Indicator.State>(\"h-full rounded-full bg-[var(--primary)] [background-image:var(--neu-fill-primary)] [box-shadow:inset_0_1px_0_var(--neu-edge)] transition-[width] duration-[var(--neu-duration)] motion-reduce:transition-none\", className)} {...props} />;\n}\nexport { Meter, MeterLabel, MeterValue, MeterTrack, MeterIndicator };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "data-feedback"
+  ],
+  "type": "registry:ui"
+}

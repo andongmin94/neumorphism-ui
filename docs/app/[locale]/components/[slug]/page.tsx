@@ -63,6 +63,8 @@ export default async function ComponentDetailPage({
     notFound();
   }
 
+  const exampleItems = Array.from(new Set([...component.importCode.matchAll(/from\s+["']@\/components\/ui\/([a-z0-9-]+)["']/g)].map((match) => match[1])));
+  const exampleInstall = `npx shadcn@latest add ${exampleItems.map((name) => `@neumorphism-ui/${name}`).join(" ")}`;
   const messages = getMessages(locale);
   const groups = getLocalizedComponentDocGroups(locale);
   const category = groups.find(
@@ -133,6 +135,7 @@ export default async function ComponentDetailPage({
           <div className="component-doc-section-heading">
             <h2>{messages.common.usage}</h2>
           </div>
+          {exampleItems.length > 1 && <CopyableCode code={exampleInstall} label={`${messages.common.usage}: ${messages.common.installation}`} />}
           <div className="component-doc-code-block">
             <h3>Import</h3>
             <CopyableCode

@@ -43,7 +43,7 @@ function TabsTrigger({
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={mergeClassName<TabsPrimitive.Tab.State>(
-        "inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[calc(var(--neu-radius-control)-4px)] border border-transparent px-4 text-sm font-semibold whitespace-nowrap text-[var(--muted-foreground)] outline-none transition-[color,background-color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 data-[active]:border-[color:var(--neu-edge)] data-[active]:bg-[var(--neu-surface)] data-[active]:text-[var(--foreground)] data-[active]:[box-shadow:var(--neu-shadow-raised-sm)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[calc(var(--neu-radius-control)-4px)] border border-transparent px-4 text-sm font-semibold whitespace-nowrap text-[var(--muted-foreground)] outline-none transition-[color,background-color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 data-[active]:border-[color:var(--neu-selected-border)] data-[active]:bg-[var(--neu-selected)] data-[active]:text-[var(--foreground)] data-[active]:[box-shadow:var(--neu-shadow-raised-sm)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}
