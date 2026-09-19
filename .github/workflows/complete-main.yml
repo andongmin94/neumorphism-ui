@@ -25,7 +25,7 @@ jobs:
           done
       - name: Prepare reviewed component sources without creating a branch
         run: |
-          git fetch origin 105261b548f35a310b882d9a531885a7558997f6
+          git fetch origin 712216abb666d59ffe617755e54114c71c8a0628
           git restore --source=FETCH_HEAD --staged --worktree -- docs registry scripts AGENTS.md README.md QUALITY.md
           node scripts/integrate-workflow-ui.mjs
           node scripts/finish-workflow-ui.mjs
