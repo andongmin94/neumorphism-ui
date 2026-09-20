@@ -19,8 +19,8 @@ jobs:
           node-version: 22
       - name: Check candidate without changing the main product
         run: |
-          git fetch --depth=1 origin 655294d8972fd615e0322e3a4c6f2bf73bb672a2
-          git checkout --detach 655294d8972fd615e0322e3a4c6f2bf73bb672a2
+          git fetch --depth=1 origin 65e78566c6495e075ec2661653a02406a9803f5a
+          git checkout --detach 65e78566c6495e075ec2661653a02406a9803f5a
           git checkout '${{ github.sha }}' -- .github/workflows/workspace-candidate.yml
       - run: npm ci --prefix registry && npm ci --prefix docs
       - name: Integrate catalog and localized documentation
@@ -44,11 +44,13 @@ jobs:
           npm run build --prefix docs
           npm run test:ssr --prefix docs
       - name: Browser engines
+        id: engines
         working-directory: docs
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Installed component and workspace interactions
         run: npm run consumer:verify --prefix registry
       - name: Localized documentation and templates
+        if: ${{ !cancelled() && steps.engines.outcome == 'success' }}
         run: npm run test:browser --prefix docs
       - name: Publish verified implementation on main
         run: |
