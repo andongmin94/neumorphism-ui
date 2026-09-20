@@ -56,6 +56,8 @@ export function DocsSearch() {
         summary: messages.search.themeSummary,
         category: messages.search.customization,
       },
+      { href: localeHref(locale, "/charts"), key: "charts", title: ({ko:"차트",en:"Charts",ja:"チャート",zh:"图表"})[locale], summary: "Recharts · Revenue · Conversion · CSV", category: messages.navigation.components },
+      { href: localeHref(locale, "/templates/dashboard"), key: "dashboard", title: ({ko:"분석 대시보드",en:"Analytics dashboard",ja:"分析ダッシュボード",zh:"分析仪表盘"})[locale], summary: "Analytics · Charts · Reporting", category: messages.navigation.components },
       ...componentDocs.map((component) => ({
         href: localeHref(locale, `/components/${component.slug}`),
         key: component.slug,

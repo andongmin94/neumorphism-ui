@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,13 +17,41 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@/lib/utils": ["../registry/src/lib/utils.ts"],
-      "@/components/ui/*": ["../registry/src/components/ui/*"],
-      "@/*": ["./*"]
+      "@/lib/utils": [
+        "../registry/src/lib/utils.ts"
+      ],
+      "@/components/ui/*": [
+        "../registry/src/components/ui/*"
+      ],
+      "@/*": [
+        "./*"
+      ],
+      "@/components/blocks/*": [
+        "../registry/src/components/blocks/*"
+      ],
+      "@/lib/analytics-model": [
+        "../registry/src/lib/analytics-model.ts"
+      ],
+      "@/lib/analytics-copy": [
+        "../registry/src/lib/analytics-copy.ts"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "**/*.mts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

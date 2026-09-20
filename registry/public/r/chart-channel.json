@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-channel",
+  "title": "Acquisition mix",
+  "description": "Acquisition mix with explicit scales, localized summaries and an exact data table.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart",
+    "@neumorphism-ui/analytics-model",
+    "@neumorphism-ui/select"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/channel-chart.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Bar, BarChart, CartesianGrid, XAxis, YAxis } from \"recharts\";\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\nimport { Select, SelectItem } from \"@/components/ui/select\";\nimport type { AnalyticsSummary } from \"@/lib/analytics-model\";\nimport { analyticsCopy, analyticsFormats, type AnalyticsLocale } from \"@/lib/analytics-copy\";\n\nexport function ChannelChart({ data, locale = \"en\" }: { data: AnalyticsSummary; locale?: AnalyticsLocale }) {\n  const [metric, setMetric] = React.useState<\"visits\" | \"convertedVisits\">(\"visits\");\n  const t = analyticsCopy[locale];\n  const f = analyticsFormats(locale);\n  const label = metric === \"visits\" ? t.visits : t.conversions;\n  return <ChartContainer\n    data-chart=\"channels\" title={t.channelsTitle} description={t.channelsBody}\n    summary={data.observedDays ? <>{label}: {f.number(data.totals[metric])}</> : t.empty}\n    actions={<label className=\"grid max-w-full gap-1.5 text-xs\">{t.metric}<Select value={metric} onChange={event => setMetric(event.target.value === \"visits\" ? \"visits\" : \"convertedVisits\")}><SelectItem value=\"visits\">{t.visits}</SelectItem><SelectItem value=\"convertedVisits\">{t.conversions}</SelectItem></Select></label>}\n    tableLabel={t.table} empty={!data.channels.length} emptyLabel={t.empty}\n    table={<table><caption className=\"sr-only\">{t.channelsTitle}</caption><thead><tr><th scope=\"col\">{t.channel}</th><th scope=\"col\">{t.visits}</th><th scope=\"col\">{t.conversions}</th><th scope=\"col\">{t.conversion}</th></tr></thead><tbody>{data.channels.map(group => <tr key={group.channel}><th scope=\"row\">{group.channel}</th><td>{f.number(group.visits)}</td><td>{f.number(group.convertedVisits)}</td><td>{f.percent(group.conversion)}</td></tr>)}</tbody></table>}\n  >\n    <BarChart data={data.channels} accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n      <CartesianGrid vertical={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n      <XAxis tickFormatter={(value: string) => value.length > 14 ? `${value.slice(0, 13)}…` : value} dataKey=\"channel\" minTickGap={16} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n      <YAxis domain={[0, \"auto\"]} width={52} allowDecimals={false} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n      <ChartTooltip formatter={value => f.number(typeof value === \"number\" ? value : null)} />\n      <Bar dataKey={metric} name={label} fill=\"var(--primary)\" radius={[4, 4, 0, 0]} maxBarSize={56} isAnimationActive={false} />\n    </BarChart>\n  </ChartContainer>;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/channel-chart.tsx"
+    }
+  ],
+  "type": "registry:block"
+}

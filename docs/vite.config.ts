@@ -21,7 +21,12 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
   return {
     resolve: {
-      alias: { "@/components/ui": fileURLToPath(new URL("../registry/src/components/ui", import.meta.url)) },
+      alias: {
+        "@/components/ui": fileURLToPath(new URL("../registry/src/components/ui", import.meta.url)),
+        "@/components/blocks": fileURLToPath(new URL("../registry/src/components/blocks", import.meta.url)),
+        "@/lib/analytics-model": fileURLToPath(new URL("../registry/src/lib/analytics-model.ts", import.meta.url)),
+        "@/lib/analytics-copy": fileURLToPath(new URL("../registry/src/lib/analytics-copy.ts", import.meta.url)),
+      },
       dedupe: ["react", "react-dom", "@base-ui/react"],
     },
     server: isCodexSeatbeltSandbox ? { watch: { useFsEvents: false, usePolling: true } } : undefined,

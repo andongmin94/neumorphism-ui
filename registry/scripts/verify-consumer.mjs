@@ -1,3 +1,4 @@
+import { decorateAnalyticsFixture, exerciseAnalytics } from "./analytics-consumer.mjs";
 import { decorateWorkspaceFixture, workspaceItems, exerciseWorkspaces } from "./workspace-consumer.mjs";
 import { run } from "./consumer-command.mjs";
 import { decorateWorkflowFixture, workflowItems, exerciseWorkflow } from "./workflow-consumer.mjs";
@@ -79,6 +80,7 @@ function fixture(directory, target, registryOrigin) {
   }
   decorateWorkflowFixture(directory);
   decorateWorkspaceFixture(directory);
+  decorateAnalyticsFixture(directory);
 }
 async function waitForServer(origin, processRef) {
   const end = Date.now() + 60_000;
@@ -122,6 +124,7 @@ async function browserChecks(directory, target, scenario) {
             await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseWorkflow(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseWorkspaces(page, { target, scenario, engineName, mode, evidenceRoot });
+            await exerciseAnalytics(page, { target, scenario, engineName, mode, evidenceRoot });
           } catch (error) {
             fs.mkdirSync(evidenceRoot, { recursive: true });
             const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-failure`);
@@ -152,7 +155,7 @@ try {
     const cssPath = path.join(directory, "src/globals.css"); const buttonPath = path.join(directory, "src/design-system/ui/button.tsx");
     if (scenario === "existing") { fs.appendFileSync(cssPath, "\n:root, .dark { --radius: 23px; }\n.consumer-owned { border-top: 7px solid currentColor; }\n"); fs.appendFileSync(buttonPath, "\n// Application-owned customization must survive later installs.\n"); }
     const beforeCss = fs.readFileSync(cssPath, "utf8"); const beforeButton = fs.readFileSync(buttonPath, "utf8"); const beforeApp = fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8");
-    await add("input", "dialog", ...expandedItems, ...workflowItems, ...workspaceItems, "checkbox");
+    await add("input", "dialog", ...expandedItems, ...workflowItems, ...workspaceItems, "template-analytics", "checkbox");
     assertExpandedFiles(directory);
     assert.equal(fs.readFileSync(cssPath, "utf8"), beforeCss, "adding UI changed theme or custom CSS"); assert.equal(fs.readFileSync(buttonPath, "utf8"), beforeButton, "adding UI overwrote a customized button"); assert.equal(fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8"), beforeApp);
     await run(npm, ["run", "build"], directory); await browserChecks(directory, target, scenario);

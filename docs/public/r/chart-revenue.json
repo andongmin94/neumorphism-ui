@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-revenue",
+  "title": "Revenue against target",
+  "description": "Revenue against target with explicit scales, localized summaries and an exact data table.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart",
+    "@neumorphism-ui/analytics-model",
+    "@neumorphism-ui/checkbox"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/revenue-chart.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from \"recharts\";\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\nimport { Checkbox } from \"@/components/ui/checkbox\";\nimport type { AnalyticsSummary } from \"@/lib/analytics-model\";\nimport { analyticsCopy, analyticsFormats, type AnalyticsLocale } from \"@/lib/analytics-copy\";\n\nexport function RevenueChart({ data, locale = \"en\", currency = \"USD\" }: {\n  data: AnalyticsSummary; locale?: AnalyticsLocale; currency?: string;\n}) {\n  const [showTarget, setShowTarget] = React.useState(true);\n  const t = analyticsCopy[locale];\n  const f = analyticsFormats(locale, currency);\n  return <ChartContainer\n    data-chart=\"revenue\" title={t.revenueTitle} description={t.revenueBody}\n    summary={data.observedDays ? <>{t.revenue}: {f.money(data.totals.revenueCents)} · {t.target}: {f.money(data.totals.targetCents)}</> : t.empty}\n    actions={<label className=\"inline-flex items-center gap-2 text-xs\"><Checkbox checked={showTarget} onCheckedChange={value => setShowTarget(value === true)} />{t.targetToggle}</label>}\n    tableLabel={t.table} empty={data.observedDays === 0} emptyLabel={t.empty}\n    table={<table><caption className=\"sr-only\">{t.revenueTitle}</caption><thead><tr><th scope=\"col\">{t.date}</th><th scope=\"col\">{t.revenue}</th><th scope=\"col\">{t.target}</th></tr></thead><tbody>{data.points.map(point => <tr key={point.date}><th scope=\"row\">{point.date}</th><td>{f.money(point.revenueCents)}</td><td>{f.money(point.targetCents)}</td></tr>)}</tbody></table>}\n  >\n    <ComposedChart data={data.points} accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n      <CartesianGrid vertical={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n      <XAxis dataKey=\"date\" tickFormatter={(value: string) => value.slice(5)} minTickGap={28} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n      <YAxis domain={[0, \"auto\"]} width={72} tickFormatter={(value: number) => f.compactMoney(value)} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n      <ChartTooltip formatter={value => f.money(typeof value === \"number\" ? value : null)} />\n      <Area type=\"linear\" dataKey=\"revenueCents\" name={t.revenue} stroke=\"var(--primary)\" fill=\"var(--primary)\" fillOpacity={0.1} strokeWidth={2.5} connectNulls={false} isAnimationActive={false} />\n      {showTarget && <Line type=\"linear\" dataKey=\"targetCents\" name={t.target} stroke=\"var(--muted-foreground)\" strokeWidth={2} strokeDasharray=\"6 4\" dot={false} connectNulls={false} isAnimationActive={false} />}\n    </ComposedChart>\n  </ChartContainer>;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/revenue-chart.tsx"
+    }
+  ],
+  "type": "registry:block"
+}

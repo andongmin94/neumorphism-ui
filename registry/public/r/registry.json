@@ -1656,6 +1656,124 @@
           "target": "@components/blocks/data-manager-model.ts"
         }
       ]
+    },
+    {
+      "name": "chart",
+      "title": "Chart",
+      "description": "Responsive chart surfaces with exact-data disclosure and styled tooltips. Compose Recharts directly.",
+      "type": "registry:ui",
+      "dependencies": [
+        "recharts@3.10.1",
+        "react-is@19.2.8"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/chart.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "analytics-model",
+      "title": "Analytics model",
+      "description": "Validated date-only reporting, integer cents, weighted rates and exact-data export.",
+      "type": "registry:lib",
+      "files": [
+        {
+          "path": "src/lib/analytics-model.ts",
+          "type": "registry:lib",
+          "target": "@lib/analytics-model.ts"
+        },
+        {
+          "path": "src/lib/analytics-copy.ts",
+          "type": "registry:lib",
+          "target": "@lib/analytics-copy.ts"
+        }
+      ]
+    },
+    {
+      "name": "chart-revenue",
+      "title": "Revenue against target",
+      "description": "Revenue against target with explicit scales, localized summaries and an exact data table.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/analytics-model",
+        "@neumorphism-ui/checkbox"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/revenue-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/revenue-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chart-channel",
+      "title": "Acquisition mix",
+      "description": "Acquisition mix with explicit scales, localized summaries and an exact data table.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/analytics-model",
+        "@neumorphism-ui/select"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/channel-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/channel-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chart-conversion",
+      "title": "Visit conversion",
+      "description": "Visit conversion with explicit scales, localized summaries and an exact data table.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/analytics-model"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/conversion-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/conversion-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "template-analytics",
+      "title": "Analytics dashboard",
+      "description": "Source-owned read-only analytics with reporting windows, channels, three charts, KPI summaries and CSV export.",
+      "type": "registry:block",
+      "registryDependencies": [
+        "@neumorphism-ui/analytics-model",
+        "@neumorphism-ui/chart-revenue",
+        "@neumorphism-ui/chart-channel",
+        "@neumorphism-ui/chart-conversion",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/select",
+        "@neumorphism-ui/checkbox",
+        "@neumorphism-ui/alert"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/analytics-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/analytics-dashboard.tsx"
+        },
+        {
+          "path": "src/components/blocks/analytics-demo.ts",
+          "type": "registry:component",
+          "target": "@components/blocks/analytics-demo.ts"
+        }
+      ]
     }
   ]
 }

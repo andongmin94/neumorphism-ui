@@ -2322,6 +2322,49 @@ import {
   "importCode": "\"use client\";\nimport * as React from \"react\";\nimport { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarCheckboxItem } from \"@/components/ui/menubar\";",
   "usageCode": "export default function Example() {\n  const [visible, setVisible] = React.useState(true);\n  const [message, setMessage] = React.useState(\"준비됨\");\n  return <div><Menubar aria-label=\"파일\"><MenubarMenu><MenubarTrigger>파일</MenubarTrigger><MenubarContent><MenubarItem onClick={() => setMessage(\"문서를 만들었습니다\")}>새 문서</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>보기</MenubarTrigger><MenubarContent><MenubarCheckboxItem checked={visible} onCheckedChange={setVisible}>상태 표시</MenubarCheckboxItem></MenubarContent></MenubarMenu></Menubar>{visible && <p role=\"status\">{message}</p>}</div>;\n}"
 },
+{
+  "slug": "chart",
+  "title": "Chart",
+  "category": "data-feedback",
+  "summary": "반응형 차트 표면, 툴팁과 정확한 데이터 표.",
+  "description": "Recharts의 축과 시리즈를 직접 조합합니다. 차트는 평면으로 읽기 쉽게 유지하고 패널에 뉴모피즘을 적용합니다.",
+  "importCode": "\"use client\";\nimport { Bar, BarChart, XAxis } from \"recharts\";\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";",
+  "usageCode": "export default function Example() {\n  const data = [{ date: \"09-01\", visits: 140 }, { date: \"09-02\", visits: 220 }, { date: \"09-03\", visits: 175 }];\n  return <ChartContainer title=\"일별 방문\" description=\"예시 데이터. 정확한 값은 표에서 확인하세요.\" tableLabel=\"데이터 보기\" table={<table><caption>일별 방문</caption><thead><tr><th scope=\"col\">날짜</th><th scope=\"col\">방문</th></tr></thead><tbody>{data.map(row => <tr key={row.date}><th scope=\"row\">{row.date}</th><td>{row.visits}</td></tr>)}</tbody></table>}>\n    <BarChart data={data} accessibilityLayer><XAxis dataKey=\"date\" /><ChartTooltip /><Bar dataKey=\"visits\" name=\"방문\" fill=\"var(--primary)\" isAnimationActive={false} /></BarChart>\n  </ChartContainer>;\n}",
+  "props": [
+    {
+      "component": "ChartContainer",
+      "name": "title / description",
+      "type": "string",
+      "required": true,
+      "description": "차트 제목과 읽을 수 있는 설명입니다."
+    },
+    {
+      "component": "ChartContainer",
+      "name": "table / tableLabel",
+      "type": "ReactNode / string",
+      "required": true,
+      "description": "동일 원본의 데이터 표와 펼치기 문구입니다."
+    },
+    {
+      "component": "ChartContainer",
+      "name": "empty / emptyLabel",
+      "type": "boolean / string",
+      "required": false,
+      "description": "기록이 없을 때 표시할 상태입니다."
+    },
+    {
+      "component": "ChartTooltip",
+      "name": "props",
+      "type": "Recharts Tooltip props",
+      "required": false,
+      "description": "기본 툴팁 옵션을 그대로 전달합니다."
+    }
+  ],
+  "accessibility": [
+    "accessibilityLayer를 사용하고 색상 외에 선 모양·라벨과 원본 표를 함께 제공하세요.",
+    "예제는 애니메이션을 사용하지 않습니다. 사용자 정의 시리즈의 모션 정책은 사용자가 관리합니다."
+  ]
+},
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

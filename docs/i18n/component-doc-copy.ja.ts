@@ -1,6 +1,7 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+"chart": {"summary": "レスポンシブなチャート表面、ツールチップと正確なデータ表。", "description": "Rechartsの軸と系列を直接組み合わせます。データは平面的に読みやすくし、周囲の表面に深度を付けます。", "props": ["読みやすいタイトルと説明。", "同じ元データの表と開閉ラベル。", "記録がない場合の表示。", "RechartsのTooltipオプションを渡します。"], "accessibility": ["accessibilityLayer、線の形、ラベル、元データの表を併用してください。", "例ではアニメーションを無効にします。独自の系列のモーションはアプリで管理します。"]},
 "navigation-menu": {"summary":"リンクとポップアップによるキーボード対応のサイトナビゲーション。","description":"Base UIの動作を保ち、開いた状態を inset で表します。ルート内に NavigationMenuViewport を一つ配置します。","props":["開いている項目と変更コールバック。","renderでフレームワークのリンクを使います。","ポップアップの位置と余白。"],"accessibility":["移動先には実際のhrefを使い、navに名前を付けてください。","Tab、方向キー、Escapeとフォーカス表示を確認してください。"]},
 "menubar": {"summary":"方向キーで移動するアプリケーションのコマンドメニュー。","description":"Menubarがフォーカス移動を担当し、既存のDropdown Menu部品がポップアップを担当します。","props":["キーボード移動の方向。","トリガーを無効にします。","チェック項目の制御状態。"],"accessibility":["ページ移動ではなくコマンドに使用し、menubarに名前を付けます。","方向キーでメニューを移動します。無効な項目は実行できません。"]},
   accordion: {

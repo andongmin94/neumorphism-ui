@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-conversion",
+  "title": "Visit conversion",
+  "description": "Visit conversion with explicit scales, localized summaries and an exact data table.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart",
+    "@neumorphism-ui/analytics-model"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/conversion-chart.tsx",
+      "content": "\"use client\";\n\nimport { CartesianGrid, Line, LineChart, XAxis, YAxis } from \"recharts\";\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\nimport type { AnalyticsSummary } from \"@/lib/analytics-model\";\nimport { analyticsCopy, analyticsFormats, type AnalyticsLocale } from \"@/lib/analytics-copy\";\n\nexport function ConversionChart({ data, locale = \"en\" }: { data: AnalyticsSummary; locale?: AnalyticsLocale }) {\n  const t = analyticsCopy[locale];\n  const f = analyticsFormats(locale);\n  return <ChartContainer\n    data-chart=\"conversion\" title={t.conversionTitle} description={t.conversionBody}\n    summary={data.observedDays ? <>{f.percent(data.conversion)} · {f.number(data.totals.convertedVisits)} / {f.number(data.totals.visits)}</> : t.empty}\n    tableLabel={t.table} empty={!data.observedDays} emptyLabel={t.empty}\n    table={<table><caption className=\"sr-only\">{t.conversionTitle}</caption><thead><tr><th scope=\"col\">{t.date}</th><th scope=\"col\">{t.visits}</th><th scope=\"col\">{t.conversions}</th><th scope=\"col\">{t.conversion}</th></tr></thead><tbody>{data.points.map(point => <tr key={point.date}><th scope=\"row\">{point.date}</th><td>{f.number(point.visits)}</td><td>{f.number(point.convertedVisits)}</td><td>{f.percent(point.conversion)}</td></tr>)}</tbody></table>}\n  >\n    <LineChart data={data.points} accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n      <CartesianGrid vertical={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n      <XAxis dataKey=\"date\" tickFormatter={(value: string) => value.slice(5)} minTickGap={28} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n      <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={48} tickFormatter={(value: number) => `${value * 100}%`} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n      <ChartTooltip formatter={value => f.percent(typeof value === \"number\" ? value : null)} />\n      <Line type=\"linear\" dataKey=\"conversion\" name={t.conversion} stroke=\"var(--primary)\" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 5 }} connectNulls={false} isAnimationActive={false} />\n    </LineChart>\n  </ChartContainer>;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/conversion-chart.tsx"
+    }
+  ],
+  "type": "registry:block"
+}

@@ -10,7 +10,9 @@
     "./ui/*": "./src/components/ui/*.tsx",
     "./utils": "./src/lib/utils.ts",
     "./theme": "./src/theme.ts",
-    "./blocks/*": "./src/components/blocks/*.tsx"
+    "./blocks/*": "./src/components/blocks/*.tsx",
+    "./analytics-model": "./src/lib/analytics-model.ts",
+    "./analytics-copy": "./src/lib/analytics-copy.ts"
   },
   "scripts": {
     "build": "node scripts/build-registry.mjs",
@@ -30,7 +32,9 @@
     "tailwind-merge": "^3.6.0",
     "@daypicker/react": "^10.0.0",
     "@tanstack/react-table": "^8.21.3",
-    "pretendard": "1.3.9"
+    "pretendard": "1.3.9",
+    "recharts": "3.10.1",
+    "react-is": "19.2.8"
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",
