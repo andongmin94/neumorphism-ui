@@ -25,27 +25,8 @@ jobs:
           rm -f .github/analytics.patch.gz.b64 .github/analytics.patch.part-*
       - name: Align documentation source paths
         run: |
-          node <<'NODE'
-          const fs = require("fs")
-          const tsFile = "docs/tsconfig.json"
-          const config = JSON.parse(fs.readFileSync(tsFile, "utf8"))
-          config.compilerOptions.paths["@/components/blocks/*"] = ["../registry/src/components/blocks/*"]
-          config.compilerOptions.paths["@/lib/analytics-model"] = ["../registry/src/lib/analytics-model.ts"]
-          config.compilerOptions.paths["@/lib/analytics-copy"] = ["../registry/src/lib/analytics-copy.ts"]
-          fs.writeFileSync(tsFile, JSON.stringify(config, null, 2) + "\n")
-
-          const viteFile = "docs/vite.config.ts"
-          const source = fs.readFileSync(viteFile, "utf8")
-          const before = 'alias: { "@/components/ui": fileURLToPath(new URL("../registry/src/components/ui", import.meta.url)) },'
-          if (!source.includes(before)) throw new Error("Expected docs Vite alias block not found")
-          const after = `alias: {
-        "@/components/ui": fileURLToPath(new URL("../registry/src/components/ui", import.meta.url)),
-        "@/components/blocks": fileURLToPath(new URL("../registry/src/components/blocks", import.meta.url)),
-        "@/lib/analytics-model": fileURLToPath(new URL("../registry/src/lib/analytics-model.ts", import.meta.url)),
-        "@/lib/analytics-copy": fileURLToPath(new URL("../registry/src/lib/analytics-copy.ts", import.meta.url)),
-      },`
-          fs.writeFileSync(viteFile, source.replace(before, after))
-          NODE
+          node -e 'const fs=require("fs");const f="docs/tsconfig.json";const c=JSON.parse(fs.readFileSync(f,"utf8"));c.compilerOptions.paths["@/components/blocks/*"]=["../registry/src/components/blocks/*"];c.compilerOptions.paths["@/lib/analytics-model"]=["../registry/src/lib/analytics-model.ts"];c.compilerOptions.paths["@/lib/analytics-copy"]=["../registry/src/lib/analytics-copy.ts"];fs.writeFileSync(f,JSON.stringify(c,null,2)+"\n")'
+          node -e 'const fs=require("fs");const f="docs/vite.config.ts";const s=fs.readFileSync(f,"utf8");const b="alias: { \"@/components/ui\": fileURLToPath(new URL(\"../registry/src/components/ui\", import.meta.url)) },";if(!s.includes(b))throw new Error("Expected docs Vite alias block not found");const a="alias: {\n        \"@/components/ui\": fileURLToPath(new URL(\"../registry/src/components/ui\", import.meta.url)),\n        \"@/components/blocks\": fileURLToPath(new URL(\"../registry/src/components/blocks\", import.meta.url)),\n        \"@/lib/analytics-model\": fileURLToPath(new URL(\"../registry/src/lib/analytics-model.ts\", import.meta.url)),\n        \"@/lib/analytics-copy\": fileURLToPath(new URL(\"../registry/src/lib/analytics-copy.ts\", import.meta.url)),\n      },";fs.writeFileSync(f,s.replace(b,a))'
       - name: Refresh dependency locks
         run: |
           npm install --package-lock-only --ignore-scripts --prefix registry
