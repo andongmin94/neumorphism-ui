@@ -19,8 +19,8 @@ jobs:
           node-version: 22
       - name: Check candidate without changing the main product
         run: |
-          git fetch --depth=1 origin 65e78566c6495e075ec2661653a02406a9803f5a
-          git checkout --detach 65e78566c6495e075ec2661653a02406a9803f5a
+          git fetch --depth=1 origin 66521452d819ca1a1c837dd9d92742ee82cbadb2
+          git checkout --detach 66521452d819ca1a1c837dd9d92742ee82cbadb2
           git checkout '${{ github.sha }}' -- .github/workflows/workspace-candidate.yml
       - run: npm ci --prefix registry && npm ci --prefix docs
       - name: Integrate catalog and localized documentation
