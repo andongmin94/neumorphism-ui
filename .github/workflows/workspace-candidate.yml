@@ -19,12 +19,14 @@ jobs:
           node-version: 22
       - name: Check candidate without changing the main product
         run: |
-          git fetch --depth=1 origin b57e43dedcb11390b941ca28dc13e6ad53e2cc95
-          git checkout --detach b57e43dedcb11390b941ca28dc13e6ad53e2cc95
+          git fetch --depth=1 origin 655294d8972fd615e0322e3a4c6f2bf73bb672a2
+          git checkout --detach 655294d8972fd615e0322e3a4c6f2bf73bb672a2
           git checkout '${{ github.sha }}' -- .github/workflows/workspace-candidate.yml
       - run: npm ci --prefix registry && npm ci --prefix docs
       - name: Integrate catalog and localized documentation
-        run: node scripts/integrate-workspaces.mjs
+        run: |
+          node scripts/integrate-workspaces.mjs
+          node scripts/refine-workspaces.mjs
       - name: Generate installation endpoints
         run: |
           npm run generate --prefix registry
