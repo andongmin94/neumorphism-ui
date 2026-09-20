@@ -1,15 +1,18 @@
 # Neumorphism UI Registry
 
-The registry provides 46 installable UI components, five light/dark theme presets,
-two workspace templates, one base, and one class-name utility: 55 catalog items in total.
+The registry provides **47 installable UI components, six blocks, five light/dark
+presets, one base and two shared libraries: 61 catalog items in total**.
 
 ## Source ownership
 
-`src/components/ui` owns the installable components. `src/components/blocks` owns the
-settings/profile and data-management workspaces. `src/theme.ts` owns preset
-data and token calculation. `catalog.json` owns metadata and dependency declarations.
-`registry.json`, `public/r`, and the synchronized documentation tokens/endpoints
-are generated from these sources. Do not edit generated output by hand.
+`src/components/ui` owns installable UI primitives. `src/components/blocks`
+owns settings/data workspaces, three analytical charts and the analytics dashboard.
+`src/lib` owns shared utilities plus the analytics model/copy. `src/theme.ts`
+owns preset data and token calculation. `catalog.json` owns metadata and dependency
+declarations.
+
+`registry.json`, `public/r`, and synchronized docs tokens/endpoints are generated.
+Do not edit generated output by hand.
 
 ## Commands
 
@@ -22,35 +25,35 @@ npm test
 npm run check:generated
 ```
 
-Type checking includes executable examples for the expanded components. Source
-contracts verify declared import dependencies and complete theme-token coverage.
 With the docs package and browser engines installed, `npm run consumer:verify`
-installs the actual generated items into independent Next.js and Vite applications
-and checks representative interactions without documentation CSS.
+installs the actual generated registry into independent Next.js and Vite
+applications and checks representative interactions without documentation CSS.
 
 ## Installation
 
-Use React 19, Tailwind CSS 4, and an initialized shadcn project. Register the
-namespace using the URL of the deployed documentation site. Install the base
-once, then add individual components. Adding a component does not reinstall the
-base or the currently selected preset.
+Use React 19, Tailwind CSS 4 and an initialized shadcn project. Install the base
+once, then add individual components or blocks. Later installs do not reinstall
+the base or selected preset.
 
 ```bash
 npx shadcn@latest add @neumorphism-ui/neumorphism-ui
 npx shadcn@latest add @neumorphism-ui/combobox
-npx shadcn@latest add @neumorphism-ui/style-sage
 npx shadcn@latest add @neumorphism-ui/template-settings
 npx shadcn@latest add @neumorphism-ui/template-data-manager
+npx shadcn@latest add @neumorphism-ui/chart-revenue
+npx shadcn@latest add @neumorphism-ui/chart-channel
+npx shadcn@latest add @neumorphism-ui/chart-conversion
+npx shadcn@latest add @neumorphism-ui/template-analytics
+npx shadcn@latest add @neumorphism-ui/style-sage
 ```
 
-See the root README for initial setup, including the separate scaffold-button
-replacement step, and QUALITY.md for executed checks and remaining release gates.
-
-After installing the base, import the packaged font stylesheet once in the
-application entry: `app/layout.tsx` (or `src/app/layout.tsx`) for Next.js, and
-`src/main.tsx` for Vite. The bundler self-hosts the font assets. Component
-installation intentionally does not overwrite your layout.
+After installing the base, import the packaged Pretendard stylesheet once in the
+application entry. Component installation intentionally does not overwrite your
+layout.
 
 ```tsx
 import "pretendard/dist/web/variable/pretendardvariable.css";
 ```
+
+Code/pre/kbd/samp use the Consolas-first system stack. See the root README for
+initial setup and QUALITY.md for executed checks and remaining release gates.
