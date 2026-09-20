@@ -27,12 +27,24 @@ jobs:
         run: |
           node <<'NODE'
           const fs = require("fs")
-          const file = "docs/tsconfig.json"
-          const config = JSON.parse(fs.readFileSync(file, "utf8"))
+          const tsFile = "docs/tsconfig.json"
+          const config = JSON.parse(fs.readFileSync(tsFile, "utf8"))
           config.compilerOptions.paths["@/components/blocks/*"] = ["../registry/src/components/blocks/*"]
           config.compilerOptions.paths["@/lib/analytics-model"] = ["../registry/src/lib/analytics-model.ts"]
           config.compilerOptions.paths["@/lib/analytics-copy"] = ["../registry/src/lib/analytics-copy.ts"]
-          fs.writeFileSync(file, JSON.stringify(config, null, 2) + "\n")
+          fs.writeFileSync(tsFile, JSON.stringify(config, null, 2) + "\n")
+
+          const viteFile = "docs/vite.config.ts"
+          const source = fs.readFileSync(viteFile, "utf8")
+          const before = 'alias: { "@/components/ui": fileURLToPath(new URL("../registry/src/components/ui", import.meta.url)) },'
+          if (!source.includes(before)) throw new Error("Expected docs Vite alias block not found")
+          const after = `alias: {
+        "@/components/ui": fileURLToPath(new URL("../registry/src/components/ui", import.meta.url)),
+        "@/components/blocks": fileURLToPath(new URL("../registry/src/components/blocks", import.meta.url)),
+        "@/lib/analytics-model": fileURLToPath(new URL("../registry/src/lib/analytics-model.ts", import.meta.url)),
+        "@/lib/analytics-copy": fileURLToPath(new URL("../registry/src/lib/analytics-copy.ts", import.meta.url)),
+      },`
+          fs.writeFileSync(viteFile, source.replace(before, after))
           NODE
       - name: Refresh dependency locks
         run: |
