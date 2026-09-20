@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menubar",
+  "title": "Menubar",
+  "description": "Application command menus with shared menu parts and roving keyboard focus.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "@neumorphism-ui/utils",
+    "@neumorphism-ui/dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/menubar.tsx",
+      "content": "\"use client\";\n\nimport { Menubar as Primitive } from \"@base-ui/react/menubar\";\nimport { Menu } from \"@base-ui/react/menu\";\nimport { mergeClassName } from \"@/lib/utils\";\nimport {\n  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem,\n  DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuGroup, DropdownMenuLabel,\n  DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubTrigger,\n  DropdownMenuSubContent,\n} from \"@/components/ui/dropdown-menu\";\n\nfunction Menubar({ className, ...props }: Primitive.Props) {\n  return <Primitive data-slot=\"menubar\" className={mergeClassName<Primitive.State>(\"flex w-fit max-w-full flex-wrap items-center gap-1 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-1.5 font-sans [box-shadow:var(--neu-shadow-raised-sm)]\", className)} {...props} />;\n}\nfunction MenubarTrigger({ className, ...props }: Menu.Trigger.Props) {\n  return <Menu.Trigger data-slot=\"menubar-trigger\" className={mergeClassName<Menu.Trigger.State>(\"inline-flex min-h-9 items-center rounded-[var(--neu-radius-control)] px-3 py-2 text-sm font-semibold text-[var(--foreground)] outline-none transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none hover:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] data-[popup-open]:bg-[var(--neu-selected)] data-[popup-open]:[box-shadow:var(--neu-shadow-inset)] data-disabled:pointer-events-none data-disabled:opacity-50\", className)} {...props} />;\n}\n\n// Menubar supplies roving focus; the existing menu parts supply popup behavior.\nexport {\n  Menubar, MenubarTrigger, DropdownMenu as MenubarMenu, DropdownMenuContent as MenubarContent,\n  DropdownMenuItem as MenubarItem, DropdownMenuCheckboxItem as MenubarCheckboxItem,\n  DropdownMenuRadioGroup as MenubarRadioGroup, DropdownMenuRadioItem as MenubarRadioItem,\n  DropdownMenuGroup as MenubarGroup, DropdownMenuLabel as MenubarLabel,\n  DropdownMenuSeparator as MenubarSeparator, DropdownMenuShortcut as MenubarShortcut,\n  DropdownMenuSub as MenubarSub, DropdownMenuSubTrigger as MenubarSubTrigger,\n  DropdownMenuSubContent as MenubarSubContent,\n};\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -2256,6 +2256,72 @@ import {
     "중요한 복구 동작은 알림에만 두지 말고 화면에도 제공하세요. 예제는 검토를 위해 수동 닫힘을 기본으로 사용합니다."
   ]
 },
+{
+  "slug": "navigation-menu",
+  "title": "Navigation Menu",
+  "category": "navigation-disclosure",
+  "summary": "링크와 팝업을 결합한 키보드 접근 가능한 사이트 탐색.",
+  "description": "Base UI의 탐색 상태를 유지하고 열린 메뉴를 inset 표면으로 표현합니다. NavigationMenuViewport를 루트 안에 한 번 배치합니다.",
+  "props": [
+    {
+      "component": "NavigationMenu",
+      "name": "value / onValueChange",
+      "type": "NavigationMenu.Root.Props",
+      "description": "현재 열린 항목과 변경 콜백입니다."
+    },
+    {
+      "component": "NavigationMenuLink",
+      "name": "render",
+      "type": "ReactElement",
+      "description": "프레임워크 링크를 render로 연결합니다."
+    },
+    {
+      "component": "NavigationMenuViewport",
+      "name": "side / align / sideOffset",
+      "type": "NavigationMenuViewportProps",
+      "description": "팝업의 위치와 여백을 지정합니다."
+    }
+  ],
+  "accessibility": [
+    "사이트 이동에는 실제 href 링크를 사용하고 nav에 이름을 부여하세요.",
+    "Tab·방향키·Escape로 조작하고, 포커스 표시를 제거하지 마세요."
+  ],
+  "importCode": "\"use client\";\nimport { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport } from \"@/components/ui/navigation-menu\";",
+  "usageCode": "export default function Example() {\n  return <div><NavigationMenu aria-label=\"제품\"><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger>제품</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href=\"#navigation-guide\">안내</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport /></NavigationMenu><p id=\"navigation-guide\">안내</p></div>;\n}"
+},
+{
+  "slug": "menubar",
+  "title": "Menubar",
+  "category": "navigation-disclosure",
+  "summary": "방향키로 이동하는 애플리케이션 명령 메뉴.",
+  "description": "Menubar는 포커스 이동을, 기존 Dropdown Menu 부품은 팝업·선택 동작을 담당합니다.",
+  "props": [
+    {
+      "component": "Menubar",
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "description": "키보드 이동 방향을 지정합니다."
+    },
+    {
+      "component": "MenubarTrigger",
+      "name": "disabled",
+      "type": "boolean",
+      "description": "메뉴 트리거를 비활성화합니다."
+    },
+    {
+      "component": "MenubarCheckboxItem",
+      "name": "checked / onCheckedChange",
+      "type": "boolean / (checked: boolean) => void",
+      "description": "체크 항목의 제어 상태입니다."
+    }
+  ],
+  "accessibility": [
+    "페이지 이동이 아닌 명령에 사용하고 menubar에 이름을 부여하세요.",
+    "방향키로 메뉴 사이를 이동합니다. 비활성 항목은 실행되지 않습니다."
+  ],
+  "importCode": "\"use client\";\nimport * as React from \"react\";\nimport { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarCheckboxItem } from \"@/components/ui/menubar\";",
+  "usageCode": "export default function Example() {\n  const [visible, setVisible] = React.useState(true);\n  const [message, setMessage] = React.useState(\"준비됨\");\n  return <div><Menubar aria-label=\"파일\"><MenubarMenu><MenubarTrigger>파일</MenubarTrigger><MenubarContent><MenubarItem onClick={() => setMessage(\"문서를 만들었습니다\")}>새 문서</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>보기</MenubarTrigger><MenubarContent><MenubarCheckboxItem checked={visible} onCheckedChange={setVisible}>상태 표시</MenubarCheckboxItem></MenubarContent></MenubarMenu></Menubar>{visible && <p role=\"status\">{message}</p>}</div>;\n}"
+},
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

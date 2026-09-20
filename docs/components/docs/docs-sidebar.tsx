@@ -85,6 +85,7 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
         </NavLink>
       </div>
 
+      <div className="docs-nav-group"><span>{({ko:"템플릿",en:"Templates",ja:"テンプレート",zh:"模板"})[locale]}</span><NavLink href={localeHref(locale, "/templates")} onNavigate={onNavigate} pathname={pathname}>{({ko:"모든 템플릿",en:"All templates",ja:"すべてのテンプレート",zh:"全部模板"})[locale]}</NavLink></div>
       {componentDocGroups.map(({ category, items }) => (
         <div className="docs-nav-group" key={category.id}>
           <span>{category.label}</span>

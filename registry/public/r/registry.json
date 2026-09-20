@@ -1552,6 +1552,110 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "navigation-menu",
+      "title": "Navigation Menu",
+      "description": "Keyboard-aware website navigation with inset open states and floating panels.",
+      "type": "registry:ui",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/navigation-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "menubar",
+      "title": "Menubar",
+      "description": "Application command menus with shared menu parts and roving keyboard focus.",
+      "type": "registry:ui",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/menubar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "template-settings",
+      "title": "Settings and profile workspace",
+      "description": "Profile editing, validation, dirty state, asynchronous save/retry and discard, with a clearly labeled local example.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/field",
+        "@neumorphism-ui/form",
+        "@neumorphism-ui/input",
+        "@neumorphism-ui/textarea",
+        "@neumorphism-ui/switch",
+        "@neumorphism-ui/alert",
+        "@neumorphism-ui/toast"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/settings-panel.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/settings-panel.tsx"
+        }
+      ]
+    },
+    {
+      "name": "template-data-manager",
+      "title": "Data management workspace",
+      "description": "Search/filter/sort/select, asynchronous create/edit and confirmed deletion, with safe local state updates and a local example.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "@tanstack/react-table",
+        "@daypicker/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/checkbox",
+        "@neumorphism-ui/input",
+        "@neumorphism-ui/select",
+        "@neumorphism-ui/field",
+        "@neumorphism-ui/form",
+        "@neumorphism-ui/date-picker",
+        "@neumorphism-ui/data-table",
+        "@neumorphism-ui/sheet",
+        "@neumorphism-ui/alert-dialog",
+        "@neumorphism-ui/alert",
+        "@neumorphism-ui/menubar",
+        "@neumorphism-ui/navigation-menu",
+        "@neumorphism-ui/toast"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/data-manager.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/data-manager.tsx"
+        },
+        {
+          "path": "src/components/blocks/data-manager-model.ts",
+          "type": "registry:component",
+          "target": "@components/blocks/data-manager-model.ts"
+        }
+      ]
     }
   ]
 }

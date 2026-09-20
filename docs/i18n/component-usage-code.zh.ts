@@ -1,6 +1,8 @@
 import { defineComponentUsageCode } from "@/i18n/component-usage-code";
 
 export const componentUsageCodeZh = defineComponentUsageCode({
+"navigation-menu": "export default function Example() {\n  return <div><NavigationMenu aria-label=\"产品\"><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger>产品</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href=\"#navigation-guide\">指南</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport /></NavigationMenu><p id=\"navigation-guide\">指南</p></div>;\n}",
+"menubar": "export default function Example() {\n  const [visible, setVisible] = React.useState(true);\n  const [message, setMessage] = React.useState(\"就绪\");\n  return <div><Menubar aria-label=\"文件\"><MenubarMenu><MenubarTrigger>文件</MenubarTrigger><MenubarContent><MenubarItem onClick={() => setMessage(\"文档已创建\")}>新建文档</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>视图</MenubarTrigger><MenubarContent><MenubarCheckboxItem checked={visible} onCheckedChange={setVisible}>显示状态</MenubarCheckboxItem></MenubarContent></MenubarMenu></Menubar>{visible && <p role=\"status\">{message}</p>}</div>;\n}",
   accordion: `<Accordion defaultValue={["shipping"]}>
   <AccordionItem value="shipping">
     <AccordionTrigger>配送需要多长时间？</AccordionTrigger>

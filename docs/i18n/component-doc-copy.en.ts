@@ -1,6 +1,8 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+"navigation-menu": {"summary":"Keyboard-aware website navigation with links and floating panels.","description":"Preserves Base UI navigation behavior and uses inset open states. Place one NavigationMenuViewport inside the root.","props":["The open item and its change handler.","Compose your framework link through render.","Controls popup placement and spacing."],"accessibility":["Use real href links for destinations and label the nav landmark.","Test Tab, arrow keys and Escape, and retain visible focus."]},
+"menubar": {"summary":"Application command menus with roving keyboard focus.","description":"Menubar owns focus navigation; the existing Dropdown Menu parts own popup and selection behavior.","props":["Sets the direction of keyboard navigation.","Disables the menu trigger.","Controlled state of a checkable item."],"accessibility":["Use for application commands, not ordinary page links, and label the menubar.","Arrow keys move between menus. Disabled items cannot execute."]},
   accordion: {
     summary:
       "A disclosure group that expands one section at a time or multiple sections together.",

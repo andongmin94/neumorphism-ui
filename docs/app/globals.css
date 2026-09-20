@@ -257,6 +257,10 @@ a {
   padding-block: 1rem;
 }
 
+.code-shell-multiline > .copy-button {
+  align-self: flex-start;
+}
+
 .code-shell-multiline pre {
   padding: 0 0.2rem;
 }

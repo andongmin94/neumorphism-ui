@@ -3,7 +3,7 @@
 Source-owned React components with soft surfaces, clear actions and visible focus.
 Install components with the shadcn CLI and edit their source in your application.
 
-The collection includes **44 UI components and five light/dark presets**. Calendar,
+The collection includes **46 UI components, two workspace templates and five light/dark presets**. Calendar,
 Date Picker, Data Table and Toast join the existing form, selection, navigation,
 overlay and feedback controls. Documentation and live examples are available in
 Korean, English, Japanese and Chinese.

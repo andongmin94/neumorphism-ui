@@ -1,7 +1,7 @@
 # Neumorphism UI Registry
 
-The registry provides 44 installable UI components, five light/dark theme presets,
-one base, and one class-name utility: 51 catalog items in total.
+The registry provides 46 installable UI components and two workspace templates, five light/dark theme presets,
+one base, and one class-name utility: 55 catalog items in total.
 
 ## Source ownership
 

@@ -1,6 +1,8 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+"navigation-menu": {"summary":"リンクとポップアップによるキーボード対応のサイトナビゲーション。","description":"Base UIの動作を保ち、開いた状態を inset で表します。ルート内に NavigationMenuViewport を一つ配置します。","props":["開いている項目と変更コールバック。","renderでフレームワークのリンクを使います。","ポップアップの位置と余白。"],"accessibility":["移動先には実際のhrefを使い、navに名前を付けてください。","Tab、方向キー、Escapeとフォーカス表示を確認してください。"]},
+"menubar": {"summary":"方向キーで移動するアプリケーションのコマンドメニュー。","description":"Menubarがフォーカス移動を担当し、既存のDropdown Menu部品がポップアップを担当します。","props":["キーボード移動の方向。","トリガーを無効にします。","チェック項目の制御状態。"],"accessibility":["ページ移動ではなくコマンドに使用し、menubarに名前を付けます。","方向キーでメニューを移動します。無効な項目は実行できません。"]},
   accordion: {
     summary:
       "1つずつ、または複数のセクションを同時に展開できるディスクロージャーグループ。",

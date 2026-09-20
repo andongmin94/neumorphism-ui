@@ -1,4 +1,5 @@
 "use client";
+import { NavigationPreview } from "./navigation-preview";
 
 import * as React from "react";
 import { WorkflowComponentPreview, workflowSlugs, type WorkflowSlug } from "./workflow-component-preview";
@@ -193,6 +194,7 @@ export function ComponentDetailPreview({
   const [switchValue, setSwitchValue] = React.useState(true);
 
   if (workflowSlugs.includes(slug as WorkflowSlug)) return <WorkflowComponentPreview slug={slug as WorkflowSlug} locale={locale} />;
+  if (slug === "navigation-menu" || slug === "menubar") return <NavigationPreview slug={slug} locale={locale} />;
   if (expandedSlugs.includes(slug as ExpandedSlug)) return <ExpandedComponentPreview slug={slug as ExpandedSlug} locale={locale} />;
 
   switch (slug) {
