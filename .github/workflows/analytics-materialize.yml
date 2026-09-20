@@ -23,6 +23,17 @@ jobs:
           git apply --check "$RUNNER_TEMP/analytics.patch"
           git apply "$RUNNER_TEMP/analytics.patch"
           rm -f .github/analytics.patch.gz.b64 .github/analytics.patch.part-*
+      - name: Align documentation source paths
+        run: |
+          node <<'NODE'
+          const fs = require("fs")
+          const file = "docs/tsconfig.json"
+          const config = JSON.parse(fs.readFileSync(file, "utf8"))
+          config.compilerOptions.paths["@/components/blocks/*"] = ["../registry/src/components/blocks/*"]
+          config.compilerOptions.paths["@/lib/analytics-model"] = ["../registry/src/lib/analytics-model.ts"]
+          config.compilerOptions.paths["@/lib/analytics-copy"] = ["../registry/src/lib/analytics-copy.ts"]
+          fs.writeFileSync(file, JSON.stringify(config, null, 2) + "\n")
+          NODE
       - name: Refresh dependency locks
         run: |
           npm install --package-lock-only --ignore-scripts --prefix registry
