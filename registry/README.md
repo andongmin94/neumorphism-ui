@@ -1,11 +1,12 @@
 # Neumorphism UI Registry
 
-The registry provides 46 installable UI components and two workspace templates, five light/dark theme presets,
-one base, and one class-name utility: 55 catalog items in total.
+The registry provides 46 installable UI components, five light/dark theme presets,
+two workspace templates, one base, and one class-name utility: 55 catalog items in total.
 
 ## Source ownership
 
-`src/components/ui` owns the installable components. `src/theme.ts` owns preset
+`src/components/ui` owns the installable components. `src/components/blocks` owns the
+settings/profile and data-management workspaces. `src/theme.ts` owns preset
 data and token calculation. `catalog.json` owns metadata and dependency declarations.
 `registry.json`, `public/r`, and the synchronized documentation tokens/endpoints
 are generated from these sources. Do not edit generated output by hand.
@@ -38,12 +39,17 @@ base or the currently selected preset.
 npx shadcn@latest add @neumorphism-ui/neumorphism-ui
 npx shadcn@latest add @neumorphism-ui/combobox
 npx shadcn@latest add @neumorphism-ui/style-sage
+npx shadcn@latest add @neumorphism-ui/template-settings
+npx shadcn@latest add @neumorphism-ui/template-data-manager
 ```
 
 See the root README for initial setup, including the separate scaffold-button
 replacement step, and QUALITY.md for executed checks and remaining release gates.
 
-After installing the base, import the packaged font stylesheet once in the application entry: `app/layout.tsx` (or `src/app/layout.tsx`) for Next.js, and `src/main.tsx` for Vite. This lets the bundler self-host the font assets. Component installation intentionally does not overwrite your layout.
+After installing the base, import the packaged font stylesheet once in the
+application entry: `app/layout.tsx` (or `src/app/layout.tsx`) for Next.js, and
+`src/main.tsx` for Vite. The bundler self-hosts the font assets. Component
+installation intentionally does not overwrite your layout.
 
 ```tsx
 import "pretendard/dist/web/variable/pretendardvariable.css";

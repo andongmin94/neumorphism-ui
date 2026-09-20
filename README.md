@@ -3,8 +3,8 @@
 Source-owned React components with soft surfaces, clear actions and visible focus.
 Install components with the shadcn CLI and edit their source in your application.
 
-The collection includes **46 UI components, two workspace templates and five light/dark presets**. Calendar,
-Date Picker, Data Table and Toast join the existing form, selection, navigation,
+The collection includes **46 UI components, two workspace templates and five light/dark presets**.
+Calendar, Date Picker, Data Table and Toast join the form, selection, navigation,
 overlay and feedback controls. Documentation and live examples are available in
 Korean, English, Japanese and Chinese.
 
@@ -65,6 +65,34 @@ The URL above is the configured public domain. Repository verification uses the
 locally built registry; it does not establish that a production deployment has
 already updated.
 
+## Installable workspaces
+
+```bash
+npx shadcn@latest add @neumorphism-ui/navigation-menu
+npx shadcn@latest add @neumorphism-ui/menubar
+npx shadcn@latest add @neumorphism-ui/template-settings
+npx shadcn@latest add @neumorphism-ui/template-data-manager
+```
+
+The settings workspace combines profile validation, a live preview, notification
+preferences, unsaved-change detection, failed-save recovery and discard. The data
+workspace combines search, status filters, sorting, pagination, stable-ID selection,
+column visibility, create/edit forms and confirmed deletion. Both use the shared
+components and theme rather than a separate documentation-only implementation.
+
+`SettingsPanel` accepts `initialValues` and an asynchronous `onSave` handler.
+`DataManager` accepts `initialRecords`, `onSave` and `onDelete`. A rejected handler
+retains the edits and original records. A resolved handler updates the local saved
+snapshot. Connect authenticated persistence in your application and enforce access
+control on the server. Initial props are snapshots: change the component key when
+switching data sets. These blocks do not create application routes or overwrite
+an existing theme, global CSS or layout.
+
+The examples on `/en/templates` (also `/ko`, `/ja`, `/zh`) are explicitly local and
+reset on reload. The gallery renders the actual example components as inert
+thumbnails, and each detail page displays the exact installable source from its
+built registry item. They are not hosted account or database services.
+
 ## Design and composition
 
 Raised actions press inward. Persistent selections stay inset after pointer exit.
@@ -112,7 +140,8 @@ local date serialization and combined data-table operations.
 
 ## Source ownership
 
-`registry/src/components/ui` owns components. `registry/src/theme.ts` owns presets,
+`registry/src/components/ui` owns components. `registry/src/components/blocks` owns the
+installable workspaces and their record model. `registry/src/theme.ts` owns presets,
 settings validation and token generation. `registry/catalog.json` owns metadata
 and dependency declarations. `docs` imports these sources for its live previews.
 
