@@ -103,8 +103,7 @@ values are not silently converted into zero.
 
 ## Development
 
-Work on **`main` only**. Do not create additional branches. Use Node.js 22.13 or
-newer in the Node 22 release line and npm.
+Work on **`main` only**. Do not create additional branches. Use Node.js 24 or newer and npm.
 
 ```bash
 npm ci --prefix registry
