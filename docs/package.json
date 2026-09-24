@@ -14,7 +14,7 @@
     "test:ssr": "node --test tests/rendered-html.test.mjs",
     "predev": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
     "prebuild": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node node_modules/typescript-7/bin/tsc --noEmit",
     "test:browser": "playwright test"
   },
   "dependencies": {
@@ -42,10 +42,11 @@
     "eslint-config-next": "16.3.5",
     "react-server-dom-webpack": "19.2.8",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vinext": "0.0.50",
     "vite": "^8.3.0",
     "wrangler": "4.92.0",
-    "@playwright/test": "1.63.0"
+    "@playwright/test": "1.63.0",
+    "typescript-7": "npm:typescript@^7.0.2"
   }
 }
