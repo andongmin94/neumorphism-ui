@@ -1,57 +1,18 @@
 {
+  "include": ["src/**/*", "components/**/*", "i18n/**/*", "tests/**/*", "press.config.tsx", "vite.config.ts"],
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    "target": "esnext",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["node", "vite/client"],
     "module": "esnext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "paths": { "@/*": ["./*"] },
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": false,
+    "noEmit": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/lib/utils": [
-        "../registry/src/lib/utils.ts"
-      ],
-      "@/components/ui/*": [
-        "../registry/src/components/ui/*"
-      ],
-      "@/*": [
-        "./*"
-      ],
-      "@/components/blocks/*": [
-        "../registry/src/components/blocks/*"
-      ],
-      "@/lib/analytics-model": [
-        "../registry/src/lib/analytics-model.ts"
-      ],
-      "@/lib/analytics-copy": [
-        "../registry/src/lib/analytics-copy.ts"
-      ]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "skipLibCheck": true,
+    "strict": true
+  }
 }

@@ -6,3 +6,5 @@
 - Use existing Base UI primitives. Calendar uses `@daypicker/react`; table state uses TanStack Table. Do not add compatibility APIs or reimplement their state machines.
 - Keep functional changes, actual test results and visual review distinct. Do not claim directory approval, exhaustive accessibility, production deployment or a clean audit without evidence.
 - Preserve user-owned code and CSS during component installation. Install the shared base explicitly once.
+
+- Documentation uses Fumapress file-based routes with the existing `ko`, `en`, `zh`, and `ja` URL prefixes. Do not restore Next.js App Router, Vinext, proxy, or Cloudflare-specific documentation runtime layers.

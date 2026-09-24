@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+import ts from "@typescript/typescript6";
 import { buildThemeCss, buildThemeVariables, defaultThemeSettings, themePresets } from "../src/theme.ts";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const colors = ["background", "foreground", "card", "card-foreground", "popover", "popover-foreground", "primary", "primary-foreground", "secondary", "secondary-foreground", "muted", "muted-foreground", "accent", "accent-foreground", "destructive", "destructive-foreground", "success", "border", "input", "ring"];

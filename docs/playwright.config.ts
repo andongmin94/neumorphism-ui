@@ -20,7 +20,7 @@ export default defineConfig({
     { name: "mobile-dark", use: { browserName: "chromium", viewport: { width: 390, height: 844 }, colorScheme: "dark", isMobile: true, hasTouch: true } },
   ],
   webServer: {
-    command: "node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4178 --strictPort",
+    command: "npm run start -- --host 127.0.0.1 --port 4178",
     url: "http://127.0.0.1:4178/ko",
     reuseExistingServer: false,
     timeout: 60_000,

@@ -35,7 +35,6 @@ jobs:
           npm run lint --prefix docs
           npm run typecheck --prefix docs
           npm run build --prefix docs
-          npm run test:ssr --prefix docs
       - name: Browser engines
         working-directory: docs
         run: npx playwright install --with-deps chromium firefox webkit

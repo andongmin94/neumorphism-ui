@@ -92,10 +92,7 @@ the local generated endpoints used by CI.
 ## Remaining release work
 
 The installable registry production audit is clean in the analytics materialization
-run. The docs hosting/build chain previously reported nine findings in the older
-Vinext/Cloudflare/Wrangler dependency graph; this analytics change does not claim
-those unrelated development/hosting findings are resolved. Review supported
-upstream upgrades and rerun the full docs audit before release.
+run. The documentation runtime now uses Fumapress and Vite; the obsolete Vinext, Next.js routing, Cloudflare Vite plugin and Wrangler development chain are removed. Verify the static Fumapress output and deployed registry endpoints before release.
 
 Before shadcn directory submission, also verify the live domain/deployed commit,
 full README initialization path, individual-item installation coverage,

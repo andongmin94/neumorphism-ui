@@ -7,7 +7,7 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const registry = makeRegistry();
 assert.deepEqual(JSON.parse(read("registry.json")), registry);
-assert.equal(read("../docs/app/theme.css"), makeThemeCss());
+assert.equal(read("../docs/src/theme.css"), makeThemeCss());
 assert.equal(read("../docs/components/docs/theme-bootstrap.ts"), makeBootstrapModule());
 const expectedFiles = [...registry.items.map((item) => `${item.name}.json`), "registry.json"].sort();
 assert.deepEqual(fs.readdirSync(path.join(root, "public/r")).sort(), expectedFiles);
