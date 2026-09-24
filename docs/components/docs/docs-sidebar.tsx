@@ -1,8 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useRouter } from "fumapress/client";
 
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
@@ -38,7 +37,7 @@ function NavLink({
 
 export function DocsNav({ onNavigate }: DocsNavProps) {
   const { componentDocGroups, locale, messages } = useLocale();
-  const pathname = usePathname();
+  const { path: pathname } = useRouter();
 
   return (
     <nav

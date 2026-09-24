@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useRouter } from "fumapress/client";
 
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
@@ -86,7 +85,7 @@ function MobileDocsNavigation() {
 
 export function SiteHeader() {
   const { locale, messages } = useLocale();
-  const pathname = usePathname();
+  const { path: pathname } = useRouter();
   const homeHref = localeHref(locale);
   const componentsHref = localeHref(locale, "/components");
   const docsHref = localeHref(locale, "/docs");

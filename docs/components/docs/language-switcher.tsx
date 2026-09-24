@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "fumapress/client";
 
 import {
   localeDetails,
@@ -10,11 +10,10 @@ import {
 import { useLocale } from "@/i18n/locale-provider";
 
 export function LanguageSwitcher() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { path: pathname, query: routerQuery } = useRouter();
   const { locale, messages } = useLocale();
   const currentLocale = localeDetails[locale];
-  const query = searchParams.toString();
+  const query = routerQuery ?? "";
 
   return (
     <details className="language-switcher">

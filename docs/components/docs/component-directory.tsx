@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import { Link } from "fumapress/client";
 
 import type { ComponentDocCategory } from "@/components/docs/component-docs-data";
 import { InstallCommand } from "@/components/docs/install-command";

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import { Link } from "fumapress/client";
 
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
