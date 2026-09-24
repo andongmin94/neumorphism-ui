@@ -59,7 +59,8 @@ export default function Consumer() {
 }
 function fixture(directory, target, registryOrigin) {
   const dependencies = Object.fromEntries(["react", "react-dom"].map((name) => [name, versions[name]]));
-  const devDependencies = Object.fromEntries(["typescript", "@types/react", "@types/react-dom", "@types/node", "tailwindcss", "@tailwindcss/postcss"].map((name) => [name, versions[name]]));
+  const devDependencies = Object.fromEntries(["@types/react", "@types/react-dom", "@types/node", "tailwindcss", "@tailwindcss/postcss"].map((name) => [name, versions[name]]));
+  devDependencies.typescript = versions["typescript-7"].replace(/^npm:typescript@/, "");
   const next = target === "next";
   if (next) dependencies.next = versions.next;
   else { devDependencies.vite = versions.vite; devDependencies["@vitejs/plugin-react"] = versions["@vitejs/plugin-react"]; }
@@ -75,6 +76,7 @@ function fixture(directory, target, registryOrigin) {
     write(directory, "src/app/page.tsx", 'export { default } from "../consumer";');
   } else {
     write(directory, "index.html", '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Installed consumer</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>');
+    write(directory, "src/vite-env.d.ts", '/// <reference types="vite/client" />\\n');
     write(directory, "src/main.tsx", 'import {createRoot} from "react-dom/client"; import Consumer from "./consumer"; import "./globals.css"; createRoot(document.getElementById("root")!).render(<Consumer/>);');
     write(directory, "vite.config.ts", 'import {defineConfig} from "vite"; import react from "@vitejs/plugin-react"; import {fileURLToPath, URL} from "node:url"; export default defineConfig({plugins:[react()],resolve:{alias:{"@":fileURLToPath(new URL("./src",import.meta.url))}}});');
   }
