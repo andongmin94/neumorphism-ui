@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu"];
+export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer"];
 
 export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
@@ -40,7 +40,7 @@ export function assertExpandedFiles(directory) {
 export async function exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot }) {
   const card = slug => page.locator(`[data-example="${slug}"]`);
   const screenshot = async label => {
-    const overlays = page.locator("[data-slot=popover-content], [data-slot=alert-dialog-content], [data-slot=sheet-content], [data-slot=combobox-content], [data-slot=hover-card-content], [data-slot=context-menu-content]");
+    const overlays = page.locator("[data-slot=popover-content], [data-slot=alert-dialog-content], [data-slot=sheet-content], [data-slot=combobox-content], [data-slot=hover-card-content], [data-slot=context-menu-content], [data-slot=drawer-content]");
     for (const overlay of await overlays.all()) if (await overlay.isVisible()) await expect(overlay).toHaveCSS("opacity", "1");
     fs.mkdirSync(evidenceRoot, { recursive: true });
     await page.screenshot({ path: path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-${label}.png`), fullPage: false });
@@ -102,6 +102,17 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await expect(contextPopup.getByRole("menuitem", { name: "Undo" })).toBeVisible();
   await contextPopup.getByRole("menuitem", { name: "Undo" }).click();
   await expect(contextMenu.getByRole("status")).toHaveText("Undo");
+
+  const drawerTrigger = card("drawer").getByRole("button", { name: "Profile settings", exact: true });
+  await drawerTrigger.click();
+  const drawer = page.locator('[data-slot="drawer-content"]');
+  await drawer.waitFor();
+  const drawerBounds = await drawer.boundingBox();
+  const drawerViewport = page.viewportSize();
+  assert.ok(drawerBounds && drawerBounds.y >= -1 && drawerBounds.y + drawerBounds.height <= drawerViewport.height + 1);
+  await page.keyboard.press("Escape");
+  await drawer.waitFor({ state: "hidden" });
+  await expect(drawerTrigger).toBeFocused();
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();

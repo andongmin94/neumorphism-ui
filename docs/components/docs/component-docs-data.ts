@@ -2460,6 +2460,27 @@ import {
       "destructive 항목은 색상뿐 아니라 명확한 문구로 위험한 동작임을 전달합니다.",
     ],
   },
+  {
+    slug: "drawer",
+    title: "Drawer",
+    category: "actions-overlays",
+    summary: "스와이프로 닫을 수 있는 하단·측면 작업 패널.",
+    description: "Base UI Drawer의 swipe gesture와 포커스 관리를 사용합니다. Sheet가 고정된 작업 패널이라면 Drawer는 터치 환경에서 손가락으로 닫거나 방향을 바꿀 수 있는 임시 작업 표면에 적합합니다.",
+    importCode: "\"use client\";\nimport {\n  Drawer,\n  DrawerClose,\n  DrawerContent,\n  DrawerDescription,\n  DrawerFooter,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerTrigger,\n} from \"@/components/ui/drawer\";\nimport { Button } from \"@/components/ui/button\";",
+    usageCode: "export default function Example() {\n  return <Drawer swipeDirection=\"down\">\n    <DrawerTrigger render={<Button />}>빠른 설정</DrawerTrigger>\n    <DrawerContent>\n      <DrawerHeader>\n        <DrawerTitle>빠른 설정</DrawerTitle>\n        <DrawerDescription>화면을 떠나지 않고 자주 쓰는 옵션을 조절합니다.</DrawerDescription>\n      </DrawerHeader>\n      <div className=\"grid gap-3 px-5 py-4\"><p>알림과 표시 옵션을 이 영역에 배치할 수 있습니다.</p></div>\n      <DrawerFooter><DrawerClose render={<Button variant=\"primary\" />}>완료</DrawerClose></DrawerFooter>\n    </DrawerContent>\n  </Drawer>;\n}",
+    props: [
+      { component: "Drawer", name: "swipeDirection", type: '"down" | "up" | "left" | "right"', defaultValue: '"down"', description: "패널이 열리고 닫히는 방향과 swipe 방향을 지정합니다." },
+      { component: "Drawer", name: "open / onOpenChange", type: "boolean / (open: boolean) => void", description: "Drawer의 controlled 열림 상태를 관리합니다." },
+      { component: "Drawer", name: "snapPoints", type: "number[]", description: "필요할 때 중간 정지 지점을 구성합니다." },
+      { component: "DrawerTrigger", name: "render", type: "ReactElement", description: "기존 Button이나 다른 요소를 trigger로 합성합니다." },
+      { component: "DrawerContent", name: "className", type: "string | (state) => string", description: "기본 방향·gesture 동작을 유지하면서 패널 스타일을 확장합니다." },
+    ],
+    accessibility: [
+      "DrawerTitle과 DrawerDescription을 제공해 열린 패널의 목적을 스크린 리더에 전달합니다.",
+      "모달 Drawer는 열린 동안 배경 콘텐츠와 포커스를 분리하고 Escape로 닫을 수 있어야 합니다.",
+      "swipe gesture만 유일한 닫기 방법으로 사용하지 말고 DrawerClose 같은 명시적 컨트롤을 함께 제공합니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

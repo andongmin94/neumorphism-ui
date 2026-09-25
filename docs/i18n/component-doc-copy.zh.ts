@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  drawer: {
+    summary: "可通过滑动关闭的底部或侧边任务面板。",
+    description: "使用 Base UI Drawer 的手势和焦点管理。Sheet 适合固定任务面板，而 Drawer 更适合可滑动关闭或从不同方向打开的临时触控界面。",
+    props: [
+      "设置打开、关闭和滑动方向。",
+      "控制 Drawer 的打开状态。",
+      "按需配置中间停靠点。",
+      "将现有 Button 或其他元素组合为触发器。",
+      "在保留方向和手势行为的同时扩展面板样式。",
+    ],
+    accessibility: [
+      "提供 DrawerTitle 和 DrawerDescription，让辅助技术识别已打开面板的用途。",
+      "模态 Drawer 打开时应隔离背景内容与焦点，并支持 Escape 关闭。",
+      "不要把滑动作为唯一关闭方式；同时提供明确的 DrawerClose 控件。",
+    ],
+  },
   "context-menu": {
     summary: "在指针位置打开的操作菜单，支持复选、单选和子菜单。",
     description: "保留 Base UI 的指针锚定和键盘导航，并将弹层呈现为悬浮的新拟态表面。可组合普通、复选、单选、子菜单和危险操作项。",

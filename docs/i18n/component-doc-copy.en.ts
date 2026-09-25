@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+  drawer: {
+    summary: "A bottom or side task panel that can be dismissed with a swipe.",
+    description: "Uses Base UI Drawer gestures and focus management. Sheet is a fixed task panel; Drawer is better for temporary touch-first surfaces that users can swipe away or open from another edge.",
+    props: [
+      "Sets the opening, closing, and swipe direction.",
+      "Controls the Drawer open state.",
+      "Configures intermediate resting points when needed.",
+      "Composes an existing Button or other element as the trigger.",
+      "Extends the panel styling while preserving direction and gesture behavior.",
+    ],
+    accessibility: [
+      "Provide DrawerTitle and DrawerDescription so assistive technology can identify the opened panel.",
+      "A modal Drawer isolates background content and focus while open and should close with Escape.",
+      "Do not make swiping the only way to dismiss the Drawer; include an explicit DrawerClose control.",
+    ],
+  },
   "context-menu": {
     summary: "A pointer-positioned action menu with checkbox, radio, and submenu items.",
     description: "Preserves Base UI pointer anchoring and keyboard navigation while rendering the popup as a floating neumorphic surface. Compose ordinary, checkable, radio, submenu, and destructive items.",

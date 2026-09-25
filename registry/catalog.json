@@ -1134,6 +1134,27 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "drawer",
+      "title": "Drawer",
+      "description": "A swipeable bottom or side task panel built on Base UI Drawer.",
+      "type": "registry:ui",
+      "categories": [
+        "actions-overlays"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

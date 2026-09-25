@@ -1,14 +1,14 @@
 # Product readiness
 
 Target: a source-owned neumorphic collection with the practical scope and quality
-discipline of `andongmin94/neobrutal-ui`. The current catalog has **49 UI
+discipline of `andongmin94/neobrutal-ui`. The current catalog has **50 UI
 components, six installable blocks, five presets, one base and two shared
-libraries: 63 registry items**. A passing build is not directory approval or
+libraries: 64 registry items**. A passing build is not directory approval or
 production certification.
 
 ## Current product surface
 
-Navigation Menu and Menubar provide destination and application-command navigation. Command adds searchable keyboard-first command selection and dialog composition. Context Menu adds pointer-positioned application actions with checkable state.
+Navigation Menu and Menubar provide destination and application-command navigation. Command adds searchable keyboard-first command selection and dialog composition. Context Menu adds pointer-positioned application actions with checkable state. Drawer adds swipeable touch-first task surfaces without duplicating Sheet behavior.
 The existing Settings and Data Manager blocks cover validated profile editing,
 failed-save recovery, dirty-state discard, search/filter/sort/paging, stable-ID
 selection, column visibility, create/edit, confirmed deletion and asynchronous
@@ -81,7 +81,7 @@ source changes.
 ## Verification boundaries
 
 Screenshots and browser assertions are evidence, not exhaustive accessibility
-certification. Current tests do not cover every state of all 49 components across
+certification. Current tests do not cover every state of all 50 components across
 all presets, browsers and assistive technologies. Filling Korean text is not a real
 IME-composition test, and Linux does not establish native Consolas rendering.
 

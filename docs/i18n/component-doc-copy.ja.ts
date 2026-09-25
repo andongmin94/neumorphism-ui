@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+  drawer: {
+    summary: "スワイプで閉じられる下部・側面のタスクパネル。",
+    description: "Base UI Drawer のジェスチャーとフォーカス管理を使用します。Sheet が固定タスクパネルなのに対し、Drawer はスワイプで閉じたり別方向から開いたりする一時的なタッチ向け表面に適しています。",
+    props: [
+      "開閉とスワイプの方向を指定します。",
+      "Drawer の開閉状態を制御します。",
+      "必要に応じて中間の停止位置を構成します。",
+      "既存の Button などを trigger として合成します。",
+      "方向とジェスチャー動作を維持しながらパネルのスタイルを拡張します。",
+    ],
+    accessibility: [
+      "DrawerTitle と DrawerDescription で開いたパネルの目的を支援技術へ伝えます。",
+      "モーダル Drawer は背景とフォーカスを分離し、Escape で閉じられるようにします。",
+      "スワイプだけを閉じる手段にせず、DrawerClose のような明示的な操作も用意します。",
+    ],
+  },
   "context-menu": {
     summary: "ポインター位置で開く操作メニュー。チェック、ラジオ、サブメニューに対応します。",
     description: "Base UI のポインターアンカーとキーボード操作を維持し、ポップアップを浮いたニューモーフィズム表面で表現します。通常項目、チェック、ラジオ、サブメニュー、破壊的操作を組み合わせられます。",
