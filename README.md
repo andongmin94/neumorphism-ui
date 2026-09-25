@@ -114,7 +114,6 @@ npm test --prefix registry
 npm run lint --prefix docs
 npm run typecheck --prefix docs
 npm run build --prefix docs
-npm run test:ssr --prefix docs
 npm run check:generated --prefix registry
 ```
 
@@ -140,7 +139,7 @@ serialization, data management and analytical filtering/export.
 - `registry/src/lib`: shared utilities and analytical data model/copy.
 - `registry/src/theme.ts`: presets, settings validation and token generation.
 - `registry/catalog.json`: registry metadata and dependency declarations.
-- `docs`: localized documentation using the same source-owned components.
+- `docs`: Fumapress documentation; registry source is synchronized into its ignored `src/registry` build input.
 
 `registry/registry.json`, both `public/r` directories, `docs/src/theme.css`
 and the theme bootstrap module are generated. Do not edit generated output by
