@@ -94,7 +94,7 @@ function LinkHub({
     () => [t.all, ...Array.from(new Set(links.map((link) => link.group)))],
     [links, t.all],
   );
-  const [group, setGroup] = React.useState(t.all);
+  const [group, setGroup] = React.useState<string>(t.all);
   const [copyState, setCopyState] = React.useState("");
 
   React.useEffect(() => {
