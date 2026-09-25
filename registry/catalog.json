@@ -1323,6 +1323,53 @@
           "target": "@components/blocks/portfolio.tsx"
         }
       ]
+    },
+    {
+      "name": "template-blog",
+      "title": "Blog archive workspace",
+      "description": "A data-driven blog archive with search, topic filters, sorting and accessible empty states.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/input",
+        "@neumorphism-ui/select",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/blog.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/blog.tsx"
+        }
+      ]
+    },
+    {
+      "name": "template-cms",
+      "title": "Local CMS workspace",
+      "description": "A local content editor with search, status filters, dirty state, save recovery and preview.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/alert",
+        "@neumorphism-ui/badge",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/input",
+        "@neumorphism-ui/switch",
+        "@neumorphism-ui/textarea",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/cms.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/cms.tsx"
+        }
+      ]
     }
   ]
 }
