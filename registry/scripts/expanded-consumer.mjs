@@ -161,10 +161,11 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await expect(imageCard.locator('[data-slot="image-card-caption"]')).toContainText("12 components");
 
   const marquee = card("marquee");
-  const marqueeToggle = marquee.getByRole("button", { name: "Pause animation" });
+  const marqueeToggle = marquee.locator('[data-slot="marquee-toggle"]');
+  await expect(marqueeToggle).toHaveAccessibleName("Pause animation");
   await marqueeToggle.click();
   await expect(marqueeToggle).toHaveAttribute("aria-pressed", "true");
-  await expect(marquee.getByRole("button", { name: "Resume animation" })).toBeVisible();
+  await expect(marqueeToggle).toHaveAccessibleName("Resume animation");
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();
