@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+  command: {
+    summary: "A searchable command palette and quick-navigation list with keyboard selection.",
+    description: "Preserves cmdk filtering, active-item state, and keyboard navigation while rendering the input as inset and the active item as pressed. CommandDialog composes it with the existing Dialog.",
+    props: [
+      "Controls whether cmdk applies its built-in search filtering.",
+      "Controls the currently active item.",
+      "Controls the search query or leaves the input uncontrolled.",
+      "Defines the searchable value and selection callback for an item.",
+      "Keeps an item in the result model while preventing selection.",
+    ],
+    accessibility: [
+      "Give CommandInput a placeholder or aria-label that describes the search purpose.",
+      "Arrow keys move the active item and Enter selects it; retain the visible focus treatment.",
+      "Provide an explicit CommandEmpty state when filtering returns no items.",
+    ],
+  },
 "chart": {"summary": "Responsive chart surfaces, tooltips and exact-data tables.", "description": "Compose Recharts axes and series directly. Data marks stay flat and legible; neumorphic depth belongs to the surrounding surface.", "props": ["Readable chart title and description.", "A table from the same data and its disclosure label.", "The state to display when no records are available.", "Pass ordinary Recharts Tooltip options."], "accessibility": ["Use accessibilityLayer, redundant line styles and labels, and an exact-data table.", "Examples disable animation. Applications own the motion policy of custom series."]},
 "navigation-menu": {"summary":"Keyboard-aware website navigation with links and floating panels.","description":"Preserves Base UI navigation behavior and uses inset open states. Place one NavigationMenuViewport inside the root.","props":["The open item and its change handler.","Compose your framework link through render.","Controls popup placement and spacing."],"accessibility":["Use real href links for destinations and label the nav landmark.","Test Tab, arrow keys and Escape, and retain visible focus."]},
 "menubar": {"summary":"Application command menus with roving keyboard focus.","description":"Menubar owns focus navigation; the existing Dropdown Menu parts own popup and selection behavior.","props":["Sets the direction of keyboard navigation.","Disables the menu trigger.","Controlled state of a checkable item."],"accessibility":["Use for application commands, not ordinary page links, and label the menubar.","Arrow keys move between menus. Disabled items cannot execute."]},

@@ -16,8 +16,9 @@ import { NumberField, NumberFieldGroup, NumberFieldInput, NumberFieldIncrement, 
 import { Toolbar, ToolbarGroup, ToolbarButton, ToolbarSeparator } from "@neumorphism-ui/registry/ui/toolbar";
 import { Meter, MeterLabel, MeterValue, MeterTrack, MeterIndicator } from "@neumorphism-ui/registry/ui/meter";
 import { Combobox, ComboboxLabel, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem, ComboboxEmpty } from "@neumorphism-ui/registry/ui/combobox";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut } from "@neumorphism-ui/registry/ui/command";
 
-export const expandedSlugs = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox"] as const;
+export const expandedSlugs = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command"] as const;
 export type ExpandedSlug = (typeof expandedSlugs)[number];
 type PreviewLocale = "ko" | "en" | "ja" | "zh";
 const copy = {
@@ -54,5 +55,6 @@ export function ExpandedComponentPreview({ slug, locale = "en" }: { slug: Expand
     case "number-field": return <NumberField id={id} defaultValue={3} min={1} max={8}><label htmlFor={id} className="text-sm font-semibold">{text.quantity}</label><NumberFieldGroup><NumberFieldDecrement aria-label={text.decrease} /><NumberFieldInput /><NumberFieldIncrement aria-label={text.increase} /></NumberFieldGroup></NumberField>;
     case "meter": return <Meter value={64} className="w-full max-w-sm"><div className="flex justify-between gap-4"><MeterLabel>{text.storage}</MeterLabel><MeterValue /></div><MeterTrack><MeterIndicator /></MeterTrack><p className="text-xs text-[var(--muted-foreground)]">64 GB / 100 GB</p></Meter>;
     case "combobox": return <div className="w-full max-w-sm"><Combobox items={cities}><ComboboxLabel>{text.city}</ComboboxLabel><ComboboxInput placeholder={text.city} /><ComboboxContent><ComboboxEmpty>{text.empty}</ComboboxEmpty><ComboboxList>{(city: string) => <ComboboxItem key={city} value={city}>{city}</ComboboxItem>}</ComboboxList></ComboboxContent></Combobox></div>;
+    case "command": return <div className="grid w-full max-w-sm gap-3"><Command><CommandInput placeholder={text.city} aria-label={text.city} /><CommandList><CommandEmpty>{text.empty}</CommandEmpty><CommandGroup heading={text.city}>{cities.map((city, index) => <CommandItem key={city} value={city} onSelect={() => setMessage(city)}>{city}<CommandShortcut>⌘{index + 1}</CommandShortcut></CommandItem>)}</CommandGroup></CommandList></Command><p role="status" className="text-sm text-[var(--muted-foreground)]">{message || text.quiet}</p></div>;
   }
 }

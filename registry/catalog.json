@@ -1091,6 +1091,28 @@
           "target": "@components/blocks/analytics-demo.ts"
         }
       ]
+    },
+    {
+      "name": "command",
+      "title": "Command",
+      "description": "A searchable command palette with keyboard navigation, groups, empty state and dialog composition.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "cmdk@^1.1.1"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/dialog"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/command.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

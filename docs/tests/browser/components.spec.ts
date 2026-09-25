@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
 
-const expanded = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox"];
+const expanded = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command"];
 const localized = ["ko", "ja", "zh"].flatMap(locale => ["form", "combobox"].map(slug => ({ locale, slug })));
 const cases = [...expanded.map(slug => ({ locale: "en", slug })), ...localized];
 

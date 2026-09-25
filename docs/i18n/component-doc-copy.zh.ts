@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  command: {
+    summary: "结合搜索与键盘选择的命令面板和快速导航列表。",
+    description: "保留 cmdk 的筛选、活动项和键盘导航，并将输入区呈现为内嵌表面、活动项呈现为按下状态。CommandDialog 可与现有 Dialog 组合。",
+    props: [
+      "决定是否使用 cmdk 内置搜索筛选。",
+      "控制当前活动项。",
+      "控制搜索词，或作为非受控输入使用。",
+      "指定项目的搜索值和选择回调。",
+      "让项目保留在结果模型中但不可选择。",
+    ],
+    accessibility: [
+      "为 CommandInput 提供能说明搜索用途的 placeholder 或 aria-label。",
+      "使用方向键移动活动项并按 Enter 选择，同时保留可见焦点。",
+      "筛选无结果时使用 CommandEmpty 提供明确的空状态。",
+    ],
+  },
 "chart": {"summary": "响应式图表面板、提示框和精确数据表。", "description": "直接组合Recharts轴和系列。数据标记保持平面和清晰，只在周围面板应用拟态阴影。", "props": ["可读的标题和说明。", "相同数据源的表格及展开标签。", "无记录时显示的状态。", "直接传入Recharts Tooltip选项。"], "accessibility": ["使用accessibilityLayer、线型和标签，并提供原始数据表。", "示例禁用动画。自定义系列的动画由应用负责。"]},
 "navigation-menu": {"summary":"结合链接和弹出面板、支持键盘的网站导航。","description":"保留Base UI导航行为，用内凹表面表示打开状态。在根组件内放置一个NavigationMenuViewport。","props":["当前打开项及变更回调。","通过render组合框架链接。","设置面板位置和间距。"],"accessibility":["目标使用实际href链接，并给nav提供名称。","测试Tab、方向键和Escape，保留焦点样式。"]},
 "menubar": {"summary":"通过方向键移动的应用命令菜单。","description":"Menubar管理焦点移动，现有Dropdown Menu部件管理弹出与选择行为。","props":["设置键盘导航方向。","禁用菜单触发器。","可勾选项目的受控状态。"],"accessibility":["用于应用命令而非普通页面链接，并为menubar提供名称。","方向键在菜单间移动，禁用项不能执行。"]},

@@ -2365,6 +2365,54 @@ import {
     "예제는 애니메이션을 사용하지 않습니다. 사용자 정의 시리즈의 모션 정책은 사용자가 관리합니다."
   ]
 },
+  {
+    slug: "command",
+    title: "Command",
+    category: "navigation-disclosure",
+    summary: "검색과 키보드 선택을 결합한 명령 팔레트와 빠른 이동 목록.",
+    description: "cmdk의 검색·활성 항목·키보드 탐색을 유지하면서 입력 영역은 inset, 선택된 항목은 눌린 표면으로 표현합니다. CommandDialog로 기존 Dialog와 조합할 수 있습니다.",
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport {\n  Command,\n  CommandEmpty,\n  CommandGroup,\n  CommandInput,\n  CommandItem,\n  CommandList,\n  CommandShortcut,\n} from \"@/components/ui/command\";",
+    usageCode: "export default function Example() {\n  const [selected, setSelected] = React.useState(\"선택한 명령 없음\");\n  return <div className=\"grid w-full max-w-md gap-3\">\n    <Command>\n      <CommandInput placeholder=\"명령 검색\" />\n      <CommandList>\n        <CommandEmpty>일치하는 명령이 없습니다.</CommandEmpty>\n        <CommandGroup heading=\"탐색\">\n          <CommandItem value=\"dashboard\" onSelect={() => setSelected(\"대시보드\")}>대시보드<CommandShortcut>⌘D</CommandShortcut></CommandItem>\n          <CommandItem value=\"settings\" onSelect={() => setSelected(\"설정\")}>설정<CommandShortcut>⌘,</CommandShortcut></CommandItem>\n        </CommandGroup>\n      </CommandList>\n    </Command>\n    <p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{selected}</p>\n  </div>;\n}",
+    props: [
+      {
+        component: "Command",
+        name: "shouldFilter",
+        type: "boolean",
+        defaultValue: "true",
+        description: "cmdk의 내장 검색 필터를 사용할지 결정합니다.",
+      },
+      {
+        component: "Command",
+        name: "value / onValueChange",
+        type: "string / (value: string) => void",
+        description: "현재 활성 항목을 제어합니다.",
+      },
+      {
+        component: "CommandInput",
+        name: "value / onValueChange",
+        type: "string / (value: string) => void",
+        description: "검색어를 제어하거나 uncontrolled 입력으로 사용합니다.",
+      },
+      {
+        component: "CommandItem",
+        name: "value / onSelect",
+        type: "string / (value: string) => void",
+        description: "검색 값과 항목 선택 동작을 지정합니다.",
+      },
+      {
+        component: "CommandItem",
+        name: "disabled",
+        type: "boolean",
+        defaultValue: "false",
+        description: "항목을 검색 결과에는 유지하면서 선택할 수 없게 합니다.",
+      },
+    ],
+    accessibility: [
+      "CommandInput에는 검색 목적을 설명하는 placeholder 또는 aria-label을 제공합니다.",
+      "방향키로 활성 항목을 이동하고 Enter로 선택할 수 있으며, 포커스 표시를 제거하지 않습니다.",
+      "검색 결과가 없을 때 CommandEmpty로 명시적인 빈 상태를 제공합니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

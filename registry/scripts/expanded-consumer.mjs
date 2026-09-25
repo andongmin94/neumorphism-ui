@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox"];
+export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command"];
 
 export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
@@ -86,6 +86,14 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await combo.press("ArrowDown"); await combo.press("Enter"); assert.equal(await combo.inputValue(), "Seoul");
   await combo.fill("zzzz"); await page.getByText("No matching cities.", { exact: true }).waitFor();
   await screenshot("combobox-empty"); await combo.press("Escape");
+
+  const command = card("command");
+  const commandInput = command.getByRole("combobox", { name: "Search cities" });
+  await commandInput.fill("Seo");
+  await expect(command.getByText("Seoul", { exact: true })).toBeVisible();
+  await commandInput.press("ArrowDown");
+  await commandInput.press("Enter");
+  await expect(command.getByRole("status")).toHaveText("Seoul");
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();
