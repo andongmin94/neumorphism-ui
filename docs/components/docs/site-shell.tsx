@@ -26,8 +26,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const sidebar = usesDocsSidebar(pathname);
 
   return (
-    <>
+    <div className="site-frame">
       <SiteHeader />
+
       <div
         className={
           sidebar
@@ -38,9 +39,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
         {sidebar ? <DocsSidebar /> : null}
         <div className="docs-site-main">
           <main id="main-content" tabIndex={-1}>{children}</main>
-          <SiteFooter />
         </div>
       </div>
-    </>
+
+      <SiteFooter />
+    </div>
   );
 }
