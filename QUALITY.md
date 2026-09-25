@@ -2,8 +2,8 @@
 
 Target: a source-owned neumorphic collection with the practical scope and quality
 discipline of `andongmin94/neobrutal-ui`. The current catalog has **56 UI
-components, seven installable blocks, five presets, one base and two shared
-libraries: 71 registry items**. A passing build is not directory approval or
+components, eight installable blocks, five presets, one base and two shared
+libraries: 72 registry items**. A passing build is not directory approval or
 production certification.
 
 ## Current product surface
@@ -12,7 +12,7 @@ Navigation Menu and Menubar provide destination and application-command navigati
 The existing Settings and Data Manager blocks cover validated profile editing,
 failed-save recovery, dirty-state discard, search/filter/sort/paging, stable-ID
 selection, column visibility, create/edit, confirmed deletion and asynchronous
-application-owned persistence callbacks. Link Hub adds a data-driven creator/team profile with grouped destinations, explicit external-link behavior and contact-copy recovery.
+application-owned persistence callbacks. Link Hub adds a data-driven creator/team profile with grouped destinations, explicit external-link behavior and contact-copy recovery. Portfolio adds a static, data-driven case-study surface with native disclosure and contact links.
 
 The analytics layer adds:
 
