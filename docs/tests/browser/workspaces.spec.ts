@@ -14,7 +14,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
       await page.locator('#installed-source details').first().locator('summary').click();
       await expect(page.locator('#installed-source pre').first()).toContainText((slug === "portfolio" || slug === "blog-post") ? "export function" : '"use client"');
       await page.locator('#installed-source details').first().locator('summary').click();
-      await page.locator('h1').click();
+      await page.locator('.docs-page-header h1').click();
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: info.outputPath(`${slug}.png`), fullPage: true });
     }
