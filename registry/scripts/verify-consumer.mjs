@@ -16,7 +16,13 @@ const docsRoot = path.resolve(root, "../docs");
 const requireDocs = createRequire(path.join(docsRoot, "package.json"));
 const { chromium, firefox, webkit } = requireDocs("@playwright/test");
 const docsPackage = JSON.parse(fs.readFileSync(path.join(docsRoot, "package.json"), "utf8"));
-const versions = { ...docsPackage.dependencies, ...docsPackage.devDependencies };
+const versions = {
+  ...docsPackage.dependencies,
+  ...docsPackage.devDependencies,
+  next: "16.3.5",
+  "@vitejs/plugin-react": "6.0.2",
+  "@tailwindcss/postcss": "^4.3.3",
+};
 const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "neumorphism-consumer-"));
 const evidenceRoot = path.join(docsRoot, "test-results/installed-consumers");
 const cli = path.join(root, "node_modules/shadcn/dist/index.js");
@@ -60,7 +66,7 @@ export default function Consumer() {
 function fixture(directory, target, registryOrigin) {
   const dependencies = Object.fromEntries(["react", "react-dom"].map((name) => [name, versions[name]]));
   const devDependencies = Object.fromEntries(["@types/react", "@types/react-dom", "@types/node", "tailwindcss", "@tailwindcss/postcss"].map((name) => [name, versions[name]]));
-  devDependencies.typescript = versions["typescript-7"].replace(/^npm:typescript@/, "");
+  devDependencies.typescript = versions.typescript;
   const next = target === "next";
   if (next) dependencies.next = versions.next;
   else { devDependencies.vite = versions.vite; devDependencies["@vitejs/plugin-react"] = versions["@vitejs/plugin-react"]; }
