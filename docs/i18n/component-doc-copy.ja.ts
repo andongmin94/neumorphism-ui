@@ -1,6 +1,38 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+  "image-card": {
+    summary: "画像と説明を1つの raised surface にまとめるコンテンツカード。",
+    description: "標準の img と figure/figcaption の意味を保ったまま、画像と説明をニューモーフィズム surface にまとめます。画像の読み込みや最適化はアプリやフレームワーク側が担当します。",
+    props: [
+      "表示する画像 URL です。",
+      "画像の目的を説明する代替テキストです。",
+      "任意の figcaption コンテンツです。",
+      "既定の aspect と object-fit スタイルを拡張します。",
+      "figure に標準 HTML 属性を渡します。",
+    ],
+    accessibility: [
+      "情報を伝える画像には意味のある alt を、装飾画像には空の alt を使用します。",
+      "caption は画像に関連する説明に使い、無関係な操作やナビゲーションの代替にしません。",
+      "画像最適化が必要なフレームワークでは、インストール後の source を編集して画像コンポーネントを置き換えられます。",
+    ],
+  },
+  marquee: {
+    summary: "一時停止と reduced-motion に対応した繰り返し情報ストリップ。",
+    description: "連続表示のため項目を視覚的に複製しますが、2つ目は aria-hidden で支援技術から除外します。Pause/Resume で停止でき、prefers-reduced-motion では自動的にアニメーションを止めます。",
+    props: [
+      "繰り返し表示する項目一覧です。",
+      "1周期の秒数を指定します。",
+      "最初から停止状態で開始します。",
+      "繰り返し情報領域のアクセシブル名です。",
+      "動作制御ボタンのアクセシブル名をローカライズします。",
+    ],
+    accessibility: [
+      "2つ目の視覚的コピーは aria-hidden にして同じ項目を二重に読み上げないようにします。",
+      "利用者が操作できる一時停止ボタンを常に提供し、状態を aria-pressed で公開します。",
+      "prefers-reduced-motion では移動をなくし、最初の項目集合だけを表示します。",
+    ],
+  },
   sidebar: {
     summary: "デスクトップの折りたたみとモバイル Sheet を備えたアプリケーションナビゲーション。",
     description: "SidebarProvider が desktop・mobile 状態と Ctrl/Cmd+B を管理します。デスクトップでは offcanvas または icon 幅に折りたたみ、モバイルでは既存の Sheet を再利用します。メニュー、tooltip、focus は既存のニューモーフィズム token を使います。",

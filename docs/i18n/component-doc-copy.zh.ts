@@ -1,6 +1,38 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  "image-card": {
+    summary: "将图片和说明组合在一个凸起表面上的内容卡片。",
+    description: "保留原生 img 与 figure/figcaption 语义，并用新拟态表面组合图片和说明。图片加载与优化由应用或框架负责。",
+    props: [
+      "要显示的图片 URL。",
+      "说明图片用途的替代文本。",
+      "可选的 figcaption 内容。",
+      "扩展默认的宽高比和 object-fit 样式。",
+      "向 figure 传递标准 HTML 属性。",
+    ],
+    accessibility: [
+      "信息图片应提供有意义的 alt，装饰图片使用空 alt。",
+      "caption 用于与图片相关的说明，不应替代无关的操作或导航。",
+      "需要图片优化组件的框架可以直接修改已安装源码并替换原生 img。",
+    ],
+  },
+  marquee: {
+    summary: "支持暂停与 reduced-motion 的循环信息条。",
+    description: "为连续移动复制一份视觉项目，但第二份通过 aria-hidden 从辅助技术中移除。用户可以暂停或继续，prefers-reduced-motion 会自动停止动画。",
+    props: [
+      "循环显示的项目列表。",
+      "设置单次动画周期的秒数。",
+      "初始以暂停状态启动。",
+      "为循环信息区域提供无障碍名称。",
+      "本地化运动控制按钮的无障碍名称。",
+    ],
+    accessibility: [
+      "第二份视觉副本使用 aria-hidden，避免屏幕阅读器重复朗读。",
+      "始终提供用户可控制的暂停按钮，并用 aria-pressed 暴露状态。",
+      "prefers-reduced-motion 会移除移动并隐藏重复项目集合。",
+    ],
+  },
   sidebar: {
     summary: "同时支持桌面折叠和移动端 Sheet 的应用导航。",
     description: "SidebarProvider 管理桌面、移动状态以及 Ctrl/Cmd+B 快捷键。桌面可完全收起或保留图标宽度，移动端复用现有 Sheet。菜单、提示和焦点状态继续使用现有新拟态 token。",

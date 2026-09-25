@@ -1,6 +1,38 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+  "image-card": {
+    summary: "A content card that combines an image and description on one raised surface.",
+    description: "Keeps native img and figure/figcaption semantics while grouping the image and description on a neumorphic surface. Image loading and optimization remain application or framework concerns.",
+    props: [
+      "The image URL to render.",
+      "Alternative text that explains the image purpose.",
+      "Optional figcaption content.",
+      "Extends the default aspect and object-fit styling.",
+      "Passes standard HTML attributes to the figure.",
+    ],
+    accessibility: [
+      "Give informative images meaningful alt text and use an empty alt for decorative images.",
+      "Use the caption for information related to the image, not as a substitute for unrelated controls or navigation.",
+      "Frameworks that need an optimized image component can edit the installed source and replace the native img.",
+    ],
+  },
+  marquee: {
+    summary: "A repeating information strip with pause controls and reduced-motion support.",
+    description: "Duplicates the visual item set for continuous movement while hiding the second copy from assistive technology. Users can pause or resume movement, and prefers-reduced-motion stops the animation automatically.",
+    props: [
+      "The items that repeat through the strip.",
+      "Sets one animation cycle in seconds.",
+      "Starts the component in a paused state.",
+      "Names the repeating information region.",
+      "Localizes the accessible names of the motion control button.",
+    ],
+    accessibility: [
+      "The second visual copy is aria-hidden so screen readers do not announce every item twice.",
+      "Always provide a user-controlled pause button and expose its state with aria-pressed.",
+      "prefers-reduced-motion removes the movement and hides the duplicate item set.",
+    ],
+  },
   sidebar: {
     summary: "Application navigation with desktop collapse and a mobile Sheet.",
     description: "SidebarProvider owns desktop and mobile state plus the Ctrl/Cmd+B shortcut. Desktop can collapse off-canvas or to icon width, while mobile reuses the existing Sheet. Menus, tooltips, and focus states stay on the existing neumorphic token system.",

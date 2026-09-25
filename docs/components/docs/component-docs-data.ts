@@ -2565,6 +2565,48 @@ import {
       "모바일 Sidebar는 modal Sheet로 동작하고 Escape로 닫히며, 데스크톱에서는 Ctrl 또는 Command+B로 접고 펼칠 수 있습니다.",
     ],
   },
+  {
+    slug: "image-card",
+    title: "Image Card",
+    category: "data-feedback",
+    summary: "이미지와 설명을 하나의 raised surface로 묶는 콘텐츠 카드.",
+    description: "표준 img와 figure/figcaption 의미를 유지하면서 이미지와 설명을 뉴모피즘 surface로 묶습니다. 이미지 로딩·최적화는 애플리케이션이나 프레임워크가 소유하고, 이 컴포넌트는 콘텐츠 구조와 표면만 제공합니다.",
+    importCode: "import { ImageCard } from \"@/components/ui/image-card\";",
+    usageCode: "export default function Example() {\n  return <ImageCard src=\"/workspace-cover.jpg\" alt=\"부드러운 파란 그라데이션의 워크스페이스 표지\" caption=\"Design system workspace · 12 components\" />;\n}",
+    props: [
+      { component: "ImageCard", name: "src", type: "string", required: true, description: "표시할 이미지 URL입니다." },
+      { component: "ImageCard", name: "alt", type: "string", required: true, description: "이미지의 목적을 설명하는 대체 텍스트입니다." },
+      { component: "ImageCard", name: "caption", type: "ReactNode", description: "선택적인 figcaption 콘텐츠입니다." },
+      { component: "ImageCard", name: "imageClassName", type: "string", description: "기본 aspect와 object-fit 스타일을 확장합니다." },
+      { component: "ImageCard", name: "figure props", type: "React.ComponentProps<\"figure\">", description: "figure에 표준 HTML 속성을 전달합니다." },
+    ],
+    accessibility: [
+      "정보를 전달하는 이미지에는 내용을 설명하는 alt를 제공하고 장식 이미지는 빈 alt를 사용합니다.",
+      "caption은 이미지와 관련된 설명에 사용하고 별개의 조작 버튼이나 내비게이션을 대신하지 않습니다.",
+      "이미지 최적화 컴포넌트가 필요한 프레임워크에서는 source를 직접 수정해 해당 이미지 컴포넌트로 교체할 수 있습니다.",
+    ],
+  },
+  {
+    slug: "marquee",
+    title: "Marquee",
+    category: "data-feedback",
+    summary: "일시 정지와 reduced-motion을 지원하는 반복 정보 스트립.",
+    description: "동일한 항목을 두 번 배치해 연속 흐름을 만들되 두 번째 복사본은 aria-hidden으로 제거합니다. 사용자는 Pause/Resume 버튼으로 움직임을 멈출 수 있고 prefers-reduced-motion에서는 애니메이션이 자동으로 정지됩니다.",
+    importCode: "\"use client\";\nimport { Marquee } from \"@/components/ui/marquee\";",
+    usageCode: "export default function Example() {\n  return <Marquee items={[\"접근성\", \"Base UI\", \"React 19\", \"Tailwind 4\"]} label=\"지원 기술\" pauseLabel=\"애니메이션 일시 정지\" resumeLabel=\"애니메이션 다시 시작\" />;\n}",
+    props: [
+      { component: "Marquee", name: "items", type: "readonly ReactNode[]", required: true, description: "순환해서 보여줄 항목 목록입니다." },
+      { component: "Marquee", name: "duration", type: "number", defaultValue: "24", description: "한 주기의 애니메이션 시간을 초 단위로 지정합니다." },
+      { component: "Marquee", name: "defaultPaused", type: "boolean", defaultValue: "false", description: "처음부터 정지된 상태로 시작할지 지정합니다." },
+      { component: "Marquee", name: "label", type: "string", defaultValue: '"Scrolling content"', description: "반복 정보 영역의 접근 가능한 이름입니다." },
+      { component: "Marquee", name: "pauseLabel / resumeLabel", type: "string", description: "동작 제어 버튼의 접근 가능한 이름을 지역화합니다." },
+    ],
+    accessibility: [
+      "두 번째 시각적 복사본은 aria-hidden으로 제외해 스크린 리더가 같은 항목을 두 번 읽지 않게 합니다.",
+      "사용자가 직접 일시 정지할 수 있는 버튼을 항상 제공하고 현재 상태를 aria-pressed로 노출합니다.",
+      "prefers-reduced-motion에서는 이동 애니메이션을 제거하고 첫 번째 항목 집합만 표시합니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(
