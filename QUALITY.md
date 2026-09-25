@@ -2,8 +2,8 @@
 
 Target: a source-owned neumorphic collection with the practical scope and quality
 discipline of `andongmin94/neobrutal-ui`. The current catalog has **56 UI
-components, ten installable blocks, five presets, one base and two shared
-libraries: 74 registry items**. A passing build is not directory approval or
+components, fifteen installable blocks, five presets, one base and two shared
+libraries: 79 registry items**. A passing build is not directory approval or
 production certification.
 
 ## Current product surface
@@ -22,12 +22,19 @@ The analytics layer adds:
 - `chart-channel`: channel totals with visits/conversions view switching.
 - `chart-conversion`: daily conversion rate with a fixed 0–100% scale and missing
   values kept distinct from zero.
+- `chart-build-duration`: paired cold/cached build duration with an explicit budget.
+- `chart-service-latency`: p50/p95 response time with a p95 budget reference.
+- `chart-release-activity`: install/update activity with count and per-release share views.
+- `chart-delivery-capacity`: planned versus delivered item counts and signed variance.
+- `chart-install-diagnostics`: sequential install-stage timing with unit switching.
 - `template-analytics`: 7/14/30-day and channel filters linked to KPI summaries,
   the three charts, exact rows and CSV export.
 
 The dashboard computes filtered conversion from total conversions divided by total
 visits, not an unweighted mean of daily percentages. CSV uses the same filtered
 records as the visible metrics and table.
+
+Operational chart recipes accept caller-owned observations and keep exact-data tables next to the visual encoding. They do not invent telemetry or reuse dashboard-specific analytics state.
 
 Charts use the established neumorphic panel/filter surfaces, but data marks
 themselves remain visually flat so depth styling does not distort quantitative

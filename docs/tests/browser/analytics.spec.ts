@@ -9,7 +9,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(`/${locale}/charts`);
-    await expect(page.locator('[data-slot="chart-plot"]')).toHaveCount(3);
+    await expect(page.locator('[data-slot="chart-plot"]')).toHaveCount(8);
     await expect(page.locator('h1')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.locator('#chart-installation details').first().locator('summary').click();
@@ -67,4 +67,22 @@ test('Chart primitive exposes its exact-data table', async ({ page }) => {
   await expect(preview.locator('tbody tr')).toHaveCount(3);
   await preview.getByRole('tab').nth(1).click();
   await expect(preview.locator('pre')).toContainText('ChartContainer');
+});
+
+
+test('operational chart recipes expose controls and exact data', async ({ page }) => {
+  await page.goto('/en/charts');
+  const gallery = page.locator('[data-slot="operational-chart-gallery"]');
+  await expect(gallery.locator('[data-chart="build-duration"]')).toBeVisible();
+  await expect(gallery.locator('[data-chart="install-diagnostics"]')).toBeVisible();
+
+  const build = gallery.locator('[data-chart="build-duration"]');
+  await build.getByRole('combobox', { name: 'Visible series' }).selectOption('cached');
+  await build.locator('summary').click();
+  await expect(build.locator('tbody tr')).toHaveCount(6);
+
+  const diagnostics = gallery.locator('[data-chart="install-diagnostics"]');
+  await diagnostics.getByRole('combobox', { name: 'Unit' }).selectOption('s');
+  await diagnostics.locator('summary').click();
+  await expect(diagnostics.locator('tbody tr')).toHaveCount(4);
 });

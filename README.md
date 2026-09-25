@@ -3,9 +3,9 @@
 Source-owned React components with soft surfaces, clear actions and visible focus.
 Install components with the shadcn CLI and edit their source in your application.
 
-The collection includes **56 UI components, ten installable blocks and five
-light/dark presets**. The registry contains 74 items in total: 56 UI components,
-ten blocks, five presets, one base and two shared libraries. Documentation and
+The collection includes **56 UI components, fifteen installable blocks and five
+light/dark presets**. The registry contains 79 items in total: 56 UI components,
+fifteen blocks, five presets, one base and two shared libraries. Documentation and
 live examples are available in Korean, English, Japanese and Chinese through Fumapress.
 
 This project is being prepared for the shadcn registry directory. It has not been
@@ -96,19 +96,26 @@ The bundled examples are local demonstrations and reset on reload.
 
 ## Analytical charts and dashboard
 
-Three chart blocks and one dashboard block are installable source, not
+Eight chart blocks and one dashboard block are installable source, not
 documentation-only mockups:
 
 ```bash
 npx shadcn@latest add @neumorphism-ui/chart-revenue
 npx shadcn@latest add @neumorphism-ui/chart-channel
 npx shadcn@latest add @neumorphism-ui/chart-conversion
+npx shadcn@latest add @neumorphism-ui/chart-build-duration
+npx shadcn@latest add @neumorphism-ui/chart-service-latency
+npx shadcn@latest add @neumorphism-ui/chart-release-activity
+npx shadcn@latest add @neumorphism-ui/chart-delivery-capacity
+npx shadcn@latest add @neumorphism-ui/chart-install-diagnostics
 npx shadcn@latest add @neumorphism-ui/template-analytics
 ```
 
 The shared `chart` primitive uses Recharts and keeps the data marks flat and
 legible while the surrounding panel follows the neumorphic surface system.
 Each chart exposes an exact-data table for verification and accessible fallback.
+
+The five operational recipes cover build duration, p50/p95 latency, release activity, planned-versus-delivered capacity and sequential installation timing. They accept caller-owned data and keep exact tables beside the chart.
 
 The analytics dashboard links 7/14/30-day range controls and channel filters to
 its KPI cards, revenue/goal chart, channel chart, conversion chart, exact table
