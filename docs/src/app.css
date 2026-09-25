@@ -8982,3 +8982,256 @@ body {
     padding-inline: 0.35rem;
   }
 }
+
+
+/* Component product presentation v7 */
+
+:root:not(.dark) {
+  --docs-muted: color-mix(in srgb, var(--foreground) 62%, var(--background));
+  --line: color-mix(in srgb, var(--foreground) 13%, transparent);
+}
+
+.featured-components-section {
+  padding: 5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.featured-components-heading {
+  max-width: 760px;
+  margin-bottom: 2rem;
+}
+
+.featured-components-heading > span {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 720;
+  letter-spacing: 0.13em;
+}
+
+.featured-components-heading h2 {
+  margin: 0.7rem 0 0.65rem;
+  font-size: clamp(2.1rem, 4vw, 3.45rem);
+  font-weight: 720;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.featured-components-heading p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 0.85rem;
+  line-height: 1.75;
+}
+
+.featured-components-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.featured-component-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--neu-radius-surface) + 3px);
+  background: var(--surface);
+  box-shadow: var(--neu-shadow-raised-sm);
+}
+
+.featured-component-stage {
+  position: relative;
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  overflow: hidden;
+  padding: 1.75rem;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 36%, color-mix(in srgb, var(--primary) 7%, transparent), transparent 44%),
+    color-mix(in srgb, var(--surface-low) 82%, var(--background));
+  box-shadow: var(--neu-shadow-inset-sm);
+}
+
+.featured-component-stage-inner {
+  width: min(100%, 470px);
+  pointer-events: none;
+}
+
+.featured-component-card footer {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+}
+
+.featured-component-card footer > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.featured-component-card footer > div > span {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+}
+
+.featured-component-card footer strong {
+  font-size: 0.88rem;
+}
+
+.featured-component-card footer a {
+  color: var(--docs-muted);
+  font-size: 0.68rem;
+  font-weight: 670;
+  text-decoration: none;
+}
+
+.featured-component-card footer a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.component-directory-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.component-directory-card {
+  min-height: 188px;
+  padding: 1.35rem;
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+}
+
+.component-directory-card > a {
+  min-height: 118px;
+}
+
+.component-directory-card h4 {
+  margin-top: 0.72rem;
+  font-size: 1.08rem;
+}
+
+.component-directory-card p {
+  max-width: 32rem;
+  font-size: 0.78rem;
+  line-height: 1.68;
+}
+
+.component-directory-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+  color: var(--docs-muted);
+}
+
+.component-directory-card-footer code {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.58rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.component-directory-card-footer > span {
+  flex: 0 0 auto;
+  font-size: 0.58rem;
+  font-weight: 680;
+}
+
+.component-example {
+  border: 1px solid color-mix(in srgb, var(--foreground) 14%, var(--line));
+  background: var(--surface);
+  box-shadow: var(--neu-shadow-raised-sm);
+}
+
+.component-example-toolbar {
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 88%, var(--background));
+}
+
+.component-example-panel {
+  min-height: 390px;
+  background:
+    radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 48%),
+    color-mix(in srgb, var(--surface-low) 82%, var(--background));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 30%, transparent);
+}
+
+.component-api-table-wrap {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--neu-shadow-raised-sm);
+}
+
+.component-api-table thead th {
+  background: color-mix(in srgb, var(--surface-low) 84%, var(--background));
+  color: var(--foreground);
+}
+
+.component-api-table tbody tr:hover {
+  background: color-mix(in srgb, var(--primary) 3%, var(--surface-soft));
+}
+
+.component-a11y-list {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--neu-shadow-raised-sm);
+}
+
+.component-a11y-list li {
+  padding-block: 0.9rem;
+}
+
+.component-doc-section {
+  padding-block: 3.5rem;
+}
+
+.component-doc-section-heading {
+  margin-bottom: 1.6rem;
+}
+
+.component-doc-section-heading h2 {
+  font-size: clamp(2rem, 3vw, 2.7rem);
+}
+
+@media (max-width: 900px) {
+  .featured-components-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .featured-component-stage {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 760px) {
+  .component-directory-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .featured-components-section {
+    padding-block: 3.75rem;
+  }
+
+  .featured-component-stage {
+    min-height: 220px;
+    padding: 1.2rem;
+  }
+
+  .component-directory-card {
+    min-height: 168px;
+    padding: 1.15rem;
+  }
+}

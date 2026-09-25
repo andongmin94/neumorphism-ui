@@ -4,7 +4,6 @@ import * as React from "react";
 import { Link } from "fumapress/client";
 
 import type { ComponentDocCategory } from "@/components/docs/component-docs-data";
-import { InstallCommand } from "@/components/docs/install-command";
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
 import { formatMessage } from "@/i18n/messages";
@@ -148,7 +147,10 @@ export function ComponentDirectory() {
                           </h4>
                           <p>{component.summary}</p>
                         </Link>
-                        <InstallCommand compact name={component.slug} />
+                        <footer className="component-directory-card-footer">
+                          <code>@neumorphism-ui/{component.slug}</code>
+                          <span aria-hidden="true">View →</span>
+                        </footer>
                       </article>
                     ))}
                   </div>

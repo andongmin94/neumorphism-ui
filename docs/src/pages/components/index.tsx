@@ -2,6 +2,7 @@ import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
 import { ComponentDirectory } from "@/components/docs/component-directory";
+import { FeaturedComponents } from "@/components/docs/featured-components";
 import { RegistryShowcase } from "@/components/docs/registry-showcase";
 import { themePresets } from "@/components/docs/theme-config";
 import { isLocale, localeHref } from "@/i18n/config";
@@ -68,6 +69,8 @@ export default function ComponentsPage({ lang }: { lang: string }) {
           </Link>
         </div>
       </header>
+
+      <FeaturedComponents />
 
       <ComponentDirectory />
 
