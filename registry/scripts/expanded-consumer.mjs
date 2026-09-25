@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable"];
+export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable", "sidebar"];
 
 export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
@@ -35,6 +35,7 @@ export function decorateFixture(directory) {
 
 export function assertExpandedFiles(directory) {
   for (const name of expandedItems) assert.ok(fs.existsSync(path.join(directory, `src/design-system/ui/${name}.tsx`)), `Installation did not finish: missing ${name}`);
+  assert.ok(fs.existsSync(path.join(directory, "src/shared/hooks/use-mobile.ts")), "Installation did not finish: missing sidebar mobile hook");
 }
 
 export async function exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot }) {
@@ -134,6 +135,26 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await separator.focus();
   await page.keyboard.press("ArrowRight");
   await expect.poll(async () => Number(await separator.getAttribute("aria-valuenow"))).not.toBe(sizeBefore);
+
+  const sidebar = card("sidebar");
+  const sidebarTrigger = sidebar.getByRole("button", { name: "Toggle sidebar", exact: true });
+  if ((page.viewportSize()?.width ?? 0) < 768) {
+    await sidebarTrigger.click();
+    const mobileSidebar = page.locator('[data-sidebar="sidebar"][data-mobile="true"]');
+    await mobileSidebar.waitFor();
+    await page.keyboard.press("Escape");
+    await mobileSidebar.waitFor({ state: "hidden" });
+    await expect(sidebarTrigger).toBeFocused();
+  } else {
+    await expect(sidebarTrigger).toHaveAttribute("aria-expanded", "true");
+    const desktopSidebar = sidebar.locator('aside[data-slot="sidebar"]');
+    const widthBefore = await desktopSidebar.evaluate((element) => element.getBoundingClientRect().width);
+    await sidebarTrigger.click();
+    await expect(sidebarTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect.poll(async () => desktopSidebar.evaluate((element) => element.getBoundingClientRect().width)).toBeLessThan(widthBefore);
+    await sidebarTrigger.click();
+    await expect(sidebarTrigger).toHaveAttribute("aria-expanded", "true");
+  }
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();

@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  sidebar: {
+    summary: "同时支持桌面折叠和移动端 Sheet 的应用导航。",
+    description: "SidebarProvider 管理桌面、移动状态以及 Ctrl/Cmd+B 快捷键。桌面可完全收起或保留图标宽度，移动端复用现有 Sheet。菜单、提示和焦点状态继续使用现有新拟态 token。",
+    props: [
+      "管理桌面侧边栏的初始或受控打开状态。",
+      "选择折叠后完全隐藏还是保留图标宽度。",
+      "选择侧边栏方向和表面样式。",
+      "本地化折叠按钮的无障碍名称。",
+      "标记当前目标，并在图标折叠时提供 tooltip。",
+    ],
+    accessibility: [
+      "导航链接应有真实目标和可读名称，并用 isActive 表示当前位置。",
+      "图标折叠后仍保留无障碍名称，tooltip 只是补充而不是唯一名称。",
+      "移动端 Sidebar 作为 modal Sheet 工作并可用 Escape 关闭；桌面还支持 Ctrl 或 Command+B。",
+    ],
+  },
   carousel: {
     summary: "通过触控、按钮和方向键浏览的连续内容视图。",
     description: "使用 Embla Carousel 处理滚动位置和拖动，新拟态仅负责幻灯片表面和控制按钮。到达首尾时，上一个和下一个按钮会自动禁用。",

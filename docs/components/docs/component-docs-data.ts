@@ -2544,6 +2544,27 @@ import {
       "handle의 시각적 grip은 aria-hidden으로 두고 조작 의미는 separator 자체가 담당합니다.",
     ],
   },
+  {
+    slug: "sidebar",
+    title: "Sidebar",
+    category: "navigation-disclosure",
+    summary: "데스크톱 축소와 모바일 Sheet를 함께 제공하는 애플리케이션 내비게이션.",
+    description: "SidebarProvider가 desktop·mobile 상태와 Ctrl/Cmd+B 단축키를 관리합니다. 데스크톱에서는 offcanvas 또는 icon 크기로 접고, 모바일에서는 기존 Sheet를 재사용합니다. 메뉴·툴팁·포커스 상태는 기존 뉴모피즘 토큰을 그대로 사용합니다.",
+    importCode: "\"use client\";\nimport {\n  Sidebar,\n  SidebarContent,\n  SidebarGroup,\n  SidebarGroupContent,\n  SidebarGroupLabel,\n  SidebarHeader,\n  SidebarInset,\n  SidebarMenu,\n  SidebarMenuItem,\n  SidebarMenuLink,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/sidebar\";",
+    usageCode: "export default function Example() {\n  return <SidebarProvider className=\"min-h-80\">\n    <Sidebar collapsible=\"icon\">\n      <SidebarHeader><strong>Workspace</strong></SidebarHeader>\n      <SidebarContent>\n        <SidebarGroup>\n          <SidebarGroupLabel>탐색</SidebarGroupLabel>\n          <SidebarGroupContent>\n            <SidebarMenu>\n              <SidebarMenuItem><SidebarMenuLink href=\"#overview\" isActive tooltip=\"개요\"><span aria-hidden=\"true\">⌂</span><span>개요</span></SidebarMenuLink></SidebarMenuItem>\n              <SidebarMenuItem><SidebarMenuLink href=\"#settings\" tooltip=\"설정\"><span aria-hidden=\"true\">⚙</span><span>설정</span></SidebarMenuLink></SidebarMenuItem>\n            </SidebarMenu>\n          </SidebarGroupContent>\n        </SidebarGroup>\n      </SidebarContent>\n    </Sidebar>\n    <SidebarInset><header className=\"p-3\"><SidebarTrigger label=\"사이드바 전환\" /></header><section id=\"overview\" className=\"p-4\">워크스페이스 개요</section></SidebarInset>\n  </SidebarProvider>;\n}",
+    props: [
+      { component: "SidebarProvider", name: "defaultOpen / open / onOpenChange", type: "boolean / controlled state", description: "데스크톱 사이드바의 초기 또는 controlled 열림 상태를 관리합니다." },
+      { component: "Sidebar", name: "collapsible", type: '"offcanvas" | "icon" | "none"', defaultValue: '"offcanvas"', description: "접힌 상태에서 완전히 숨길지 icon 너비로 유지할지 지정합니다." },
+      { component: "Sidebar", name: "side / variant", type: '"left" | "right" / "sidebar" | "floating" | "inset"', description: "배치 방향과 표면 표현을 선택합니다." },
+      { component: "SidebarTrigger", name: "label", type: "string", defaultValue: '"Toggle sidebar"', description: "접기·펼치기 버튼의 접근 가능한 이름을 지역화합니다." },
+      { component: "SidebarMenuButton / SidebarMenuLink", name: "isActive / tooltip", type: "boolean / string", description: "현재 위치의 inset 상태와 icon-collapse 툴팁을 제공합니다." },
+    ],
+    accessibility: [
+      "내비게이션 링크에는 실제 목적지와 읽을 수 있는 이름을 제공하고 현재 위치에는 isActive를 사용합니다.",
+      "icon 크기로 접힌 항목도 접근 가능한 이름을 유지하며 tooltip은 보조 설명일 뿐 유일한 이름이 아닙니다.",
+      "모바일 Sidebar는 modal Sheet로 동작하고 Escape로 닫히며, 데스크톱에서는 Ctrl 또는 Command+B로 접고 펼칠 수 있습니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

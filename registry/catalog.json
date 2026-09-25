@@ -1219,6 +1219,35 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "sidebar",
+      "title": "Sidebar",
+      "description": "Responsive application navigation with desktop collapse, mobile Sheet, keyboard shortcut and menu primitives.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/sheet",
+        "@neumorphism-ui/tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/sidebar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/hooks/use-mobile.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-mobile.ts"
+        }
+      ]
     }
   ]
 }
