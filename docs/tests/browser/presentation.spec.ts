@@ -31,7 +31,11 @@ for (const entry of pages) {
       }
     } else {
       await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
-      await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
+      if (entry.sidebar) {
+        await expect(page.locator(".docs-site-sidebar")).toBeHidden();
+      } else {
+        await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
+      }
     }
 
     await page.screenshot({
