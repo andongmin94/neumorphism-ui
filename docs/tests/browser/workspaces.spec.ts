@@ -6,7 +6,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     await page.goto(`/${locale}/templates`); await expect(page.locator('h1')).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: info.outputPath('gallery.png'), fullPage: true });
-    for (const slug of ["settings", "data-manager", "link-hub", "portfolio"]) {
+    for (const slug of ["settings", "data-manager", "link-hub", "portfolio", "blog", "cms"]) {
       await page.goto(`/${locale}/templates/${slug}`);
       await expect(page.locator(`[data-template="${slug}"]`)).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
@@ -28,6 +28,31 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
+
+test('blog documentation filters by topic and search', async ({ page }) => {
+  await page.goto('/en/templates/blog');
+  const preview = page.locator('[data-template="blog"]');
+  await expect(preview.getByRole('status')).toContainText('3 posts');
+  await preview.getByRole('button', { name: 'Engineering', exact: true }).click();
+  await expect(preview.getByRole('status')).toContainText('1 post');
+  const search = preview.getByRole('searchbox', { name: 'Search posts' });
+  await search.fill('Keyboard');
+  await expect(preview.getByRole('link', { name: 'Keyboard-first overlays without separate logic' })).toBeVisible();
+});
+
+test('CMS documentation preserves edits through a failed save', async ({ page }) => {
+  await page.goto('/en/templates/cms');
+  const preview = page.locator('[data-template="cms"]');
+  const fail = preview.getByRole('checkbox', { name: 'Fail the next save', exact: true });
+  await fail.check();
+  const title = preview.getByLabel('Title', { exact: true });
+  await title.fill('Edited title');
+  await preview.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(preview.getByRole('alert')).toBeVisible();
+  await expect(title).toHaveValue('Edited title');
+  await preview.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(preview.getByRole('status')).toHaveText('Saved.');
+});
 
 test('portfolio documentation exposes case study detail', async ({ page }) => {
   await page.goto('/en/templates/portfolio');

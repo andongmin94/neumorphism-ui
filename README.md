@@ -3,9 +3,9 @@
 Source-owned React components with soft surfaces, clear actions and visible focus.
 Install components with the shadcn CLI and edit their source in your application.
 
-The collection includes **56 UI components, eight installable blocks and five
-light/dark presets**. The registry contains 72 items in total: 56 UI components,
-eight blocks, five presets, one base and two shared libraries. Documentation and
+The collection includes **56 UI components, ten installable blocks and five
+light/dark presets**. The registry contains 74 items in total: 56 UI components,
+ten blocks, five presets, one base and two shared libraries. Documentation and
 live examples are available in Korean, English, Japanese and Chinese through Fumapress.
 
 This project is being prepared for the shadcn registry directory. It has not been
@@ -78,6 +78,8 @@ npx shadcn@latest add @neumorphism-ui/template-settings
 npx shadcn@latest add @neumorphism-ui/template-data-manager
 npx shadcn@latest add @neumorphism-ui/template-link-hub
 npx shadcn@latest add @neumorphism-ui/template-portfolio
+npx shadcn@latest add @neumorphism-ui/template-blog
+npx shadcn@latest add @neumorphism-ui/template-cms
 ```
 
 The settings workspace combines profile validation, live preview, notification
@@ -85,7 +87,7 @@ preferences, unsaved-change detection, failed-save recovery and discard. The dat
 workspace combines search, status filters, sorting, pagination, stable-ID selection,
 column visibility, create/edit forms and confirmed deletion.
 
-The Link Hub and Portfolio templates are data-driven presentation blocks. Link Hub owns only local filtering and clipboard feedback; Portfolio is fully static and uses native disclosure.
+The Link Hub, Portfolio and Blog templates are data-driven presentation blocks. Link Hub owns only local filtering and clipboard feedback; Portfolio is fully static and uses native disclosure; Blog owns only archive search/filter/sort state. The CMS workspace is a local editor shell with dirty-state recovery and an application-owned onSave callback.
 
 The Settings and Data Manager blocks accept application-owned asynchronous callbacks. Rejected operations
 retain edits and original data; resolved operations update the local saved snapshot.

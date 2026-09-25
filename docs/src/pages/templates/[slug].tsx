@@ -8,6 +8,8 @@ import { templateCopy } from "@/components/docs/template-copy";
 import { TemplatePreview, type TemplateSlug } from "@/components/docs/template-preview";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import analyticsSource from "@/public/r/template-analytics.json";
+import blogSource from "@/public/r/template-blog.json";
+import cmsSource from "@/public/r/template-cms.json";
 import recordsSource from "@/public/r/template-data-manager.json";
 import linksSource from "@/public/r/template-link-hub.json";
 import portfolioSource from "@/public/r/template-portfolio.json";
@@ -19,6 +21,8 @@ const templateSlugs = [
   "dashboard",
   "link-hub",
   "portfolio",
+  "blog",
+  "cms",
 ] as const satisfies readonly TemplateSlug[];
 
 function isTemplateSlug(value: string): value is TemplateSlug {
@@ -38,6 +42,10 @@ function templateTitle(slug: TemplateSlug, locale: Locale) {
       return t.links;
     case "portfolio":
       return t.portfolio;
+    case "blog":
+      return t.blog;
+    case "cms":
+      return t.cms;
   }
 }
 
@@ -54,6 +62,10 @@ function templateDescription(slug: TemplateSlug, locale: Locale) {
       return t.linksBody;
     case "portfolio":
       return t.portfolioBody;
+    case "blog":
+      return t.blogBody;
+    case "cms":
+      return t.cmsBody;
   }
 }
 
@@ -66,6 +78,10 @@ function templateNote(slug: TemplateSlug, locale: Locale) {
       return t.linksNote;
     case "portfolio":
       return t.portfolioNote;
+    case "blog":
+      return t.blogNote;
+    case "cms":
+      return t.cmsNote;
     default:
       return t.note;
   }
@@ -83,6 +99,10 @@ function templateSource(slug: TemplateSlug) {
       return linksSource;
     case "portfolio":
       return portfolioSource;
+    case "blog":
+      return blogSource;
+    case "cms":
+      return cmsSource;
   }
 }
 
@@ -136,6 +156,26 @@ export function Example({ profile, projects }: {
 }) {
   return <Portfolio profile={profile} projects={projects} locale="${locale}" />;
 }`;
+    case "blog":
+      return `"use client";
+import { Blog, type BlogPost } from "@/components/blocks/blog";
+
+export function Example({ posts }: { posts: BlogPost[] }) {
+  return <Blog posts={posts} locale="${locale}" basePath="/blog" />;
+}`;
+    case "cms":
+      return `"use client";
+import { CmsWorkspace, type CmsPost } from "@/components/blocks/cms";
+
+export function Example({
+  posts,
+  savePost,
+}: {
+  posts: CmsPost[];
+  savePost: (post: CmsPost) => Promise<void>;
+}) {
+  return <CmsWorkspace initialPosts={posts} onSave={savePost} locale="${locale}" />;
+}`;
   }
 }
 
@@ -178,7 +218,9 @@ export default function TemplatePage({
           <CopyableCode code={usage} label={t.use} multiline />
           <h3>{t.integration}</h3>
           <p>{templateNote(slug, locale)}</p>
-          {(slug === "settings" || slug === "data-manager") && <p>{t.imports}</p>}
+          {(slug === "settings" || slug === "data-manager" || slug === "cms") && (
+            <p>{t.imports}</p>
+          )}
         </section>
 
         <section className="docs-content-section" id="installed-source">

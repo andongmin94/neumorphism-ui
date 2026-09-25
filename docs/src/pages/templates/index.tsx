@@ -48,6 +48,18 @@ export default function TemplatesPage({ lang }: { lang: string }) {
       description: t.portfolioBody,
       tags: "Case studies · Details · Contact",
     },
+    {
+      slug: "blog",
+      title: t.blog,
+      description: t.blogBody,
+      tags: "Search · Topics · Sort",
+    },
+    {
+      slug: "cms",
+      title: t.cms,
+      description: t.cmsBody,
+      tags: "Editor · Dirty state · Preview",
+    },
   ];
 
   return (
