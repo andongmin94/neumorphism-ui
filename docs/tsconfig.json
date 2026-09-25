@@ -1,18 +1,52 @@
 {
-  "include": ["src/**/*", "components/**/*", "i18n/**/*", "tests/**/*", "press.config.tsx", "vite.config.ts"],
+  "include": [
+    "src/**/*",
+    "components/**/*",
+    "i18n/**/*",
+    "tests/**/*",
+    "press.config.tsx",
+    "vite.config.ts"
+  ],
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["node", "vite/client"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "types": [
+      "node",
+      "vite/client"
+    ],
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "paths": { "@/*": ["./*"] },
+    "paths": {
+      "@/lib/utils": [
+        "./node_modules/@neumorphism-ui/registry/src/lib/utils.ts"
+      ],
+      "@/components/ui/*": [
+        "./node_modules/@neumorphism-ui/registry/src/components/ui/*"
+      ],
+      "@/components/blocks/*": [
+        "./node_modules/@neumorphism-ui/registry/src/components/blocks/*"
+      ],
+      "@/lib/analytics-model": [
+        "./node_modules/@neumorphism-ui/registry/src/lib/analytics-model.ts"
+      ],
+      "@/lib/analytics-copy": [
+        "./node_modules/@neumorphism-ui/registry/src/lib/analytics-copy.ts"
+      ],
+      "@/*": [
+        "./*"
+      ]
+    },
     "esModuleInterop": true,
     "verbatimModuleSyntax": false,
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "preserveSymlinks": true
   }
 }
