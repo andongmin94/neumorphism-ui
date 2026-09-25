@@ -11,13 +11,36 @@ import { Input } from "@neumorphism-ui/registry/ui/input";
 
 type CategoryFilter = "all" | ComponentDocCategory;
 
+const categoryCopy = {
+  ko: "카테고리",
+  en: "Categories",
+  ja: "カテゴリー",
+  zh: "分类",
+} as const;
+
 export function ComponentDirectory() {
   const { componentDocGroups, locale, messages } = useLocale();
   const [category, setCategory] = React.useState<CategoryFilter>("all");
   const [query, setQuery] = React.useState("");
   const searchRef = React.useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
-  const totalCount = componentDocGroups.reduce((count, group) => count + group.items.length, 0);
+
+  const entries = componentDocGroups.flatMap((group) =>
+    group.items.map((component) => ({
+      ...component,
+      categoryLabel: group.category.label,
+    })),
+  );
+  const totalCount = entries.length;
+  const visibleItems = entries.filter((component) => {
+    const matchesCategory = category === "all" || component.category === category;
+    const matchesQuery =
+      !normalizedQuery ||
+      [component.title, component.slug, component.summary, component.categoryLabel].some((value) =>
+        value.toLocaleLowerCase(locale).includes(normalizedQuery),
+      );
+    return matchesCategory && matchesQuery;
+  });
 
   React.useEffect(() => {
     function focusSearch(event: KeyboardEvent) {
@@ -32,24 +55,6 @@ export function ComponentDirectory() {
     return () => document.removeEventListener("keydown", focusSearch);
   }, []);
 
-  const visibleGroups = componentDocGroups
-    .map((group) => ({
-      ...group,
-      items: group.items.filter((component) => {
-        const matchesCategory = category === "all" || component.category === category;
-        const matchesQuery =
-          !normalizedQuery ||
-          [component.title, component.slug, component.summary].some((value) =>
-            value.toLocaleLowerCase(locale).includes(normalizedQuery),
-          );
-
-        return matchesCategory && matchesQuery;
-      }),
-    }))
-    .filter((group) => group.items.length > 0);
-
-  const resultCount = visibleGroups.reduce((total, group) => total + group.items.length, 0);
-
   function reset() {
     setCategory("all");
     setQuery("");
@@ -57,104 +62,92 @@ export function ComponentDirectory() {
   }
 
   return (
-    <section
-      className="component-directory"
-      aria-labelledby="component-directory-title"
-      id="components"
-    >
+    <section className="component-directory" aria-labelledby="component-directory-title" id="components">
       <div className="component-directory-toolbar">
         <div>
-          <span className="component-directory-eyebrow">DIRECTORY</span>
           <h2 id="component-directory-title">{messages.directory.title}</h2>
           <p>{messages.directory.description}</p>
         </div>
 
         <label className="component-directory-search">
-          <span className="sr-only">{messages.directory.searchLabel}</span>
           <svg aria-hidden="true" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-3.5-3.5" />
           </svg>
           <Input
             ref={searchRef}
+            aria-label={messages.directory.searchLabel}
             onChange={(event) => setQuery(event.target.value)}
             placeholder={messages.directory.searchPlaceholder}
             value={query}
           />
-          {!query ? <kbd>/</kbd> : null}
+          {query ? (
+            <button aria-label={messages.directory.reset} onClick={() => setQuery("")} type="button">×</button>
+          ) : (
+            <kbd>/</kbd>
+          )}
         </label>
       </div>
 
       <div className="component-directory-browser">
-        <aside
-          aria-label={messages.directory.filtersLabel}
-          className="component-directory-categories"
-        >
-          <span>Categories</span>
-          <button
-            aria-pressed={category === "all"}
-            className={category === "all" ? "is-active" : undefined}
-            onClick={() => setCategory("all")}
-            type="button"
-          >
-            <span>{messages.directory.all}</span>
-            <small>{totalCount}</small>
-          </button>
-          {componentDocGroups.map((group) => (
+        <aside aria-label={messages.directory.filtersLabel} className="component-directory-categories">
+          <h2>{categoryCopy[locale]}</h2>
+          <div>
             <button
-              aria-pressed={category === group.category.id}
-              className={category === group.category.id ? "is-active" : undefined}
-              key={group.category.id}
-              onClick={() => setCategory(group.category.id)}
+              aria-pressed={category === "all"}
+              className={category === "all" ? "is-active" : undefined}
+              onClick={() => setCategory("all")}
               type="button"
             >
-              <span>{group.category.label}</span>
-              <small>{group.items.length}</small>
+              <span>{messages.directory.all}</span>
+              <small>{totalCount}</small>
             </button>
-          ))}
+            {componentDocGroups.map((group) => (
+              <button
+                aria-pressed={category === group.category.id}
+                className={category === group.category.id ? "is-active" : undefined}
+                key={group.category.id}
+                onClick={() => setCategory(group.category.id)}
+                type="button"
+              >
+                <span>{group.category.label}</span>
+                <small>{group.items.length}</small>
+              </button>
+            ))}
+          </div>
         </aside>
 
-        <div className="component-directory-results">
+        <section className="component-directory-results" aria-label={messages.navigation.components}>
           <div className="component-directory-results-head">
             <p aria-live="polite">
-              {formatMessage(messages.directory.resultCount, { count: resultCount })}
+              {formatMessage(messages.directory.resultCount, { count: visibleItems.length })}
             </p>
             <Link href={localeHref(locale, "/templates")}>
-              Templates <span aria-hidden="true">↗</span>
+              Templates <span aria-hidden="true">→</span>
             </Link>
           </div>
 
-          {visibleGroups.length ? (
-            <div className="component-directory-groups">
-              {visibleGroups.map((group) => (
-                <section key={group.category.id}>
-                  <header>
-                    <div>
-                      <h3>{group.category.label}</h3>
-                      <p>{group.category.description}</p>
-                    </div>
-                    <span>{group.items.length}</span>
-                  </header>
-
-                  <div className="component-directory-grid">
-                    {group.items.map((component) => (
-                      <article className="component-directory-card" key={component.slug}>
-                        <Link href={localeHref(locale, `/components/${component.slug}`)}>
-                          <span className="component-directory-card-meta">{component.category}</span>
-                          <h4>
-                            {component.title}
-                            <span aria-hidden="true">↗</span>
-                          </h4>
-                          <p>{component.summary}</p>
-                        </Link>
-                        <footer className="component-directory-card-footer">
-                          <code>@neumorphism-ui/{component.slug}</code>
-                          <span aria-hidden="true">View →</span>
-                        </footer>
-                      </article>
-                    ))}
+          {visibleItems.length ? (
+            <div className="component-directory-grid">
+              {visibleItems.map((component) => (
+                <Link
+                  className="component-directory-card"
+                  href={localeHref(locale, \`/components/\${component.slug}\`)}
+                  key={component.slug}
+                >
+                  <div className="component-directory-card-top">
+                    <span>{component.categoryLabel}</span>
+                    <code>source</code>
                   </div>
-                </section>
+                  <div className="component-directory-card-body">
+                    <h3>{component.title}</h3>
+                    <p>{component.summary}</p>
+                  </div>
+                  <div className="component-directory-card-footer">
+                    <code>@neumorphism-ui/{component.slug}</code>
+                    <span aria-hidden="true">→</span>
+                  </div>
+                </Link>
               ))}
             </div>
           ) : (
@@ -166,7 +159,7 @@ export function ComponentDirectory() {
               </button>
             </div>
           )}
-        </div>
+        </section>
       </div>
     </section>
   );
