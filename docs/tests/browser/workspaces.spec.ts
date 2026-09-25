@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 for (const locale of ["ko", "en", "ja", "zh"]) {
   test(`${locale}: template gallery and installed-source previews`, async ({ page }, info) => {
     const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
-    await page.goto(`/${locale}/templates`); await expect(page.locator('h1')).toBeVisible();
+    await page.goto(`/${locale}/templates`); await expect(page.locator('.docs-page-header h1')).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: info.outputPath('gallery.png'), fullPage: true });
     for (const slug of ["settings", "data-manager", "link-hub", "portfolio", "blog", "blog-post", "cms"]) {
