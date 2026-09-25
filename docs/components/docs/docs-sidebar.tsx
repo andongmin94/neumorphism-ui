@@ -6,11 +6,59 @@ import { Link, useRouter } from "fumapress/client";
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
 
-const referenceNavigation = {
-  ko: { designTokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", accessibility: "접근성", verification: "검증과 릴리스", credits: "Credits & dependencies", reference: "레퍼런스" },
-  en: { designTokens: "Design tokens", registry: "Registry architecture", resources: "Resources", accessibility: "Accessibility", verification: "Verification & release", credits: "Credits & dependencies", reference: "Reference" },
-  ja: { designTokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", accessibility: "アクセシビリティ", verification: "検証とリリース", credits: "Credits & dependencies", reference: "リファレンス" },
-  zh: { designTokens: "设计令牌", registry: "Registry 架构", resources: "资源", accessibility: "无障碍", verification: "验证与发布", credits: "Credits & dependencies", reference: "参考" },
+const navigationCopy = {
+  ko: {
+    start: "시작",
+    explore: "탐색",
+    reference: "레퍼런스",
+    templates: "템플릿",
+    charts: "차트",
+    designTokens: "디자인 토큰",
+    registry: "Registry 구조",
+    resources: "리소스",
+    accessibility: "접근성",
+    verification: "검증과 릴리스",
+    credits: "Credits & dependencies",
+  },
+  en: {
+    start: "Start",
+    explore: "Explore",
+    reference: "Reference",
+    templates: "Templates",
+    charts: "Charts",
+    designTokens: "Design tokens",
+    registry: "Registry architecture",
+    resources: "Resources",
+    accessibility: "Accessibility",
+    verification: "Verification & release",
+    credits: "Credits & dependencies",
+  },
+  ja: {
+    start: "スタート",
+    explore: "探索",
+    reference: "リファレンス",
+    templates: "テンプレート",
+    charts: "チャート",
+    designTokens: "デザイントークン",
+    registry: "Registry 構造",
+    resources: "リソース",
+    accessibility: "アクセシビリティ",
+    verification: "検証とリリース",
+    credits: "Credits & dependencies",
+  },
+  zh: {
+    start: "开始",
+    explore: "探索",
+    reference: "参考",
+    templates: "模板",
+    charts: "图表",
+    designTokens: "设计令牌",
+    registry: "Registry 架构",
+    resources: "资源",
+    accessibility: "无障碍",
+    verification: "验证与发布",
+    credits: "Credits & dependencies",
+  },
 } as const;
 
 type DocsNavProps = {
@@ -45,19 +93,13 @@ function NavLink({
 export function DocsNav({ onNavigate }: DocsNavProps) {
   const { componentDocGroups, locale, messages } = useLocale();
   const { path: pathname } = useRouter();
+  const copy = navigationCopy[locale];
 
   return (
-    <nav
-      className="docs-nav"
-      aria-label={messages.navigation.docsNavigation}
-    >
+    <nav className="docs-nav" aria-label={messages.navigation.docsNavigation}>
       <div className="docs-nav-group">
-        <span>{messages.navigation.gettingStarted}</span>
-        <NavLink
-          href={localeHref(locale)}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
+        <span>{copy.start}</span>
+        <NavLink href={localeHref(locale)} onNavigate={onNavigate} pathname={pathname}>
           {messages.navigation.introduction}
         </NavLink>
         <NavLink
@@ -67,80 +109,48 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
         >
           {messages.navigation.installation}
         </NavLink>
-        <NavLink
-          href={localeHref(locale, "/docs/design-tokens")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {referenceNavigation[locale].designTokens}
-        </NavLink>
-        <NavLink
-          href={localeHref(locale, "/docs/registry")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {referenceNavigation[locale].registry}
-        </NavLink>
       </div>
 
       <div className="docs-nav-group">
-        <span>{messages.navigation.configuration}</span>
-        <NavLink
-          href={localeHref(locale, "/customize")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
+        <span>{copy.explore}</span>
+        <NavLink href={localeHref(locale, "/components")} onNavigate={onNavigate} pathname={pathname}>
+          {messages.navigation.components}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/templates")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.templates}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/charts")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.charts}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/customize")} onNavigate={onNavigate} pathname={pathname}>
           {messages.navigation.themeStudio}
         </NavLink>
       </div>
 
       <div className="docs-nav-group">
-        <span>{referenceNavigation[locale].reference}</span>
-        <NavLink
-          href={localeHref(locale, "/docs/resources")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {referenceNavigation[locale].resources}
+        <span>{copy.reference}</span>
+        <NavLink href={localeHref(locale, "/docs/design-tokens")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.designTokens}
         </NavLink>
-        <NavLink
-          href={localeHref(locale, "/docs/accessibility")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {referenceNavigation[locale].accessibility}
+        <NavLink href={localeHref(locale, "/docs/registry")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.registry}
         </NavLink>
-        <NavLink
-          href={localeHref(locale, "/docs/verification")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {referenceNavigation[locale].verification}
+        <NavLink href={localeHref(locale, "/docs/accessibility")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.accessibility}
         </NavLink>
-        <NavLink
-          href={localeHref(locale, "/docs/credits")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {referenceNavigation[locale].credits}
+        <NavLink href={localeHref(locale, "/docs/verification")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.verification}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/docs/resources")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.resources}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/docs/credits")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.credits}
         </NavLink>
       </div>
 
-      <div className="docs-nav-group">
-        <span>{messages.navigation.components}</span>
-        <NavLink
-          href={localeHref(locale, "/components")}
-          onNavigate={onNavigate}
-          pathname={pathname}
-        >
-          {messages.navigation.allComponents}
-        </NavLink>
-      </div>
-
-      <div className="docs-nav-group"><span>{({ko:"템플릿",en:"Templates",ja:"テンプレート",zh:"模板"})[locale]}</span><NavLink href={localeHref(locale, "/templates")} onNavigate={onNavigate} pathname={pathname}>{({ko:"모든 템플릿",en:"All templates",ja:"すべてのテンプレート",zh:"全部模板"})[locale]}</NavLink></div>
-      <div className="docs-nav-group"><NavLink href={localeHref(locale, "/charts")} onNavigate={onNavigate} pathname={pathname}>{({ko:"차트",en:"Charts",ja:"チャート",zh:"图表"})[locale]}</NavLink></div>
       {componentDocGroups.map(({ category, items }) => (
-        <div className="docs-nav-group" key={category.id}>
+        <div className="docs-nav-group docs-nav-group-components" key={category.id}>
           <span>{category.label}</span>
           {items.map((item) => (
             <NavLink
