@@ -28,6 +28,7 @@ export function ComponentDirectory() {
       event.preventDefault();
       searchRef.current?.focus();
     }
+
     document.addEventListener("keydown", focusSearch);
     return () => document.removeEventListener("keydown", focusSearch);
   }, []);
@@ -56,11 +57,7 @@ export function ComponentDirectory() {
   }
 
   return (
-    <section
-      className="component-directory"
-      aria-labelledby="component-directory-title"
-      id="components"
-    >
+    <section className="component-directory" aria-labelledby="component-directory-title" id="components">
       <div className="component-directory-toolbar">
         <div>
           <span className="component-directory-eyebrow">DIRECTORY</span>
@@ -85,10 +82,7 @@ export function ComponentDirectory() {
       </div>
 
       <div className="component-directory-browser">
-        <aside
-          aria-label={messages.directory.filtersLabel}
-          className="component-directory-categories"
-        >
+        <aside aria-label={messages.directory.filtersLabel} className="component-directory-categories">
           <span>Categories</span>
           <button
             aria-pressed={category === "all"}
@@ -139,9 +133,7 @@ export function ComponentDirectory() {
                     {group.items.map((component) => (
                       <article className="component-directory-card" key={component.slug}>
                         <Link href={localeHref(locale, `/components/${component.slug}`)}>
-                          <span className="component-directory-card-meta">
-                            {component.category}
-                          </span>
+                          <span className="component-directory-card-meta">{component.category}</span>
                           <h4>
                             {component.title}
                             <span aria-hidden="true">↗</span>
