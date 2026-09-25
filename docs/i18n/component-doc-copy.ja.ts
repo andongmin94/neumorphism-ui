@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+  "input-otp": {
+    summary: "1つの実入力と複数の表示スロットを組み合わせた認証コード入力。",
+    description: "フォーカス、貼り付け、自動移動は input-otp に任せ、表示スロットだけをニューモーフィズム表面で装飾します。複数の枠が見えてもアクセシビリティツリーとフォーム値は1つの入力のままです。",
+    props: [
+      "許可する認証コードの長さを指定します。",
+      "controlled または初期 uncontrolled のコード値を指定します。",
+      "コード全体の値が変わると呼び出されます。",
+      "スロットグループを囲む外側のコンテナを拡張します。",
+      "コード全体のどの位置をこの表示スロットに出すか指定します。",
+    ],
+    accessibility: [
+      "InputOTP に認証コードの目的を説明する aria-label または関連付けた label を指定します。",
+      "複数スロットが見えても、文字ごとに textbox を公開せず実入力は1つに保ちます。",
+      "貼り付けやキーボード入力を妨げず、エラーは別の説明テキストに関連付けます。",
+    ],
+  },
   drawer: {
     summary: "スワイプで閉じられる下部・側面のタスクパネル。",
     description: "Base UI Drawer のジェスチャーとフォーカス管理を使用します。Sheet が固定タスクパネルなのに対し、Drawer はスワイプで閉じたり別方向から開いたりする一時的なタッチ向け表面に適しています。",

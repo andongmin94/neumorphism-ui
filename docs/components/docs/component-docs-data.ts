@@ -2481,6 +2481,27 @@ import {
       "swipe gesture만 유일한 닫기 방법으로 사용하지 말고 DrawerClose 같은 명시적 컨트롤을 함께 제공합니다.",
     ],
   },
+  {
+    slug: "input-otp",
+    title: "Input OTP",
+    category: "forms-selection",
+    summary: "한 개의 실제 입력과 여러 시각적 slot을 결합한 인증 코드 입력.",
+    description: "input-otp의 포커스·붙여넣기·자동 이동 동작을 그대로 사용하고 각 slot만 뉴모피즘 표면으로 표현합니다. 화면에는 여러 칸이 보이지만 접근성 트리와 폼 값은 하나의 입력으로 유지됩니다.",
+    importCode: "\"use client\";\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@/components/ui/input-otp\";",
+    usageCode: "export default function Example() {\n  return <InputOTP maxLength={6} defaultValue=\"123456\" aria-label=\"인증 코드\">\n    <InputOTPGroup>\n      <InputOTPSlot index={0} />\n      <InputOTPSlot index={1} />\n      <InputOTPSlot index={2} />\n    </InputOTPGroup>\n    <InputOTPSeparator />\n    <InputOTPGroup>\n      <InputOTPSlot index={3} />\n      <InputOTPSlot index={4} />\n      <InputOTPSlot index={5} />\n    </InputOTPGroup>\n  </InputOTP>;\n}",
+    props: [
+      { component: "InputOTP", name: "maxLength", type: "number", required: true, description: "허용할 인증 코드 길이를 지정합니다." },
+      { component: "InputOTP", name: "value / defaultValue", type: "string", description: "controlled 또는 초기 uncontrolled 코드 값을 지정합니다." },
+      { component: "InputOTP", name: "onChange", type: "(value: string) => void", description: "전체 코드 값이 바뀔 때 호출됩니다." },
+      { component: "InputOTP", name: "containerClassName", type: "string", description: "slot 그룹을 감싸는 외부 컨테이너를 확장합니다." },
+      { component: "InputOTPSlot", name: "index", type: "number", required: true, description: "전체 코드에서 이 시각적 slot이 표시할 위치입니다." },
+    ],
+    accessibility: [
+      "InputOTP에 인증 코드의 목적을 설명하는 aria-label 또는 연결된 label을 제공합니다.",
+      "여러 slot이 보여도 실제 입력은 하나이므로 문자마다 별도의 textbox role을 만들지 않습니다.",
+      "붙여넣기와 키보드 입력을 막지 말고 오류 메시지는 별도의 설명 텍스트로 연결합니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

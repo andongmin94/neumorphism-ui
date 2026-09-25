@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  "input-otp": {
+    summary: "将一个真实输入与多个视觉槽位组合的验证码输入。",
+    description: "使用 input-otp 处理焦点、粘贴和自动前进，仅用新拟态样式呈现视觉槽位。虽然界面显示多个方格，但无障碍树和表单值仍是一个输入。",
+    props: [
+      "设置允许的验证码长度。",
+      "设置受控值或初始非受控值。",
+      "完整验证码值变化时调用。",
+      "扩展包裹槽位组的外层容器。",
+      "指定此视觉槽位显示完整验证码中的哪个位置。",
+    ],
+    accessibility: [
+      "为 InputOTP 提供说明验证码用途的 aria-label 或关联 label。",
+      "即使显示多个槽位，也应保持一个真实输入，不要为每个字符暴露 textbox。",
+      "不要阻止粘贴或键盘输入；将验证错误通过独立说明文本关联。",
+    ],
+  },
   drawer: {
     summary: "可通过滑动关闭的底部或侧边任务面板。",
     description: "使用 Base UI Drawer 的手势和焦点管理。Sheet 适合固定任务面板，而 Drawer 更适合可滑动关闭或从不同方向打开的临时触控界面。",

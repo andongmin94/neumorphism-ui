@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer"];
+export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp"];
 
 export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
@@ -113,6 +113,12 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await page.keyboard.press("Escape");
   await drawer.waitFor({ state: "hidden" });
   await expect(drawerTrigger).toBeFocused();
+
+  const otpCard = card("input-otp");
+  const otpInput = otpCard.getByRole("textbox", { name: "Verification code" });
+  await otpInput.fill("654321");
+  await expect(otpCard.locator('[data-slot="input-otp-slot"]').nth(0)).toHaveText("6");
+  await expect(otpCard.locator('[data-slot="input-otp-slot"]').nth(5)).toHaveText("1");
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();

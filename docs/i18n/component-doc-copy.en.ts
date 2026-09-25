@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+  "input-otp": {
+    summary: "A verification-code input that combines one real input with multiple visual slots.",
+    description: "Uses input-otp for focus, paste, and automatic advancement while styling only the visual slots with neumorphic surfaces. Multiple boxes are visible, but the accessibility tree and form value remain a single input.",
+    props: [
+      "Sets the allowed verification-code length.",
+      "Sets the controlled or initial uncontrolled code value.",
+      "Runs when the complete code value changes.",
+      "Extends the outer container that wraps slot groups.",
+      "Selects which position of the complete code this visual slot displays.",
+    ],
+    accessibility: [
+      "Give InputOTP an aria-label or associated label that explains the verification code purpose.",
+      "Although multiple slots are visible, keep one real input instead of exposing one textbox per character.",
+      "Do not block paste or keyboard entry; connect validation errors through separate descriptive text.",
+    ],
+  },
   drawer: {
     summary: "A bottom or side task panel that can be dismissed with a swipe.",
     description: "Uses Base UI Drawer gestures and focus management. Sheet is a fixed task panel; Drawer is better for temporary touch-first surfaces that users can swipe away or open from another edge.",
