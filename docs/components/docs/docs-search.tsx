@@ -17,6 +17,33 @@ import {
 } from "@neumorphism-ui/registry/ui/dialog";
 import { Input } from "@neumorphism-ui/registry/ui/input";
 
+const referenceSearchCopy = {
+  ko: {
+    tokens: ["디자인 토큰", "semantic · surface · depth"],
+    registry: ["Registry 구조", "source ownership · generated endpoint"],
+    resources: ["리소스", "components · templates · charts · verification"],
+    credits: ["Credits & dependencies", "외부 패키지와 소유 경계"],
+  },
+  en: {
+    tokens: ["Design tokens", "semantic · surface · depth"],
+    registry: ["Registry architecture", "source ownership · generated endpoints"],
+    resources: ["Resources", "components · templates · charts · verification"],
+    credits: ["Credits & dependencies", "external packages and ownership boundaries"],
+  },
+  ja: {
+    tokens: ["デザイントークン", "semantic · surface · depth"],
+    registry: ["Registry 構造", "source ownership · generated endpoint"],
+    resources: ["リソース", "components · templates · charts · verification"],
+    credits: ["Credits & dependencies", "外部パッケージと所有境界"],
+  },
+  zh: {
+    tokens: ["设计令牌", "semantic · surface · depth"],
+    registry: ["Registry 架构", "source ownership · generated endpoint"],
+    resources: ["资源", "components · templates · charts · verification"],
+    credits: ["Credits & dependencies", "外部包与所有权边界"],
+  },
+} as const;
+
 export function DocsSearch() {
   const { componentDocGroups, locale, messages } = useLocale();
   const [open, setOpen] = React.useState(false);
@@ -40,6 +67,34 @@ export function DocsSearch() {
         key: "installation",
         title: messages.navigation.installation,
         summary: messages.search.installSummary,
+        category: messages.search.gettingStarted,
+      },
+      {
+        href: localeHref(locale, "/docs/design-tokens"),
+        key: "design-tokens",
+        title: referenceSearchCopy[locale].tokens[0],
+        summary: referenceSearchCopy[locale].tokens[1],
+        category: messages.search.gettingStarted,
+      },
+      {
+        href: localeHref(locale, "/docs/registry"),
+        key: "registry-architecture",
+        title: referenceSearchCopy[locale].registry[0],
+        summary: referenceSearchCopy[locale].registry[1],
+        category: messages.search.gettingStarted,
+      },
+      {
+        href: localeHref(locale, "/docs/resources"),
+        key: "resources",
+        title: referenceSearchCopy[locale].resources[0],
+        summary: referenceSearchCopy[locale].resources[1],
+        category: messages.search.gettingStarted,
+      },
+      {
+        href: localeHref(locale, "/docs/credits"),
+        key: "credits",
+        title: referenceSearchCopy[locale].credits[0],
+        summary: referenceSearchCopy[locale].credits[1],
         category: messages.search.gettingStarted,
       },
       {

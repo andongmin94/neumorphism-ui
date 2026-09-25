@@ -6,6 +6,13 @@ import { Link, useRouter } from "fumapress/client";
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
 
+const referenceNavigation = {
+  ko: { designTokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", credits: "Credits & dependencies", reference: "레퍼런스" },
+  en: { designTokens: "Design tokens", registry: "Registry architecture", resources: "Resources", credits: "Credits & dependencies", reference: "Reference" },
+  ja: { designTokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", credits: "Credits & dependencies", reference: "リファレンス" },
+  zh: { designTokens: "设计令牌", registry: "Registry 架构", resources: "资源", credits: "Credits & dependencies", reference: "参考" },
+} as const;
+
 type DocsNavProps = {
   onNavigate?: () => void;
 };
@@ -60,6 +67,20 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
         >
           {messages.navigation.installation}
         </NavLink>
+        <NavLink
+          href={localeHref(locale, "/docs/design-tokens")}
+          onNavigate={onNavigate}
+          pathname={pathname}
+        >
+          {referenceNavigation[locale].designTokens}
+        </NavLink>
+        <NavLink
+          href={localeHref(locale, "/docs/registry")}
+          onNavigate={onNavigate}
+          pathname={pathname}
+        >
+          {referenceNavigation[locale].registry}
+        </NavLink>
       </div>
 
       <div className="docs-nav-group">
@@ -70,6 +91,24 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
           pathname={pathname}
         >
           {messages.navigation.themeStudio}
+        </NavLink>
+      </div>
+
+      <div className="docs-nav-group">
+        <span>{referenceNavigation[locale].reference}</span>
+        <NavLink
+          href={localeHref(locale, "/docs/resources")}
+          onNavigate={onNavigate}
+          pathname={pathname}
+        >
+          {referenceNavigation[locale].resources}
+        </NavLink>
+        <NavLink
+          href={localeHref(locale, "/docs/credits")}
+          onNavigate={onNavigate}
+          pathname={pathname}
+        >
+          {referenceNavigation[locale].credits}
         </NavLink>
       </div>
 
