@@ -1,6 +1,38 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+  carousel: {
+    summary: "タッチ、ボタン、方向キーで移動する連続コンテンツビュー。",
+    description: "スクロール位置とドラッグは Embla Carousel に任せ、ニューモーフィズムはスライド表面と操作ボタンに限定します。先頭と末尾では前後ボタンが自動的に無効になります。",
+    props: [
+      "スクロール軸と対応する方向キー操作を指定します。",
+      "loop や align などの Embla オプションを渡します。",
+      "外部連携用に Embla API インスタンスを受け取ります。",
+      "1つのスライドの実コンテンツを配置します。",
+      "前後ボタンのアクセシブル名をローカライズします。",
+    ],
+    accessibility: [
+      "Carousel に aria-label または aria-labelledby で領域の目的を指定します。",
+      "各スライドは group と carousel slide の説明を使用し、端では移動ボタンが disabled を公開します。",
+      "横方向は左右キー、縦方向は上下キーで移動できます。",
+    ],
+  },
+  resizable: {
+    summary: "ポインターとキーボードで比率を調整できる分割パネル。",
+    description: "サイズ計算と separator のアクセシビリティは react-resizable-panels に任せます。ニューモーフィズムはパネル境界と handle の表面だけを担当します。",
+    props: [
+      "パネルの分割方向を指定します。",
+      "初期パネルサイズを指定します。",
+      "パネルが縮小・拡大できる範囲を制限します。",
+      "separator 中央に視覚的な grip を表示します。",
+      "separator を表示したままリサイズを無効にします。",
+    ],
+    accessibility: [
+      "ResizableHandle はライブラリの separator 意味と現在値を使用するため、偽の slider を追加しません。",
+      "キーボード利用者は separator にフォーカスし、方向キーでパネルサイズを変更できます。",
+      "視覚的 grip は aria-hidden とし、操作の意味は separator 自体が担当します。",
+    ],
+  },
   "input-otp": {
     summary: "1つの実入力と複数の表示スロットを組み合わせた認証コード入力。",
     description: "フォーカス、貼り付け、自動移動は input-otp に任せ、表示スロットだけをニューモーフィズム表面で装飾します。複数の枠が見えてもアクセシビリティツリーとフォーム値は1つの入力のままです。",

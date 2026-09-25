@@ -2502,6 +2502,48 @@ import {
       "붙여넣기와 키보드 입력을 막지 말고 오류 메시지는 별도의 설명 텍스트로 연결합니다.",
     ],
   },
+  {
+    slug: "carousel",
+    title: "Carousel",
+    category: "navigation-disclosure",
+    summary: "터치·버튼·방향키로 이동하는 순차 콘텐츠 뷰.",
+    description: "Embla Carousel의 스크롤 위치와 drag 동작을 그대로 사용하고 각 slide의 콘텐츠 표면만 뉴모피즘으로 구성합니다. 이전·다음 버튼은 현재 위치에 따라 자동으로 비활성화됩니다.",
+    importCode: "\"use client\";\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@/components/ui/carousel\";",
+    usageCode: "export default function Example() {\n  return <Carousel aria-label=\"기능 둘러보기\" className=\"w-full max-w-md px-12\">\n    <CarouselContent>\n      {[\"대시보드\", \"설정\", \"분석\"].map((item) => <CarouselItem key={item}><div className=\"grid h-40 place-items-center rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]\">{item}</div></CarouselItem>)}\n    </CarouselContent>\n    <CarouselPrevious label=\"이전 슬라이드\" />\n    <CarouselNext label=\"다음 슬라이드\" />\n  </Carousel>;\n}",
+    props: [
+      { component: "Carousel", name: "orientation", type: '"horizontal" | "vertical"', defaultValue: '"horizontal"', description: "스크롤 축과 방향키 동작을 지정합니다." },
+      { component: "Carousel", name: "opts", type: "EmblaOptionsType", description: "loop, align 등 Embla 옵션을 전달합니다." },
+      { component: "Carousel", name: "setApi", type: "(api: CarouselApi) => void", description: "외부에서 Embla API를 사용할 때 인스턴스를 전달받습니다." },
+      { component: "CarouselItem", name: "children", type: "ReactNode", description: "한 개 slide의 실제 콘텐츠를 배치합니다." },
+      { component: "CarouselPrevious / CarouselNext", name: "label", type: "string", description: "버튼의 접근 가능한 이름을 지역화합니다." },
+    ],
+    accessibility: [
+      "Carousel에 aria-label 또는 aria-labelledby로 영역의 목적을 지정합니다.",
+      "각 slide는 group과 carousel slide 설명을 사용하고 이전·다음 버튼은 현재 위치에 따라 disabled 상태를 노출합니다.",
+      "가로 Carousel은 좌우 방향키, 세로 Carousel은 상하 방향키로 이동할 수 있습니다.",
+    ],
+  },
+  {
+    slug: "resizable",
+    title: "Resizable",
+    category: "navigation-disclosure",
+    summary: "키보드와 포인터로 비율을 조절하는 분할 패널.",
+    description: "react-resizable-panels의 크기 계산과 separator 접근성을 그대로 사용합니다. 뉴모피즘은 panel 경계와 handle의 표면만 담당하며 패널 상태 계산을 재구현하지 않습니다.",
+    importCode: "\"use client\";\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from \"@/components/ui/resizable\";",
+    usageCode: "export default function Example() {\n  return <ResizablePanelGroup orientation=\"horizontal\" className=\"h-48 max-w-lg\">\n    <ResizablePanel defaultSize={40} minSize={25}><div className=\"grid h-full place-items-center p-4\">목록</div></ResizablePanel>\n    <ResizableHandle withHandle />\n    <ResizablePanel defaultSize={60} minSize={30}><div className=\"grid h-full place-items-center p-4\">세부 정보</div></ResizablePanel>\n  </ResizablePanelGroup>;\n}",
+    props: [
+      { component: "ResizablePanelGroup", name: "orientation", type: '"horizontal" | "vertical"', required: true, description: "패널 분할 방향을 지정합니다." },
+      { component: "ResizablePanel", name: "defaultSize", type: "number | string", description: "초기 패널 크기를 지정합니다." },
+      { component: "ResizablePanel", name: "minSize / maxSize", type: "number | string", description: "패널이 줄거나 늘어날 수 있는 범위를 제한합니다." },
+      { component: "ResizableHandle", name: "withHandle", type: "boolean", defaultValue: "false", description: "separator 중앙에 시각적 grip을 표시합니다." },
+      { component: "ResizableHandle", name: "disabled", type: "boolean", defaultValue: "false", description: "separator를 표시하되 크기 조절을 비활성화합니다." },
+    ],
+    accessibility: [
+      "ResizableHandle은 separator 의미와 현재 크기 값을 라이브러리에서 노출하므로 별도 가짜 slider를 만들지 않습니다.",
+      "키보드 사용자는 separator에 포커스한 뒤 방향키로 패널 크기를 조절할 수 있어야 합니다.",
+      "handle의 시각적 grip은 aria-hidden으로 두고 조작 의미는 separator 자체가 담당합니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

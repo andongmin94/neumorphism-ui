@@ -1,6 +1,38 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+  carousel: {
+    summary: "A sequential content view navigated by touch, buttons, and arrow keys.",
+    description: "Uses Embla Carousel for scroll position and dragging while neumorphism is limited to the slide surfaces and controls. Previous and next buttons disable automatically at the ends.",
+    props: [
+      "Sets the scroll axis and matching arrow-key behavior.",
+      "Passes Embla options such as loop and align.",
+      "Provides the Embla API instance for external integrations.",
+      "Contains the real content of one slide.",
+      "Localizes the accessible name of the previous and next buttons.",
+    ],
+    accessibility: [
+      "Give Carousel an aria-label or aria-labelledby that identifies the region.",
+      "Slides use group semantics with a carousel slide description, while navigation buttons expose disabled state at the ends.",
+      "Horizontal carousels support Left and Right; vertical carousels support Up and Down.",
+    ],
+  },
+  resizable: {
+    summary: "Split panels whose proportions can be adjusted with pointer or keyboard.",
+    description: "Uses react-resizable-panels for size calculation and separator accessibility. Neumorphism styles only the panel boundary and handle instead of reimplementing panel state.",
+    props: [
+      "Sets the panel split direction.",
+      "Sets the initial panel size.",
+      "Constrains how far a panel may shrink or grow.",
+      "Shows a visual grip in the middle of the separator.",
+      "Keeps the separator visible while disabling resizing.",
+    ],
+    accessibility: [
+      "ResizableHandle relies on the library separator semantics and current size values; do not add a fake slider.",
+      "Keyboard users can focus the separator and change panel size with arrow keys.",
+      "The visual grip is aria-hidden while the separator itself owns the interaction meaning.",
+    ],
+  },
   "input-otp": {
     summary: "A verification-code input that combines one real input with multiple visual slots.",
     description: "Uses input-otp for focus, paste, and automatic advancement while styling only the visual slots with neumorphic surfaces. Multiple boxes are visible, but the accessibility tree and form value remain a single input.",

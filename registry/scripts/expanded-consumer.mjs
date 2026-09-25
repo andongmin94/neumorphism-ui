@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp"];
+export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable"];
 
 export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
@@ -118,6 +118,22 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   const otpInput = otpCard.getByRole("textbox", { name: "Verification code" });
   await otpInput.fill("654321");
   await expect(otpInput).toHaveValue("654321");
+
+  const carousel = card("carousel");
+  const carouselTrack = carousel.locator('[data-slot="carousel-content"] > div');
+  const transformBefore = await carouselTrack.evaluate((element) => getComputedStyle(element).transform);
+  const nextSlide = carousel.getByRole("button", { name: "Next slide" });
+  await expect(nextSlide).toBeEnabled();
+  await nextSlide.click();
+  await expect.poll(async () => carouselTrack.evaluate((element) => getComputedStyle(element).transform)).not.toBe(transformBefore);
+  await expect(carousel.getByRole("button", { name: "Previous slide" })).toBeEnabled();
+
+  const resizable = card("resizable");
+  const separator = resizable.getByRole("separator");
+  const sizeBefore = Number(await separator.getAttribute("aria-valuenow"));
+  await separator.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(async () => Number(await separator.getAttribute("aria-valuenow"))).not.toBe(sizeBefore);
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();

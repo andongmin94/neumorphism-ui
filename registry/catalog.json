@@ -1176,6 +1176,49 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "carousel",
+      "title": "Carousel",
+      "description": "A touch and keyboard navigable content carousel powered by Embla.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "embla-carousel-react@^8.6.0"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/button"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/carousel.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "resizable",
+      "title": "Resizable",
+      "description": "Accessible split panels with pointer and keyboard resizing.",
+      "type": "registry:ui",
+      "categories": [
+        "navigation-disclosure"
+      ],
+      "dependencies": [
+        "react-resizable-panels@^4.12.2"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/resizable.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

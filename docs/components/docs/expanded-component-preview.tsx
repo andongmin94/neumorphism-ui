@@ -20,8 +20,10 @@ import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, Command
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuLabel, ContextMenuItem, ContextMenuCheckboxItem, ContextMenuShortcut } from "@neumorphism-ui/registry/ui/context-menu";
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@neumorphism-ui/registry/ui/drawer";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@neumorphism-ui/registry/ui/input-otp";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@neumorphism-ui/registry/ui/carousel";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@neumorphism-ui/registry/ui/resizable";
 
-export const expandedSlugs = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp"] as const;
+export const expandedSlugs = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable"] as const;
 export type ExpandedSlug = (typeof expandedSlugs)[number];
 type PreviewLocale = "ko" | "en" | "ja" | "zh";
 const copy = {
@@ -32,6 +34,8 @@ const copy = {
 } as const;
 const cities = ["Busan", "London", "Seoul", "Tokyo"];
 const otpCopy = { ko: "인증 코드", en: "Verification code", ja: "認証コード", zh: "验证码" } as const;
+const carouselCopy = { ko: { label: "기능 둘러보기", previous: "이전 슬라이드", next: "다음 슬라이드", items: ["대시보드", "설정", "분석"] }, en: { label: "Feature tour", previous: "Previous slide", next: "Next slide", items: ["Dashboard", "Settings", "Analytics"] }, ja: { label: "機能ツアー", previous: "前のスライド", next: "次のスライド", items: ["ダッシュボード", "設定", "分析"] }, zh: { label: "功能导览", previous: "上一张", next: "下一张", items: ["仪表盘", "设置", "分析"] } } as const;
+const resizableCopy = { ko: ["목록", "세부 정보"], en: ["List", "Details"], ja: ["一覧", "詳細"], zh: ["列表", "详情"] } as const;
 
 export function ExpandedComponentPreview({ slug, locale = "en" }: { slug: ExpandedSlug; locale?: PreviewLocale }) {
   const text = copy[locale];
@@ -63,5 +67,7 @@ export function ExpandedComponentPreview({ slug, locale = "en" }: { slug: Expand
     case "context-menu": return <div className="grid w-full max-w-sm gap-3"><ContextMenu><ContextMenuTrigger className="grid min-h-32 place-items-center rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-5 text-center text-sm font-medium [box-shadow:var(--neu-shadow-inset)]">{text.tools}</ContextMenuTrigger><ContextMenuContent><ContextMenuLabel>{text.tools}</ContextMenuLabel><ContextMenuItem onClick={() => setMessage(text.undo)}>{text.undo}<ContextMenuShortcut>⌘Z</ContextMenuShortcut></ContextMenuItem><ContextMenuCheckboxItem checked={expanded} onCheckedChange={setExpanded}>{text.details}</ContextMenuCheckboxItem></ContextMenuContent></ContextMenu><p role="status" className="text-sm text-[var(--muted-foreground)]">{message || text.quiet}</p></div>;
     case "drawer": return <Drawer swipeDirection="down"><DrawerTrigger render={<Button />}>{text.settings}</DrawerTrigger><DrawerContent><DrawerHeader><DrawerTitle>{text.settings}</DrawerTitle><DrawerDescription>{text.hint}</DrawerDescription></DrawerHeader><div className="px-5 py-4 text-sm text-[var(--muted-foreground)]">{text.detailBody}</div><DrawerFooter><DrawerClose render={<Button variant="primary" />}>{text.close}</DrawerClose></DrawerFooter></DrawerContent></Drawer>;
     case "input-otp": return <div className="grid gap-3"><InputOTP maxLength={6} aria-label={otpCopy[locale]}><InputOTPGroup><InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} /></InputOTPGroup><InputOTPSeparator /><InputOTPGroup><InputOTPSlot index={3} /><InputOTPSlot index={4} /><InputOTPSlot index={5} /></InputOTPGroup></InputOTP></div>;
+    case "carousel": { const carousel = carouselCopy[locale]; return <Carousel aria-label={carousel.label} className="w-full max-w-sm px-12"><CarouselContent>{carousel.items.map((item) => <CarouselItem key={item}><div className="grid h-36 place-items-center rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 font-semibold [box-shadow:var(--neu-shadow-raised-sm)]">{item}</div></CarouselItem>)}</CarouselContent><CarouselPrevious label={carousel.previous} /><CarouselNext label={carousel.next} /></Carousel>; }
+    case "resizable": return <ResizablePanelGroup orientation="horizontal" className="h-40 w-full max-w-sm"><ResizablePanel defaultSize={40} minSize={25}><div className="grid h-full place-items-center p-4 text-sm font-semibold">{resizableCopy[locale][0]}</div></ResizablePanel><ResizableHandle withHandle /><ResizablePanel defaultSize={60} minSize={30}><div className="grid h-full place-items-center p-4 text-sm font-semibold">{resizableCopy[locale][1]}</div></ResizablePanel></ResizablePanelGroup>;
   }
 }

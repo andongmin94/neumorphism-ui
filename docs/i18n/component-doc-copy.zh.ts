@@ -1,6 +1,38 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  carousel: {
+    summary: "通过触控、按钮和方向键浏览的连续内容视图。",
+    description: "使用 Embla Carousel 处理滚动位置和拖动，新拟态仅负责幻灯片表面和控制按钮。到达首尾时，上一个和下一个按钮会自动禁用。",
+    props: [
+      "设置滚动轴和对应的方向键行为。",
+      "传递 loop、align 等 Embla 选项。",
+      "向外部集成提供 Embla API 实例。",
+      "放置单个幻灯片的真实内容。",
+      "本地化前后导航按钮的无障碍名称。",
+    ],
+    accessibility: [
+      "为 Carousel 提供 aria-label 或 aria-labelledby 说明区域用途。",
+      "每个幻灯片使用 group 与 carousel slide 语义，并在边界处让导航按钮暴露 disabled 状态。",
+      "横向轮播支持左右键，纵向轮播支持上下键。",
+    ],
+  },
+  resizable: {
+    summary: "可通过指针或键盘调整比例的分割面板。",
+    description: "使用 react-resizable-panels 处理尺寸计算和 separator 无障碍语义。新拟态只负责面板边界和 handle 表面，不重新实现面板状态。",
+    props: [
+      "设置面板分割方向。",
+      "设置初始面板尺寸。",
+      "限制面板缩小或扩大的范围。",
+      "在 separator 中间显示视觉 grip。",
+      "保留 separator 但禁用尺寸调整。",
+    ],
+    accessibility: [
+      "ResizableHandle 使用库提供的 separator 语义和当前尺寸值，不额外制作伪 slider。",
+      "键盘用户可以聚焦 separator 并使用方向键调整面板尺寸。",
+      "视觉 grip 使用 aria-hidden，交互含义由 separator 本身承担。",
+    ],
+  },
   "input-otp": {
     summary: "将一个真实输入与多个视觉槽位组合的验证码输入。",
     description: "使用 input-otp 处理焦点、粘贴和自动前进，仅用新拟态样式呈现视觉槽位。虽然界面显示多个方格，但无障碍树和表单值仍是一个输入。",
