@@ -27,7 +27,7 @@ for (const entry of pages) {
       if (entry.sidebar) {
         await expect(page.locator(".docs-site-sidebar")).toBeVisible();
       } else {
-        await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
+        if (entry.sidebar) await expect(page.locator(".docs-site-sidebar")).toBeHidden(); else await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
       }
     } else {
       await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
