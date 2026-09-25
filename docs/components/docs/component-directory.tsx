@@ -132,7 +132,7 @@ export function ComponentDirectory() {
               {visibleItems.map((component) => (
                 <Link
                   className="component-directory-card"
-                  href={localeHref(locale, \`/components/\${component.slug}\`)}
+                  href={localeHref(locale, `/components/${component.slug}`)}
                   key={component.slug}
                 >
                   <div className="component-directory-card-top">
