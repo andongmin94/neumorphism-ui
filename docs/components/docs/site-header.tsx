@@ -59,7 +59,7 @@ function MobileDocsNavigation() {
 
       <DialogContent
         aria-labelledby="mobile-docs-navigation-title"
-        className="mobile-nav-panel"
+        className="mobile-nav-panel translate-x-0 translate-y-0"
         id="mobile-docs-navigation"
         overlayClassName="mobile-nav-backdrop"
         showCloseButton={false}
