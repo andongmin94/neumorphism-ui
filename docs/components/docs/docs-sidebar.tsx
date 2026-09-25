@@ -189,7 +189,7 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
         <div className="component-nav-list">
           {filteredComponents.map((item) => (
             <NavLink
-              href={localeHref(locale, \`/components/\${item.slug}\`)}
+              href={localeHref(locale, `/components/${item.slug}`)}
               key={item.slug}
               onNavigate={onNavigate}
               pathname={pathname}
