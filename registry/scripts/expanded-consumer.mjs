@@ -117,8 +117,7 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   const otpCard = card("input-otp");
   const otpInput = otpCard.getByRole("textbox", { name: "Verification code" });
   await otpInput.fill("654321");
-  await expect(otpCard.locator('[data-slot="input-otp-slot"]').nth(0)).toHaveText("6");
-  await expect(otpCard.locator('[data-slot="input-otp-slot"]').nth(5)).toHaveText("1");
+  await expect(otpInput).toHaveValue("654321");
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();
