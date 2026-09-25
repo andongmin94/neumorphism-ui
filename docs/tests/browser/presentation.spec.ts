@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 
 const pages = [
   { name: "home", path: "/en", heading: "Neumorphism as an interface system, not a visual effect.", sidebar: false },
+  { name: "docs", path: "/en/docs", heading: "Documentation", sidebar: true },
   { name: "components", path: "/en/components", heading: "Install only the interface parts you need.", sidebar: false },
   { name: "templates", path: "/en/templates", heading: "Templates", sidebar: false },
   { name: "charts", path: "/en/charts", heading: "Charts that do not hide the data.", sidebar: false },
@@ -24,6 +25,8 @@ for (const entry of pages) {
 
     if (info.project.name === "desktop-light") {
       await expect(page.locator(".site-header .primary-nav")).toBeVisible();
+      await expect(page.locator(".site-brand")).toBeVisible();
+      await expect(page.locator(".site-actions")).toBeVisible();
       if (entry.sidebar) {
         await expect(page.locator(".docs-site-sidebar")).toBeVisible();
       } else {
@@ -77,6 +80,7 @@ test("presentation: tablet shell and drawer", async ({ page }, info) => {
   const tabletPages = [
     { name: "home", path: "/en", sidebar: false },
     { name: "components", path: "/en/components", sidebar: false },
+    { name: "docs", path: "/en/docs", sidebar: true },
     { name: "templates", path: "/en/templates", sidebar: false },
     { name: "button-detail", path: "/en/components/button", sidebar: true },
     { name: "verification", path: "/en/docs/verification", sidebar: true },
@@ -138,7 +142,7 @@ test("presentation: mobile-docs-navigation", async ({ page }, info) => {
   await page.getByRole("button", { name: "Open docs menu" }).click();
   const dialog = page.getByRole("dialog", { name: "Mobile documentation navigation" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByText("Start", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("Getting started", { exact: true })).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Components", exact: true })).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Button", exact: true })).toBeVisible();
   const box = await dialog.boundingBox();
@@ -149,4 +153,15 @@ test("presentation: mobile-docs-navigation", async ({ page }, info) => {
     path: info.outputPath("presentation-mobile-docs-navigation.png"),
     fullPage: false,
   });
+});
+
+
+test("presentation: home mirrors the sibling directory skeleton", async ({ page }) => {
+  await page.goto("/en");
+  await expect(page.locator(".directory-hero")).toBeVisible();
+  await expect(page.locator(".home-showcase")).toBeVisible();
+  await expect(page.locator(".component-directory")).toBeVisible();
+  await expect(page.locator(".component-directory-categories")).toBeVisible();
+  await expect(page.locator(".component-directory-grid")).toBeVisible();
+  expect(await page.locator(".component-directory-card").count()).toBeGreaterThan(40);
 });
