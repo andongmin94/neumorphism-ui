@@ -5,6 +5,9 @@ import { fileURLToPath } from "node:url";
 const registryRoot = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
 const workspaceRoot = path.dirname(registryRoot);
 const sourceDir = path.join(registryRoot, "public", "r");
+const sourceRoot = path.join(registryRoot, "src");
+const docsSourceRoot = path.join(workspaceRoot, "docs", "src");
+const docsRegistrySource = path.join(docsSourceRoot, "registry");
 const docsPublicRoot = path.join(workspaceRoot, "docs", "public");
 const targetDir = path.join(docsPublicRoot, "r");
 
@@ -37,3 +40,9 @@ fs.rmSync(targetDir, { force: true, recursive: true });
 fs.cpSync(sourceDir, targetDir, { recursive: true });
 
 console.log(`Synced Registry JSON to ${targetDir}`);
+
+assertManagedPath(registryRoot, sourceRoot, "Registry source root");
+assertManagedPath(docsSourceRoot, docsRegistrySource, "Docs registry source");
+fs.rmSync(docsRegistrySource, { force: true, recursive: true });
+fs.cpSync(sourceRoot, docsRegistrySource, { recursive: true });
+console.log(`Synced registry source to ${docsRegistrySource}`);

@@ -22,20 +22,38 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "paths": {
+      "@neumorphism-ui/registry/ui/*": [
+        "./src/registry/components/ui/*"
+      ],
+      "@neumorphism-ui/registry/blocks/*": [
+        "./src/registry/components/blocks/*"
+      ],
+      "@neumorphism-ui/registry/theme": [
+        "./src/registry/theme.ts"
+      ],
+      "@neumorphism-ui/registry/analytics-model": [
+        "./src/registry/lib/analytics-model.ts"
+      ],
+      "@neumorphism-ui/registry/analytics-copy": [
+        "./src/registry/lib/analytics-copy.ts"
+      ],
+      "@neumorphism-ui/registry/utils": [
+        "./src/registry/lib/utils.ts"
+      ],
       "@/lib/utils": [
-        "./node_modules/@neumorphism-ui/registry/src/lib/utils.ts"
+        "./src/registry/lib/utils.ts"
       ],
       "@/components/ui/*": [
-        "./node_modules/@neumorphism-ui/registry/src/components/ui/*"
+        "./src/registry/components/ui/*"
       ],
       "@/components/blocks/*": [
-        "./node_modules/@neumorphism-ui/registry/src/components/blocks/*"
+        "./src/registry/components/blocks/*"
       ],
       "@/lib/analytics-model": [
-        "./node_modules/@neumorphism-ui/registry/src/lib/analytics-model.ts"
+        "./src/registry/lib/analytics-model.ts"
       ],
       "@/lib/analytics-copy": [
-        "./node_modules/@neumorphism-ui/registry/src/lib/analytics-copy.ts"
+        "./src/registry/lib/analytics-copy.ts"
       ],
       "@/*": [
         "./*"
@@ -46,7 +64,6 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
-    "preserveSymlinks": true
+    "strict": true
   }
 }

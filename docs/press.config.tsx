@@ -8,13 +8,18 @@ import { SiteFooter } from "@/components/docs/site-footer";
 import { SiteHeader } from "@/components/docs/site-header";
 import { getThemeBootstrapScript } from "@/components/docs/theme-config";
 import { ThemePreference } from "@/components/docs/theme-preference";
-import { defaultLocale, isLocale, locales } from "@/i18n/config";
+import { defaultLocale, isLocale, locales, type Locale } from "@/i18n/config";
 import { LocaleProvider } from "@/i18n/locale-provider";
 import { getLocalizedComponentDocGroups } from "@/i18n/localized-component-docs";
 import { getMessages } from "@/i18n/messages";
 
 const i18n = defineI18n({ languages: [...locales], defaultLanguage: defaultLocale });
 const translations = i18n.translations().extend(fumapressTranslations());
+function resolveLocale(lang: string | undefined): Locale {
+  if (lang && isLocale(lang)) return lang;
+  return defaultLocale;
+}
+
 const PressRoot = createRootLayout({
   providerProps: { search: { enabled: false }, theme: { enabled: false } },
 });
@@ -45,7 +50,7 @@ const config = defineConfig({
     },
   },
   renderRoot: ({ children, lang }) => {
-    const locale = isLocale(lang ?? "") ? lang : defaultLocale;
+    const locale = resolveLocale(lang);
     const messages = getMessages(locale);
     const componentDocGroups = getLocalizedComponentDocGroups(locale).map(({ category, items }) => ({
       category: { id: category.id, label: category.label, description: category.description },
@@ -71,7 +76,7 @@ const config = defineConfig({
     );
   },
   renderNotFound: ({ lang }) => {
-    const locale = isLocale(lang ?? "") ? lang : defaultLocale;
+    const locale = resolveLocale(lang);
     return <main className="docs-content docs-article"><h1>404</h1><p>{getMessages(locale).site.description}</p></main>;
   },
 });

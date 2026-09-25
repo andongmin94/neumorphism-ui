@@ -12,14 +12,14 @@
     "start": "fumapress start",
     "predev": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
     "prebuild": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
-    "lint": "oxlint --no-error-on-unmatched-pattern src components i18n tests press.config.tsx vite.config.ts",
+    "lint": "oxlint --no-error-on-unmatched-pattern --ignore-pattern src/registry src components i18n tests press.config.tsx vite.config.ts",
     "typecheck": "tsc --noEmit",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "pretypecheck": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
     "@daypicker/react": "^10.0.1",
-    "@neumorphism-ui/registry": "file:../registry",
     "@tanstack/react-table": "^8.21.3",
     "fumadocs-core": "16.15.7",
     "fumapress": "1.3.1",
