@@ -7227,15 +7227,67 @@ body {
   align-content: start;
 }
 
+.template-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.template-card-heading > div > span,
+.template-card-arrow {
+  color: var(--foreground-soft);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
 .template-card-heading h2,
 .template-card-featured .template-card-heading h2 {
   margin: 6px 0 0;
   font-size: 1.25rem;
 }
 
+.template-card-body > p {
+  margin: 0;
+  color: var(--docs-text-soft);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.template-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .template-tags span {
+  padding: 4px 8px;
+  border: 1px solid var(--docs-line-soft);
   border-radius: 999px;
   background: var(--neu-surface-low);
+  color: var(--foreground-soft);
+  font-size: 0.68rem;
+}
+
+.template-card-link {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 40px;
+  align-items: center;
+  margin-top: 2px;
+  padding: 0 12px;
+  border: 1px solid var(--docs-line-strong);
+  border-radius: var(--neu-radius-control);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-raised-sm);
+  color: var(--foreground);
+  font-size: 0.76rem;
+  font-weight: 680;
+  text-decoration: none;
+}
+
+.template-card-link:hover {
+  box-shadow: var(--neu-shadow-inset-sm);
 }
 
 .charts-product-section,
