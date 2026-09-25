@@ -7,10 +7,10 @@ import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
 
 const referenceNavigation = {
-  ko: { designTokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", credits: "Credits & dependencies", reference: "레퍼런스" },
-  en: { designTokens: "Design tokens", registry: "Registry architecture", resources: "Resources", credits: "Credits & dependencies", reference: "Reference" },
-  ja: { designTokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", credits: "Credits & dependencies", reference: "リファレンス" },
-  zh: { designTokens: "设计令牌", registry: "Registry 架构", resources: "资源", credits: "Credits & dependencies", reference: "参考" },
+  ko: { designTokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", accessibility: "접근성", verification: "검증과 릴리스", credits: "Credits & dependencies", reference: "레퍼런스" },
+  en: { designTokens: "Design tokens", registry: "Registry architecture", resources: "Resources", accessibility: "Accessibility", verification: "Verification & release", credits: "Credits & dependencies", reference: "Reference" },
+  ja: { designTokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", accessibility: "アクセシビリティ", verification: "検証とリリース", credits: "Credits & dependencies", reference: "リファレンス" },
+  zh: { designTokens: "设计令牌", registry: "Registry 架构", resources: "资源", accessibility: "无障碍", verification: "验证与发布", credits: "Credits & dependencies", reference: "参考" },
 } as const;
 
 type DocsNavProps = {
@@ -102,6 +102,20 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
           pathname={pathname}
         >
           {referenceNavigation[locale].resources}
+        </NavLink>
+        <NavLink
+          href={localeHref(locale, "/docs/accessibility")}
+          onNavigate={onNavigate}
+          pathname={pathname}
+        >
+          {referenceNavigation[locale].accessibility}
+        </NavLink>
+        <NavLink
+          href={localeHref(locale, "/docs/verification")}
+          onNavigate={onNavigate}
+          pathname={pathname}
+        >
+          {referenceNavigation[locale].verification}
         </NavLink>
         <NavLink
           href={localeHref(locale, "/docs/credits")}

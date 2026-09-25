@@ -22,25 +22,25 @@ const referenceSearchCopy = {
     tokens: ["디자인 토큰", "semantic · surface · depth"],
     registry: ["Registry 구조", "source ownership · generated endpoint"],
     resources: ["리소스", "components · templates · charts · verification"],
-    credits: ["Credits & dependencies", "외부 패키지와 소유 경계"],
+    accessibility: ["접근성", "keyboard · focus · semantics · reduced motion"], verification: ["검증과 릴리스", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "외부 패키지와 소유 경계"],
   },
   en: {
     tokens: ["Design tokens", "semantic · surface · depth"],
     registry: ["Registry architecture", "source ownership · generated endpoints"],
     resources: ["Resources", "components · templates · charts · verification"],
-    credits: ["Credits & dependencies", "external packages and ownership boundaries"],
+    accessibility: ["Accessibility", "keyboard · focus · semantics · reduced motion"], verification: ["Verification & release", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "external packages and ownership boundaries"],
   },
   ja: {
     tokens: ["デザイントークン", "semantic · surface · depth"],
     registry: ["Registry 構造", "source ownership · generated endpoint"],
     resources: ["リソース", "components · templates · charts · verification"],
-    credits: ["Credits & dependencies", "外部パッケージと所有境界"],
+    accessibility: ["アクセシビリティ", "keyboard · focus · semantics · reduced motion"], verification: ["検証とリリース", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "外部パッケージと所有境界"],
   },
   zh: {
     tokens: ["设计令牌", "semantic · surface · depth"],
     registry: ["Registry 架构", "source ownership · generated endpoint"],
     resources: ["资源", "components · templates · charts · verification"],
-    credits: ["Credits & dependencies", "外部包与所有权边界"],
+    accessibility: ["无障碍", "keyboard · focus · semantics · reduced motion"], verification: ["验证与发布", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "外部包与所有权边界"],
   },
 } as const;
 
@@ -88,6 +88,20 @@ export function DocsSearch() {
         key: "resources",
         title: referenceSearchCopy[locale].resources[0],
         summary: referenceSearchCopy[locale].resources[1],
+        category: messages.search.gettingStarted,
+      },
+      {
+        href: localeHref(locale, "/docs/accessibility"),
+        key: "accessibility",
+        title: referenceSearchCopy[locale].accessibility[0],
+        summary: referenceSearchCopy[locale].accessibility[1],
+        category: messages.search.gettingStarted,
+      },
+      {
+        href: localeHref(locale, "/docs/verification"),
+        key: "verification",
+        title: referenceSearchCopy[locale].verification[0],
+        summary: referenceSearchCopy[locale].verification[1],
         category: messages.search.gettingStarted,
       },
       {

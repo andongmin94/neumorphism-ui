@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const pages = ["design-tokens", "registry", "resources", "credits"] as const;
+const pages = ["design-tokens", "registry", "resources", "accessibility", "verification", "credits"] as const;
 
 for (const locale of ["ko", "en", "ja", "zh"]) {
   for (const pageName of pages) {
@@ -27,4 +27,11 @@ test("registry architecture documents generated ownership", async ({ page }) => 
   await expect(page.getByText("registry/src/components/ui", { exact: true })).toBeVisible();
   await expect(page.getByText("docs/src/registry", { exact: true })).toBeVisible();
   await expect(page.getByText("@neumorphism-ui", { exact: true })).toBeVisible();
+});
+
+
+test("verification page names the independent installation gate", async ({ page }) => {
+  await page.goto("/en/docs/verification");
+  await expect(page.getByText("The independent matrix derives every file-bearing item from the built catalog.", { exact: true })).toBeVisible();
+  await expect(page.getByText("License and attribution are a separate legal release gate; they are not inferred from repository ownership.", { exact: true })).toBeVisible();
 });
