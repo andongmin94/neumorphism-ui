@@ -13,10 +13,10 @@ type TemplateCard = {
 };
 
 const pageCopy = {
-  ko: { kicker: "INSTALLABLE SCREENS", note: "source로 설치하고 애플리케이션 데이터와 연결하는 완성 화면 패턴입니다." },
-  en: { kicker: "INSTALLABLE SCREENS", note: "Complete screen patterns you install as source and connect to application data." },
-  ja: { kicker: "INSTALLABLE SCREENS", note: "source として導入し、アプリケーションデータへ接続する完成画面パターンです。" },
-  zh: { kicker: "INSTALLABLE SCREENS", note: "作为源码安装并连接应用数据的完整界面模式。" },
+  ko: { kicker: "INSTALLABLE SCREENS" },
+  en: { kicker: "INSTALLABLE SCREENS" },
+  ja: { kicker: "INSTALLABLE SCREENS" },
+  zh: { kicker: "INSTALLABLE SCREENS" },
 } as const;
 
 export default function TemplatesPage({ lang }: { lang: string }) {
@@ -42,20 +42,15 @@ export default function TemplatesPage({ lang }: { lang: string }) {
         <span>{page.kicker}</span>
         <h1>{t.title}</h1>
         <p>{t.intro}</p>
-        <small>{page.note}</small>
       </header>
 
       <div className="template-gallery">
         {items.map((item, index) => (
           <article
-            className={`template-card ${index === 0 ? "template-card-featured" : ""}`}
+            className="template-card"
             key={item.slug}
           >
             <div className="template-card-preview" aria-hidden="true" inert>
-              <div className="template-preview-toolbar">
-                <span><i /><i /><i /></span>
-                <code>{item.slug}</code>
-              </div>
               <div className="template-preview-stage">
                 <div className="template-preview-scale">
                   <TemplatePreview slug={item.slug} locale={locale} />
