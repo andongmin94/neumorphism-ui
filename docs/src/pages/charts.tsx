@@ -1,4 +1,3 @@
-import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
 import { ChartWorkbench } from "@/components/docs/chart-workbench";
@@ -6,7 +5,7 @@ import { CopyableCode } from "@/components/docs/copyable-code";
 import { InstallCommand } from "@/components/docs/install-command";
 import { OperationalChartGallery } from "@/components/docs/operational-chart-gallery";
 import { templateCopy } from "@/components/docs/template-copy";
-import { isLocale, localeHref } from "@/i18n/config";
+import { isLocale } from "@/i18n/config";
 import buildDuration from "@/public/r/chart-build-duration.json";
 import channels from "@/public/r/chart-channel.json";
 import conversion from "@/public/r/chart-conversion.json";
@@ -218,15 +217,6 @@ export function Example() {
         <h1>{page.title}</h1>
         <p>{page.body}</p>
 
-        <div className="charts-gallery-stats">
-          <div><strong>8</strong><span>{page.recipes}</span></div>
-          <div><strong>2</strong><span>{page.families}</span></div>
-          <div><strong>100%</strong><span>{page.table}</span></div>
-        </div>
-
-        <Link className="docs-secondary-action" href={localeHref(locale, "/templates/dashboard")}>
-          {page.dashboard} ↗
-        </Link>
       </header>
 
       <section className="charts-product-section">
