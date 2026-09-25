@@ -238,9 +238,9 @@ export default function TemplatePage({
           {source.files.map((file) => (
             <details key={file.path} className="docs-disclosure">
               <summary>
-                <code>{file.target}</code>
+                <code>{file.target ?? file.path}</code>
               </summary>
-              <CopyableCode code={file.content} label={file.target} multiline />
+              <CopyableCode code={file.content} label={file.target ?? file.path} multiline />
             </details>
           ))}
         </section>

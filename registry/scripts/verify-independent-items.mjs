@@ -189,6 +189,11 @@ function fixture(directory, target, registryOrigin) {
     );
     write(
       directory,
+      "src/vite-env.d.ts",
+      '/// <reference types="vite/client" />\n',
+    );
+    write(
+      directory,
       "vite.config.ts",
       'import { defineConfig } from "vite"; import react from "@vitejs/plugin-react"; import { fileURLToPath, URL } from "node:url"; export default defineConfig({ plugins: [react()], resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } } });\n',
     );
@@ -225,7 +230,7 @@ const records = [];
 const queue = [...selected];
 async function worker(registryOrigin) {
   for (let item; (item = queue.shift()); ) {
-    const targets = item.categories?.includes("template") ? ["next"] : ["next", "vite"];
+    const targets = item.name.startsWith("template-") || item.categories?.includes("template") ? ["next"] : ["next", "vite"];
     for (const target of targets) {
       const record = await verifyItem(item, target, registryOrigin);
       records.push(record);
