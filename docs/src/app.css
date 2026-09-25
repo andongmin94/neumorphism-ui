@@ -8468,3 +8468,43 @@ body {
     white-space: nowrap;
   }
 }
+
+
+/* Route-aware documentation shell v5 */
+
+.docs-site-layout-product {
+  display: block;
+  max-width: none;
+  min-height: calc(100vh - var(--docs-header-height));
+}
+
+.docs-site-layout-product .docs-site-main {
+  width: 100%;
+  border-right: 0;
+}
+
+.docs-site-layout-product .site-footer {
+  max-width: none;
+}
+
+.docs-site-layout-sidebar {
+  grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
+  max-width: var(--docs-frame-max);
+}
+
+.docs-site-layout-product .docs-home-shell,
+.docs-site-layout-product .components-landing-page,
+.docs-site-layout-product .template-gallery-page,
+.docs-site-layout-product .charts-page,
+.docs-site-layout-product .theme-studio-page {
+  margin-inline: auto;
+}
+
+@media (min-width: 1440px) {
+  .docs-site-layout-product .docs-home-shell,
+  .docs-site-layout-product .components-landing-page,
+  .docs-site-layout-product .template-gallery-page,
+  .docs-site-layout-product .theme-studio-page {
+    padding-inline: clamp(3rem, 6vw, 6.5rem);
+  }
+}

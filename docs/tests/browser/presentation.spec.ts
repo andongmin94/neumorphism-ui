@@ -1,11 +1,13 @@
 import { test, expect } from "@playwright/test";
 
 const pages = [
-  { name: "home", path: "/en", heading: "Neumorphism as an interface system, not a visual effect." },
-  { name: "components", path: "/en/components", heading: "Install only the interface parts you need." },
-  { name: "templates", path: "/en/templates", heading: "Templates" },
-  { name: "charts", path: "/en/charts", heading: "Charts that do not hide the data." },
-  { name: "theme-studio", path: "/en/customize", heading: "Tune tokens in a real interface, not in a spreadsheet." },
+  { name: "home", path: "/en", heading: "Neumorphism as an interface system, not a visual effect.", sidebar: false },
+  { name: "components", path: "/en/components", heading: "Install only the interface parts you need.", sidebar: false },
+  { name: "templates", path: "/en/templates", heading: "Templates", sidebar: false },
+  { name: "charts", path: "/en/charts", heading: "Charts that do not hide the data.", sidebar: false },
+  { name: "theme-studio", path: "/en/customize", heading: "Tune tokens in a real interface, not in a spreadsheet.", sidebar: false },
+  { name: "button-detail", path: "/en/components/button", heading: "Button", sidebar: true },
+  { name: "verification", path: "/en/docs/verification", heading: "Verification & release", sidebar: true },
 ] as const;
 
 for (const entry of pages) {
@@ -22,10 +24,14 @@ for (const entry of pages) {
 
     if (info.project.name === "desktop-light") {
       await expect(page.locator(".site-header .primary-nav")).toBeVisible();
-      await expect(page.locator(".docs-site-sidebar")).toBeVisible();
+      if (entry.sidebar) {
+        await expect(page.locator(".docs-site-sidebar")).toBeVisible();
+      } else {
+        await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
+      }
     } else {
       await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
-      await expect(page.locator(".docs-site-sidebar")).toBeHidden();
+      await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
     }
 
     await page.screenshot({

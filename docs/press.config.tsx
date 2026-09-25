@@ -3,9 +3,7 @@ import { fumapressTranslations } from "fumapress/i18n";
 import { createRootLayout } from "fumapress/layouts/root";
 import { defineI18n } from "fumadocs-core/i18n";
 
-import { DocsSidebar } from "@/components/docs/docs-sidebar";
-import { SiteFooter } from "@/components/docs/site-footer";
-import { SiteHeader } from "@/components/docs/site-header";
+import { SiteShell } from "@/components/docs/site-shell";
 import { getThemeBootstrapScript } from "@/components/docs/theme-config";
 import { ThemePreference } from "@/components/docs/theme-preference";
 import { defaultLocale, isLocale, locales, type Locale } from "@/i18n/config";
@@ -63,14 +61,7 @@ const config = defineConfig({
         <LocaleProvider componentDocGroups={componentDocGroups} locale={locale} messages={messages}>
           <ThemePreference />
           <a className="skip-link" href="#main-content">{messages.site.skipToContent}</a>
-          <SiteHeader />
-          <div className="docs-site-layout">
-            <DocsSidebar />
-            <div className="docs-site-main">
-              <main id="main-content">{children}</main>
-              <SiteFooter />
-            </div>
-          </div>
+          <SiteShell>{children}</SiteShell>
         </LocaleProvider>
       </PressRoot>
     );
