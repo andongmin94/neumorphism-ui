@@ -25,7 +25,8 @@
     "prevalidate": "npm run generate",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "consumer:verify": "node scripts/verify-consumer.mjs",
-    "check:generated": "node --experimental-strip-types scripts/check-generated.mjs"
+    "check:generated": "node --experimental-strip-types scripts/check-generated.mjs",
+    "independent:verify": "node scripts/verify-independent-items.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
