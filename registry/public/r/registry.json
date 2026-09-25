@@ -1967,6 +1967,26 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "template-link-hub",
+      "title": "Link hub workspace",
+      "description": "A creator or team profile with grouped destinations, filtering, external-link semantics and contact copy recovery.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/button",
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/link-hub.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/link-hub.tsx"
+        }
+      ]
     }
   ]
 }
