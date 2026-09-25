@@ -117,7 +117,7 @@ export function Blog({
 }: BlogProps) {
   const t = copy[locale];
   const [query, setQuery] = React.useState("");
-  const [topic, setTopic] = React.useState(t.all);
+  const [topic, setTopic] = React.useState<string>(t.all);
   const [sort, setSort] = React.useState<"newest" | "oldest" | "shortest">("newest");
   const searchRef = React.useRef<HTMLInputElement>(null);
 
