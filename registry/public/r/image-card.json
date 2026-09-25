@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "image-card",
+  "title": "Image Card",
+  "description": "A semantic image and caption surface with source-owned presentation.",
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/image-card.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\ninterface ImageCardProps extends React.ComponentProps<\"figure\"> {\n  src: string;\n  alt: string;\n  caption?: React.ReactNode;\n  imageClassName?: string;\n}\n\nfunction ImageCard({\n  src,\n  alt,\n  caption,\n  imageClassName,\n  className,\n  ...props\n}: ImageCardProps) {\n  return (\n    <figure\n      data-slot=\"image-card\"\n      className={cn(\n        \"w-full max-w-sm overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised)]\",\n        className,\n      )}\n      {...props}\n    >\n      <img\n        data-slot=\"image-card-image\"\n        src={src}\n        alt={alt}\n        className={cn(\"aspect-[4/3] w-full object-cover\", imageClassName)}\n      />\n      {caption !== undefined ? (\n        <figcaption\n          data-slot=\"image-card-caption\"\n          className=\"border-t border-[var(--border)] bg-[var(--neu-surface-soft)] px-4 py-3 text-sm leading-relaxed\"\n        >\n          {caption}\n        </figcaption>\n      ) : null}\n    </figure>\n  );\n}\n\nexport { ImageCard };\nexport type { ImageCardProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "data-feedback"
+  ],
+  "type": "registry:ui"
+}

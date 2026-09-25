@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "marquee",
+  "title": "Marquee",
+  "description": "A pausable repeating information strip with reduced-motion support.",
+  "registryDependencies": [
+    "@neumorphism-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/marquee.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\ninterface MarqueeProps extends Omit<React.ComponentProps<\"div\">, \"children\"> {\n  items: readonly React.ReactNode[];\n  duration?: number;\n  defaultPaused?: boolean;\n  label?: string;\n  pauseLabel?: string;\n  resumeLabel?: string;\n}\n\nfunction Marquee({\n  items,\n  duration = 24,\n  defaultPaused = false,\n  label = \"Scrolling content\",\n  pauseLabel = \"Pause animation\",\n  resumeLabel = \"Resume animation\",\n  className,\n  ...props\n}: MarqueeProps) {\n  const [paused, setPaused] = React.useState(defaultPaused);\n  const itemNodes = items.map((item, index) => (\n    <span\n      data-slot=\"marquee-item\"\n      className=\"shrink-0 whitespace-nowrap rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-4 py-2 text-sm font-semibold [box-shadow:var(--neu-shadow-raised-sm)]\"\n      key={index}\n    >\n      {item}\n    </span>\n  ));\n\n  return (\n    <div\n      data-slot=\"marquee\"\n      aria-label={label}\n      className={cn(\n        \"relative w-full min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] p-3 pr-24 [box-shadow:var(--neu-shadow-inset)]\",\n        className,\n      )}\n      {...props}\n    >\n      <style>{`\n        @keyframes neumorphism-marquee-scroll {\n          from { transform: translate3d(0, 0, 0); }\n          to { transform: translate3d(-50%, 0, 0); }\n        }\n        @media (prefers-reduced-motion: reduce) {\n          [data-slot=\"marquee-track\"] { animation: none !important; transform: none !important; }\n          [data-slot=\"marquee-copy\"] { display: none !important; }\n        }\n      `}</style>\n      <button\n        type=\"button\"\n        data-slot=\"marquee-toggle\"\n        aria-pressed={paused}\n        aria-label={paused ? resumeLabel : pauseLabel}\n        onClick={() => setPaused((value) => !value)}\n        className=\"absolute right-2 top-2 z-10 h-8 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-3 text-xs font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]\"\n      >\n        {paused ? \"▶\" : \"Ⅱ\"}\n      </button>\n      <div\n        data-slot=\"marquee-track\"\n        className=\"flex w-max min-w-full items-center gap-3 will-change-transform\"\n        style={{\n          animation: `neumorphism-marquee-scroll ${duration}s linear infinite`,\n          animationPlayState: paused ? \"paused\" : \"running\",\n        }}\n      >\n        <div className=\"flex shrink-0 items-center gap-3 pr-3\">{itemNodes}</div>\n        <div\n          data-slot=\"marquee-copy\"\n          aria-hidden=\"true\"\n          className=\"flex shrink-0 items-center gap-3 pr-3\"\n        >\n          {itemNodes}\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport { Marquee };\nexport type { MarqueeProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "categories": [
+    "data-feedback"
+  ],
+  "type": "registry:ui"
+}
