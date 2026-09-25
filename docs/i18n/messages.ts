@@ -41,7 +41,7 @@ const ko = {
     closeAction: "닫기",
     introSummary: "Registry 개요와 빠른 시작",
     installSummary: "Registry namespace, base와 컴포넌트 설치 방법",
-    componentsSummary: "40개 컴포넌트 목록과 예제",
+    componentsSummary: "56개 컴포넌트 목록과 예제",
     themeSummary: "팔레트, 깊이, 모서리 반경, 광원과 설치 가능한 스타일",
     gettingStarted: "시작하기",
     customization: "커스터마이징",
@@ -93,15 +93,15 @@ const ko = {
     structure: "구성",
     structureBody:
       "컴포넌트 API는 shadcn의 Base UI 방식을 따르고, 뉴모피즘에 필요한 시각 규칙은 CSS 변수로 분리되어 있습니다.",
-    componentsCard: "40개 컴포넌트의 미리보기, 설치 명령, API",
+    componentsCard: "56개 컴포넌트의 미리보기, 설치 명령, API",
     themesCard: "팔레트, 깊이, 모서리 반경과 광원 조정",
     registryCard: "공개 Registry item과 dependency 확인",
   },
   componentsPage: {
     title: "컴포넌트",
-    metaDescription: "Neumorphism UI의 설치 가능한 40개 컴포넌트와 상세 문서.",
+    metaDescription: "Neumorphism UI의 설치 가능한 56개 컴포넌트와 상세 문서.",
     intro:
-      "폼, 탐색, 피드백, 오버레이를 포함한 40개 컴포넌트입니다. 각 문서에서 실제 미리보기, 설치 명령, 사용 코드와 API를 확인할 수 있습니다.",
+      "폼, 탐색, 피드백, 오버레이를 포함한 56개 컴포넌트입니다. 각 문서에서 실제 미리보기, 설치 명령, 사용 코드와 API를 확인할 수 있습니다.",
     themes: "테마",
     themesBody:
       "컴포넌트 소스는 그대로 두고 팔레트, 깊이, 모서리 반경을 style Registry item으로 교체할 수 있습니다.",
@@ -313,7 +313,7 @@ const en: Messages = {
     closeAction: "Close",
     introSummary: "Registry overview and quick start",
     installSummary: "Set up the Registry namespace, base, and components",
-    componentsSummary: "Browse 40 components and examples",
+    componentsSummary: "Browse 56 components and examples",
     themeSummary: "Palette, depth, radius, light source, and installable styles",
     gettingStarted: "Getting started",
     customization: "Customization",
@@ -362,7 +362,7 @@ const en: Messages = {
     structure: "How it works",
     structureBody:
       "Component APIs follow shadcn’s Base UI conventions, while the visual rules for neumorphism live in CSS variables.",
-    componentsCard: "Preview, install, and inspect the API for 40 components",
+    componentsCard: "Preview, install, and inspect the API for 56 components",
     themesCard: "Adjust palette, depth, radius, and light source",
     registryCard: "Inspect public Registry items and dependencies",
   },
@@ -575,7 +575,7 @@ const zh: Messages = {
     closeAction: "关闭",
     introSummary: "Registry 概览和快速开始",
     installSummary: "配置 Registry namespace、base 和组件",
-    componentsSummary: "浏览 40 个组件和示例",
+    componentsSummary: "浏览 56 个组件和示例",
     themeSummary: "调色板、深度、圆角、光源和可安装样式",
     gettingStarted: "开始使用",
     customization: "自定义",
@@ -623,7 +623,7 @@ const zh: Messages = {
     structure: "工作方式",
     structureBody:
       "组件 API 遵循 shadcn 的 Base UI 方式，新拟态视觉规则则由 CSS 变量单独管理。",
-    componentsCard: "查看 40 个组件的预览、安装命令和 API",
+    componentsCard: "查看 56 个组件的预览、安装命令和 API",
     themesCard: "调整调色板、深度、圆角和光源",
     registryCard: "查看公开 Registry item 和依赖",
   },
@@ -631,7 +631,7 @@ const zh: Messages = {
     title: "组件",
     metaDescription: "Neumorphism UI 的 40 个可安装组件及详细文档。",
     intro:
-      "共 40 个组件，覆盖表单、导航、反馈和浮层。每篇文档都包含实时预览、安装命令、用法代码和 API。",
+      "共 56 个组件，覆盖表单、导航、反馈和浮层。每篇文档都包含实时预览、安装命令、用法代码和 API。",
     themes: "主题",
     themesBody:
       "无需改动组件源码，即可通过 style Registry item 替换调色板、深度和圆角。",
@@ -826,7 +826,7 @@ const ja: Messages = {
     closeAction: "閉じる",
     introSummary: "Registry の概要とクイックスタート",
     installSummary: "Registry namespace、base、コンポーネントの設定",
-    componentsSummary: "40 コンポーネントと例を表示",
+    componentsSummary: "56 コンポーネントと例を表示",
     themeSummary: "パレット、奥行き、角丸、光源、導入可能なスタイル",
     gettingStarted: "はじめに",
     customization: "カスタマイズ",
@@ -875,16 +875,16 @@ const ja: Messages = {
     structure: "仕組み",
     structureBody:
       "コンポーネント API は shadcn の Base UI 方式に従い、ニューモーフィズム固有の見た目は CSS 変数で分離しています。",
-    componentsCard: "40 コンポーネントのプレビュー、導入、API",
+    componentsCard: "56 コンポーネントのプレビュー、導入、API",
     themesCard: "パレット、奥行き、角丸、光源を調整",
     registryCard: "公開 Registry item と依存関係を確認",
   },
   componentsPage: {
     title: "コンポーネント",
     metaDescription:
-      "Neumorphism UI の導入可能な 40 コンポーネントと詳細ドキュメント。",
+      "Neumorphism UI の導入可能な 56 コンポーネントと詳細ドキュメント。",
     intro:
-      "フォーム、ナビゲーション、フィードバック、オーバーレイを含む 40 コンポーネントです。各ページでライブプレビュー、インストールコマンド、使用コード、API を確認できます。",
+      "フォーム、ナビゲーション、フィードバック、オーバーレイを含む 56 コンポーネントです。各ページでライブプレビュー、インストールコマンド、使用コード、API を確認できます。",
     themes: "テーマ",
     themesBody:
       "コンポーネントのソースはそのままに、style Registry item でパレット、奥行き、角丸を切り替えられます。",

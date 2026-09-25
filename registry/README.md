@@ -1,7 +1,7 @@
 # Neumorphism UI Registry
 
-The registry provides **56 installable UI components, fifteen blocks, five light/dark
-presets, one base and two shared libraries: 79 catalog items in total**.
+The registry provides **56 installable UI components, sixteen blocks, five light/dark
+presets, one base and two shared libraries: 80 catalog items in total**.
 
 ## Source ownership
 
@@ -44,6 +44,7 @@ npx shadcn@latest add @neumorphism-ui/template-data-manager
 npx shadcn@latest add @neumorphism-ui/template-link-hub
 npx shadcn@latest add @neumorphism-ui/template-portfolio
 npx shadcn@latest add @neumorphism-ui/template-blog
+npx shadcn@latest add @neumorphism-ui/template-blog-post
 npx shadcn@latest add @neumorphism-ui/template-cms
 npx shadcn@latest add @neumorphism-ui/chart-revenue
 npx shadcn@latest add @neumorphism-ui/chart-channel
