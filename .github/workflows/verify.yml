@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24
           cache: npm
@@ -26,6 +26,8 @@ jobs:
       - run: npm ci --prefix registry && npm ci --prefix docs
       - name: Registry build, examples, and source contracts
         run: |
+          npm audit --prefix registry --audit-level=high
+          npm audit --prefix docs --audit-level=high
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
@@ -51,9 +53,39 @@ jobs:
           test -z "$(git ls-files --others --exclude-standard)"
       - name: Save UI verification evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: ui-verification
           path: docs/test-results
           retention-days: 7
           if-no-files-found: ignore
+
+  verify-installations:
+    name: Independent installations (${{ matrix.shard }}/3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: registry/package-lock.json
+      - name: Build registry installation inputs
+        run: |
+          npm ci --prefix registry
+          npm run build --prefix registry
+      - name: Verify independent items
+        run: node registry/scripts/verify-independent-items.mjs --shard=${{ matrix.shard }}/3
+      - name: Save independent installation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: independent-items-${{ matrix.shard }}
+          retention-days: 7
+          if-no-files-found: error
+          path: docs/test-results/independent-items
