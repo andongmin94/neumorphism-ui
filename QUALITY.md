@@ -92,18 +92,14 @@ certification. Current tests do not cover every state of all 56 components acros
 all presets, browsers and assistive technologies. Filling Korean text is not a real
 IME-composition test, and Linux does not establish native Consolas rendering.
 
-Aggregate installation is not independent installation coverage for every advertised
-item. The published domain and deployed registry endpoints are also separate from
-the local generated endpoints used by CI.
+Aggregate installation remains a separate signal from the independent-item matrix. `verify-independent-items.mjs` derives every file-bearing catalog item, installs it into fresh projects, checks templates in Next.js and other items in both Next.js and Vite, and is sharded in CI. The published domain and deployed registry endpoints are still separate from the local generated endpoints used by CI.
 
 ## Remaining release work
 
 The installable registry production audit is clean in the analytics materialization
 run. The documentation runtime now uses Fumapress and Vite; the obsolete Vinext, Next.js routing, Cloudflare Vite plugin and Wrangler development chain are removed. Verify the static Fumapress output and deployed registry endpoints before release.
 
-Before shadcn directory submission, also verify the live domain/deployed commit,
-full README initialization path, individual-item installation coverage,
-license/attribution and directory metadata.
+Before shadcn directory submission, also verify the live domain/deployed commit and full README initialization path. Directory metadata and individual-item installation coverage are now source-controlled and automated. License/attribution remains a separate legal release gate and must not be invented from repository ownership.
 
 Next product work should focus on broad state/accessibility review and any remaining
 high-value components/templates revealed by real application composition. Review

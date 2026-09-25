@@ -8,8 +8,7 @@ light/dark presets**. The registry contains 79 items in total: 56 UI components,
 fifteen blocks, five presets, one base and two shared libraries. Documentation and
 live examples are available in Korean, English, Japanese and Chinese through Fumapress.
 
-This project is being prepared for the shadcn registry directory. It has not been
-submitted or approved. See [QUALITY.md](QUALITY.md) for verification scope and
+This project is being prepared for the shadcn registry directory. `registry/directory-entry.json` contains the current directory metadata, but the project has not been submitted or approved. See [QUALITY.md](QUALITY.md) for verification scope and
 remaining release work.
 
 ## First installation
@@ -137,6 +136,7 @@ npm run lint --prefix docs
 npm run typecheck --prefix docs
 npm run build --prefix docs
 npm run check:generated --prefix registry
+node registry/scripts/verify-independent-items.mjs --shard=1/1
 ```
 
 For browser verification:

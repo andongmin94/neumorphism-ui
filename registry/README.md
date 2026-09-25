@@ -1,12 +1,12 @@
 # Neumorphism UI Registry
 
-The registry provides **47 installable UI components, six blocks, five light/dark
-presets, one base and two shared libraries: 61 catalog items in total**.
+The registry provides **56 installable UI components, fifteen blocks, five light/dark
+presets, one base and two shared libraries: 79 catalog items in total**.
 
 ## Source ownership
 
 `src/components/ui` owns installable UI primitives. `src/components/blocks`
-owns settings/data workspaces, three analytical charts and the analytics dashboard.
+owns workspaces, templates, eight chart recipes and the analytics dashboard.
 `src/lib` owns shared utilities plus the analytics model/copy. `src/theme.ts`
 owns preset data and token calculation. `catalog.json` owns metadata and dependency
 declarations.
@@ -23,6 +23,7 @@ npm run build
 npm run sync:docs
 npm test
 npm run check:generated
+npm run independent:verify -- --shard=1/1
 ```
 
 With the docs package and browser engines installed, `npm run consumer:verify`
@@ -40,9 +41,18 @@ npx shadcn@latest add @neumorphism-ui/neumorphism-ui
 npx shadcn@latest add @neumorphism-ui/combobox
 npx shadcn@latest add @neumorphism-ui/template-settings
 npx shadcn@latest add @neumorphism-ui/template-data-manager
+npx shadcn@latest add @neumorphism-ui/template-link-hub
+npx shadcn@latest add @neumorphism-ui/template-portfolio
+npx shadcn@latest add @neumorphism-ui/template-blog
+npx shadcn@latest add @neumorphism-ui/template-cms
 npx shadcn@latest add @neumorphism-ui/chart-revenue
 npx shadcn@latest add @neumorphism-ui/chart-channel
 npx shadcn@latest add @neumorphism-ui/chart-conversion
+npx shadcn@latest add @neumorphism-ui/chart-build-duration
+npx shadcn@latest add @neumorphism-ui/chart-service-latency
+npx shadcn@latest add @neumorphism-ui/chart-release-activity
+npx shadcn@latest add @neumorphism-ui/chart-delivery-capacity
+npx shadcn@latest add @neumorphism-ui/chart-install-diagnostics
 npx shadcn@latest add @neumorphism-ui/template-analytics
 npx shadcn@latest add @neumorphism-ui/style-sage
 ```
