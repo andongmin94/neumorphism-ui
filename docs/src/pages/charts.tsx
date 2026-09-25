@@ -4,7 +4,6 @@ import { ChartWorkbench } from "@/components/docs/chart-workbench";
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { InstallCommand } from "@/components/docs/install-command";
 import { OperationalChartGallery } from "@/components/docs/operational-chart-gallery";
-import { templateCopy } from "@/components/docs/template-copy";
 import { isLocale } from "@/i18n/config";
 import buildDuration from "@/public/r/chart-build-duration.json";
 import channels from "@/public/r/chart-channel.json";
@@ -87,7 +86,6 @@ export default function ChartsPage({ lang }: { lang: string }) {
   if (!isLocale(lang)) notFound();
 
   const locale = lang;
-  const t = templateCopy[locale];
   const a = analyticsCopy[locale];
   const page = pageCopy[locale];
 
