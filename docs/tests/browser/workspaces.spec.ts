@@ -6,7 +6,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     await page.goto(`/${locale}/templates`); await expect(page.locator('h1')).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: info.outputPath('gallery.png'), fullPage: true });
-    for (const slug of ["settings", "data-manager"]) {
+    for (const slug of ["settings", "data-manager", "link-hub"]) {
       await page.goto(`/${locale}/templates/${slug}`);
       await expect(page.locator(`[data-template="${slug}"]`)).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
@@ -28,6 +28,15 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
+
+test('link hub documentation filters destinations', async ({ page }) => {
+  await page.goto('/en/templates/link-hub');
+  const preview = page.locator('[data-template="link-hub"]');
+  await expect(preview.getByRole('link')).toHaveCount(5);
+  await preview.getByRole('button', { name: 'Work', exact: true }).click();
+  await expect(preview.getByRole('link')).toHaveCount(2);
+  await expect(preview.getByRole('status').first()).toContainText('2 links');
+});
 
 test('settings documentation exercises failed save and retry', async ({ page }) => {
   await page.goto('/en/templates/settings'); const preview = page.locator('[data-template="settings"]');
