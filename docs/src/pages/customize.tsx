@@ -1,9 +1,7 @@
-import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
 import { ThemeStudio } from "@/components/docs/theme-studio";
-import { isLocale, localeHref } from "@/i18n/config";
-import { getMessages } from "@/i18n/messages";
+import { isLocale } from "@/i18n/config";
 
 const pageCopy = {
   ko: {
@@ -55,7 +53,6 @@ const pageCopy = {
 export default function CustomizePage({ lang }: { lang: string }) {
   if (!isLocale(lang)) notFound();
   const locale = lang;
-  const messages = getMessages(locale);
   const copy = pageCopy[locale];
 
   return (
@@ -64,20 +61,6 @@ export default function CustomizePage({ lang }: { lang: string }) {
         <span>{copy.kicker}</span>
         <h1>{copy.title}</h1>
         <p>{copy.body}</p>
-        <div className="docs-page-actions">
-          <Link className="docs-primary-action" href={localeHref(locale, "/docs/design-tokens")}>
-            {copy.tokens}
-          </Link>
-          <Link className="docs-secondary-action" href={localeHref(locale, "/docs/registry")}>
-            {copy.registry}
-          </Link>
-        </div>
-        <div className="theme-studio-stats" aria-label={messages.customizePage.title}>
-          <div><strong>5</strong><span>{copy.presets}</span></div>
-          <div><strong>3</strong><span>{copy.depth}</span></div>
-          <div><strong>4</strong><span>{copy.directions}</span></div>
-          <div><strong>3</strong><span>{copy.shapes}</span></div>
-        </div>
       </header>
 
       <ThemeStudio />
