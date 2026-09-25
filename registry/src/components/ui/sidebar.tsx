@@ -87,7 +87,7 @@ function SidebarProvider({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleSidebar]);
 
-  const state = open ? "expanded" : "collapsed";
+  const state: SidebarContextValue["state"] = open ? "expanded" : "collapsed";
   const contextValue = React.useMemo(
     () => ({
       state,
