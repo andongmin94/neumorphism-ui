@@ -19,10 +19,10 @@ import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
 
 const navigationCopy = {
-  ko: { docs: "문서", theme: "테마", charts: "차트", templates: "템플릿" },
-  en: { docs: "Docs", theme: "Theme", charts: "Charts", templates: "Templates" },
-  ja: { docs: "ドキュメント", theme: "テーマ", charts: "チャート", templates: "テンプレート" },
-  zh: { docs: "文档", theme: "主题", charts: "图表", templates: "模板" },
+  ko: { docs: "문서", theme: "스타일링", charts: "차트", templates: "템플릿" },
+  en: { docs: "Docs", theme: "Styling", charts: "Charts", templates: "Templates" },
+  ja: { docs: "ドキュメント", theme: "スタイリング", charts: "チャート", templates: "テンプレート" },
+  zh: { docs: "文档", theme: "样式", charts: "图表", templates: "模板" },
 } as const;
 
 function MobileDocsNavigation() {
