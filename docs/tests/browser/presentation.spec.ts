@@ -63,7 +63,13 @@ test("presentation: mobile-docs-navigation", async ({ page }, info) => {
   test.skip(info.project.name === "desktop-light", "mobile presentation only");
   await page.goto("/en/components/button");
   await page.getByRole("button", { name: "Open docs menu" }).click();
-  await expect(page.getByRole("dialog", { name: "Mobile documentation navigation" })).toBeVisible();
+  const dialog = page.getByRole("dialog", { name: "Mobile documentation navigation" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText("Start", { exact: true })).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Components", exact: true })).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Button", exact: true })).toBeVisible();
+  const box = await dialog.boundingBox();
+  expect(box?.width ?? 0).toBeGreaterThan(300);
   await page.screenshot({
     path: info.outputPath("presentation-mobile-docs-navigation.png"),
     fullPage: false,

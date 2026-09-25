@@ -9601,3 +9601,60 @@ body {
       -5px -5px 14px color-mix(in srgb, white 28%, transparent);
   }
 }
+
+
+/* Mobile documentation navigation visibility v10 */
+
+@media (max-width: 1024px) {
+  .mobile-nav-backdrop {
+    z-index: 79 !important;
+  }
+
+  .mobile-nav-panel {
+    z-index: 80 !important;
+    width: min(86vw, 22rem) !important;
+    min-width: min(20rem, 86vw) !important;
+    color: var(--foreground) !important;
+    background: var(--docs-panel) !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .mobile-nav-heading {
+    color: var(--foreground) !important;
+    background: color-mix(in srgb, var(--docs-panel) 96%, transparent) !important;
+  }
+
+  .mobile-nav-scroll {
+    width: 100%;
+    color: var(--foreground) !important;
+    background: var(--docs-panel) !important;
+  }
+
+  .mobile-nav-scroll .docs-nav {
+    width: 100%;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .mobile-nav-scroll .docs-nav-group > span {
+    color: color-mix(in srgb, var(--foreground) 76%, var(--docs-panel)) !important;
+    opacity: 1 !important;
+  }
+
+  .mobile-nav-scroll .docs-nav-group a {
+    color: color-mix(in srgb, var(--foreground) 76%, var(--docs-panel)) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .mobile-nav-scroll .docs-nav-group a:hover {
+    color: var(--foreground) !important;
+    background: color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  }
+
+  .mobile-nav-scroll .docs-nav-group a.is-current {
+    color: var(--foreground) !important;
+    background: color-mix(in srgb, var(--primary) 14%, var(--docs-panel)) !important;
+  }
+}
