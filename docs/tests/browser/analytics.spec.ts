@@ -12,8 +12,9 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     await expect(page.locator('[data-slot="chart-plot"]')).toHaveCount(8);
     await expect(page.locator('h1')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await page.locator('#chart-installation details').first().locator('summary').click();
-    await expect(page.locator('#chart-installation details pre').first()).toContainText('export function RevenueChart');
+    const revenueCard = page.locator('#chart-installation .chart-reference-card').first();
+    await revenueCard.getByText('Source', { exact: true }).click();
+    await expect(revenueCard.locator('details').nth(1).locator('pre')).toContainText('export function RevenueChart');
     await page.goto(`/${locale}/templates/dashboard`);
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator('[data-slot="analytics-dashboard"]')).toBeVisible();
