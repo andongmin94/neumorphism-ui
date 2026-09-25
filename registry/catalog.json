@@ -1304,6 +1304,25 @@
           "target": "@components/blocks/link-hub.tsx"
         }
       ]
+    },
+    {
+      "name": "template-portfolio",
+      "title": "Portfolio workspace",
+      "description": "A data-driven portfolio with project case studies, outcomes and contact links.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/portfolio.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/portfolio.tsx"
+        }
+      ]
     }
   ]
 }
