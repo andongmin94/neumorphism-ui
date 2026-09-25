@@ -28,7 +28,8 @@
     "react-dom": "19.2.8",
     "react-is": "19.2.8",
     "recharts": "3.10.1",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@16.15.7"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
