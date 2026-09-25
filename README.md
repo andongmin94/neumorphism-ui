@@ -6,7 +6,7 @@ Install components with the shadcn CLI and edit their source in your application
 The collection includes **56 UI components, sixteen installable blocks and five
 light/dark presets**. The registry contains 80 items in total: 56 UI components,
 sixteen blocks, five presets, one base and two shared libraries. Documentation and
-live examples are available in Korean, English, Japanese and Chinese through Fumapress.
+live examples are available in English, Korean, Japanese and Chinese through Fumapress.
 
 This project is being prepared for the shadcn registry directory. `registry/directory-entry.json` contains the current directory metadata, but the project has not been submitted or approved. See [QUALITY.md](QUALITY.md) for verification scope and
 remaining release work.

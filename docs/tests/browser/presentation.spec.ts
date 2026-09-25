@@ -48,6 +48,18 @@ for (const entry of pages) {
 }
 
 
+test("presentation: default locale is English", async ({ page }) => {
+  const response = await page.goto("/");
+  expect(response?.status()).toBe(200);
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Neumorphism as an interface system, not a visual effect.",
+      exact: true,
+    }),
+  ).toBeVisible();
+});
+
 test("presentation: search-dialog", async ({ page }, info) => {
   await page.goto("/en");
   await page.getByRole("button", { name: /Search documentation/i }).click();

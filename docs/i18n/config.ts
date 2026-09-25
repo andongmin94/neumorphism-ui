@@ -1,8 +1,8 @@
-export const locales = ["ko", "en", "zh", "ja"] as const;
+export const locales = ["en", "ko", "zh", "ja"] as const;
 
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = "ko";
+export const defaultLocale: Locale = "en";
 
 export const localeDetails: Record<
   Locale,
