@@ -1469,6 +1469,25 @@
           "target": "@components/blocks/install-diagnostics-chart.tsx"
         }
       ]
+    },
+    {
+      "name": "template-blog-post",
+      "title": "Blog post workspace",
+      "description": "A static data-driven article renderer with sections, metadata, list content and return navigation.",
+      "type": "registry:block",
+      "categories": [
+        "template"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/blog-post.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/blog-post.tsx"
+        }
+      ]
     }
   ]
 }
