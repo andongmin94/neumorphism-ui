@@ -7191,6 +7191,8 @@ body {
 
 .template-card-preview,
 .template-card-featured .template-card-preview {
+  min-width: 0;
+  overflow: hidden;
   border: 0;
   border-bottom: 1px solid var(--docs-line-strong);
   background: var(--neu-surface-low);
@@ -7199,18 +7201,22 @@ body {
 
 .template-preview-stage,
 .template-card-featured .template-preview-stage {
+  position: relative;
   height: 300px;
+  overflow: hidden;
 }
 
 .template-preview-scale {
+  position: absolute;
   top: 12px;
   left: 12px;
-  width: 900px;
-  transform: scale(0.39);
+  width: 1040px;
+  transform: scale(0.58);
+  transform-origin: top left;
 }
 
 .template-card-featured .template-preview-scale {
-  transform: scale(0.39);
+  transform: scale(0.58);
 }
 
 .template-card-body,
@@ -7652,7 +7658,8 @@ body {
 
   .template-preview-scale,
   .template-card-featured .template-preview-scale {
-    transform: scale(0.31);
+    width: 920px;
+    transform: scale(0.34);
   }
 
   .footer-inner {
