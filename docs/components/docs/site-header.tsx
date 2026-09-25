@@ -125,7 +125,6 @@ export function SiteHeader() {
           <span className="brand-sigil" aria-hidden="true">N</span>
           <span className="brand-copy">
             <strong>Neumorphism UI</strong>
-            <small>React UI system</small>
           </span>
         </Link>
 
