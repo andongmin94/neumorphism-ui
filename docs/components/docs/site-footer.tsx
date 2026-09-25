@@ -20,20 +20,20 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-copy">
-          <Link className="footer-brand" href={localeHref(locale)}>
-            Neumorphism UI
-          </Link>
+          <div className="footer-identity">
+            <Link className="footer-brand" href={localeHref(locale)}>
+              Neumorphism UI
+            </Link>
+            <span>{copy.meta}</span>
+          </div>
           <p>{messages.footer.description}</p>
-          <span>{copy.meta}</span>
         </div>
 
         <nav aria-label={messages.navigation.footerLabel}>
-          <Link href={localeHref(locale, "/components")}>{messages.navigation.components}</Link>
-          <Link href={localeHref(locale, "/templates")}>Templates</Link>
-          <Link href={localeHref(locale, "/docs/credits")}>{copy.credits}</Link>
           <a href="https://github.com/andongmin94/neumorphism-ui" rel="noreferrer" target="_blank">
             GitHub
           </a>
+          <Link href={localeHref(locale, "/docs/credits")}>{copy.credits}</Link>
         </nav>
       </div>
     </footer>
