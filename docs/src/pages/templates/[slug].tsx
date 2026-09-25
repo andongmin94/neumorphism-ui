@@ -173,6 +173,12 @@ import { Blog, type BlogPost } from "@/components/blocks/blog";
 export function Example({ posts }: { posts: BlogPost[] }) {
   return <Blog posts={posts} locale="${locale}" basePath="/blog" />;
 }`;
+    case "blog-post":
+      return `import { BlogPost, type BlogArticle } from "@/components/blocks/blog-post";
+
+export function Example({ post }: { post: BlogArticle }) {
+  return <BlogPost post={post} locale="${locale}" backHref="/blog" />;
+}`;
     case "cms":
       return `"use client";
 import { CmsWorkspace, type CmsPost } from "@/components/blocks/cms";
