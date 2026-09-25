@@ -38,6 +38,16 @@ for (const entry of pages) {
       }
     }
 
+    await page.evaluate(() => {
+      window.scrollTo(0, 0);
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    });
+    await expect(page.locator(".site-header")).toBeVisible();
+
+    await page.screenshot({
+      path: info.outputPath(`presentation-${entry.name}-top.png`),
+      fullPage: false,
+    });
     await page.screenshot({
       path: info.outputPath(`presentation-${entry.name}.png`),
       fullPage: true,
@@ -58,6 +68,54 @@ test("presentation: default locale is English", async ({ page }) => {
       exact: true,
     }),
   ).toBeVisible();
+});
+
+test("presentation: tablet shell and drawer", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop-light", "single tablet presentation pass");
+
+  await page.setViewportSize({ width: 820, height: 1180 });
+  const tabletPages = [
+    { name: "home", path: "/en", sidebar: false },
+    { name: "components", path: "/en/components", sidebar: false },
+    { name: "templates", path: "/en/templates", sidebar: false },
+    { name: "button-detail", path: "/en/components/button", sidebar: true },
+  ] as const;
+
+  for (const entry of tabletPages) {
+    const response = await page.goto(entry.path);
+    expect(response?.status()).toBe(200);
+    await page.evaluate(() => {
+      window.scrollTo(0, 0);
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    });
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
+    await expect(page.locator(".primary-nav")).toBeHidden();
+
+    if (entry.sidebar) {
+      await expect(page.locator(".docs-site-sidebar")).toBeHidden();
+    } else {
+      await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
+    }
+
+    await page.screenshot({
+      path: info.outputPath(`presentation-tablet-${entry.name}.png`),
+      fullPage: false,
+    });
+  }
+
+  await page.getByRole("button", { name: "Open docs menu" }).click();
+  const dialog = page.getByRole("dialog", { name: "Mobile documentation navigation" });
+  await expect(dialog).toBeVisible();
+  const box = await dialog.boundingBox();
+  expect(box?.width ?? 0).toBeGreaterThan(300);
+  expect(box?.x ?? -999).toBeGreaterThanOrEqual(-1);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(821);
+  await page.screenshot({
+    path: info.outputPath("presentation-tablet-docs-navigation.png"),
+    fullPage: false,
+  });
 });
 
 test("presentation: search-dialog", async ({ page }, info) => {

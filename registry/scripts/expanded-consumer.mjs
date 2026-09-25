@@ -180,7 +180,7 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   assert.equal(await input.getAttribute("aria-invalid"), "true");
   await screenshot("form-error");
   await input.fill("Min"); await form.getByRole("button", { name: "Save changes" }).click();
-  assert.equal(await form.getByRole("status").textContent(), "Local example saved.");
+  await expect(form.getByRole("status")).toHaveText("Local example saved.");
   await input.fill("Uncommitted"); await form.getByRole("button", { name: "Reset" }).click();
   assert.equal(await input.inputValue(), "Min");
 
@@ -193,7 +193,7 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   assert.equal(await toolbar.getByRole("status").textContent(), "");
   await page.keyboard.press("ArrowRight");
   await expect(toolbar.getByRole("button", { name: "Save changes", exact: true })).toBeFocused();
-  await page.keyboard.press("Enter"); assert.equal(await toolbar.getByRole("status").textContent(), "Local example saved.");
+  await page.keyboard.press("Enter"); await expect(toolbar.getByRole("status")).toHaveText("Local example saved.");
   assert.equal(await card("meter").getByRole("meter").getAttribute("aria-valuenow"), "64");
 
   await card("hover-card").getByRole("link").hover();
