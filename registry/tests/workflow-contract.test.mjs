@@ -18,15 +18,14 @@ test("all presets and the installed base use Pretendard and Consolas consistentl
   const base = makeRegistry().items.find(item => item.type === "registry:base");
   assert.deepEqual(base.dependencies, ["pretendard@1.3.9"]);
   assert.equal(base.css["@font-face"], undefined);
-  const layout = fs.readFileSync(new URL("../../docs/app/[locale]/layout.tsx", import.meta.url), "utf8");
-  assert.ok(layout.includes('import "pretendard/dist/web/variable/pretendardvariable.css"'));
+  const css = fs.readFileSync(new URL("../../docs/src/app.css", import.meta.url), "utf8");
+  assert.ok(css.includes('@import "pretendard/dist/web/variable/pretendardvariable.css";'));
   assert.equal(base.css["@layer base"]["code, pre, kbd, samp"]["font-family"], "var(--neu-font-mono)");
   for (const preset of themePresets) for (const mode of ["light", "dark"]) {
     const tokens = buildThemeVariables({ ...defaultThemeSettings, ...preset.defaults, presetId: preset.id }, mode);
     assert.equal(tokens["--neu-font-sans"], '"Pretendard Variable", Pretendard, sans-serif');
     assert.equal(tokens["--neu-font-mono"], "Consolas, monospace");
   }
-  const css = fs.readFileSync(new URL("../../docs/app/globals.css", import.meta.url), "utf8");
   assert.doesNotMatch(css, /SFMono|Roboto Mono|Noto Sans|\/fonts\//);
 });
 test("date-only values do not serialize through UTC and new components do not reinstall the base", () => {
