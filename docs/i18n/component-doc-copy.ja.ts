@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyJa = defineComponentDocCopy({
+  "context-menu": {
+    summary: "ポインター位置で開く操作メニュー。チェック、ラジオ、サブメニューに対応します。",
+    description: "Base UI のポインターアンカーとキーボード操作を維持し、ポップアップを浮いたニューモーフィズム表面で表現します。通常項目、チェック、ラジオ、サブメニュー、破壊的操作を組み合わせられます。",
+    props: [
+      "メニューの開閉状態を制御します。",
+      "ポインター基準のポップアップ位置と間隔を調整します。",
+      "項目を表示したまま実行できない状態にします。",
+      "チェック可能な項目の状態を制御します。",
+      "相互排他的なラジオ項目の選択を制御します。",
+    ],
+    accessibility: [
+      "ContextMenuTrigger はポインターとキーボードの両方で理解できる対象にします。",
+      "開いたメニューは方向キーで移動し、Enter または Space で実行、Escape で閉じます。",
+      "破壊的な操作は色だけでなく明確な文言でも示します。",
+    ],
+  },
   command: {
     summary: "検索とキーボード選択を組み合わせたコマンドパレットとクイックナビゲーション。",
     description: "cmdk のフィルタリング、アクティブ項目、キーボード操作を維持し、入力を inset、選択項目を押し込まれた表面で表現します。CommandDialog で既存の Dialog と組み合わせられます。",

@@ -2413,6 +2413,53 @@ import {
       "검색 결과가 없을 때 CommandEmpty로 명시적인 빈 상태를 제공합니다.",
     ],
   },
+  {
+    slug: "context-menu",
+    title: "Context Menu",
+    category: "actions-overlays",
+    summary: "포인터 위치에서 열리는 작업 메뉴와 체크·라디오·하위 메뉴.",
+    description: "Base UI Context Menu의 포인터 anchoring과 키보드 탐색을 유지하면서 팝업을 floating 뉴모피즘 표면으로 표현합니다. 일반 항목, 체크·라디오 항목, 하위 메뉴와 destructive 상태를 조합할 수 있습니다.",
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport {\n  ContextMenu,\n  ContextMenuCheckboxItem,\n  ContextMenuContent,\n  ContextMenuItem,\n  ContextMenuLabel,\n  ContextMenuShortcut,\n  ContextMenuTrigger,\n} from \"@/components/ui/context-menu\";",
+    usageCode: "export default function Example() {\n  const [details, setDetails] = React.useState(true);\n  const [message, setMessage] = React.useState(\"준비됨\");\n  return <div className=\"grid gap-3\">\n    <ContextMenu>\n      <ContextMenuTrigger className=\"grid min-h-32 place-items-center rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] p-6 [box-shadow:var(--neu-shadow-inset)]\">\n        마우스 오른쪽 버튼을 눌러 메뉴를 여세요\n      </ContextMenuTrigger>\n      <ContextMenuContent>\n        <ContextMenuLabel>문서</ContextMenuLabel>\n        <ContextMenuItem onClick={() => setMessage(\"복사했습니다\")}>복사<ContextMenuShortcut>⌘C</ContextMenuShortcut></ContextMenuItem>\n        <ContextMenuCheckboxItem checked={details} onCheckedChange={setDetails}>세부 정보 표시</ContextMenuCheckboxItem>\n      </ContextMenuContent>\n    </ContextMenu>\n    <p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message}</p>\n  </div>;\n}",
+    props: [
+      {
+        component: "ContextMenu",
+        name: "open / onOpenChange",
+        type: "boolean / (open: boolean) => void",
+        description: "메뉴의 controlled 열림 상태를 관리합니다.",
+      },
+      {
+        component: "ContextMenuContent",
+        name: "side / align / sideOffset",
+        type: "Positioner props",
+        description: "포인터 기준 팝업 위치와 간격을 조절합니다.",
+      },
+      {
+        component: "ContextMenuItem",
+        name: "disabled",
+        type: "boolean",
+        defaultValue: "false",
+        description: "항목을 보이게 유지하면서 실행할 수 없게 합니다.",
+      },
+      {
+        component: "ContextMenuCheckboxItem",
+        name: "checked / onCheckedChange",
+        type: "boolean / (checked: boolean) => void",
+        description: "체크 가능한 메뉴 항목의 상태를 제어합니다.",
+      },
+      {
+        component: "ContextMenuRadioGroup",
+        name: "value / onValueChange",
+        type: "string / (value: string) => void",
+        description: "상호 배타적인 라디오 항목의 선택을 제어합니다.",
+      },
+    ],
+    accessibility: [
+      "ContextMenuTrigger 영역은 키보드와 포인터 사용자가 모두 이해할 수 있는 명확한 대상이어야 합니다.",
+      "메뉴가 열리면 방향키로 항목을 이동하고 Enter 또는 Space로 실행하며 Escape로 닫을 수 있습니다.",
+      "destructive 항목은 색상뿐 아니라 명확한 문구로 위험한 동작임을 전달합니다.",
+    ],
+  },
 ] as const satisfies readonly ComponentDoc[];
 
 const componentDocsBySlug = new Map<string, ComponentDoc>(

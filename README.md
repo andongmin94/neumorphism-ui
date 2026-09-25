@@ -3,8 +3,8 @@
 Source-owned React components with soft surfaces, clear actions and visible focus.
 Install components with the shadcn CLI and edit their source in your application.
 
-The collection includes **48 UI components, six installable blocks and five
-light/dark presets**. The registry contains 62 items in total: 48 UI components,
+The collection includes **49 UI components, six installable blocks and five
+light/dark presets**. The registry contains 63 items in total: 49 UI components,
 six blocks, five presets, one base and two shared libraries. Documentation and
 live examples are available in Korean, English, Japanese and Chinese through Fumapress.
 
@@ -53,6 +53,7 @@ npx shadcn@latest add @neumorphism-ui/toast
 npx shadcn@latest add @neumorphism-ui/navigation-menu
 npx shadcn@latest add @neumorphism-ui/menubar
 npx shadcn@latest add @neumorphism-ui/command
+npx shadcn@latest add @neumorphism-ui/context-menu
 npx shadcn@latest add @neumorphism-ui/style-sage
 ```
 

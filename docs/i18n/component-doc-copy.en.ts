@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyEn = defineComponentDocCopy({
+  "context-menu": {
+    summary: "A pointer-positioned action menu with checkbox, radio, and submenu items.",
+    description: "Preserves Base UI pointer anchoring and keyboard navigation while rendering the popup as a floating neumorphic surface. Compose ordinary, checkable, radio, submenu, and destructive items.",
+    props: [
+      "Controls the menu open state.",
+      "Adjusts popup placement and spacing relative to the pointer anchor.",
+      "Keeps an item visible while preventing execution.",
+      "Controls the state of a checkable menu item.",
+      "Controls the selection among mutually exclusive radio items.",
+    ],
+    accessibility: [
+      "Make the ContextMenuTrigger region an understandable target for both pointer and keyboard users.",
+      "When open, arrow keys move between items, Enter or Space activates one, and Escape closes the menu.",
+      "Describe destructive actions explicitly instead of relying on color alone.",
+    ],
+  },
   command: {
     summary: "A searchable command palette and quick-navigation list with keyboard selection.",
     description: "Preserves cmdk filtering, active-item state, and keyboard navigation while rendering the input as inset and the active item as pressed. CommandDialog composes it with the existing Dialog.",

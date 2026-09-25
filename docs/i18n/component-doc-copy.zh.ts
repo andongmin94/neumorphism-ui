@@ -1,6 +1,22 @@
 import { defineComponentDocCopy } from "@/i18n/component-doc-copy";
 
 export const componentDocCopyZh = defineComponentDocCopy({
+  "context-menu": {
+    summary: "在指针位置打开的操作菜单，支持复选、单选和子菜单。",
+    description: "保留 Base UI 的指针锚定和键盘导航，并将弹层呈现为悬浮的新拟态表面。可组合普通、复选、单选、子菜单和危险操作项。",
+    props: [
+      "控制菜单的打开状态。",
+      "调整弹层相对指针锚点的位置和间距。",
+      "让项目保持可见但不可执行。",
+      "控制可勾选菜单项的状态。",
+      "控制互斥单选项的选择。",
+    ],
+    accessibility: [
+      "让 ContextMenuTrigger 区域对鼠标和键盘用户都是清晰可理解的目标。",
+      "菜单打开后用方向键移动，Enter 或 Space 执行，Escape 关闭。",
+      "危险操作应使用明确文案说明，不要只依赖颜色。",
+    ],
+  },
   command: {
     summary: "结合搜索与键盘选择的命令面板和快速导航列表。",
     description: "保留 cmdk 的筛选、活动项和键盘导航，并将输入区呈现为内嵌表面、活动项呈现为按下状态。CommandDialog 可与现有 Dialog 组合。",
