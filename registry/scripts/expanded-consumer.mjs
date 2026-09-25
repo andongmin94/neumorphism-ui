@@ -90,7 +90,7 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   const command = card("command");
   const commandInput = command.getByRole("combobox", { name: "Search cities" });
   await commandInput.fill("Seo");
-  await expect(command.getByText("Seoul", { exact: true })).toBeVisible();
+  await expect(command.getByRole("option", { name: /Seoul/ })).toBeVisible();
   await commandInput.press("ArrowDown");
   await commandInput.press("Enter");
   await expect(command.getByRole("status")).toHaveText("Seoul");
