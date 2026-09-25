@@ -3,9 +3,9 @@
 Source-owned React components with soft surfaces, clear actions and visible focus.
 Install components with the shadcn CLI and edit their source in your application.
 
-The collection includes **56 UI components, fifteen installable blocks and five
-light/dark presets**. The registry contains 79 items in total: 56 UI components,
-fifteen blocks, five presets, one base and two shared libraries. Documentation and
+The collection includes **56 UI components, sixteen installable blocks and five
+light/dark presets**. The registry contains 80 items in total: 56 UI components,
+sixteen blocks, five presets, one base and two shared libraries. Documentation and
 live examples are available in Korean, English, Japanese and Chinese through Fumapress.
 
 This project is being prepared for the shadcn registry directory. `registry/directory-entry.json` contains the current directory metadata, but the project has not been submitted or approved. See [QUALITY.md](QUALITY.md) for verification scope and
@@ -78,6 +78,7 @@ npx shadcn@latest add @neumorphism-ui/template-data-manager
 npx shadcn@latest add @neumorphism-ui/template-link-hub
 npx shadcn@latest add @neumorphism-ui/template-portfolio
 npx shadcn@latest add @neumorphism-ui/template-blog
+npx shadcn@latest add @neumorphism-ui/template-blog-post
 npx shadcn@latest add @neumorphism-ui/template-cms
 ```
 
@@ -86,7 +87,7 @@ preferences, unsaved-change detection, failed-save recovery and discard. The dat
 workspace combines search, status filters, sorting, pagination, stable-ID selection,
 column visibility, create/edit forms and confirmed deletion.
 
-The Link Hub, Portfolio and Blog templates are data-driven presentation blocks. Link Hub owns only local filtering and clipboard feedback; Portfolio is fully static and uses native disclosure; Blog owns only archive search/filter/sort state. The CMS workspace is a local editor shell with dirty-state recovery and an application-owned onSave callback.
+The Link Hub, Portfolio, Blog and Blog Post templates are data-driven presentation blocks. Link Hub owns only local filtering and clipboard feedback; Portfolio is fully static and uses native disclosure; Blog owns only archive search/filter/sort state. The CMS workspace is a local editor shell with dirty-state recovery and an application-owned onSave callback.
 
 The Settings and Data Manager blocks accept application-owned asynchronous callbacks. Rejected operations
 retain edits and original data; resolved operations update the local saved snapshot.

@@ -6,13 +6,13 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     await page.goto(`/${locale}/templates`); await expect(page.locator('h1')).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: info.outputPath('gallery.png'), fullPage: true });
-    for (const slug of ["settings", "data-manager", "link-hub", "portfolio", "blog", "cms"]) {
+    for (const slug of ["settings", "data-manager", "link-hub", "portfolio", "blog", "blog-post", "cms"]) {
       await page.goto(`/${locale}/templates/${slug}`);
       await expect(page.locator(`[data-template="${slug}"]`)).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.locator('#installed-source details').first().locator('summary').click();
-      await expect(page.locator('#installed-source pre').first()).toContainText(slug === "portfolio" ? "export function Portfolio" : '"use client"');
+      await expect(page.locator('#installed-source pre').first()).toContainText((slug === "portfolio" || slug === "blog-post") ? "export function" : '"use client"');
       await page.locator('#installed-source details').first().locator('summary').click();
       await page.locator('h1').click();
       await page.evaluate(() => window.scrollTo(0, 0));
@@ -28,6 +28,14 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
+
+test('blog post documentation renders article sections', async ({ page }) => {
+  await page.goto('/en/templates/blog-post');
+  const preview = page.locator('[data-template="blog-post"]');
+  await expect(preview.getByRole('heading', { name: 'Why small interfaces age better', exact: true })).toBeVisible();
+  await expect(preview.getByRole('heading', { name: 'Start with the boundary', exact: true })).toBeVisible();
+  await expect(preview.getByRole('listitem')).toHaveCount(3);
+});
 
 test('blog documentation filters by topic and search', async ({ page }) => {
   await page.goto('/en/templates/blog');

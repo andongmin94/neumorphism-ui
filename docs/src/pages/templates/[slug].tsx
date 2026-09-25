@@ -9,6 +9,7 @@ import { TemplatePreview, type TemplateSlug } from "@/components/docs/template-p
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import analyticsSource from "@/public/r/template-analytics.json";
 import blogSource from "@/public/r/template-blog.json";
+import blogPostSource from "@/public/r/template-blog-post.json";
 import cmsSource from "@/public/r/template-cms.json";
 import recordsSource from "@/public/r/template-data-manager.json";
 import linksSource from "@/public/r/template-link-hub.json";
@@ -22,6 +23,7 @@ const templateSlugs = [
   "link-hub",
   "portfolio",
   "blog",
+  "blog-post",
   "cms",
 ] as const satisfies readonly TemplateSlug[];
 
@@ -44,6 +46,8 @@ function templateTitle(slug: TemplateSlug, locale: Locale) {
       return t.portfolio;
     case "blog":
       return t.blog;
+    case "blog-post":
+      return t.blogPost;
     case "cms":
       return t.cms;
   }
@@ -64,6 +68,8 @@ function templateDescription(slug: TemplateSlug, locale: Locale) {
       return t.portfolioBody;
     case "blog":
       return t.blogBody;
+    case "blog-post":
+      return t.blogPostBody;
     case "cms":
       return t.cmsBody;
   }
@@ -80,6 +86,8 @@ function templateNote(slug: TemplateSlug, locale: Locale) {
       return t.portfolioNote;
     case "blog":
       return t.blogNote;
+    case "blog-post":
+      return t.blogPostNote;
     case "cms":
       return t.cmsNote;
     default:
@@ -101,6 +109,8 @@ function templateSource(slug: TemplateSlug) {
       return portfolioSource;
     case "blog":
       return blogSource;
+    case "blog-post":
+      return blogPostSource;
     case "cms":
       return cmsSource;
   }

@@ -55,6 +55,12 @@ export default function TemplatesPage({ lang }: { lang: string }) {
       tags: "Search · Topics · Sort",
     },
     {
+      slug: "blog-post",
+      title: t.blogPost,
+      description: t.blogPostBody,
+      tags: "Article · Sections · Static",
+    },
+    {
       slug: "cms",
       title: t.cms,
       description: t.cmsBody,
