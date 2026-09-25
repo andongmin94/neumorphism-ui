@@ -15,6 +15,10 @@ import { getRequestOrigin } from "@/components/docs/request-origin";
 import { isLocale, localeHref } from "@/i18n/config";
 import { formatMessage, getMessages } from "@/i18n/messages";
 
+const initCommand = "npx shadcn@latest init";
+const styleDryRunCommand = `${getInstallCommand("style-sage")} --dry-run`;
+const styleInstallCommand = getInstallCommand("style-sage");
+
 export default async function InstallationPage({ lang }: { lang: string }) {
   if (!isLocale(lang)) notFound();
   const locale = lang;
