@@ -1,4 +1,5 @@
 name: Verify
+# Fumapress documentation verification
 on:
   push:
     branches: [main]
