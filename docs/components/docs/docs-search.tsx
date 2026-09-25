@@ -56,7 +56,7 @@ export function DocsSearch() {
 
     return [
       {
-        href: localeHref(locale),
+        href: localeHref(locale, "/docs"),
         key: "introduction",
         title: messages.navigation.introduction,
         summary: messages.search.introSummary,
