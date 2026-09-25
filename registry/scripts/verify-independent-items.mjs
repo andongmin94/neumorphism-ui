@@ -258,7 +258,8 @@ try {
 }
 
 const expectedTargets = selected.reduce(
-  (sum, item) => sum + (item.categories?.includes("template") ? 1 : 2),
+  (sum, item) =>
+    sum + (item.name.startsWith("template-") || item.categories?.includes("template") ? 1 : 2),
   0,
 );
 assert.equal(records.length, expectedTargets, "Every selected item must finish");
