@@ -11,7 +11,7 @@
     "build": "fumapress build",
     "start": "fumapress start",
     "predev": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
-    "prebuild": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
+    "prebuild": "npm ci --prefix ../registry && npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
     "lint": "oxlint --no-error-on-unmatched-pattern --ignore-pattern src/registry src components i18n tests press.config.tsx vite.config.ts",
     "typecheck": "tsc --noEmit",
     "test:browser": "playwright test",
