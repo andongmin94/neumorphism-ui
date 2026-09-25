@@ -46,3 +46,26 @@ for (const entry of pages) {
     expect(errors).toEqual([]);
   });
 }
+
+
+test("presentation: search-dialog", async ({ page }, info) => {
+  await page.goto("/en");
+  await page.getByRole("button", { name: /Search documentation/i }).click();
+  const dialog = page.getByRole("dialog", { name: /Search documentation/i });
+  await expect(dialog).toBeVisible();
+  await page.screenshot({
+    path: info.outputPath("presentation-search-dialog.png"),
+    fullPage: false,
+  });
+});
+
+test("presentation: mobile-docs-navigation", async ({ page }, info) => {
+  test.skip(info.project.name === "desktop-light", "mobile presentation only");
+  await page.goto("/en/components/button");
+  await page.getByRole("button", { name: "Open docs menu" }).click();
+  await expect(page.getByRole("dialog", { name: "Mobile documentation navigation" })).toBeVisible();
+  await page.screenshot({
+    path: info.outputPath("presentation-mobile-docs-navigation.png"),
+    fullPage: false,
+  });
+});

@@ -8904,3 +8904,81 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* Mobile presentation polish v6 */
+
+@media (max-width: 560px) {
+  .home-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-stat-grid > div,
+  .home-stat-grid > div:nth-child(2) {
+    padding: 0.9rem 0.75rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .home-stat-grid > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .home-stat-grid > div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .component-directory-categories {
+    margin-inline: -0.15rem;
+    padding: 0 0.15rem 0.5rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2rem), transparent 100%);
+  }
+
+  .component-directory-categories::-webkit-scrollbar {
+    display: none;
+  }
+
+  .component-directory-categories button {
+    scroll-snap-align: start;
+  }
+
+  .component-doc-intro-actions .compact-install {
+    overflow: hidden;
+  }
+
+  .component-doc-intro-actions .compact-install code {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .component-doc-code-block .copyable-code,
+  .component-doc-section .copyable-code {
+    max-width: 100%;
+  }
+
+  .component-doc-code-block pre,
+  .component-doc-section pre {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  .component-doc-code-block pre code,
+  .component-doc-section pre code {
+    min-width: max-content;
+    font-size: 0.68rem;
+    line-height: 1.58;
+  }
+
+  .component-doc-quicknav {
+    gap: 0.15rem 0.35rem;
+  }
+
+  .component-doc-quicknav a {
+    padding-inline: 0.35rem;
+  }
+}
