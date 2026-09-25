@@ -57,8 +57,8 @@ export default function VerificationPage({ lang }: { lang: string }) {
   const t = copy[lang];
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-5 pt-8 pb-16 sm:px-8 sm:pt-12">
-      <article className="docs-content docs-article">
+    <div className="docs-reference-page">
+      <article className="docs-content docs-article docs-reference-article">
         <header className="docs-page-header"><h1>{t.title}</h1><p>{t.intro}</p></header>
 
         <section className="docs-content-section">

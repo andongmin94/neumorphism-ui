@@ -8276,3 +8276,195 @@ body {
     font-size: clamp(3rem, 14vw, 4.4rem);
   }
 }
+
+
+/* Reference documentation presentation v4 */
+
+.docs-reference-page {
+  width: min(100%, 1160px);
+  margin-inline: auto;
+  padding: 4.25rem clamp(1.5rem, 4vw, 3.75rem) 7rem;
+}
+
+.docs-reference-layout {
+  grid-template-columns: minmax(0, 900px) 190px;
+  max-width: 1260px;
+}
+
+.docs-reference-article > .docs-page-header {
+  max-width: 900px;
+  padding-bottom: 3.5rem;
+}
+
+.docs-reference-article > .docs-page-header h1 {
+  max-width: 880px;
+  font-size: clamp(3rem, 5vw, 4.6rem);
+}
+
+.docs-reference-article > .docs-page-header > p {
+  max-width: 740px;
+}
+
+.docs-reference-article > .docs-content-section {
+  display: grid;
+  grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+  column-gap: clamp(2rem, 5vw, 4.5rem);
+  row-gap: 1rem;
+  padding-block: 2.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.docs-reference-article > .docs-content-section:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.docs-reference-article > .docs-content-section > h2 {
+  grid-column: 1;
+  align-self: start;
+  margin: 0;
+  color: var(--foreground);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.35;
+}
+
+.docs-reference-article > .docs-content-section > :not(h2) {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.docs-reference-article > .docs-content-section > p {
+  margin-top: 0;
+  color: var(--docs-muted);
+  font-size: 0.85rem;
+  line-height: 1.78;
+}
+
+.docs-reference-article > .docs-content-section > h3 {
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+  font-size: 0.78rem;
+  font-weight: 720;
+  letter-spacing: -0.01em;
+}
+
+.docs-reference-article > .docs-content-section > ul,
+.docs-reference-article > .docs-content-section > ol {
+  display: grid;
+  gap: 0.65rem;
+  margin-block: 0;
+  padding-left: 1.2rem;
+  color: var(--docs-muted);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.docs-reference-article > .docs-content-section table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.docs-reference-article > .docs-content-section th,
+.docs-reference-article > .docs-content-section td {
+  padding: 0.8rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.docs-reference-article > .docs-content-section tr:last-child th,
+.docs-reference-article > .docs-content-section tr:last-child td {
+  border-bottom: 0;
+}
+
+.docs-reference-article > .docs-content-section thead th {
+  background: var(--surface-low);
+  color: var(--docs-muted);
+  font-size: 0.62rem;
+  font-weight: 720;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.docs-reference-article > .docs-content-section pre {
+  overflow-x: auto;
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface-low) 74%, var(--background));
+  box-shadow: var(--neu-shadow-inset-sm);
+}
+
+.docs-reference-article > .docs-content-section pre code {
+  font-size: 0.72rem;
+  line-height: 1.65;
+}
+
+.docs-reference-article .docs-disclosure {
+  border-color: var(--line);
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.docs-reference-article .docs-disclosure > summary {
+  min-height: 42px;
+  padding-inline: 0.85rem;
+  font-size: 0.75rem;
+}
+
+.docs-reference-article .copyable-code {
+  max-width: 100%;
+}
+
+.docs-reference-article .docs-section-note {
+  padding: 0.75rem 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--docs-muted);
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
+.docs-reference-article .docs-next {
+  margin-top: 3rem;
+}
+
+@media (max-width: 900px) {
+  .docs-reference-article > .docs-content-section {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .docs-reference-article > .docs-content-section > h2,
+  .docs-reference-article > .docs-content-section > :not(h2) {
+    grid-column: 1;
+  }
+
+  .docs-reference-article > .docs-content-section > h2 {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .docs-reference-page {
+    padding-inline: 1.25rem;
+  }
+
+  .docs-reference-article > .docs-page-header h1 {
+    font-size: clamp(2.8rem, 15vw, 4rem);
+  }
+
+  .docs-reference-article > .docs-content-section table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

@@ -33,8 +33,8 @@ export default async function InstallationPage({ lang }: { lang: string }) {
   ] as const;
 
   return (
-    <div className="docs-content-layout">
-      <article className="docs-content docs-article">
+    <div className="docs-content-layout docs-reference-layout">
+      <article className="docs-content docs-article docs-reference-article">
         <header className="docs-page-header">
           <h1>Installation</h1>
           <p>{messages.installationPage.intro}</p>
