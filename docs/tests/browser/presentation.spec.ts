@@ -70,6 +70,8 @@ test("presentation: mobile-docs-navigation", async ({ page }, info) => {
   await expect(dialog.getByRole("link", { name: "Button", exact: true })).toBeVisible();
   const box = await dialog.boundingBox();
   expect(box?.width ?? 0).toBeGreaterThan(300);
+  expect(box?.x ?? -999).toBeGreaterThanOrEqual(-1);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(391);
   await page.screenshot({
     path: info.outputPath("presentation-mobile-docs-navigation.png"),
     fullPage: false,

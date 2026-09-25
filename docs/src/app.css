@@ -9256,7 +9256,7 @@ body {
     border-radius: 0 !important;
     background: var(--surface) !important;
     transform: none !important;
-    translate: none !important;
+    translate: 0 0 !important;
     box-shadow:
       12px 0 28px color-mix(in srgb, black 18%, transparent),
       inset -1px 0 0 var(--line-light) !important;
