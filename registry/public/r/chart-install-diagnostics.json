@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-install-diagnostics",
+  "title": "Install diagnostics",
+  "description": "Sequential installation stage durations with unit switching.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart",
+    "@neumorphism-ui/select"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/install-diagnostics-chart.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Bar, BarChart, CartesianGrid, XAxis, YAxis } from \"recharts\";\n\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\nimport { Select, SelectItem } from \"@/components/ui/select\";\n\nexport type InstallDiagnosticPoint = {\n  stage: string;\n  durationMs: number;\n};\n\nexport function InstallDiagnosticsChart({\n  data,\n}: {\n  data: readonly InstallDiagnosticPoint[];\n}) {\n  const [unit, setUnit] = React.useState<\"ms\" | \"s\">(\"ms\");\n  const total = data.reduce((sum, row) => sum + row.durationMs, 0);\n  const largest = data.length ? data.reduce((best, row) => row.durationMs > best.durationMs ? row : best) : null;\n  const format = (value: number) => unit === \"ms\" ? `${value} ms` : `${(value / 1000).toFixed(2)} s`;\n\n  return (\n    <ChartContainer\n      data-chart=\"install-diagnostics\"\n      title=\"Installation diagnostics\"\n      description=\"Sequential stage durations for one installation trace.\"\n      summary={largest ? `Total ${format(total)} · longest stage ${largest.stage} (${format(largest.durationMs)})` : \"No installation trace.\"}\n      actions={\n        <label className=\"grid gap-1.5 text-xs\">\n          Unit\n          <Select value={unit} onChange={(event) => setUnit(event.target.value as typeof unit)}>\n            <SelectItem value=\"ms\">Milliseconds</SelectItem>\n            <SelectItem value=\"s\">Seconds</SelectItem>\n          </Select>\n        </label>\n      }\n      tableLabel=\"View installation data\"\n      empty={!data.length}\n      table={\n        <table>\n          <caption className=\"sr-only\">Installation diagnostic data</caption>\n          <thead><tr><th>Stage</th><th>Duration</th><th>Share</th></tr></thead>\n          <tbody>{data.map((row) => <tr key={row.stage}><th scope=\"row\">{row.stage}</th><td>{format(row.durationMs)}</td><td>{total ? ((row.durationMs / total) * 100).toFixed(1) + \"%\" : \"—\"}</td></tr>)}</tbody>\n        </table>\n      }\n    >\n      <BarChart data={data} layout=\"vertical\" accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n        <CartesianGrid horizontal={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n        <XAxis type=\"number\" tickFormatter={(value: number) => format(value)} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <YAxis type=\"category\" dataKey=\"stage\" width={72} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <ChartTooltip formatter={(value) => format(Number(value))} />\n        <Bar dataKey=\"durationMs\" name=\"Duration\" fill=\"var(--primary)\" radius={[0, 4, 4, 0]} maxBarSize={42} isAnimationActive={false} />\n      </BarChart>\n    </ChartContainer>\n  );\n}\n\nconst exampleTrace: InstallDiagnosticPoint[] = [\n  { stage: \"Resolve\", durationMs: 120 },\n  { stage: \"Download\", durationMs: 840 },\n  { stage: \"Transform\", durationMs: 210 },\n  { stage: \"Write\", durationMs: 90 },\n];\n\nexport function InstallDiagnosticsExample() {\n  return <InstallDiagnosticsChart data={exampleTrace} />;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/install-diagnostics-chart.tsx"
+    }
+  ],
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:block"
+}

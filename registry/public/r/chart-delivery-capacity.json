@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-delivery-capacity",
+  "title": "Delivery capacity",
+  "description": "Planned versus delivered work with signed variance.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart",
+    "@neumorphism-ui/select"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/delivery-capacity-chart.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from \"recharts\";\n\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\nimport { Select, SelectItem } from \"@/components/ui/select\";\n\nexport type DeliveryCapacityPoint = {\n  period: string;\n  planned: number;\n  delivered: number;\n};\n\nexport function DeliveryCapacityChart({\n  data,\n}: {\n  data: readonly DeliveryCapacityPoint[];\n}) {\n  const [view, setView] = React.useState<\"compare\" | \"variance\">(\"compare\");\n  const planned = data.reduce((sum, row) => sum + row.planned, 0);\n  const delivered = data.reduce((sum, row) => sum + row.delivered, 0);\n  const chartData = data.map((row) => ({ ...row, variance: row.delivered - row.planned }));\n\n  return (\n    <ChartContainer\n      data-chart=\"delivery-capacity\"\n      title=\"Delivery capacity\"\n      description=\"Planned and delivered item counts. This is not a productivity score.\"\n      summary={data.length ? `Planned ${planned} · delivered ${delivered} · net variance ${delivered - planned >= 0 ? \"+\" : \"\"}${delivered - planned}` : \"No delivery records.\"}\n      actions={\n        <label className=\"grid gap-1.5 text-xs\">\n          View\n          <Select value={view} onChange={(event) => setView(event.target.value as typeof view)}>\n            <SelectItem value=\"compare\">Planned vs delivered</SelectItem>\n            <SelectItem value=\"variance\">Signed variance</SelectItem>\n          </Select>\n        </label>\n      }\n      tableLabel=\"View delivery data\"\n      empty={!data.length}\n      table={\n        <table>\n          <caption className=\"sr-only\">Delivery capacity data</caption>\n          <thead><tr><th>Period</th><th>Planned</th><th>Delivered</th><th>Variance</th></tr></thead>\n          <tbody>{chartData.map((row) => <tr key={row.period}><th scope=\"row\">{row.period}</th><td>{row.planned}</td><td>{row.delivered}</td><td>{row.variance > 0 ? \"+\" + row.variance : row.variance}</td></tr>)}</tbody>\n        </table>\n      }\n    >\n      <BarChart data={chartData} accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n        <CartesianGrid vertical={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n        <XAxis dataKey=\"period\" tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <YAxis width={44} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <ReferenceLine y={0} stroke=\"var(--foreground)\" />\n        <ChartTooltip />\n        {view === \"variance\" ? (\n          <Bar dataKey=\"variance\" name=\"Delivered − planned\" fill=\"var(--primary)\" maxBarSize={52} isAnimationActive={false} />\n        ) : (\n          <>\n            <Bar dataKey=\"planned\" name=\"Planned\" fill=\"var(--muted)\" stroke=\"var(--muted-foreground)\" strokeDasharray=\"4 3\" maxBarSize={40} isAnimationActive={false} />\n            <Bar dataKey=\"delivered\" name=\"Delivered\" fill=\"var(--primary)\" maxBarSize={40} isAnimationActive={false} />\n          </>\n        )}\n      </BarChart>\n    </ChartContainer>\n  );\n}\n\nconst exampleCapacity: DeliveryCapacityPoint[] = [\n  { period: \"S1\", planned: 32, delivered: 28 },\n  { period: \"S2\", planned: 36, delivered: 39 },\n  { period: \"S3\", planned: 34, delivered: 31 },\n  { period: \"S4\", planned: 38, delivered: 42 },\n];\n\nexport function DeliveryCapacityExample() {\n  return <DeliveryCapacityChart data={exampleCapacity} />;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/delivery-capacity-chart.tsx"
+    }
+  ],
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:block"
+}

@@ -2053,6 +2053,105 @@
           "target": "@components/blocks/cms.tsx"
         }
       ]
+    },
+    {
+      "name": "chart-build-duration",
+      "title": "Build duration",
+      "description": "Paired cold and cached build timings with a budget reference.",
+      "type": "registry:block",
+      "categories": [
+        "chart"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/select"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/build-duration-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/build-duration-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chart-service-latency",
+      "title": "Service latency",
+      "description": "p50 and p95 service latency against an explicit p95 budget.",
+      "type": "registry:block",
+      "categories": [
+        "chart"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/chart"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/service-latency-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/service-latency-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chart-release-activity",
+      "title": "Release activity",
+      "description": "New installs and updates by release with count and share views.",
+      "type": "registry:block",
+      "categories": [
+        "chart"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/select"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/release-activity-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/release-activity-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chart-delivery-capacity",
+      "title": "Delivery capacity",
+      "description": "Planned versus delivered work with signed variance.",
+      "type": "registry:block",
+      "categories": [
+        "chart"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/select"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/delivery-capacity-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/delivery-capacity-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chart-install-diagnostics",
+      "title": "Install diagnostics",
+      "description": "Sequential installation stage durations with unit switching.",
+      "type": "registry:block",
+      "categories": [
+        "chart"
+      ],
+      "registryDependencies": [
+        "@neumorphism-ui/chart",
+        "@neumorphism-ui/select"
+      ],
+      "files": [
+        {
+          "path": "src/components/blocks/install-diagnostics-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/blocks/install-diagnostics-chart.tsx"
+        }
+      ]
     }
   ]
 }

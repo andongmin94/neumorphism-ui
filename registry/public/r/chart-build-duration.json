@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-build-duration",
+  "title": "Build duration",
+  "description": "Paired cold and cached build timings with a budget reference.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart",
+    "@neumorphism-ui/select"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/build-duration-chart.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from \"recharts\";\n\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\nimport { Select, SelectItem } from \"@/components/ui/select\";\n\nexport type BuildDurationPoint = {\n  label: string;\n  coldSeconds: number;\n  cachedSeconds: number;\n};\n\nexport function BuildDurationChart({\n  data,\n  budgetSeconds = 220,\n}: {\n  data: readonly BuildDurationPoint[];\n  budgetSeconds?: number;\n}) {\n  const [series, setSeries] = React.useState<\"both\" | \"cold\" | \"cached\">(\"both\");\n  const coldMean = data.length ? data.reduce((sum, row) => sum + row.coldSeconds, 0) / data.length : 0;\n  const cachedMean = data.length ? data.reduce((sum, row) => sum + row.cachedSeconds, 0) / data.length : 0;\n  const breaches = data.filter((row) => row.coldSeconds > budgetSeconds).length;\n\n  return (\n    <ChartContainer\n      data-chart=\"build-duration\"\n      title=\"Build duration\"\n      description=\"Paired cold and cached build runs in seconds.\"\n      summary={data.length ? `Mean cold ${coldMean.toFixed(1)} s · cached ${cachedMean.toFixed(1)} s · ${breaches}/${data.length} cold runs over budget` : \"No build runs.\"}\n      actions={\n        <label className=\"grid gap-1.5 text-xs\">\n          Visible series\n          <Select value={series} onChange={(event) => setSeries(event.target.value as typeof series)}>\n            <SelectItem value=\"both\">Both</SelectItem>\n            <SelectItem value=\"cold\">Cold only</SelectItem>\n            <SelectItem value=\"cached\">Cached only</SelectItem>\n          </Select>\n        </label>\n      }\n      tableLabel=\"View build data\"\n      empty={!data.length}\n      table={\n        <table>\n          <caption className=\"sr-only\">Build duration data</caption>\n          <thead><tr><th>Build</th><th>Cold (s)</th><th>Cached (s)</th><th>Saved (s)</th></tr></thead>\n          <tbody>{data.map((row) => <tr key={row.label}><th scope=\"row\">{row.label}</th><td>{row.coldSeconds}</td><td>{row.cachedSeconds}</td><td>{row.coldSeconds - row.cachedSeconds}</td></tr>)}</tbody>\n        </table>\n      }\n    >\n      <LineChart data={data} accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n        <CartesianGrid vertical={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n        <XAxis dataKey=\"label\" tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <YAxis domain={[0, \"auto\"]} width={52} tickFormatter={(value: number) => `${value}s`} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <ReferenceLine y={budgetSeconds} stroke=\"var(--destructive)\" strokeDasharray=\"4 4\" />\n        <ChartTooltip formatter={(value) => `${Number(value)} s`} />\n        {series !== \"cached\" && <Line dataKey=\"coldSeconds\" name=\"Cold build\" stroke=\"var(--foreground)\" strokeWidth={2.5} dot={{ r: 3 }} isAnimationActive={false} />}\n        {series !== \"cold\" && <Line dataKey=\"cachedSeconds\" name=\"Cached build\" stroke=\"var(--primary)\" strokeWidth={2.5} strokeDasharray=\"7 4\" dot={{ r: 3 }} isAnimationActive={false} />}\n      </LineChart>\n    </ChartContainer>\n  );\n}\n\nconst exampleBuilds: BuildDurationPoint[] = [\n  { label: \"B1\", coldSeconds: 210, cachedSeconds: 108 },\n  { label: \"B2\", coldSeconds: 195, cachedSeconds: 102 },\n  { label: \"B3\", coldSeconds: 238, cachedSeconds: 114 },\n  { label: \"B4\", coldSeconds: 226, cachedSeconds: 109 },\n  { label: \"B5\", coldSeconds: 204, cachedSeconds: 96 },\n  { label: \"B6\", coldSeconds: 188, cachedSeconds: 93 },\n];\n\nexport function BuildDurationExample() {\n  return <BuildDurationChart data={exampleBuilds} />;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/build-duration-chart.tsx"
+    }
+  ],
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:block"
+}

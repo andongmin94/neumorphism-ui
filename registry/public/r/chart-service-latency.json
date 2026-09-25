@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-service-latency",
+  "title": "Service latency",
+  "description": "p50 and p95 service latency against an explicit p95 budget.",
+  "registryDependencies": [
+    "@neumorphism-ui/chart"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/service-latency-chart.tsx",
+      "content": "\"use client\";\n\nimport { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from \"recharts\";\n\nimport { ChartContainer, ChartTooltip } from \"@/components/ui/chart\";\n\nexport type ServiceLatencyPoint = {\n  label: string;\n  p50Ms: number;\n  p95Ms: number;\n};\n\nexport function ServiceLatencyChart({\n  data,\n  budgetMs = 300,\n}: {\n  data: readonly ServiceLatencyPoint[];\n  budgetMs?: number;\n}) {\n  const worst = data.length ? Math.max(...data.map((row) => row.p95Ms)) : 0;\n  const breaches = data.filter((row) => row.p95Ms > budgetMs);\n\n  return (\n    <ChartContainer\n      data-chart=\"service-latency\"\n      title=\"Service latency\"\n      description=\"Daily p50 and p95 response time against a p95 budget.\"\n      summary={data.length ? `Worst p95 ${worst} ms · ${breaches.length}/${data.length} periods over budget` : \"No latency samples.\"}\n      tableLabel=\"View latency data\"\n      empty={!data.length}\n      table={\n        <table>\n          <caption className=\"sr-only\">Service latency data</caption>\n          <thead><tr><th>Period</th><th>p50 (ms)</th><th>p95 (ms)</th><th>Budget</th></tr></thead>\n          <tbody>{data.map((row) => <tr key={row.label}><th scope=\"row\">{row.label}</th><td>{row.p50Ms}</td><td>{row.p95Ms}</td><td>{row.p95Ms > budgetMs ? \"Over\" : \"Within\"}</td></tr>)}</tbody>\n        </table>\n      }\n    >\n      <LineChart data={data} accessibilityLayer margin={{ top: 12, right: 12, bottom: 4, left: 0 }}>\n        <CartesianGrid vertical={false} stroke=\"var(--border)\" strokeDasharray=\"3 4\" />\n        <XAxis dataKey=\"label\" tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <YAxis domain={[0, \"auto\"]} width={52} tickFormatter={(value: number) => `${value}ms`} tick={{ fill: \"var(--muted-foreground)\" }} tickLine={false} axisLine={false} />\n        <ReferenceLine y={budgetMs} stroke=\"var(--destructive)\" strokeDasharray=\"4 4\" />\n        <ChartTooltip formatter={(value) => `${Number(value)} ms`} />\n        <Line dataKey=\"p50Ms\" name=\"p50\" stroke=\"var(--muted-foreground)\" strokeWidth={2} strokeDasharray=\"7 4\" dot={false} isAnimationActive={false} />\n        <Line dataKey=\"p95Ms\" name=\"p95\" stroke=\"var(--primary)\" strokeWidth={2.5} dot={{ r: 3 }} isAnimationActive={false} />\n      </LineChart>\n    </ChartContainer>\n  );\n}\n\nconst exampleLatency: ServiceLatencyPoint[] = [\n  { label: \"Mon\", p50Ms: 80, p95Ms: 210 },\n  { label: \"Tue\", p50Ms: 76, p95Ms: 195 },\n  { label: \"Wed\", p50Ms: 95, p95Ms: 340 },\n  { label: \"Thu\", p50Ms: 130, p95Ms: 470 },\n  { label: \"Fri\", p50Ms: 100, p95Ms: 330 },\n  { label: \"Sat\", p50Ms: 82, p95Ms: 240 },\n  { label: \"Sun\", p50Ms: 79, p95Ms: 215 },\n];\n\nexport function ServiceLatencyExample() {\n  return <ServiceLatencyChart data={exampleLatency} />;\n}\n",
+      "type": "registry:component",
+      "target": "@components/blocks/service-latency-chart.tsx"
+    }
+  ],
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:block"
+}
