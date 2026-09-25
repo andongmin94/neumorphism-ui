@@ -9235,3 +9235,60 @@ body {
     padding: 1.15rem;
   }
 }
+
+
+/* Mobile navigation accessibility and drawer layout v7 */
+
+@media (max-width: 1024px) {
+  .mobile-nav-panel {
+    top: var(--docs-header-height) !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    width: min(88vw, 21.25rem) !important;
+    max-width: min(88vw, 21.25rem) !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-right: 1px solid var(--line) !important;
+    border-radius: 0 !important;
+    background: var(--surface) !important;
+    transform: none !important;
+    translate: none !important;
+    box-shadow:
+      12px 0 28px color-mix(in srgb, black 18%, transparent),
+      inset -1px 0 0 var(--line-light) !important;
+  }
+
+  .mobile-nav-heading {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    min-height: 58px;
+    margin: 0;
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .mobile-nav-heading > strong {
+    font-size: 0.86rem;
+    font-weight: 730;
+    letter-spacing: -0.02em;
+  }
+
+  .mobile-nav-scroll {
+    height: calc(100dvh - var(--docs-header-height) - 58px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1rem 0.9rem 3rem;
+    scrollbar-width: thin;
+  }
+
+  .mobile-nav-scroll .docs-nav {
+    gap: 1.15rem;
+  }
+}

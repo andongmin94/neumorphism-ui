@@ -58,19 +58,24 @@ function MobileDocsNavigation() {
       </DialogTrigger>
 
       <DialogContent
-        aria-label={messages.navigation.mobileLabel}
+        aria-labelledby="mobile-docs-navigation-title"
         className="mobile-nav-panel"
         id="mobile-docs-navigation"
         overlayClassName="mobile-nav-backdrop"
         showCloseButton={false}
       >
+        <DialogTitle className="sr-only" id="mobile-docs-navigation-title">
+          {messages.navigation.mobileLabel}
+        </DialogTitle>
         <div className="mobile-nav-heading">
-          <DialogTitle>{messages.navigation.docs}</DialogTitle>
+          <strong>{messages.navigation.docs}</strong>
           <DialogClose aria-label={messages.navigation.mobileClose} className="mobile-nav-close">
             <span aria-hidden="true">×</span>
           </DialogClose>
         </div>
-        <DocsNav onNavigate={closeMobileNav} />
+        <div className="mobile-nav-scroll">
+          <DocsNav onNavigate={closeMobileNav} />
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -196,6 +196,7 @@ export function DocsSearch() {
       <DialogTrigger
         render={
           <button
+            aria-label={messages.search.trigger}
             className="docs-search-trigger"
             type="button"
           />
