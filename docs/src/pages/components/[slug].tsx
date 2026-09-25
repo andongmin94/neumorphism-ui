@@ -4,6 +4,7 @@ import { notFound } from "fumapress/router";
 
 import { ComponentExample } from "@/components/docs/component-example";
 import { ComponentInstallation } from "@/components/docs/component-installation";
+import { InstallCommand } from "@/components/docs/install-command";
 import { componentDocs } from "@/components/docs/component-docs-data";
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { DocsToc } from "@/components/docs/docs-toc";
@@ -61,14 +62,37 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
             <span aria-hidden="true">/</span>
             <span aria-current="page">{component.title}</span>
           </nav>
-          <div className="component-doc-kicker">
+
+          <div className="component-doc-meta">
             <span>{category?.label}</span>
-            <a href={`/r/${component.slug}.json`} target="_blank">
+            <code>@neumorphism-ui/{component.slug}</code>
+          </div>
+
+          <div className="component-doc-heading-row">
+            <div>
+              <h1>{component.title}</h1>
+              <p className="component-doc-description">{component.description}</p>
+            </div>
+          </div>
+
+          <div className="component-doc-intro-actions">
+            <InstallCommand compact name={component.slug} />
+            <a
+              className="component-doc-registry-link"
+              href={`/r/${component.slug}.json`}
+              target="_blank"
+              rel="noreferrer"
+            >
               {messages.common.registryJson}
+              <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <h1>{component.title}</h1>
-          <p className="component-doc-description">{component.description}</p>
+
+          <nav className="component-doc-quicknav" aria-label={messages.common.pageToc}>
+            {componentTocItems.map((item) => (
+              <a href={item.href} key={item.href}>{item.label}</a>
+            ))}
+          </nav>
         </header>
 
         <section className="component-doc-section" id="preview">

@@ -7200,3 +7200,217 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* Component detail v3 */
+
+.component-doc-page {
+  grid-template-columns: minmax(0, 880px) 190px;
+  max-width: 1240px;
+  gap: 4rem;
+  padding-top: 3.6rem;
+}
+
+.component-doc-article {
+  max-width: 880px;
+}
+
+.component-doc-intro {
+  padding-bottom: 1.6rem;
+}
+
+.component-doc-breadcrumb {
+  margin-bottom: 1.35rem;
+  color: var(--docs-muted);
+  font-size: 0.7rem;
+}
+
+.component-doc-breadcrumb a {
+  color: var(--docs-muted);
+  text-decoration: none;
+}
+
+.component-doc-breadcrumb a:hover {
+  color: var(--foreground);
+}
+
+.component-doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.component-doc-meta > span {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 720;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.component-doc-meta code {
+  padding: 0.28rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface-low);
+  color: var(--docs-muted);
+  font-size: 0.58rem;
+}
+
+.component-doc-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.component-doc-intro h1 {
+  margin: 0;
+  font-size: clamp(3.2rem, 6vw, 5.2rem);
+  font-weight: 720;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
+}
+
+.component-doc-description {
+  max-width: 760px;
+  margin-top: 1rem;
+  font-size: 0.98rem;
+  line-height: 1.78;
+}
+
+.component-doc-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.component-doc-intro-actions .compact-install {
+  min-width: min(100%, 22rem);
+  border-color: var(--line);
+  border-radius: 8px;
+  background: var(--surface-low);
+  box-shadow: none;
+}
+
+.component-doc-registry-link {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--docs-muted);
+  font-size: 0.68rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.component-doc-registry-link:hover {
+  background: var(--surface-low);
+  color: var(--foreground);
+}
+
+.component-doc-quicknav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.component-doc-quicknav a {
+  padding: 0.34rem 0.5rem;
+  border-radius: 6px;
+  color: var(--docs-muted);
+  font-size: 0.66rem;
+  font-weight: 620;
+  text-decoration: none;
+}
+
+.component-doc-quicknav a:hover {
+  background: var(--surface-low);
+  color: var(--foreground);
+}
+
+.component-doc-section {
+  padding-block: 3rem;
+}
+
+.component-doc-section:first-of-type {
+  padding-top: 2.25rem;
+}
+
+.component-doc-section-heading {
+  display: block;
+  margin-bottom: 1.35rem;
+}
+
+.component-doc-section-heading h2 {
+  font-size: clamp(1.9rem, 3vw, 2.45rem);
+  letter-spacing: -0.045em;
+}
+
+.component-example {
+  overflow: hidden;
+  border-color: var(--line);
+  border-radius: var(--neu-radius-surface);
+}
+
+.component-example-toolbar {
+  min-height: 44px;
+  padding-inline: 0.75rem;
+}
+
+.component-example-panel {
+  min-height: 360px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.component-api-table-wrap {
+  border-radius: 10px;
+}
+
+.component-a11y-list {
+  border-radius: 10px;
+}
+
+.component-doc-pagination {
+  margin-top: 1rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 1024px) {
+  .component-doc-page {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 900px;
+  }
+
+  .component-doc-page > .docs-toc {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .component-doc-intro h1 {
+    font-size: clamp(3rem, 16vw, 4.4rem);
+  }
+
+  .component-doc-intro-actions {
+    display: grid;
+  }
+
+  .component-doc-intro-actions .compact-install {
+    min-width: 0;
+  }
+
+  .component-doc-registry-link {
+    justify-content: center;
+  }
+}
