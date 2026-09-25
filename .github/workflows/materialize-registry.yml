@@ -22,6 +22,7 @@ jobs:
           npm ci --prefix registry
           npm run lint --prefix registry
           npm run build --prefix registry
+          npm run sync:docs --prefix registry
           npm test --prefix registry
           npm run check:generated --prefix registry
       - name: Commit generated outputs
