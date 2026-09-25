@@ -6886,3 +6886,317 @@ body {
     transform: scale(0.28);
   }
 }
+
+
+/* Component directory v3 */
+
+.components-landing-page {
+  width: min(100%, 1400px);
+  margin-inline: auto;
+  padding: 4.5rem clamp(1.5rem, 4vw, 4rem) 7rem;
+}
+
+.components-landing-hero {
+  max-width: 920px;
+  padding-bottom: 4.5rem;
+}
+
+.components-landing-hero > span,
+.components-feature-section > header > span,
+.component-directory-eyebrow {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 720;
+  letter-spacing: 0.13em;
+}
+
+.components-landing-hero h1 {
+  margin: 1rem 0 1.1rem;
+  font-size: clamp(3.2rem, 6vw, 5.7rem);
+  font-weight: 720;
+  letter-spacing: -0.07em;
+  line-height: 0.94;
+}
+
+.components-landing-hero > p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 1.04rem;
+  line-height: 1.8;
+}
+
+.component-directory {
+  padding: 0 0 5rem;
+  border: 0;
+}
+
+.component-directory-toolbar {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  align-items: end;
+  gap: 4rem;
+  padding: 2rem 0 1.6rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.component-directory-toolbar h2 {
+  margin: 0.7rem 0 0.4rem;
+  font-size: clamp(2.1rem, 3.5vw, 3.25rem);
+  letter-spacing: -0.055em;
+}
+
+.component-directory-toolbar p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.component-directory-search {
+  position: relative;
+}
+
+.component-directory-search svg {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  z-index: 1;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: var(--docs-muted);
+  stroke-width: 1.8;
+  transform: translateY(-50%);
+}
+
+.component-directory-search input {
+  height: 44px;
+  padding-inline: 2.45rem 2.4rem;
+  border-color: var(--line);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--surface-low) 72%, transparent);
+  box-shadow: none;
+}
+
+.component-directory-search kbd {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  padding: 0.22rem 0.38rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--background);
+  color: var(--docs-muted);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  transform: translateY(-50%);
+}
+
+.component-directory-browser {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 2.5rem;
+  padding-top: 1.6rem;
+}
+
+.component-directory-categories {
+  position: sticky;
+  top: calc(var(--docs-header-height) + 1.5rem);
+  align-self: start;
+  display: grid;
+  gap: 0.12rem;
+}
+
+.component-directory-categories > span {
+  margin-bottom: 0.45rem;
+  color: var(--docs-muted);
+  font-size: 0.61rem;
+  font-weight: 720;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.component-directory-categories button {
+  display: flex;
+  width: 100%;
+  min-height: 34px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.42rem 0.56rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--docs-muted);
+  font-size: 0.76rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.component-directory-categories button:hover {
+  background: var(--surface-low);
+  color: var(--foreground);
+}
+
+.component-directory-categories button.is-active {
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface-low));
+  color: var(--foreground);
+  font-weight: 680;
+}
+
+.component-directory-categories small {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+}
+
+.component-directory-results {
+  min-width: 0;
+}
+
+.component-directory-results-head {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.component-directory-results-head p {
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 0.7rem;
+}
+
+.component-directory-results-head a {
+  color: var(--foreground);
+  font-size: 0.7rem;
+  font-weight: 680;
+  text-decoration: none;
+}
+
+.component-directory-groups {
+  gap: 3.25rem;
+  padding-top: 2rem;
+}
+
+.component-directory-groups > section > header {
+  margin-bottom: 1rem;
+}
+
+.component-directory-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.component-directory-card {
+  min-height: 176px;
+  padding: 1.15rem;
+}
+
+.component-directory-card > a {
+  min-height: 112px;
+}
+
+.component-directory-card-meta {
+  color: var(--docs-muted);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.component-directory-card h4 {
+  margin: 0.65rem 0 0.45rem;
+  font-size: 1rem;
+}
+
+.component-directory-card h4 span {
+  font-size: 0.8rem;
+}
+
+.component-directory-card .compact-install {
+  margin-top: auto;
+}
+
+.components-feature-section {
+  padding: 5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.components-feature-section > header {
+  max-width: 760px;
+  margin-bottom: 2rem;
+}
+
+.components-feature-section > header h2 {
+  margin: 0.7rem 0 0.6rem;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  letter-spacing: -0.05em;
+}
+
+.components-feature-section > header p {
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 0.84rem;
+  line-height: 1.7;
+}
+
+.components-composition-section {
+  padding-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  .component-directory-browser {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .component-directory-categories {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    gap: 0.35rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .component-directory-categories > span {
+    display: none;
+  }
+
+  .component-directory-categories button {
+    flex: 0 0 auto;
+    width: auto;
+    border: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 760px) {
+  .components-landing-page {
+    padding-inline: 1.25rem;
+  }
+
+  .component-directory-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+  }
+
+  .component-directory-search {
+    width: 100%;
+  }
+
+  .component-directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .components-landing-hero h1 {
+    font-size: clamp(3rem, 14vw, 4.4rem);
+  }
+
+  .component-directory-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

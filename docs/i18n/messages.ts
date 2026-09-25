@@ -369,9 +369,9 @@ const en: Messages = {
   componentsPage: {
     title: "Components",
     metaDescription:
-      "Twenty-six installable Neumorphism UI components with detailed documentation.",
+      "Fifty-six installable Neumorphism UI components with detailed documentation.",
     intro:
-      "Twenty-six components covering forms, navigation, feedback, and overlays. Each page includes a live preview, install command, usage code, and API reference.",
+      "Fifty-six components covering forms, navigation, feedback, overlays, layout, and data UI. Each page includes a live preview, install command, usage code, and API reference.",
     themes: "Themes",
     themesBody:
       "Keep component source unchanged while swapping palette, depth, and radius through style Registry items.",
