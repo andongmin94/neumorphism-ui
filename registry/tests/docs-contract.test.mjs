@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+import ts from "@typescript/typescript6";
 import { componentDocs } from "../../docs/components/docs/component-docs-data.ts";
 import { makeRegistry } from "../scripts/theme-output.mjs";
 const root = fileURLToPath(new URL("../", import.meta.url));
