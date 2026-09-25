@@ -43,6 +43,7 @@ export function ComponentDirectory() {
           [component.title, component.slug, component.summary].some((value) =>
             value.toLocaleLowerCase(locale).includes(normalizedQuery),
           );
+
         return matchesCategory && matchesQuery;
       }),
     }))
@@ -57,7 +58,11 @@ export function ComponentDirectory() {
   }
 
   return (
-    <section className="component-directory" aria-labelledby="component-directory-title" id="components">
+    <section
+      className="component-directory"
+      aria-labelledby="component-directory-title"
+      id="components"
+    >
       <div className="component-directory-toolbar">
         <div>
           <span className="component-directory-eyebrow">DIRECTORY</span>
@@ -82,7 +87,10 @@ export function ComponentDirectory() {
       </div>
 
       <div className="component-directory-browser">
-        <aside aria-label={messages.directory.filtersLabel} className="component-directory-categories">
+        <aside
+          aria-label={messages.directory.filtersLabel}
+          className="component-directory-categories"
+        >
           <span>Categories</span>
           <button
             aria-pressed={category === "all"}
@@ -151,7 +159,9 @@ export function ComponentDirectory() {
             <div className="component-directory-empty">
               <strong>{messages.directory.emptyTitle}</strong>
               <p>{messages.directory.emptyBody}</p>
-              <button onClick={reset} type="button">{messages.directory.reset}</button>
+              <button onClick={reset} type="button">
+                {messages.directory.reset}
+              </button>
             </div>
           )}
         </div>
