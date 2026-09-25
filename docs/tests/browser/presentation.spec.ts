@@ -79,6 +79,7 @@ test("presentation: tablet shell and drawer", async ({ page }, info) => {
     { name: "components", path: "/en/components", sidebar: false },
     { name: "templates", path: "/en/templates", sidebar: false },
     { name: "button-detail", path: "/en/components/button", sidebar: true },
+    { name: "verification", path: "/en/docs/verification", sidebar: true },
   ] as const;
 
   for (const entry of tabletPages) {
@@ -90,6 +91,8 @@ test("presentation: tablet shell and drawer", async ({ page }, info) => {
     });
 
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const mainBox = await page.locator(".docs-site-main").boundingBox();
+    expect(mainBox?.width ?? 0).toBeGreaterThan(700);
     await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
     await expect(page.locator(".primary-nav")).toBeHidden();
 

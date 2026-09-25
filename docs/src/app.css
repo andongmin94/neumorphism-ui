@@ -8492,6 +8492,18 @@ body {
   max-width: var(--docs-frame-max);
 }
 
+@media (max-width: 1024px) {
+  .docs-site-layout-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: none;
+  }
+
+  .docs-site-layout-sidebar .docs-site-main {
+    grid-column: 1;
+    width: 100%;
+  }
+}
+
 .docs-site-layout-product .docs-home-shell,
 .docs-site-layout-product .components-landing-page,
 .docs-site-layout-product .template-gallery-page,
