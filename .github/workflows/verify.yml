@@ -122,6 +122,7 @@ jobs:
         run: |
           npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts
           npx playwright test --config=playwright.material.config.ts
+          npx playwright test --config=playwright.detail.config.ts
       - name: Save presentation screenshots
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -130,3 +131,17 @@ jobs:
           retention-days: 7
           if-no-files-found: error
           path: docs/test-results/docs-browser
+      - name: Save directly viewable workspace detail
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          path: docs/test-results/docs-browser/catalog/*-desktop-light/theme-interaction.png
+          archive: false
+          retention-days: 7
+          if-no-files-found: error
+      - name: Save directly viewable input anatomy
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          path: docs/test-results/docs-browser/catalog/*-desktop-light/input-group.png
+          archive: false
+          retention-days: 7
+          if-no-files-found: error

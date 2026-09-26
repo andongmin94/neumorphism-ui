@@ -15,7 +15,8 @@
     "lint": "oxlint --no-error-on-unmatched-pattern --ignore-pattern src/registry src components i18n tests press.config.tsx vite.config.ts",
     "typecheck": "tsc --noEmit",
     "test:browser": "playwright test",
-    "pretypecheck": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry"
+    "pretypecheck": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
+    "verify:deployed": "node scripts/verify-deployed.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

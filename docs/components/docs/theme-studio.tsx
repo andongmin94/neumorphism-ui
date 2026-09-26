@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { ThemePreview } from "./theme-preview";
 
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { getInstallCommand } from "@/components/docs/registry-config";
@@ -21,30 +22,14 @@ import {
   themePresets,
   THEME_STORAGE_KEY,
 } from "@/components/docs/theme-config";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@neumorphism-ui/registry/ui/alert";
-import { Badge } from "@neumorphism-ui/registry/ui/badge";
-import { Button } from "@neumorphism-ui/registry/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@neumorphism-ui/registry/ui/card";
-import { Input } from "@neumorphism-ui/registry/ui/input";
-import { Progress } from "@neumorphism-ui/registry/ui/progress";
-import { Switch } from "@neumorphism-ui/registry/ui/switch";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@neumorphism-ui/registry/ui/tabs";
+
+
+
+
+
+
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@neumorphism-ui/registry/ui/tabs";
 
 type PreviewMode = "light" | "dark";
 
@@ -64,7 +49,7 @@ function ControlGroup({
 }
 
 export function ThemeStudio() {
-  const { messages } = useLocale();
+  const { messages, locale } = useLocale();
   const copy = messages.themeStudio;
   const depthOptions: {
     id: ThemeDepth;
@@ -105,7 +90,6 @@ export function ThemeStudio() {
   const [settings, setSettings] =
     React.useState<ThemeSettings>(defaultThemeSettings);
   const [ready, setReady] = React.useState(false);
-  const [notifications, setNotifications] = React.useState(true);
   const [previewMode, setPreviewMode] = React.useState<PreviewMode>("light");
   const preset = getThemePreset(settings.presetId);
   const accent = settings.accent ?? preset[previewMode].primary;
@@ -359,96 +343,7 @@ export function ThemeStudio() {
           <span>{preset.name} · {depthOptions.find((option) => option.id === settings.depth)?.label}</span>
         </div>
 
-        <div
-          className="theme-preview-canvas"
-          data-preview-mode={previewMode}
-          style={previewStyle}
-        >
-          <Card className="theme-preview-profile">
-            <CardHeader>
-              <div>
-                <Badge variant="primary">NVDA</Badge>
-                <CardTitle>{copy.priceAlert}</CardTitle>
-                <CardDescription>
-                  NVIDIA · NASDAQ
-                </CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="theme-preview-field">
-                <label htmlFor="theme-preview-input">{copy.targetPrice}</label>
-                <div>
-                  <Input
-                    defaultValue="$210.00"
-                    id="theme-preview-input"
-                    readOnly
-                  />
-                  <Button variant="primary">{copy.save}</Button>
-                </div>
-              </div>
-              <div className="theme-preview-progress">
-                <span>
-                  <strong>{copy.currentPrice}</strong>
-                  <small>{copy.targetProgress}</small>
-                </span>
-                <Progress aria-label={copy.targetProgress} value={90} />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button variant="default">{copy.viewChart}</Button>
-              <Button variant="soft">{copy.deleteAlert}</Button>
-            </CardFooter>
-          </Card>
-
-          <div className="theme-preview-side">
-            <Card variant="inset" className="theme-preview-settings">
-              <CardHeader>
-                <CardTitle>{copy.alertConditions}</CardTitle>
-                <CardDescription>{copy.pushAtTarget}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <label>
-                  <span>
-                    <strong>{copy.realtimeAlerts}</strong>
-                    <small>{notifications ? copy.on : copy.off}</small>
-                  </span>
-                  <Switch
-                    checked={notifications}
-                    onCheckedChange={setNotifications}
-                  />
-                </label>
-                <label>
-                  <span>
-                    <strong>{copy.changeToday}</strong>
-                    <small>{copy.intraday}</small>
-                  </span>
-                  <Badge variant="soft">+2.14%</Badge>
-                </label>
-              </CardContent>
-            </Card>
-
-            <Alert variant="success">
-              <span aria-hidden="true">✓</span>
-              <AlertTitle>{copy.alertEnabled}</AlertTitle>
-              <AlertDescription>{copy.alertEnabledBody}</AlertDescription>
-            </Alert>
-          </div>
-
-          <div className="theme-elevation-strip">
-            <Card variant="raised">
-              <span>{copy.card}</span>
-              <small>{copy.raisedSurface}</small>
-            </Card>
-            <Card variant="inset">
-              <span>{copy.input}</span>
-              <small>{copy.insetSurface}</small>
-            </Card>
-            <Card variant="flat">
-              <span>{copy.divider}</span>
-              <small>{copy.flatStructure}</small>
-            </Card>
-          </div>
-        </div>
+        <ThemePreview copy={copy} locale={locale} previewMode={previewMode} style={previewStyle} />
 
         <Tabs className="theme-output" defaultValue="css" id="theme-output">
           <div className="theme-output-heading">

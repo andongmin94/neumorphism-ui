@@ -7468,6 +7468,10 @@ body {
 }
 
 @media (min-width: 1360px) {
+  .component-doc-quicknav {
+    display: none;
+  }
+
   .docs-toc {
     display: block;
   }

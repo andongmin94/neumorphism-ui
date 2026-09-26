@@ -54,7 +54,7 @@ function Slider({
     >
       <SliderPrimitive.Control
         data-slot="slider-control"
-        className="relative flex grow touch-none items-center select-none data-[orientation=horizontal]:h-5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-5 data-[orientation=vertical]:justify-center"
+        className="relative flex grow touch-none items-center select-none data-[orientation=horizontal]:h-11 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-11 data-[orientation=vertical]:justify-center"
       >
         <SliderPrimitive.Track
           data-slot="slider-track"
@@ -62,7 +62,7 @@ function Slider({
         >
           <SliderPrimitive.Indicator
             data-slot="slider-range"
-            className="bg-[var(--primary)] [box-shadow:inset_0_1px_rgb(255_255_255_/_0.24)] data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+            className="rounded-[inherit] bg-[var(--primary)] [box-shadow:inset_0_1px_rgb(255_255_255_/_0.24)] data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
           />
         </SliderPrimitive.Track>
         {values.map((_, index) => (

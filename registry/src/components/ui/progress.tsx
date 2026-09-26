@@ -36,7 +36,7 @@ function Progress({
     >
       <ProgressPrimitive.Track
         data-slot="progress-track"
-        className="relative h-full w-full"
+        className="relative h-full w-full rounded-[inherit]"
       >
         <ProgressPrimitive.Indicator
           data-slot="progress-indicator"

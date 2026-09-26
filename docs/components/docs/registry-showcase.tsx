@@ -286,7 +286,7 @@ export function RegistryShowcase({ copy }: { copy: ShowcaseMessages }) {
         />
         <div className="showcase-surface feedback-showcase">
           <Alert variant="success">
-            <span aria-hidden="true">✓</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
             <AlertTitle>{copy.feedback.registryConnected}</AlertTitle>
             <AlertDescription>
               {copy.feedback.registryDescription}

@@ -1,0 +1,10 @@
+.badge { width: fit-content; }
+.error { margin: 8px 0 0; color: var(--neu-error-text); font-size: 13px; line-height: 1.5; }
+.footer { flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+.chartLink { display: inline-flex; min-height: 40px; align-items: center; gap: 6px; color: var(--foreground); font-size: 14px; font-weight: 600; text-underline-offset: 4px; }
+.chartLink:hover { color: var(--primary); }
+.chartLink:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 4px; }
+.changeRow { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.changeRow > span { display: grid; gap: 4px; }
+.changeRow strong { font-size: 12px; }
+.changeRow small { color: var(--muted-foreground); font-size: 11px; }

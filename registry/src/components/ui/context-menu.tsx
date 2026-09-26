@@ -206,7 +206,7 @@ function ContextMenuCheckboxItem({
     >
       <span className="pointer-events-none absolute left-2.5 grid size-4 place-items-center text-[var(--primary)]">
         <ContextMenuPrimitive.CheckboxItemIndicator>
-          <span aria-hidden="true">✓</span>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
         </ContextMenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
