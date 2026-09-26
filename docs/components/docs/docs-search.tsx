@@ -16,10 +16,10 @@ import {
 import styles from "./docs-search.module.css";
 
 const referenceCopy = {
-  ko: { tokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", accessibility: "접근성", verification: "검증과 릴리스", credits: "Credits & dependencies", charts: "차트", navigate: "탐색" },
-  en: { tokens: "Design tokens", registry: "Registry architecture", resources: "Resources", accessibility: "Accessibility", verification: "Verification & release", credits: "Credits & dependencies", charts: "Charts", navigate: "Navigate" },
-  ja: { tokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", accessibility: "アクセシビリティ", verification: "検証とリリース", credits: "Credits & dependencies", charts: "チャート", navigate: "移動" },
-  zh: { tokens: "设计令牌", registry: "Registry 架构", resources: "资源", accessibility: "无障碍", verification: "验证与发布", credits: "Credits & dependencies", charts: "图表", navigate: "导航" },
+  ko: { search: "검색", tokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", accessibility: "접근성", verification: "검증과 릴리스", credits: "Credits & dependencies", charts: "차트", navigate: "탐색" },
+  en: { search: "Search", tokens: "Design tokens", registry: "Registry architecture", resources: "Resources", accessibility: "Accessibility", verification: "Verification & release", credits: "Credits & dependencies", charts: "Charts", navigate: "Navigate" },
+  ja: { search: "検索", tokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", accessibility: "アクセシビリティ", verification: "検証とリリース", credits: "Credits & dependencies", charts: "チャート", navigate: "移動" },
+  zh: { search: "搜索", tokens: "设计令牌", registry: "Registry 架构", resources: "资源", accessibility: "无障碍", verification: "验证与发布", credits: "Credits & dependencies", charts: "图表", navigate: "导航" },
 } as const;
 
 function SearchIcon() {
@@ -106,7 +106,7 @@ export function DocsSearch() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger render={<button aria-label={messages.search.trigger} className="docs-search-trigger" type="button" />}>
         <span aria-hidden="true"><SearchIcon /></span>
-        <span>{messages.search.trigger}</span>
+        <span>{copy.search}</span>
         <kbd>Ctrl K</kbd>
       </DialogTrigger>
       <DialogContent className={`docs-search-dialog ${styles.dialog}`} showCloseButton={false}>
@@ -131,6 +131,7 @@ export function DocsSearch() {
           }}
         >
           <div className={styles.inputRow}>
+            <SearchIcon />
             <CommandInput aria-label={messages.search.label} placeholder={messages.search.placeholder} value={query} onValueChange={setQuery} autoFocus />
             <DialogClose className={styles.close} aria-label={messages.search.close}>
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="m6 6 12 12M6 18 18 6" /></svg>

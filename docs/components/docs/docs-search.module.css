@@ -1,7 +1,25 @@
-.dialog[data-slot="dialog-content"] { gap: 0; padding: 0; overflow: hidden; }
+.dialog[data-slot="dialog-content"] {
+  gap: 0;
+  width: min(calc(100vw - 32px), 620px);
+  padding: 0;
+  overflow: hidden;
+}
+
 .palette[data-slot="command"] { border: 0; border-radius: 0; box-shadow: none; }
-.inputRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding-right: 10px; border-bottom: 1px solid var(--border); }
-.inputRow > [data-slot="command-input-wrapper"] { height: 60px; border: 0; box-shadow: none; }
+
+.inputRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 0 10px 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+.inputRow > svg { width: 18px; height: 18px; color: var(--muted-foreground); }
+.inputRow > [data-slot="command-input-wrapper"] { min-width: 0; height: 60px; border: 0; box-shadow: none; }
+.inputRow > [data-slot="command-input-wrapper"] > span { display: none; }
+.inputRow:has([data-slot="command-input"]:focus-visible) { box-shadow: inset 0 -2px 0 var(--ring); }
+.inputRow [data-slot="command-input"]:focus-visible { outline: 0; box-shadow: none; }
+
 .close { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--border); border-radius: var(--neu-radius-control); background: var(--neu-surface); color: var(--foreground); }
 .close:hover { box-shadow: var(--neu-shadow-inset-sm); }
 .close:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

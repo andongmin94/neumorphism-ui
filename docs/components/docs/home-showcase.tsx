@@ -82,7 +82,8 @@ export function HomeShowcase() {
               setInvalid(false);
               setMessage("saved");
             }}
-            onReset={() => {
+            onReset={(event) => {
+              event.preventDefault();
               setDraft({ ...saved });
               setInvalid(false);
               setMessage("discarded");
