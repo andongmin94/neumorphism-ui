@@ -1,0 +1,91 @@
+name: Material refinement review
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/material-refinement.yml', '.github/material-refinement.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: material-refinement
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - run: npm ci --prefix registry && npm ci --prefix docs
+      - name: Prepare isolated component specimen
+        run: |
+          sed -i 's/buildThemeVariables, settingsForPreset/buildThemeVariables, defaultThemeSettings, getThemePreset/g; s/settingsForPreset(preset)/{ ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset }/g' .github/material-refinement.py
+          python .github/material-refinement.py prepare
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          cd docs
+          npx playwright install --with-deps chromium
+          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts --grep='material specimen'
+      - name: Refine source and regenerate all outputs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python .github/material-refinement.py refine
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Verify material states and documentation
+        working-directory: docs
+        run: |
+          npx playwright test --config=playwright.material.config.ts
+          npm run test:browser
+      - name: Create reviewed candidate without changing main
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          rm .github/material-refinement.py .github/workflows/material-refinement.yml
+          git add -A
+          mkdir -p docs/test-results/material-review
+          git diff --cached > docs/test-results/material-review/changes.patch
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const repo = process.env.GITHUB_REPOSITORY;
+          const parent = process.env.GITHUB_SHA;
+          async function api(path, body) {
+            const response = await fetch(`https://api.github.com/repos/${repo}/${path}`, {
+              method: body ? 'POST' : 'GET',
+              headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+              ...(body ? { body: JSON.stringify(body) } : {}),
+            });
+            if (!response.ok) throw new Error(`${path}: ${response.status} ${await response.text()}`);
+            return response.json();
+          }
+          const paths = execFileSync('git', ['diff', '--cached', '--name-only'], { encoding: 'utf8' }).trim().split('\n');
+          const deleted = new Set(execFileSync('git', ['diff', '--cached', '--diff-filter=D', '--name-only'], { encoding: 'utf8' }).trim().split('\n'));
+          const tree = paths.map(path => deleted.has(path) ? { path, mode: '100644', type: 'blob', sha: null } : { path, mode: '100644', type: 'blob', content: fs.readFileSync(path, 'utf8') });
+          const base = await api(`git/commits/${parent}`);
+          const result = await api('git/trees', { base_tree: base.tree.sha, tree });
+          const commit = await api('git/commits', { message: 'design: refine neumorphic materials and core interaction states', tree: result.sha, parents: [parent] });
+          fs.writeFileSync('docs/test-results/material-review/candidate.json', JSON.stringify({ parent, sha: commit.sha, tree: result.sha, files: paths }, null, 2));
+          console.log(`Reviewed candidate: ${commit.sha}. Main was NOT moved.`);
+          JS
+      - name: Save source diff and visual evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: material-refinement-review
+          path: docs/test-results
+          retention-days: 7
+          if-no-files-found: error
