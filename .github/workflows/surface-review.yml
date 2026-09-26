@@ -43,6 +43,7 @@ jobs:
           if (createHash('sha256').update(archive).digest('hex') !== 'eb5c96e9c17054d9c113a7fa5ee61b7dbe9b46ab4bd394b7e14f05ff80ce5d3f') throw new Error('Source payload checksum mismatch');
           writeFileSync('/tmp/surface-edits.json', brotliDecompressSync(archive));
           writeFileSync('/tmp/surface-refinements.py', await blob('8a6fb852230985aaa796d59bd758263dadd6b02c'));
+          writeFileSync('/tmp/surface-usage.py', await blob('dc0e00c01ada9355673e74308cd1e907da7d459b'));
           writeFileSync('registry/scripts/generate-registry.mjs', await blob('047e330ca8ab9b771fd50ad1f0cb9d37871fe77f'));
           JS
           python <<'PY'
@@ -68,6 +69,7 @@ jobs:
           print(f'Applied {len(pending)} source files; main ref is unchanged.')
           PY
           python /tmp/surface-refinements.py
+          python /tmp/surface-usage.py
       - name: Static source and generated output
         env:
           GITHUB_TOKEN: ${{ github.token }}
