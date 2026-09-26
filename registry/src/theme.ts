@@ -86,32 +86,32 @@ export const themePresets: readonly ThemePreset[] = [
       motion: 180,
     },
     light: {
-      background: "#e5ebf1",
-      surface: "#e9eef4",
-      surfaceSoft: "#f3f6f9",
-      surfaceLow: "#dbe2ea",
-      popover: "#eef3f8",
-      secondary: "#dfe6ee",
-      foreground: "#172033",
-      mutedForeground: "#566478",
-      primary: "#1267f4",
+      background: "#ebecf0",
+      surface: "#ebecf0",
+      surfaceSoft: "#f2f3f5",
+      surfaceLow: "#dfe1e7",
+      popover: "#ebecf0",
+      secondary: "#e5e7ed",
+      foreground: "#25264b",
+      mutedForeground: "#586079",
+      primary: "#0768da",
       primaryForeground: "#ffffff",
       destructive: "#b92e43",
       border: "rgb(83 99 123 / 0.18)",
       input: "rgb(83 99 123 / 0.16)",
       edge: "rgb(255 255 255 / 0.72)",
-      shadowDark: "rgb(30 48 72 / 0.14)",
-      shadowLight: "rgb(255 255 255 / 0.88)",
+      shadowDark: "rgb(66 72 94 / 0.22)",
+      shadowLight: "rgb(255 255 255 / 0.94)",
     },
     dark: {
-      background: "#151a22",
-      surface: "#1b222c",
-      surfaceSoft: "#242d39",
-      surfaceLow: "#141922",
-      popover: "#1b222c",
-      secondary: "#202a36",
+      background: "#242731",
+      surface: "#242731",
+      surfaceSoft: "#2b2f3c",
+      surfaceLow: "#1c1f28",
+      popover: "#292d39",
+      secondary: "#2a2e3a",
       foreground: "#e9f0fa",
-      mutedForeground: "#8fa1b7",
+      mutedForeground: "#aab4c8",
       primary: "#5aa2ff",
       primaryForeground: "#07111f",
       destructive: "#ff7685",
@@ -450,9 +450,9 @@ export function buildThemeVariables(
       : settings.controlShape === "soft"
         ? "12px"
         : "10px";
-  const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 62%, transparent)`;
-  const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 65%, transparent)`;
-  const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 0 color-mix(in srgb, ${primary} 86%, white)`;
+  const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 84%, transparent)`;
+  const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 86%, transparent)`;
+  const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`;
   const primaryInsetShadow = shadowValue(
     x,
     y,
@@ -490,7 +490,7 @@ export function buildThemeVariables(
     "--neu-surface": tokens.surface,
     "--neu-surface-soft": tokens.surfaceSoft,
     "--neu-surface-low": tokens.surfaceLow,
-    "--neu-edge": `color-mix(in srgb, ${tokens.foreground} ${mode === "light" ? 10 : 9}%, transparent)`,
+    "--neu-edge": mode === "light" ? "transparent" : `color-mix(in srgb, ${tokens.foreground} 4%, transparent)`,
     "--neu-shadow-dark": tokens.shadowDark,
     "--neu-shadow-light": tokens.shadowLight,
     "--neu-shadow-raised": shadowValue(
@@ -499,7 +499,7 @@ export function buildThemeVariables(
       profile.offset,
       profile.blur,
       tokens.shadowDark,
-      `color-mix(in srgb, ${tokens.shadowLight} 76%, transparent)`,
+      `color-mix(in srgb, ${tokens.shadowLight} 94%, transparent)`,
     ),
     "--neu-shadow-raised-sm": shadowValue(
       x,
@@ -508,7 +508,7 @@ export function buildThemeVariables(
       profile.smallBlur,
       tokens.shadowDark,
       raisedSmallLight,
-    ) + `, inset ${x}px ${y}px 0 color-mix(in srgb, ${tokens.edge} 45%, transparent)`,
+    ),
     "--neu-shadow-inset": shadowValue(
       x,
       y,
@@ -528,8 +528,8 @@ export function buildThemeVariables(
       true,
     ),
     "--neu-shadow-primary": primaryShadow,
-    "--neu-shadow-primary-hover": shadowValue(x, y, profile.smallOffset + 1, profile.smallBlur + 3, tokens.shadowDark, raisedSmallLight) + `, inset ${x}px ${y}px 0 color-mix(in srgb, ${primary} 86%, white)`,
-    "--neu-fill-inset": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceLow} 35%, ${tokens.surface}), ${tokens.surface})`,
+    "--neu-shadow-primary-hover": shadowValue(x, y, profile.smallOffset + 1, profile.smallBlur + 3, tokens.shadowDark, raisedSmallLight) + `, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`,
+    "--neu-fill-inset": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceLow} 35%, ${tokens.surface}), color-mix(in srgb, ${tokens.surfaceSoft} 30%, ${tokens.surface}))`,
     "--neu-shadow-primary-inset": primaryInsetShadow,
     "--neu-shadow-destructive-inset": shadowValue(
       x,
@@ -546,7 +546,7 @@ export function buildThemeVariables(
     "--neu-radius-surface": `${settings.surfaceRadius}px`,
     "--neu-radius-overlay": `calc(${settings.surfaceRadius}px + 4px)`,
     "--neu-duration": `${settings.motion}ms`,
-    "--neu-fill-raised": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceSoft} 28%, ${tokens.surface}), ${tokens.surface})`,
+    "--neu-fill-raised": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceSoft} 12%, ${tokens.surface}), ${tokens.surface})`,
     "--neu-fill-primary": primaryForeground === "#ffffff"
       ? `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, ${primary}, color-mix(in srgb, ${primary} 94%, black))`
       : `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${primary} 94%, white), ${primary})`,

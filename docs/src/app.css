@@ -6024,7 +6024,7 @@ body {
   height: 34px;
   flex: none;
   place-items: center;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -6103,7 +6103,7 @@ body {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -6135,7 +6135,7 @@ body {
   height: 40px;
   min-width: 40px;
   place-items: center;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -6345,10 +6345,15 @@ body {
   padding: 0 9px;
   align-items: center;
   gap: 7px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
-  background: var(--neu-surface-low);
+  background: var(--neu-surface);
   box-shadow: var(--neu-shadow-inset-sm);
+}
+
+.sidebar-filter:focus-within {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
 }
 
 .sidebar-filter svg {
@@ -6748,9 +6753,20 @@ body {
   color: var(--foreground);
 }
 
-.docs-primary-action:hover,
+.docs-primary-action:hover {
+  box-shadow: var(--neu-shadow-primary-hover);
+}
+
 .docs-secondary-action:hover {
-  box-shadow: var(--neu-shadow-inset-sm);
+  box-shadow: var(--neu-shadow-hover);
+}
+
+.docs-primary-action:active {
+  box-shadow: var(--neu-shadow-primary-inset);
+}
+
+.docs-secondary-action:active {
+  box-shadow: var(--neu-shadow-inset);
 }
 
 .directory-hero-meta {
@@ -6830,7 +6846,7 @@ body {
   align-items: center;
   gap: 10px;
   padding: 0 12px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-inset-sm);
@@ -6983,7 +6999,7 @@ body {
   flex-direction: column;
   gap: 18px;
   padding: 18px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -7179,7 +7195,7 @@ body {
   overflow: hidden;
   flex-direction: column;
   grid-column: auto;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -7276,7 +7292,7 @@ body {
   align-items: center;
   margin-top: 2px;
   padding: 0 12px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -7315,7 +7331,7 @@ body {
 }
 
 .charts-workbench-frame {
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);

@@ -152,3 +152,22 @@ test("header and showcase reflow at four widths in both modes", async ({ page },
     }
   }
 });
+
+test("sidebar filter keeps a visible recessed target and keyboard focus", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/en/components/button");
+  const field = page.locator(".docs-site-sidebar .sidebar-filter");
+  const input = field.getByRole("searchbox");
+  await expect(input).toBeVisible();
+  expect(await field.evaluate(e => getComputedStyle(e).boxShadow)).toContain("inset");
+  await input.focus();
+  await expect(field).toHaveCSS("outline-style", "solid");
+  await expect(field).toHaveCSS("outline-width", "2px");
+  await input.fill("dialog");
+  await expect(page.locator(".docs-site-sidebar .component-nav-list").getByRole("link", { name: "Dialog", exact: true })).toBeVisible();
+  await field.screenshot({ path: info.outputPath("sidebar-search-focus.png") });
+  await input.fill("no-such-component-1379");
+  await expect(page.locator(".docs-site-sidebar .component-nav-list a")).toHaveCount(0);
+  await input.fill("");
+  await expect(page.locator(".docs-site-sidebar .component-nav-list a")).toHaveCount(56);
+});

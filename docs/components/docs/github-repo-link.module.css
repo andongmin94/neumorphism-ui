@@ -3,7 +3,7 @@
   height: 40px;
   flex: none;
   align-items: center;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);

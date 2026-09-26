@@ -120,3 +120,32 @@ test("mobile reflow and short-screen dialog stay reachable", async ({ page }, in
   await expect(dialog).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });
+
+
+test("continuous material and borderless depth survive interaction", async ({ page }, info) => {
+  await page.goto("/");
+  const neutral = page.getByTestId("default");
+  const input = page.getByRole("textbox", { name: "Workspace name" });
+  const material = await neutral.evaluate(e => ({
+    base: getComputedStyle(document.body).backgroundColor,
+    surface: getComputedStyle(e).backgroundColor,
+    edge: getComputedStyle(e).borderTopColor,
+    shadow: getComputedStyle(e).boxShadow,
+  }));
+  expect(material.surface).toBe(material.base);
+  expect(material.edge).toBe("rgba(0, 0, 0, 0)");
+  expect(material.shadow).not.toContain("inset");
+  await neutral.hover();
+  expect(await neutral.evaluate(e => getComputedStyle(e).boxShadow)).not.toBe(material.shadow);
+  await page.mouse.down();
+  expect(await neutral.evaluate(e => getComputedStyle(e).boxShadow)).toContain("inset");
+  await page.mouse.up();
+  await page.keyboard.press("Tab");
+  await neutral.focus();
+  await expect(neutral).toHaveCSS("outline-style", "solid");
+  await expect(neutral).toHaveCSS("outline-width", "2px");
+  await input.focus();
+  expect(await input.evaluate(e => getComputedStyle(e).boxShadow)).toContain("inset");
+  await expect(input).toHaveCSS("outline-style", "solid");
+  await page.screenshot({ path: info.outputPath("continuous-material-focus.png"), fullPage: true });
+});

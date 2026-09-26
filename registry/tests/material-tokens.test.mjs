@@ -6,6 +6,7 @@ test("all material presets retain distinct tinted hover and recessed fill", () =
     const tokens = buildThemeVariables({ ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset }, mode);
     assert.notEqual(tokens["--neu-shadow-primary-hover"], tokens["--neu-shadow-hover"]);
     assert.match(tokens["--neu-fill-inset"], /^linear-gradient/);
-    assert.match(tokens["--neu-edge"], /color-mix/);
+    if (mode === "light") assert.equal(tokens["--neu-edge"], "transparent");
+    else assert.match(tokens["--neu-edge"], /color-mix/);
   }
 });
