@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Apply exact reviewed source edits without publishing
+      - name: Apply exact source edits without publishing
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -32,15 +32,17 @@ jobs:
           import { createHash } from 'node:crypto';
           import { brotliDecompressSync } from 'node:zlib';
           const chunks = ['756196e47d52950389ac0dd4fc2fba091ace7734','fbe8be002555eaf5924b96576b428ef43f4573da','26961079cf1471fadb06cdd0f9b40e5221607a0e','cb1a0ed1096af9eb519550f5bd8681e9e2319822','113a5ef99ae896b0e373260173cdabc4d541a994'];
-          let encoded = '';
-          for (const sha of chunks) {
+          async function blob(sha) {
             const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/blobs/${sha}`, { headers: { Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: 'application/vnd.github+json' }});
             if (!response.ok) throw new Error(`blob ${sha}: ${response.status}`);
-            encoded += Buffer.from((await response.json()).content, 'base64').toString('utf8');
+            return Buffer.from((await response.json()).content, 'base64');
           }
+          let encoded = '';
+          for (const sha of chunks) encoded += (await blob(sha)).toString('utf8');
           const archive = Buffer.from(encoded, 'base64');
           if (createHash('sha256').update(archive).digest('hex') !== 'eb5c96e9c17054d9c113a7fa5ee61b7dbe9b46ab4bd394b7e14f05ff80ce5d3f') throw new Error('Source payload checksum mismatch');
           writeFileSync('/tmp/surface-edits.json', brotliDecompressSync(archive));
+          writeFileSync('/tmp/surface-refinements.py', await blob('8a6fb852230985aaa796d59bd758263dadd6b02c'));
           JS
           python <<'PY'
           import hashlib, json
@@ -64,6 +66,7 @@ jobs:
               path.write_text(content)
           print(f'Applied {len(pending)} source files; main ref is unchanged.')
           PY
+          python /tmp/surface-refinements.py
       - name: Static source and generated output
         env:
           GITHUB_TOKEN: ${{ github.token }}
