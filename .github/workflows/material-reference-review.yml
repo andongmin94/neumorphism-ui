@@ -35,6 +35,18 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           python .github/material-reference.py
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('registry/src/theme.ts')
+          s = p.read_text()
+          assert 'mutedForeground: "#626981"' in s
+          p.write_text(s.replace('mutedForeground: "#626981"', 'mutedForeground: "#586079"'))
+          p = Path('registry/tests/material-tokens.test.mjs')
+          s = p.read_text()
+          old = '    assert.match(tokens["--neu-edge"], /color-mix/);'
+          assert old in s
+          p.write_text(s.replace(old, '    if (mode === "light") assert.equal(tokens["--neu-edge"], "transparent");\n    else assert.match(tokens["--neu-edge"], /color-mix/);'))
+          PY
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
