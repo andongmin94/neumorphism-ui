@@ -1,0 +1,28 @@
+name: Material reference review
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/material-reference-review.yml']
+permissions:
+  contents: read
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Capture the requested public reference and source snapshot
+        run: |
+          mkdir -p "$RUNNER_TEMP/reference"
+          git archive HEAD | gzip > "$RUNNER_TEMP/reference/source.tar.gz"
+          curl -fLsS --max-time 30 'https://paranpenguin.co.kr/content_shop/item/1379' -o "$RUNNER_TEMP/reference/product.html" || true
+          curl -fLsS --max-time 30 'https://paranpenguin.co.kr/files/attach/images/2024/10/02/b7e3076be412e573259e72995eb26aea.jpg' -o "$RUNNER_TEMP/reference/template.jpg" || true
+          curl -fLsS --max-time 30 'https://paranpenguin.co.kr/files/attach/images/2024/10/02/3166763a6cd45015e529ae5f329c08b1.jpg' -o "$RUNNER_TEMP/reference/example.jpg" || true
+          timeout 45s google-chrome --headless --no-sandbox --disable-gpu --hide-scrollbars --window-size=1440,1100 --virtual-time-budget=10000 --screenshot="$RUNNER_TEMP/reference/product.png" 'https://paranpenguin.co.kr/content_shop/item/1379' || true
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: requested-material-reference
+          path: ${{ runner.temp }}/reference
+          retention-days: 3
+          if-no-files-found: error
