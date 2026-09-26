@@ -46,6 +46,31 @@ jobs:
           text = p.read_text()
           assert old in text
           p.write_text(text.replace(old, new))
+          p = Path('registry/src/components/ui/tabs.tsx')
+          text = p.read_text()
+          old = 'disabled:pointer-events-none disabled:opacity-50'
+          assert old in text
+          text = text.replace(old, 'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50')
+          text = text.replace('hover:text-[var(--foreground)]', 'hover:not-data-disabled:text-[var(--foreground)]')
+          p.write_text(text)
+          p = Path('docs/tests/material/material.spec.ts')
+          text = p.read_text()
+          old = '  const activity = page.getByRole("tab", { name: "Activity", exact: true });\n  await expect(activity).toBeFocused();\n  await expect(activity).toHaveAttribute("aria-selected", "true");'
+          new = '''  // Base UI deliberately keeps disabled tabs discoverable. Focus does not select.
+            const blocked = page.getByRole("tab", { name: "Access", exact: true });
+            await expect(blocked).toBeFocused();
+            await expect(blocked).toHaveAttribute("aria-disabled", "true");
+            await expect(blocked).toHaveCSS("opacity", "0.5");
+            await page.keyboard.press("Enter");
+            await expect(profile).toHaveAttribute("aria-selected", "true");
+            await page.keyboard.press("ArrowRight");
+            const activity = page.getByRole("tab", { name: "Activity", exact: true });
+            await expect(activity).toBeFocused();
+            await expect(activity).toHaveAttribute("aria-selected", "false");
+            await page.keyboard.press("Enter");
+            await expect(activity).toHaveAttribute("aria-selected", "true");'''
+          assert old in text
+          p.write_text(text.replace(old, new))
           PY
           npm run lint --prefix registry
           npm run build --prefix registry
@@ -58,8 +83,9 @@ jobs:
       - name: Verify documentation and material states
         working-directory: docs
         run: |
-          npm run test:browser
           npx playwright test --config=playwright.material.config.ts
+          mv test-results/docs-browser/material-after test-results/material-after
+          npm run test:browser
       - name: Create reviewed candidate without changing main
         env:
           GITHUB_TOKEN: ${{ github.token }}
