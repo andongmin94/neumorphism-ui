@@ -46,6 +46,36 @@ jobs:
           old = '    assert.match(tokens["--neu-edge"], /color-mix/);'
           assert old in s
           p.write_text(s.replace(old, '    if (mode === "light") assert.equal(tokens["--neu-edge"], "transparent");\n    else assert.match(tokens["--neu-edge"], /color-mix/);'))
+          p = Path('docs/src/app.css')
+          s = p.read_text()
+          start = s.index('.sidebar-filter {', s.index('/* Neobrutal documentation shell parity.'))
+          end = s.index('}', start) + 1
+          old = s[start:end]
+          assert 'box-shadow: none;' in old
+          new = old.replace('box-shadow: none;', 'box-shadow: var(--neu-shadow-inset-sm);')
+          new += '\n\n.sidebar-filter:focus-within {\n  outline: 2px solid var(--ring);\n  outline-offset: 3px;\n}'
+          p.write_text(s[:start] + new + s[end:])
+          p = Path('docs/tests/browser/docs-polish.spec.ts')
+          p.write_text(p.read_text() + '''
+          test("sidebar filter keeps a visible recessed target and keyboard focus", async ({ page }, info) => {
+            await page.setViewportSize({ width: 1440, height: 1000 });
+            await page.goto("/en/components/button");
+            const field = page.locator(".docs-site-sidebar .sidebar-filter");
+            const input = field.getByRole("searchbox");
+            await expect(input).toBeVisible();
+            expect(await field.evaluate(e => getComputedStyle(e).boxShadow)).toContain("inset");
+            await input.focus();
+            await expect(field).toHaveCSS("outline-style", "solid");
+            await expect(field).toHaveCSS("outline-width", "2px");
+            await input.fill("dialog");
+            await expect(page.locator(".docs-site-sidebar .component-nav-list").getByRole("link", { name: "Dialog", exact: true })).toBeVisible();
+            await field.screenshot({ path: info.outputPath("sidebar-search-focus.png") });
+            await input.fill("no-such-component-1379");
+            await expect(page.locator(".docs-site-sidebar .component-nav-list a")).toHaveCount(0);
+            await input.fill("");
+            await expect(page.locator(".docs-site-sidebar .component-nav-list a")).toHaveCount(56);
+          });
+          ''')
           PY
           npm run lint --prefix registry
           npm run build --prefix registry
