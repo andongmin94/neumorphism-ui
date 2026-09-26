@@ -74,7 +74,7 @@ jobs:
               const menu = page.getByRole("menu").first();
               await expect(menu).toBeVisible();
               const label = menu.locator('[data-slot="dropdown-menu-label"]');
-              const group = menu.getByRole("group").filter({ has: label }).first();
+              const group = menu.locator('[data-slot="dropdown-menu-group"]').first();
               await expect(group).toBeVisible();
               await expect(group).toHaveAccessibleName((await label.innerText()).trim());
               const checkbox = menu.getByRole("menuitemcheckbox");
@@ -149,6 +149,7 @@ jobs:
         working-directory: docs
         run: |
           set -o pipefail
+          npx playwright test --config=playwright.detail.config.ts menu-composition.spec.ts --project=desktop-light --max-failures=1 --reporter=list
           npx playwright test --config=playwright.detail.config.ts --reporter=list 2>&1 | tee test-results/repair-review/detail.log
           npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts --reporter=list 2>&1 | tee test-results/repair-review/presentation.log
           npx playwright test --config=playwright.material.config.ts --reporter=list 2>&1 | tee test-results/repair-review/material.log
