@@ -2,137 +2,61 @@ name: Material refinement review
 on:
   push:
     branches: [main]
-    paths: ['.github/workflows/material-refinement.yml', '.github/material-refinement.py']
-  workflow_dispatch:
+    paths: ['.github/workflows/material-refinement.yml']
 permissions:
   contents: write
-concurrency:
-  group: material-refinement
-  cancel-in-progress: true
+  actions: read
 jobs:
-  review:
+  export:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: |
-            registry/package-lock.json
-            docs/package-lock.json
-      - run: npm ci --prefix registry && npm ci --prefix docs
-      - name: Prepare isolated component specimen
-        run: |
-          sed -i 's/buildThemeVariables, settingsForPreset/buildThemeVariables, defaultThemeSettings, getThemePreset/g; s/settingsForPreset(preset)/{ ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset }/g' .github/material-refinement.py
-          python .github/material-refinement.py prepare
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          cd docs
-          npx playwright install --with-deps chromium
-          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts --grep='material specimen'
-          mv test-results/docs-browser/material-before test-results/material-before
-      - name: Refine source and regenerate all outputs
+      - name: Recover exactly the tested source patch
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          python .github/material-refinement.py refine
+          gh run download 36223603288 --repo "$GITHUB_REPOSITORY" --name material-refinement-review --dir "$RUNNER_TEMP/material-reviewed"
           python - <<'PY'
           from pathlib import Path
-          p = Path('registry/tests/docs-contract.test.mjs')
-          old = r'hover:\[box-shadow:var\(--neu-shadow-hover\)\]'
-          new = r'hover:shadow-\[var\(--neu-shadow-hover\)\]'
-          text = p.read_text()
-          assert old in text
-          p.write_text(text.replace(old, new))
-          p = Path('registry/src/components/ui/tabs.tsx')
-          text = p.read_text()
-          old = 'disabled:pointer-events-none disabled:opacity-50'
-          assert old in text
-          text = text.replace(old, 'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50')
-          text = text.replace('hover:text-[var(--foreground)]', 'hover:not-data-disabled:text-[var(--foreground)]')
-          p.write_text(text)
-          for name in ['button', 'input', 'textarea', 'tabs', 'dialog', 'switch']:
-              p = Path(f'registry/src/components/ui/{name}.tsx')
-              text = p.read_text().replace('outline-none', 'outline-hidden')
-              text = text.replace('outline-[var(--ring)]', 'outline-[color:var(--ring)]')
-              text = text.replace('outline-[var(--neu-error-text)]', 'outline-[color:var(--neu-error-text)]')
-              text = text.replace('peer-focus-visible:outline-2', 'peer-focus-visible:outline-2 peer-focus-visible:outline-solid') if name == 'switch' else text.replace('focus-visible:outline-2', 'focus-visible:outline-2 focus-visible:outline-solid')
-              p.write_text(text)
-          p = Path('docs/tests/material/material.spec.ts')
-          text = p.read_text()
-          old = '  const activity = page.getByRole("tab", { name: "Activity", exact: true });\n  await expect(activity).toBeFocused();\n  await expect(activity).toHaveAttribute("aria-selected", "true");'
-          new = '''  // Base UI deliberately keeps disabled tabs discoverable. Focus does not select.
-            const blocked = page.getByRole("tab", { name: "Access", exact: true });
-            await expect(blocked).toBeFocused();
-            await expect(blocked).toHaveAttribute("aria-disabled", "true");
-            await expect(blocked).toHaveCSS("opacity", "0.5");
-            await page.keyboard.press("Enter");
-            await expect(profile).toHaveAttribute("aria-selected", "true");
-            await page.keyboard.press("ArrowRight");
-            const activity = page.getByRole("tab", { name: "Activity", exact: true });
-            await expect(activity).toBeFocused();
-            await expect(activity).toHaveAttribute("aria-selected", "false");
-            await page.keyboard.press("Enter");
-            await expect(activity).toHaveAttribute("aria-selected", "true");'''
-          assert old in text
-          text = text.replace(old, new)
-          text = text.replace('outline: s.outlineWidth', 'outline: s.outlineWidth, outlineStyle: s.outlineStyle, outlineColor: s.outlineColor, focusVisible: e.matches(":focus-visible")')
-          text = text.replace('expect(parseFloat(focused.outline)).toBeGreaterThanOrEqual(2);', 'expect(parseFloat(focused.outline)).toBeGreaterThanOrEqual(2);\n    expect(focused.outlineStyle).toBe("solid");\n    expect(focused.outlineColor).not.toBe("rgba(0, 0, 0, 0)");\n    expect(focused.focusVisible).toBe(true);')
-          text = text.replace('await input.focus();\n    expect(await input.evaluate', 'await input.focus();\n    await expect(input).toHaveCSS("outline-style", "solid");\n    expect(await input.evaluate')
-          p.write_text(text)
+          import hashlib, os
+          patch = Path(os.environ['RUNNER_TEMP']) / 'material-reviewed/material-review/changes.patch'
+          assert hashlib.sha256(patch.read_bytes()).hexdigest() == 'c452f9356bf6c67a131daca358b52aa958dd0d464e6c1934cd4b4309713cfb73'
           PY
-          npm run lint --prefix registry
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          npm test --prefix registry
-          npm run check:generated --prefix registry
-          npm run lint --prefix docs
-          npm run typecheck --prefix docs
-          npm run build --prefix docs
-      - name: Verify documentation and material states
-        working-directory: docs
-        run: |
-          npx playwright test --config=playwright.material.config.ts
-          mv test-results/docs-browser/material-after test-results/material-after
-          npm run test:browser
-      - name: Create reviewed candidate without changing main
+          git apply --index --exclude='.github/**' "$RUNNER_TEMP/material-reviewed/material-review/changes.patch"
+      - name: Export product tree for GitHub MCP publication
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          rm .github/material-refinement.py .github/workflows/material-refinement.yml
-          git add -A
-          mkdir -p docs/test-results/material-review
-          git diff --cached > docs/test-results/material-review/changes.patch
+          mkdir -p docs/test-results/material-export
           node --input-type=module <<'JS'
           import fs from 'node:fs';
           import { execFileSync } from 'node:child_process';
           const repo = process.env.GITHUB_REPOSITORY;
           const parent = process.env.GITHUB_SHA;
           async function api(path, body) {
-            const response = await fetch(`https://api.github.com/repos/${repo}/${path}`, {
+            const r = await fetch(`https://api.github.com/repos/${repo}/${path}`, {
               method: body ? 'POST' : 'GET',
               headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
               ...(body ? { body: JSON.stringify(body) } : {}),
             });
-            if (!response.ok) throw new Error(`${path}: ${response.status} ${await response.text()}`);
-            return response.json();
+            if (!r.ok) throw new Error(`${path}: ${r.status} ${await r.text()}`);
+            return r.json();
           }
           const paths = execFileSync('git', ['diff', '--cached', '--name-only'], { encoding: 'utf8' }).trim().split('\n');
-          const deleted = new Set(execFileSync('git', ['diff', '--cached', '--diff-filter=D', '--name-only'], { encoding: 'utf8' }).trim().split('\n'));
-          const tree = paths.map(path => deleted.has(path) ? { path, mode: '100644', type: 'blob', sha: null } : { path, mode: '100644', type: 'blob', content: fs.readFileSync(path, 'utf8') });
+          if (paths.some(p => p.startsWith('.github/'))) throw new Error('Workflow changes must be published through the authorized GitHub MCP connection.');
+          const elements = paths.map(path => ({ path, mode: '100644', type: 'blob', content: fs.readFileSync(path, 'utf8') }));
+          fs.writeFileSync('docs/test-results/material-export/sources.json', JSON.stringify(elements));
           const base = await api(`git/commits/${parent}`);
-          const result = await api('git/trees', { base_tree: base.tree.sha, tree });
-          const commit = await api('git/commits', { message: 'design: refine neumorphic materials and core interaction states', tree: result.sha, parents: [parent] });
-          fs.writeFileSync('docs/test-results/material-review/candidate.json', JSON.stringify({ parent, sha: commit.sha, tree: result.sha, files: paths }, null, 2));
-          console.log(`Reviewed candidate: ${commit.sha}. Main was NOT moved.`);
+          const result = await api('git/trees', { base_tree: base.tree.sha, tree: elements });
+          fs.writeFileSync('docs/test-results/material-export/candidate.json', JSON.stringify({ parent, tree: result.sha, files: paths, reviewedRun: 36223603288 }, null, 2));
+          console.log(`Verified product tree: ${result.sha}. Main was NOT moved.`);
           JS
-      - name: Save source diff and visual evidence
+      - name: Save publication inputs
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: material-refinement-review
-          path: docs/test-results
+          name: material-publication-inputs
+          path: docs/test-results/material-export
           retention-days: 7
           if-no-files-found: error
