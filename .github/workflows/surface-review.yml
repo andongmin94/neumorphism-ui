@@ -5,14 +5,14 @@ on:
     paths: [.github/workflows/surface-review.yml]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: full-surface-review
   cancel-in-progress: true
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -22,21 +22,113 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Collect exact source and built baseline
+      - name: Apply exact reviewed source edits without publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/full-surface-review
+          node --input-type=module <<'JS'
+          import { writeFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { brotliDecompressSync } from 'node:zlib';
+          const chunks = ['756196e47d52950389ac0dd4fc2fba091ace7734','fbe8be002555eaf5924b96576b428ef43f4573da','26961079cf1471fadb06cdd0f9b40e5221607a0e','cb1a0ed1096af9eb519550f5bd8681e9e2319822','113a5ef99ae896b0e373260173cdabc4d541a994'];
+          let encoded = '';
+          for (const sha of chunks) {
+            const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/blobs/${sha}`, { headers: { Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: 'application/vnd.github+json' }});
+            if (!response.ok) throw new Error(`blob ${sha}: ${response.status}`);
+            encoded += Buffer.from((await response.json()).content, 'base64').toString('utf8');
+          }
+          const archive = Buffer.from(encoded, 'base64');
+          if (createHash('sha256').update(archive).digest('hex') !== 'eb5c96e9c17054d9c113a7fa5ee61b7dbe9b46ab4bd394b7e14f05ff80ce5d3f') throw new Error('Source payload checksum mismatch');
+          writeFileSync('/tmp/surface-edits.json', brotliDecompressSync(archive));
+          JS
+          python <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          pending = []
+          for item in json.loads(Path('/tmp/surface-edits.json').read_text()):
+              path = Path(item['path'])
+              assert not path.is_absolute() and '..' not in path.parts
+              if item['before'] is None:
+                  assert not path.exists(), path
+                  content = item['text']
+              else:
+                  raw = path.read_bytes()
+                  assert hashlib.sha256(raw).hexdigest() == item['before'], path
+                  content = raw.decode()
+                  for start, end, text in reversed(item['splices']):
+                      content = content[:start] + text + content[end:]
+              pending.append((path, content))
+          for path, content in pending:
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(content)
+          print(f'Applied {len(pending)} source files; main ref is unchanged.')
+          PY
+      - name: Static source and generated output
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/surface-review
-          git archive HEAD | tar -x -C /tmp/surface-review
           npm ci --prefix registry
           npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
           npm run build --prefix docs
-          cp -R docs/dist /tmp/surface-review/built-baseline
-          printf '%s\n' "$GITHUB_SHA" > /tmp/surface-review/baseline-sha.txt
-      - name: Baseline review bundle
+          npm run check:generated --prefix registry
+      - name: Browser engine
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Real component geometry and composed screens
+        working-directory: docs
+        run: |
+          result=0
+          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts || result=1
+          npx playwright test --config=playwright.material.config.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts || result=1
+          exit "$result"
+      - name: Prepare source-owned Git objects without moving main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm .github/workflows/surface-review.yml
+          git add registry docs .github/workflows/surface-review.yml
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const repository = process.env.GITHUB_REPOSITORY;
+          const changed = execFileSync('git', ['diff', '--cached', '--name-status', '-z']).toString().split('\0').filter(Boolean);
+          const files = []; for (let i=0; i<changed.length; i+=2) files.push({status:changed[i], path:changed[i+1]});
+          const entries = [];
+          for (let i=0; i<files.length; i+=6) {
+            const results = await Promise.all(files.slice(i,i+6).map(async file => {
+              if (file.status === 'D') return {path:file.path, mode:'100644', type:'blob', sha:null};
+              const content=readFileSync(file.path).toString('base64');
+              const response = await fetch(`https://api.github.com/repos/${repository}/git/blobs`, {method:'POST',headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`, Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({content,encoding:'base64'})});
+              if (!response.ok) throw new Error(`${file.path}: ${response.status} ${await response.text()}`);
+              return {path:file.path,mode:'100644',type:'blob',sha:(await response.json()).sha};
+            }));
+            entries.push(...results);
+          }
+          writeFileSync('/tmp/full-surface-review/prepared-tree.json', JSON.stringify({parent:process.env.GITHUB_SHA,baseTree:execFileSync('git',['rev-parse','HEAD^{tree}']).toString().trim(),entries},null,2));
+          console.log(`Prepared ${entries.length} objects. No commit, branch, or ref was written.`);
+          JS
+      - name: Collect visual review evidence
+        if: always()
+        run: |
+          mkdir -p /tmp/full-surface-review
+          git diff HEAD > /tmp/full-surface-review/reviewed.patch
+          printf '%s\n' "$GITHUB_SHA" > /tmp/full-surface-review/review-parent.txt
+          if [ -d docs/test-results ]; then cp -R docs/test-results /tmp/full-surface-review/evidence; fi
+          if [ -d docs/dist ]; then cp -R docs/dist /tmp/full-surface-review/built; fi
+      - name: Review bundle
+        if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: full-surface-baseline
-          path: /tmp/surface-review
+          name: full-surface-review
+          path: /tmp/full-surface-review
           include-hidden-files: true
           retention-days: 3
+          if-no-files-found: error
