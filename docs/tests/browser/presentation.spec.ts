@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const pages = [
-  { name: "home", path: "/en", heading: "Neumorphism as an interface system, not a visual effect.", sidebar: false },
+  { name: "home", path: "/en", heading: "Soft by design. Clear in use.", sidebar: false },
   { name: "docs", path: "/en/docs", heading: "Documentation", sidebar: true },
   { name: "components", path: "/en/components", heading: "Install only the interface parts you need.", sidebar: false },
   { name: "templates", path: "/en/templates", heading: "Templates", sidebar: false },
@@ -14,31 +14,25 @@ const pages = [
 for (const entry of pages) {
   test(`presentation: ${entry.name}`, async ({ page }, info) => {
     const errors: string[] = [];
-    page.on("pageerror", (error) => errors.push(error.message));
-
+    page.on("pageerror", error => errors.push(error.message));
     const response = await page.goto(entry.path);
     expect(response?.status()).toBe(200);
     await page.evaluate(() => document.fonts.ready);
-
     await expect(page.getByRole("heading", { level: 1, name: entry.heading, exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await expect(page.locator("[data-github-repository]")).toHaveAttribute("data-state", /ready|unavailable/);
+    await expect(page.locator("[data-github-stars]")).toBeVisible();
 
     if (info.project.name === "desktop-light") {
       await expect(page.locator(".site-header .primary-nav")).toBeVisible();
       await expect(page.locator(".site-brand")).toBeVisible();
       await expect(page.locator(".site-actions")).toBeVisible();
-      if (entry.sidebar) {
-        await expect(page.locator(".docs-site-sidebar")).toBeVisible();
-      } else {
-        if (entry.sidebar) await expect(page.locator(".docs-site-sidebar")).toBeHidden(); else await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
-      }
+      if (entry.sidebar) await expect(page.locator(".docs-site-sidebar")).toBeVisible();
+      else await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
     } else {
       await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
-      if (entry.sidebar) {
-        await expect(page.locator(".docs-site-sidebar")).toBeHidden();
-      } else {
-        await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
-      }
+      if (entry.sidebar) await expect(page.locator(".docs-site-sidebar")).toBeHidden();
+      else await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
     }
 
     await page.evaluate(() => {
@@ -46,36 +40,20 @@ for (const entry of pages) {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     });
     await expect(page.locator(".site-header")).toBeVisible();
-
-    await page.screenshot({
-      path: info.outputPath(`presentation-${entry.name}-top.png`),
-      fullPage: false,
-    });
-    await page.screenshot({
-      path: info.outputPath(`presentation-${entry.name}.png`),
-      fullPage: true,
-    });
-
+    await page.screenshot({ path: info.outputPath(`presentation-${entry.name}-top.png`), fullPage: false });
+    await page.screenshot({ path: info.outputPath(`presentation-${entry.name}.png`), fullPage: true });
     expect(errors).toEqual([]);
   });
 }
 
-
 test("presentation: default locale is English", async ({ page }) => {
   const response = await page.goto("/");
   expect(response?.status()).toBe(200);
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "Neumorphism as an interface system, not a visual effect.",
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Soft by design. Clear in use.", exact: true })).toBeVisible();
 });
 
 test("presentation: tablet shell and drawer", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop-light", "single tablet presentation pass");
-
   await page.setViewportSize({ width: 820, height: 1180 });
   const tabletPages = [
     { name: "home", path: "/en", sidebar: false },
@@ -85,7 +63,6 @@ test("presentation: tablet shell and drawer", async ({ page }, info) => {
     { name: "button-detail", path: "/en/components/button", sidebar: true },
     { name: "verification", path: "/en/docs/verification", sidebar: true },
   ] as const;
-
   for (const entry of tabletPages) {
     const response = await page.goto(entry.path);
     expect(response?.status()).toBe(200);
@@ -93,25 +70,15 @@ test("presentation: tablet shell and drawer", async ({ page }, info) => {
       window.scrollTo(0, 0);
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     });
-
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const mainBox = await page.locator(".docs-site-main").boundingBox();
     expect(mainBox?.width ?? 0).toBeGreaterThan(700);
     await expect(page.locator(".mobile-nav-trigger")).toBeVisible();
     await expect(page.locator(".primary-nav")).toBeHidden();
-
-    if (entry.sidebar) {
-      await expect(page.locator(".docs-site-sidebar")).toBeHidden();
-    } else {
-      await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
-    }
-
-    await page.screenshot({
-      path: info.outputPath(`presentation-tablet-${entry.name}.png`),
-      fullPage: false,
-    });
+    if (entry.sidebar) await expect(page.locator(".docs-site-sidebar")).toBeHidden();
+    else await expect(page.locator(".docs-site-sidebar")).toHaveCount(0);
+    await page.screenshot({ path: info.outputPath(`presentation-tablet-${entry.name}.png`), fullPage: false });
   }
-
   await page.getByRole("button", { name: "Open docs menu" }).click();
   const dialog = page.getByRole("dialog", { name: "Mobile documentation navigation" });
   await expect(dialog).toBeVisible();
@@ -119,21 +86,14 @@ test("presentation: tablet shell and drawer", async ({ page }, info) => {
   expect(box?.width ?? 0).toBeGreaterThan(300);
   expect(box?.x ?? -999).toBeGreaterThanOrEqual(-1);
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(821);
-  await page.screenshot({
-    path: info.outputPath("presentation-tablet-docs-navigation.png"),
-    fullPage: false,
-  });
+  await page.screenshot({ path: info.outputPath("presentation-tablet-docs-navigation.png"), fullPage: false });
 });
 
 test("presentation: search-dialog", async ({ page }, info) => {
   await page.goto("/en");
   await page.getByRole("button", { name: /Search documentation/i }).click();
-  const dialog = page.getByRole("dialog", { name: /Search documentation/i });
-  await expect(dialog).toBeVisible();
-  await page.screenshot({
-    path: info.outputPath("presentation-search-dialog.png"),
-    fullPage: false,
-  });
+  await expect(page.getByRole("dialog", { name: /Search documentation/i })).toBeVisible();
+  await page.screenshot({ path: info.outputPath("presentation-search-dialog.png"), fullPage: false });
 });
 
 test("presentation: mobile-docs-navigation", async ({ page }, info) => {
@@ -149,12 +109,8 @@ test("presentation: mobile-docs-navigation", async ({ page }, info) => {
   expect(box?.width ?? 0).toBeGreaterThan(300);
   expect(box?.x ?? -999).toBeGreaterThanOrEqual(-1);
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(391);
-  await page.screenshot({
-    path: info.outputPath("presentation-mobile-docs-navigation.png"),
-    fullPage: false,
-  });
+  await page.screenshot({ path: info.outputPath("presentation-mobile-docs-navigation.png"), fullPage: false });
 });
-
 
 test("presentation: home mirrors the sibling directory skeleton", async ({ page }) => {
   await page.goto("/en");

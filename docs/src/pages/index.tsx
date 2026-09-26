@@ -2,42 +2,31 @@ import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
 import { ComponentDirectory } from "@/components/docs/component-directory";
-import { InteractivePreview } from "@/components/docs/interactive-preview";
+import { HomeShowcase } from "@/components/docs/home-showcase";
+import { componentDocs } from "@/components/docs/component-docs-data";
 import { isLocale, localeHref } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 
 const landingCopy = {
   ko: {
-    kicker: "REACT / BASE UI / TAILWIND CSS V4",
-    title: "뉴모피즘을 장식이 아니라 인터페이스 시스템으로.",
-    body: "Raised surface, inset state, keyboard interaction을 같은 규칙으로 묶고 source로 설치합니다.",
-    meta: "56 components · 80 registry items · light and dark themes",
-    showcase: "실제 컴포넌트. 같은 규칙.",
-    try: "직접 사용해보기 ↓",
+    lines: ["부드러운 표면.", "명확한 사용성."],
+    body: "표면과 상태, 키보드 동작까지 같은 규칙을 따르는 React 컴포넌트입니다. 소스를 설치하고 내 프로젝트에 맞게 수정하세요.",
+    browse: "컴포넌트 살펴보기", meta: "오픈 소스 · 라이트와 다크 테마",
   },
   en: {
-    kicker: "REACT / BASE UI / TAILWIND CSS V4",
-    title: "Neumorphism as an interface system, not a visual effect.",
-    body: "Raised surfaces, inset states and keyboard interaction share one system. Install the source and make it yours.",
-    meta: "56 components · 80 registry items · light and dark themes",
-    showcase: "Real controls. Shared rules.",
-    try: "Try it out ↓",
+    lines: ["Soft by design.", "Clear in use."],
+    body: "Raised controls, clear selection and visible focus. Build a complete interface with shared styles and source you can edit.",
+    browse: "Browse components", meta: "Open source · Light and dark themes",
   },
   ja: {
-    kicker: "REACT / BASE UI / TAILWIND CSS V4",
-    title: "ニューモーフィズムを装飾ではなくインターフェースシステムとして。",
-    body: "Raised surface、inset state、keyboard interaction を同じルールでまとめ、source として導入します。",
-    meta: "56 components · 80 registry items · light and dark themes",
-    showcase: "実際のコンポーネント。同じルール。",
-    try: "試してみる ↓",
+    lines: ["柔らかな表面。", "明確な使い心地。"],
+    body: "表面、選択状態、キーボード操作を共通のルールで。ソースを導入し、自分のプロジェクトに合わせて編集できます。",
+    browse: "コンポーネントを見る", meta: "オープンソース · ライトとダークテーマ",
   },
   zh: {
-    kicker: "REACT / BASE UI / TAILWIND CSS V4",
-    title: "把新拟态做成界面系统，而不是视觉特效。",
-    body: "Raised surface、inset state 与 keyboard interaction 共用一套规则，并以源码安装。",
-    meta: "56 components · 80 registry items · light and dark themes",
-    showcase: "真实组件。同一套规则。",
-    try: "试试看 ↓",
+    lines: ["柔和的设计。", "清晰的体验。"],
+    body: "凸起控件、清晰的选择状态与可见的焦点。用共享样式和可编辑源码构建完整界面。",
+    browse: "浏览组件", meta: "开源 · 明亮与深色主题",
   },
 } as const;
 
@@ -52,33 +41,20 @@ export default function Home({ lang }: { lang: string }) {
       <section className="directory-hero">
         <div className="directory-hero-inner">
           <div className="directory-hero-copy">
-            <p className="directory-eyebrow">{copy.kicker}</p>
-            <h1>{copy.title}</h1>
+            <p className="directory-eyebrow">REACT / BASE UI / TAILWIND CSS V4</p>
+            <h1>{copy.lines[0]}<br />{copy.lines[1]}</h1>
             <p className="directory-hero-description">{copy.body}</p>
             <div className="directory-hero-actions">
               <Link className="docs-primary-action" href={localeHref(locale, "/docs/installation")}>
-                {messages.home.install}
-                <span aria-hidden="true">→</span>
+                {messages.home.install}<span aria-hidden="true">→</span>
               </Link>
-              <a className="docs-secondary-action" href="#components">
-                {messages.home.viewComponents}
-              </a>
+              <a className="docs-secondary-action" href="#components">{copy.browse} <span>{componentDocs.length}</span></a>
             </div>
             <p className="directory-hero-meta">{copy.meta}</p>
           </div>
-
-          <div className="home-showcase">
-            <div className="home-showcase-caption">
-              <span>{copy.showcase}</span>
-              <span>{copy.try}</span>
-            </div>
-            <div className="home-preview-card">
-              <InteractivePreview />
-            </div>
-          </div>
+          <HomeShowcase />
         </div>
       </section>
-
       <ComponentDirectory />
     </div>
   );

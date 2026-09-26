@@ -1,280 +1,165 @@
 "use client";
 
 import * as React from "react";
-import { Link } from "fumapress/client";
-
+import { useRouter } from "fumapress/client";
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
 import { formatMessage } from "@/i18n/messages";
+import { templateCopy } from "./template-copy";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogClose, DialogContent, DialogDescription,
+  DialogHeader, DialogTitle, DialogTrigger,
 } from "@neumorphism-ui/registry/ui/dialog";
-import { Input } from "@neumorphism-ui/registry/ui/input";
+import {
+  Command, CommandEmpty, CommandInput, CommandItem, CommandList,
+} from "@neumorphism-ui/registry/ui/command";
+import styles from "./docs-search.module.css";
 
-const referenceSearchCopy = {
-  ko: {
-    tokens: ["디자인 토큰", "semantic · surface · depth"],
-    registry: ["Registry 구조", "source ownership · generated endpoint"],
-    resources: ["리소스", "components · templates · charts · verification"],
-    accessibility: ["접근성", "keyboard · focus · semantics · reduced motion"], verification: ["검증과 릴리스", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "외부 패키지와 소유 경계"],
-  },
-  en: {
-    tokens: ["Design tokens", "semantic · surface · depth"],
-    registry: ["Registry architecture", "source ownership · generated endpoints"],
-    resources: ["Resources", "components · templates · charts · verification"],
-    accessibility: ["Accessibility", "keyboard · focus · semantics · reduced motion"], verification: ["Verification & release", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "external packages and ownership boundaries"],
-  },
-  ja: {
-    tokens: ["デザイントークン", "semantic · surface · depth"],
-    registry: ["Registry 構造", "source ownership · generated endpoint"],
-    resources: ["リソース", "components · templates · charts · verification"],
-    accessibility: ["アクセシビリティ", "keyboard · focus · semantics · reduced motion"], verification: ["検証とリリース", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "外部パッケージと所有境界"],
-  },
-  zh: {
-    tokens: ["设计令牌", "semantic · surface · depth"],
-    registry: ["Registry 架构", "source ownership · generated endpoint"],
-    resources: ["资源", "components · templates · charts · verification"],
-    accessibility: ["无障碍", "keyboard · focus · semantics · reduced motion"], verification: ["验证与发布", "source · generation · consumers · browsers"], credits: ["Credits & dependencies", "外部包与所有权边界"],
-  },
+const referenceCopy = {
+  ko: { tokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", accessibility: "접근성", verification: "검증과 릴리스", credits: "Credits & dependencies", charts: "차트", navigate: "탐색" },
+  en: { tokens: "Design tokens", registry: "Registry architecture", resources: "Resources", accessibility: "Accessibility", verification: "Verification & release", credits: "Credits & dependencies", charts: "Charts", navigate: "Navigate" },
+  ja: { tokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", accessibility: "アクセシビリティ", verification: "検証とリリース", credits: "Credits & dependencies", charts: "チャート", navigate: "移動" },
+  zh: { tokens: "设计令牌", registry: "Registry 架构", resources: "资源", accessibility: "无障碍", verification: "验证与发布", credits: "Credits & dependencies", charts: "图表", navigate: "导航" },
 } as const;
 
+function SearchIcon() {
+  return <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg>;
+}
+
 export function DocsSearch() {
+  const router = useRouter();
   const { componentDocGroups, locale, messages } = useLocale();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const searchEntries = React.useMemo(() => {
-    const componentDocs = componentDocGroups.flatMap(({ items }) => items);
-    const categoryLabels = new Map(
-      componentDocGroups.map(({ category }) => [category.id, category.label]),
-    );
-
-    return [
-      {
-        href: localeHref(locale, "/docs"),
-        key: "introduction",
-        title: messages.navigation.introduction,
-        summary: messages.search.introSummary,
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/installation"),
-        key: "installation",
-        title: messages.navigation.installation,
-        summary: messages.search.installSummary,
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/design-tokens"),
-        key: "design-tokens",
-        title: referenceSearchCopy[locale].tokens[0],
-        summary: referenceSearchCopy[locale].tokens[1],
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/registry"),
-        key: "registry-architecture",
-        title: referenceSearchCopy[locale].registry[0],
-        summary: referenceSearchCopy[locale].registry[1],
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/resources"),
-        key: "resources",
-        title: referenceSearchCopy[locale].resources[0],
-        summary: referenceSearchCopy[locale].resources[1],
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/accessibility"),
-        key: "accessibility",
-        title: referenceSearchCopy[locale].accessibility[0],
-        summary: referenceSearchCopy[locale].accessibility[1],
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/verification"),
-        key: "verification",
-        title: referenceSearchCopy[locale].verification[0],
-        summary: referenceSearchCopy[locale].verification[1],
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/docs/credits"),
-        key: "credits",
-        title: referenceSearchCopy[locale].credits[0],
-        summary: referenceSearchCopy[locale].credits[1],
-        category: messages.search.gettingStarted,
-      },
-      {
-        href: localeHref(locale, "/components"),
-        key: "components",
-        title: messages.navigation.components,
-        summary: messages.search.componentsSummary,
-        category: messages.navigation.components,
-      },
-      {
-        href: localeHref(locale, "/customize"),
-        key: "theme-studio",
-        title: messages.navigation.themeStudio,
-        summary: messages.search.themeSummary,
-        category: messages.search.customization,
-      },
-      { href: localeHref(locale, "/charts"), key: "charts", title: ({ko:"차트",en:"Charts",ja:"チャート",zh:"图表"})[locale], summary: "Recharts · Revenue · Conversion · CSV", category: messages.navigation.components },
-      { href: localeHref(locale, "/templates/dashboard"), key: "dashboard", title: ({ko:"분석 대시보드",en:"Analytics dashboard",ja:"分析ダッシュボード",zh:"分析仪表盘"})[locale], summary: "Analytics · Charts · Reporting", category: messages.navigation.components },
-      ...componentDocs.map((component) => ({
-        href: localeHref(locale, `/components/${component.slug}`),
-        key: component.slug,
-        title: component.title,
-        summary: component.summary,
-        category: categoryLabels.get(component.category) ?? "",
+  const copy = referenceCopy[locale];
+  const templates = templateCopy[locale];
+  const entries = React.useMemo(() => {
+    const componentDocs = componentDocGroups.flatMap(({ category, items }) =>
+      items.map(item => ({
+        href: localeHref(locale, `/components/${item.slug}`), key: item.slug,
+        title: item.title, summary: item.summary, category: category.label,
       })),
+    );
+    const reference = [
+      ["design-tokens", copy.tokens, "semantic surface depth light shape motion"],
+      ["registry", copy.registry, "source ownership generated endpoints"],
+      ["resources", copy.resources, "components templates charts verification"],
+      ["accessibility", copy.accessibility, "keyboard focus semantics reduced motion"],
+      ["verification", copy.verification, "source generation consumers browsers release"],
+      ["credits", copy.credits, "license dependencies external packages ownership"],
+    ].map(([key, title, summary]) => ({
+      href: localeHref(locale, `/docs/${key}`), key: `docs-${key}`, title, summary,
+      category: messages.search.gettingStarted,
+    }));
+    const screens = [
+      ["dashboard", templates.dashboard, templates.dashboardBody],
+      ["settings", templates.settings, templates.settingsBody],
+      ["data-manager", templates.records, templates.recordsBody],
+      ["link-hub", templates.links, templates.linksBody],
+      ["portfolio", templates.portfolio, templates.portfolioBody],
+      ["blog", templates.blog, templates.blogBody],
+      ["blog-post", templates.blogPost, templates.blogPostBody],
+      ["cms", templates.cms, templates.cmsBody],
+    ].map(([slug, title, summary]) => ({
+      href: localeHref(locale, `/templates/${slug}`), key: `template-${slug}`,
+      title, summary, category: templates.title,
+    }));
+    return [
+      { href: localeHref(locale, "/docs"), key: "introduction", title: messages.navigation.introduction, summary: messages.search.introSummary, category: messages.search.gettingStarted },
+      { href: localeHref(locale, "/docs/installation"), key: "installation", title: messages.navigation.installation, summary: messages.search.installSummary, category: messages.search.gettingStarted },
+      { href: localeHref(locale), key: "components", title: messages.navigation.components, summary: messages.search.componentsSummary, category: messages.navigation.components },
+      { href: localeHref(locale, "/customize"), key: "theme-studio", title: messages.navigation.themeStudio, summary: messages.search.themeSummary, category: messages.search.customization },
+      { href: localeHref(locale, "/charts"), key: "charts", title: copy.charts, summary: "Recharts revenue conversion operational charts CSV", category: messages.navigation.components },
+      { href: localeHref(locale, "/templates"), key: "templates", title: templates.title, summary: templates.intro, category: templates.title },
+      ...reference, ...componentDocs, ...screens,
     ];
-  }, [componentDocGroups, locale, messages]);
+  }, [componentDocGroups, locale, messages, copy, templates]);
 
-  const handleOpenChange = React.useCallback((nextOpen: boolean) => {
-    setOpen(nextOpen);
-
-    if (!nextOpen) {
-      setQuery("");
-    }
+  const handleOpenChange = React.useCallback((value: boolean) => {
+    setOpen(value);
+    if (!value) setQuery("");
   }, []);
 
-  const closeSearch = React.useCallback(() => {
-    handleOpenChange(false);
-  }, [handleOpenChange]);
-
   React.useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
+    function shortcut(event: KeyboardEvent) {
+      // The directory owns '/'. Respect its document-level preventDefault before
+      // this window listener runs; never steal composition or an editable field.
+      if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
       const target = event.target as HTMLElement | null;
-      const isTyping =
-        target?.tagName === "INPUT" ||
-        target?.tagName === "TEXTAREA" ||
-        target?.isContentEditable;
-
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      const typing = Boolean(target?.closest("input, textarea, select, [contenteditable=true]"));
+      const modifier = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
+      if (modifier || (!typing && !event.metaKey && !event.ctrlKey && !event.altKey && event.key === "/")) {
         event.preventDefault();
-        if (open) {
-          closeSearch();
-        } else {
-          handleOpenChange(true);
-        }
-      } else if (!isTyping && event.key === "/") {
-        event.preventDefault();
-        handleOpenChange(true);
+        handleOpenChange(!open);
       }
     }
+    window.addEventListener("keydown", shortcut);
+    return () => window.removeEventListener("keydown", shortcut);
+  }, [handleOpenChange, open]);
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [closeSearch, handleOpenChange, open]);
-
-  const normalizedQuery = query.trim().toLowerCase();
-  const results = searchEntries.filter((entry) => {
-    if (!normalizedQuery) {
-      return true;
-    }
-
-    return [
-      entry.title,
-      entry.key,
-      entry.summary,
-      entry.category,
-    ].some((value) => value.toLowerCase().includes(normalizedQuery));
-  });
+  const normalized = query.trim().toLocaleLowerCase(locale);
+  const results = normalized
+    ? entries.filter(entry => [entry.title, entry.key, entry.summary, entry.category].some(value => value.toLocaleLowerCase(locale).includes(normalized)))
+    : entries.slice(0, 12);
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={handleOpenChange}
-    >
-      <DialogTrigger
-        render={
-          <button
-            aria-label={messages.search.trigger}
-            className="docs-search-trigger"
-            type="button"
-          />
-        }
-      >
-        <span aria-hidden="true">⌕</span>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger render={<button aria-label={messages.search.trigger} className="docs-search-trigger" type="button" />}>
+        <span aria-hidden="true"><SearchIcon /></span>
         <span>{messages.search.trigger}</span>
         <kbd>Ctrl K</kbd>
       </DialogTrigger>
-
-      <DialogContent className="docs-search-dialog" showCloseButton={false}>
+      <DialogContent className={`docs-search-dialog ${styles.dialog}`} showCloseButton={false}>
         <DialogHeader className="sr-only">
           <DialogTitle>{messages.search.title}</DialogTitle>
-          <DialogDescription>
-            {messages.search.description}
-          </DialogDescription>
+          <DialogDescription>{messages.search.description}</DialogDescription>
         </DialogHeader>
-
-        <div className="docs-search-input-wrap">
-          <span aria-hidden="true">⌕</span>
-          <Input
-            aria-label={messages.search.label}
-            autoFocus
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={messages.search.placeholder}
-            value={query}
-          />
-          <DialogClose
-            aria-label={messages.search.close}
-            className="docs-search-close"
-          >
-            <span aria-hidden="true">×</span>
-          </DialogClose>
-        </div>
-
-        <div className="docs-search-results">
-          <span className="docs-search-results-label">
-            {normalizedQuery
-              ? formatMessage(messages.search.resultCount, {
-                  count: results.length,
-                })
-              : messages.search.quickJump}
-          </span>
-          {results.length ? (
-            <div>
-              {results.slice(0, 12).map((entry) => (
-                <DialogClose
-                  key={entry.key}
-                  render={
-                    <Link
-                      className="docs-search-result"
-                      href={entry.href}
-                    />
-                  }
-                >
-                  <span>
-                    <strong>{entry.title}</strong>
-                    <small>{entry.category}</small>
-                  </span>
-                  <span aria-hidden="true">→</span>
-                </DialogClose>
-              ))}
-            </div>
-          ) : (
-            <div className="docs-search-empty">
-              {messages.search.empty}
-            </div>
-          )}
-        </div>
-
-        <footer className="docs-search-footer">
-          <span><kbd>Ctrl K</kbd> {messages.search.open}</span>
+        <Command
+          className={styles.palette}
+          shouldFilter={false}
+          loop
+          onKeyDownCapture={(event) => {
+            if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) {
+              event.stopPropagation();
+              return;
+            }
+            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+              event.preventDefault();
+              event.stopPropagation();
+              handleOpenChange(false);
+            }
+          }}
+        >
+          <div className={styles.inputRow}>
+            <CommandInput aria-label={messages.search.label} placeholder={messages.search.placeholder} value={query} onValueChange={setQuery} autoFocus />
+            <DialogClose className={styles.close} aria-label={messages.search.close}>
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="m6 6 12 12M6 18 18 6" /></svg>
+            </DialogClose>
+          </div>
+          <p className={styles.resultCount} aria-live="polite">{normalized ? formatMessage(messages.search.resultCount, { count: results.length }) : messages.search.quickJump}</p>
+          <CommandList className={styles.list}>
+            <CommandEmpty>{messages.search.empty}</CommandEmpty>
+            {results.map(entry => (
+              <CommandItem
+                className={styles.result}
+                key={entry.key}
+                value={entry.key}
+                data-href={entry.href}
+                onSelect={() => {
+                  handleOpenChange(false);
+                  void router.push(entry.href);
+                }}
+              >
+                <span><small>{entry.category}</small><strong>{entry.title}</strong></span>
+                <span aria-hidden="true">→</span>
+              </CommandItem>
+            ))}
+          </CommandList>
+        </Command>
+        <footer className={styles.footer}>
+          <span><kbd>↑</kbd><kbd>↓</kbd> {copy.navigate}</span>
+          <span><kbd>Enter</kbd> {messages.search.open}</span>
           <span><kbd>Esc</kbd> {messages.search.closeAction}</span>
-          <DialogClose
-            render={<Link href={localeHref(locale, "/components")} />}
-          >
-            {messages.navigation.components}
-          </DialogClose>
         </footer>
       </DialogContent>
     </Dialog>

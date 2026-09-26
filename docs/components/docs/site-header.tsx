@@ -15,6 +15,7 @@ import {
 
 import { DocsSearch } from "./docs-search";
 import { DocsNav } from "./docs-sidebar";
+import { GitHubRepoLink } from "./github-repo-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -93,75 +94,30 @@ export function SiteHeader() {
   const templatesHref = localeHref(locale, "/templates");
 
   const links = [
-    {
-      href: docsHref,
-      label: copy.docs,
-      active:
-        pathname === docsHref ||
-        pathname.startsWith(docsHref + "/") ||
-        pathname.startsWith(componentsHref + "/"),
-    },
-    {
-      href: customizeHref,
-      label: copy.theme,
-      active: pathname === customizeHref || pathname.startsWith(customizeHref + "/"),
-    },
-    {
-      href: chartsHref,
-      label: copy.charts,
-      active: pathname === chartsHref || pathname.startsWith(chartsHref + "/"),
-    },
-    {
-      href: templatesHref,
-      label: copy.templates,
-      active: pathname === templatesHref || pathname.startsWith(templatesHref + "/"),
-    },
+    { href: docsHref, label: copy.docs, active: pathname === docsHref || pathname.startsWith(docsHref + "/") || pathname.startsWith(componentsHref + "/") },
+    { href: customizeHref, label: copy.theme, active: pathname === customizeHref || pathname.startsWith(customizeHref + "/") },
+    { href: chartsHref, label: copy.charts, active: pathname === chartsHref || pathname.startsWith(chartsHref + "/") },
+    { href: templatesHref, label: copy.templates, active: pathname === templatesHref || pathname.startsWith(templatesHref + "/") },
   ];
 
   return (
     <header className="site-header">
       <div className="site-header__inner">
         <MobileDocsNavigation key={pathname} />
-
         <Link className="site-brand" href={homeHref} aria-label={messages.site.homeLabel}>
           <span className="site-brand__mark" aria-hidden="true">N</span>
           <span className="site-brand__name">Neumorphism UI</span>
         </Link>
-
         <nav className="primary-nav" aria-label={messages.navigation.primaryLabel}>
           {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              aria-current={link.active ? "page" : undefined}
-              className={link.active ? "is-active" : undefined}
-            >
+            <Link key={link.href} href={link.href} aria-current={link.active ? "page" : undefined} className={link.active ? "is-active" : undefined}>
               {link.label}
             </Link>
           ))}
         </nav>
-
         <div className="site-actions">
-          <div className="header-search">
-            <DocsSearch />
-          </div>
-
-          <a
-            className="github-repo-button"
-            href="https://github.com/andongmin94/neumorphism-ui"
-            rel="noreferrer"
-            target="_blank"
-            aria-label="Open Neumorphism UI on GitHub"
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path
-                fill="currentColor"
-                d="M12 .7a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C15 6.2 16 6.5 16 6.5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .7Z"
-              />
-            </svg>
-            <span>GitHub</span>
-          </a>
-
+          <div className="header-search"><DocsSearch /></div>
+          <GitHubRepoLink />
           <LanguageSwitcher />
           <ThemeToggle />
         </div>

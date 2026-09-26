@@ -1,4 +1,4 @@
-import { defineConfig } from "fumapress";
+import { defineConfig, type PressPlugin } from "fumapress";
 import { fumapressTranslations } from "fumapress/i18n";
 import { createRootLayout } from "fumapress/layouts/root";
 import { defineI18n } from "fumadocs-core/i18n";
@@ -71,4 +71,41 @@ const config = defineConfig({
     return <main className="docs-content docs-article"><h1>404</h1><p>{getMessages(locale).site.description}</p></main>;
   },
 });
-export default config;
+
+// Build-time API: the deployed docs remain static. No browser GitHub token or
+// per-visitor upstream request; an unavailable count is never represented as zero.
+const githubStarsPlugin: PressPlugin<typeof config.$context> = {
+  name: "site:github-stars",
+  createPages({ createApiIsomorphic }) {
+    createApiIsomorphic({
+      render: "static",
+      path: "/api/github-stars",
+      async handler() {
+        try {
+          const headers: Record<string, string> = {
+            Accept: "application/vnd.github+json",
+            "User-Agent": "neumorphism-ui-build",
+          };
+          if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+          const response = await fetch("https://api.github.com/repos/andongmin94/neumorphism-ui", {
+            headers,
+            signal: AbortSignal.timeout(5000),
+          });
+          if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
+          const payload = await response.json();
+          const count = payload?.stargazers_count;
+          if (typeof count !== "number" || !Number.isSafeInteger(count) || count < 0) {
+            throw new Error("GitHub returned an invalid star count");
+          }
+          console.info(`GitHub star snapshot: ${count}`);
+          return Response.json({ count, fetchedAt: new Date().toISOString() });
+        } catch (error) {
+          console.warn("GitHub star snapshot unavailable:", error instanceof Error ? error.message : "request failed");
+          return Response.json({ count: null, fetchedAt: null });
+        }
+      },
+    });
+  },
+};
+
+export default config.plugins(githubStarsPlugin);
