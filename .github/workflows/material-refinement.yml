@@ -53,11 +53,12 @@ jobs:
           text = text.replace(old, 'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50')
           text = text.replace('hover:text-[var(--foreground)]', 'hover:not-data-disabled:text-[var(--foreground)]')
           p.write_text(text)
-          for name in ['button', 'input', 'textarea', 'tabs', 'dialog']:
+          for name in ['button', 'input', 'textarea', 'tabs', 'dialog', 'switch']:
               p = Path(f'registry/src/components/ui/{name}.tsx')
               text = p.read_text().replace('outline-none', 'outline-hidden')
               text = text.replace('outline-[var(--ring)]', 'outline-[color:var(--ring)]')
               text = text.replace('outline-[var(--neu-error-text)]', 'outline-[color:var(--neu-error-text)]')
+              text = text.replace('peer-focus-visible:outline-2', 'peer-focus-visible:outline-2 peer-focus-visible:outline-solid') if name == 'switch' else text.replace('focus-visible:outline-2', 'focus-visible:outline-2 focus-visible:outline-solid')
               p.write_text(text)
           p = Path('docs/tests/material/material.spec.ts')
           text = p.read_text()
