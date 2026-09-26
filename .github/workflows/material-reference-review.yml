@@ -2,27 +2,87 @@ name: Material reference review
 on:
   push:
     branches: [main]
-    paths: ['.github/workflows/material-reference-review.yml']
+    paths: ['.github/workflows/material-reference-review.yml', '.github/material-reference.py']
 permissions:
-  contents: read
+  contents: write
+concurrency:
+  group: material-reference-review
+  cancel-in-progress: true
 jobs:
-  reference:
+  review:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Capture the requested public reference and source snapshot
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - run: npm ci --prefix registry && npm ci --prefix docs
+      - name: Capture current source controls
         run: |
-          mkdir -p "$RUNNER_TEMP/reference"
-          git archive HEAD | gzip > "$RUNNER_TEMP/reference/source.tar.gz"
-          curl -fLsS --max-time 30 'https://paranpenguin.co.kr/content_shop/item/1379' -o "$RUNNER_TEMP/reference/product.html" || true
-          curl -fLsS --max-time 30 'https://paranpenguin.co.kr/files/attach/images/2024/10/02/b7e3076be412e573259e72995eb26aea.jpg' -o "$RUNNER_TEMP/reference/template.jpg" || true
-          curl -fLsS --max-time 30 'https://paranpenguin.co.kr/files/attach/images/2024/10/02/3166763a6cd45015e529ae5f329c08b1.jpg' -o "$RUNNER_TEMP/reference/example.jpg" || true
-          timeout 45s google-chrome --headless --no-sandbox --disable-gpu --hide-scrollbars --window-size=1440,1100 --virtual-time-budget=10000 --screenshot="$RUNNER_TEMP/reference/product.png" 'https://paranpenguin.co.kr/content_shop/item/1379' || true
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          cd docs
+          npx playwright install --with-deps chromium
+          MATERIAL_PHASE=reference-before npx playwright test --config=playwright.material.config.ts --grep='material specimen'
+          mv test-results/docs-browser/material-reference-before test-results/reference-before
+      - name: Refine materials and regenerate source-owned output
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python .github/material-reference.py
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Verify rendered states and documentation
+        working-directory: docs
+        run: |
+          MATERIAL_PHASE=reference-after npx playwright test --config=playwright.material.config.ts
+          mv test-results/docs-browser/material-reference-after test-results/reference-after
+          npm run test:browser
+      - name: Export reviewed product tree without moving main
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p docs/test-results/publication
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const repo = process.env.GITHUB_REPOSITORY;
+          const parent = process.env.GITHUB_SHA;
+          async function api(path, body) {
+            const r = await fetch(`https://api.github.com/repos/${repo}/${path}`, {
+              method: body ? 'POST' : 'GET',
+              headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+              ...(body ? { body: JSON.stringify(body) } : {}),
+            });
+            if (!r.ok) throw new Error(`${path}: ${r.status} ${await r.text()}`);
+            return r.json();
+          }
+          execFileSync('git', ['add', 'registry', 'docs']);
+          const paths = execFileSync('git', ['diff', '--cached', '--name-only'], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+          if (!paths.length || paths.some(p => p.startsWith('.github/'))) throw new Error('Unexpected product tree');
+          const elements = paths.map(path => ({ path, mode: '100644', type: 'blob', content: fs.readFileSync(path, 'utf8') }));
+          const base = await api(`git/commits/${parent}`);
+          const result = await api('git/trees', { base_tree: base.tree.sha, tree: elements });
+          fs.writeFileSync('docs/test-results/publication/candidate.json', JSON.stringify({ parent, tree: result.sha, files: paths }, null, 2));
+          fs.writeFileSync('docs/test-results/publication/changes.patch', execFileSync('git', ['diff', '--cached'], { encoding: 'utf8' }));
+          console.log(`Reviewed product tree: ${result.sha}. Main was NOT moved.`);
+          JS
+          tar -czf docs/test-results/publication/static-docs.tar.gz -C docs/dist/public .
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
-          name: requested-material-reference
-          path: ${{ runner.temp }}/reference
-          retention-days: 3
+          name: material-reference-review
+          path: docs/test-results
+          retention-days: 5
           if-no-files-found: error
