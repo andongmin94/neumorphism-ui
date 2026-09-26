@@ -1,0 +1,53 @@
+name: Review workspace
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/review-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Build the exact review tree
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix docs
+          mkdir -p review-workspace
+          git archive --format=tar.gz HEAD -o review-workspace/source.tar.gz
+          tar -czf review-workspace/runtime.tar.gz registry/node_modules docs/node_modules docs/dist docs/src/registry
+          cp "$(command -v node)" review-workspace/node
+          printf '%s\n' "$GITHUB_SHA" > review-workspace/commit.txt
+      - name: Record public deployment reachability
+        run: |
+          node --input-type=module <<'JS'
+          import { writeFileSync } from 'node:fs';
+          const urls = ['https://neumorphism-ui.dev/en', 'https://neumorphism-ui.dev/r/button.json', 'https://neumorphism-ui.dev/r/neumorphism-ui.json'];
+          const results = await Promise.all(urls.map(async url => {
+            try {
+              const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+              return { url, status: response.status, contentType: response.headers.get('content-type'), body: (await response.text()).slice(0, 30000) };
+            } catch (error) { return { url, error: error.message, cause: error.cause?.code ?? null }; }
+          }));
+          writeFileSync('review-workspace/deployment.json', JSON.stringify({ checkedAt: new Date().toISOString(), results }, null, 2));
+          console.log(JSON.stringify(results.map(({ body, ...result }) => result), null, 2));
+          JS
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: review-workspace
+          path: review-workspace
+          compression-level: 0
+          retention-days: 1
