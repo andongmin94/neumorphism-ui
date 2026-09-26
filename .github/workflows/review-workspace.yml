@@ -5,11 +5,11 @@ on:
     branches: [main]
     paths: [.github/workflows/review-workspace.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -19,35 +19,311 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Build the exact review tree
+      - name: Apply source-owned detail corrections
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, json
+          def edit(path, old, new):
+              p=Path(path); s=p.read_text()
+              if old not in s: raise RuntimeError('Missing source target: '+path+' '+old[:60])
+              p.write_text(s.replace(old,new))
+          def put(path, value):
+              p=Path(path); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(value.strip()+'\n')
+          ui='registry/src/components/ui/'
+          edit(ui+'alert.tsx','relative grid w-full grid-cols-[0_1fr]','relative grid w-full min-w-0 grid-cols-[0_1fr]')
+          edit(ui+'alert.tsx','[&>svg]:mt-0.5','[&>svg]:col-start-1 [&>svg]:row-start-1 [&>svg]:row-span-2 [&>svg]:mt-0.5')
+          edit(ui+'alert.tsx','col-start-2 min-h-4 font-semibold leading-none tracking-tight','col-start-2 min-w-0 font-semibold leading-5 tracking-tight')
+          edit(ui+'alert.tsx','col-start-2 grid justify-items-start','col-start-2 grid min-w-0 justify-items-start')
+          edit(ui+'progress.tsx','className="relative h-full w-full"','className="relative h-full w-full rounded-[inherit]"')
+          edit(ui+'slider.tsx','data-[orientation=horizontal]:h-5','data-[orientation=horizontal]:h-11')
+          edit(ui+'slider.tsx','data-[orientation=vertical]:w-5','data-[orientation=vertical]:w-11')
+          edit(ui+'slider.tsx','className="bg-[var(--primary)]','className="rounded-[inherit] bg-[var(--primary)]')
+          edit(ui+'textarea.tsx','min-h-24 w-full resize-y','min-h-24 w-full min-w-0 resize-y')
+          edit(ui+'textarea.tsx','px-4 py-3 text-sm','px-4 py-3 text-sm leading-6')
+          check='<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>'
+          # Fix existing icon callers, not an alternate Alert layout for text glyphs.
+          for root in ['registry/src','docs/components']:
+              for p in Path(root).rglob('*.tsx'):
+                  s=p.read_text(); n=re.sub(r'(<Alert\b[^>]*>\s*)<span aria-hidden="true">✓</span>',lambda m:m[1]+check,s)
+                  if n!=s: p.write_text(n)
+          # Checkmark geometry no longer depends on the system font.
+          for name in ['dropdown-menu.tsx','context-menu.tsx','menubar.tsx']:
+              p=Path(ui+name); s=p.read_text(); s=s.replace('<span aria-hidden="true">✓</span>',check)
+              p.write_text(s)
+          put(ui+'select.tsx',r'''
+          import * as React from "react";
+          import { cn } from "@/lib/utils";
+          function Select({ className, children, multiple, size, ...props }: React.ComponentProps<"select">) {
+            const listbox = Boolean(multiple || (size !== undefined && size > 1));
+            return (
+              <span data-slot="select-root" className="relative inline-flex w-full min-w-0">
+                <select
+                  data-slot="select" multiple={multiple} size={size}
+                  className={cn(
+                    "peer w-full min-w-0 appearance-none rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] text-sm text-[var(--foreground)] shadow-[var(--neu-shadow-inset)] outline-hidden transition-[box-shadow,border-color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:border-[var(--ring)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[color:var(--ring)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none disabled:[background-image:none] disabled:border-[color:var(--input)] aria-invalid:border-[var(--destructive)] aria-invalid:focus-visible:outline-[color:var(--neu-error-text)]",
+                    listbox ? "min-h-24 px-4 py-2" : "h-10 py-2 ps-4 pe-10",
+                    className,
+                  )}
+                  {...props}
+                >{children}</select>
+                {!listbox && <svg data-slot="select-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)] peer-disabled:opacity-60"><path d="m6 9 6 6 6-6" /></svg>}
+              </span>
+            );
+          }
+          function SelectGroup(props: React.ComponentProps<"optgroup">) { return <optgroup data-slot="select-group" {...props} />; }
+          function SelectItem(props: React.ComponentProps<"option">) { return <option data-slot="select-item" {...props} />; }
+          const SelectOption = SelectItem;
+          export { Select, SelectGroup, SelectItem, SelectOption };
+          ''')
+          put(ui+'input-group.tsx',r'''
+          import * as React from "react";
+          import { cn } from "@/lib/utils";
+          function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+            return <div role="group" data-slot="input-group" className={cn(
+              "flex min-h-10 w-full min-w-0 items-center gap-1 rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] p-1 shadow-[var(--neu-shadow-inset)] transition-[border-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none focus-within:border-[var(--ring)] focus-within:outline-2 focus-within:outline-solid focus-within:outline-offset-2 focus-within:outline-[color:var(--ring)] has-[[data-slot=input-group-control][aria-invalid=true]]:border-[var(--destructive)] has-[[data-slot=input-group-control][aria-invalid=true]]:outline-[color:var(--neu-error-text)] has-[[data-slot=input-group-control]:disabled]:opacity-60 has-[[data-slot=input-group-control]:disabled]:shadow-none has-[[data-slot=input-group-control]:disabled]:[background-image:none] has-[[data-slot=input-group-control]:disabled]:border-[color:var(--input)] [&>[data-slot=input-group-addon]+[data-slot=input-group-control]]:ps-0",
+              className,
+            )} {...props} />;
+          }
+          function InputGroupAddon({ className, ...props }: React.ComponentProps<"div">) {
+            return <div data-slot="input-group-addon" className={cn("flex shrink-0 items-center gap-2 px-3 text-sm text-[var(--muted-foreground)] [&_svg]:size-4 [&_svg]:shrink-0",className)} {...props} />;
+          }
+          function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
+            return <span data-slot="input-group-text" className={cn("text-sm leading-5 text-[var(--muted-foreground)]",className)} {...props} />;
+          }
+          function InputGroupInput({ className, ...props }: React.ComponentProps<"input">) {
+            return <input data-slot="input-group-control" className={cn("h-7.5 min-w-0 flex-1 border-0 bg-transparent px-3 py-1.5 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)] disabled:cursor-not-allowed",className)} {...props} />;
+          }
+          function InputGroupTextarea({ className, ...props }: React.ComponentProps<"textarea">) {
+            return <textarea data-slot="input-group-control" className={cn("min-h-24 min-w-0 flex-1 resize-y border-0 bg-transparent px-3 py-2 text-sm leading-6 text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)] disabled:cursor-not-allowed",className)} {...props} />;
+          }
+          function InputGroupButton({ className, type="button", ...props }: React.ComponentProps<"button">) {
+            return <button type={type} data-slot="input-group-button" className={cn("inline-flex h-7.5 shrink-0 items-center justify-center gap-2 rounded-[calc(var(--neu-radius-control)-4px)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-3 text-xs font-semibold text-[var(--foreground)] shadow-[var(--neu-shadow-raised-sm)] outline-hidden transition-shadow duration-[var(--neu-duration)] motion-reduce:transition-none hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-[-2px] focus-visible:outline-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none [&_svg]:size-4 [&_svg]:shrink-0",className)} {...props} />;
+          }
+          export { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea };
+          ''')
+          p=Path(ui+'number-field.tsx'); s=p.read_text()
+          s=s.replace('inline-flex w-fit max-w-full items-center gap-1','inline-flex h-10 w-fit max-w-full items-center gap-1')
+          s=s.replace('border border-[color:var(--input)]','border border-transparent')
+          s=s.replace('bg-[var(--neu-surface)] p-1','bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] p-1')
+          s=s.replace('focus-within:ring-2 focus-within:ring-[var(--ring)]','focus-within:outline-2 focus-within:outline-solid focus-within:outline-offset-2 focus-within:outline-[color:var(--ring)] data-disabled:opacity-60 data-disabled:shadow-none data-disabled:[background-image:none]')
+          s=s.replace('h-9 w-20','h-7.5 w-20').replace('size-9 shrink-0','size-7.5 shrink-0')
+          s=s.replace('focus-visible:ring-2 focus-visible:ring-[var(--ring)]','focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-[-2px] focus-visible:outline-[color:var(--ring)]')
+          s=s.replace('data-disabled:opacity-40','data-disabled:opacity-40 data-disabled:shadow-none')
+          s=s.replace('<span aria-hidden="true">−</span>','<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M5 12h14" /></svg>')
+          s=s.replace('<span aria-hidden="true">+</span>','<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M5 12h14M12 5v14" /></svg>')
+          p.write_text(s)
+          put('docs/components/docs/theme-preview.tsx',r'''
+          "use client";
+          import { useId, useRef, useState, type CSSProperties } from "react";
+          import { Link } from "fumapress/client";
+          import { Alert, AlertDescription, AlertTitle } from "@neumorphism-ui/registry/ui/alert";
+          import { Badge } from "@neumorphism-ui/registry/ui/badge";
+          import { Button } from "@neumorphism-ui/registry/ui/button";
+          import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@neumorphism-ui/registry/ui/card";
+          import { Input } from "@neumorphism-ui/registry/ui/input";
+          import { Progress } from "@neumorphism-ui/registry/ui/progress";
+          import { Switch } from "@neumorphism-ui/registry/ui/switch";
+          import { localeHref, type Locale } from "@/i18n/config";
+          import type { getMessages } from "@/i18n/messages";
+          import styles from "./theme-preview.module.css";
+          const words = {
+            en: { demo: "Local preview only. No alert is sent.", saved: "Target", paused: "Alerts paused", removed: "Alert removed. Save a target to recreate it.", invalid: "Enter a price greater than zero.", progress: "of target" },
+            ko: { demo: "로컬 미리보기입니다. 알림을 전송하지 않습니다.", saved: "목표 가격", paused: "알림 일시 정지", removed: "알림을 삭제했습니다. 목표 가격을 저장하면 다시 만들 수 있습니다.", invalid: "0보다 큰 가격을 입력하세요.", progress: "목표 대비" },
+            ja: { demo: "ローカルプレビューです。通知は送信されません。", saved: "目標価格", paused: "通知を一時停止", removed: "通知を削除しました。目標価格を保存すると再作成できます。", invalid: "0より大きい価格を入力してください。", progress: "目標比" },
+            zh: { demo: "仅为本地预览，不会发送提醒。", saved: "目标价格", paused: "提醒已暂停", removed: "已删除提醒。保存目标价格即可重新创建。", invalid: "请输入大于零的价格。", progress: "目标比例" },
+          } as const;
+          type Props = { copy: ReturnType<typeof getMessages>["themeStudio"]; locale: Locale; previewMode: "light" | "dark"; style: CSSProperties };
+          export function ThemePreview({ copy, locale, previewMode, style }: Props) {
+            const t=words[locale]; const id=useId(); const input=useRef<HTMLInputElement>(null);
+            const [draft,setDraft]=useState("210"); const [saved,setSaved]=useState<number|null>(210);
+            const [notifications,setNotifications]=useState(true); const [invalid,setInvalid]=useState(false);
+            const progress=saved===null ? 0 : Math.min(100,188.32/saved*100);
+            const money=new Intl.NumberFormat(locale,{style:"currency",currency:"USD"});
+            return <div className="theme-preview-canvas" data-theme-price-preview data-preview-mode={previewMode} style={style}>
+              <Card className="theme-preview-profile">
+                <CardHeader><Badge variant="primary" className={styles.badge}>NVDA</Badge><CardTitle>{copy.priceAlert}</CardTitle><CardDescription>NVIDIA · NASDAQ</CardDescription></CardHeader>
+                <CardContent>
+                  <form noValidate className="theme-preview-field" onSubmit={event=>{event.preventDefault();const price=Number(draft);if(!Number.isFinite(price)||price<=0){setInvalid(true);input.current?.focus();return;}setSaved(price);setDraft(String(price));setInvalid(false);}}>
+                    <label htmlFor={`${id}-price`}>{copy.targetPrice}</label>
+                    <div><Input ref={input} id={`${id}-price`} type="number" inputMode="decimal" min="0.01" step="0.01" value={draft} aria-invalid={invalid||undefined} aria-describedby={invalid?`${id}-error`:undefined} onChange={event=>{setDraft(event.target.value);setInvalid(false);}} /><Button type="submit" variant="primary" disabled={saved!==null&&Number(draft)===saved}>{copy.save}</Button></div>
+                    {invalid&&<p id={`${id}-error`} className={styles.error} role="alert">{t.invalid}</p>}
+                  </form>
+                  <div className="theme-preview-progress"><span><strong>{copy.currentPrice}</strong><small>{Math.round(progress)}% {t.progress}</small></span><Progress aria-label={copy.targetProgress} value={progress} /></div>
+                </CardContent>
+                <CardFooter className={styles.footer}><Link className={styles.chartLink} href={localeHref(locale,"/charts")}>{copy.viewChart}<span aria-hidden="true">↗</span></Link><Button variant="ghost" disabled={saved===null} onClick={()=>setSaved(null)}>{copy.deleteAlert}</Button></CardFooter>
+              </Card>
+              <div className="theme-preview-side">
+                <Card variant="flat" className="theme-preview-settings"><CardHeader><CardTitle>{copy.alertConditions}</CardTitle><CardDescription>{copy.pushAtTarget}</CardDescription></CardHeader><CardContent><label><span><strong>{copy.realtimeAlerts}</strong><small>{notifications?copy.on:copy.off}</small></span><Switch checked={notifications} onCheckedChange={setNotifications}/></label><div className={styles.changeRow}><span><strong>{copy.changeToday}</strong><small>{copy.intraday}</small></span><Badge variant="soft">+2.14%</Badge></div></CardContent></Card>
+                <Alert variant={saved!==null&&notifications?"success":"default"} role="status">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={saved!==null&&notifications?"m5 12 4 4L19 6":"M8 6v12M16 6v12"}/></svg>
+                  <AlertTitle>{saved===null?t.removed:notifications?copy.alertEnabled:t.paused}</AlertTitle><AlertDescription>{saved!==null&&<span>{t.saved}: {money.format(saved)}</span>}<span>{t.demo}</span></AlertDescription>
+                </Alert>
+              </div>
+              <div className="theme-elevation-strip"><Card variant="raised"><span>{copy.card}</span><small>{copy.raisedSurface}</small></Card><Card variant="inset"><span>{copy.input}</span><small>{copy.insetSurface}</small></Card><Card variant="flat"><span>{copy.divider}</span><small>{copy.flatStructure}</small></Card></div>
+            </div>;
+          }
+          ''')
+          put('docs/components/docs/theme-preview.module.css',r'''
+          .badge { width: fit-content; }
+          .error { margin: 8px 0 0; color: var(--neu-error-text); font-size: 13px; line-height: 1.5; }
+          .footer { flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+          .chartLink { display: inline-flex; min-height: 40px; align-items: center; gap: 6px; color: var(--foreground); font-size: 14px; font-weight: 600; text-underline-offset: 4px; }
+          .chartLink:hover { color: var(--primary); }
+          .chartLink:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 4px; }
+          .changeRow { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+          .changeRow > span { display: grid; gap: 4px; }
+          .changeRow strong { font-size: 12px; }
+          .changeRow small { color: var(--muted-foreground); font-size: 11px; }
+          ''')
+          p=Path('docs/components/docs/theme-studio.tsx'); s=p.read_text()
+          start=s.index('        <div\n          className="theme-preview-canvas"')
+          end=s.index('        <Tabs className="theme-output"',start)
+          s=s[:start]+'        <ThemePreview copy={copy} locale={locale} previewMode={previewMode} style={previewStyle} />\n\n'+s[end:]
+          s=s.replace('  const { messages } = useLocale();','  const { messages, locale } = useLocale();')
+          s=s.replace('  const [notifications, setNotifications] = React.useState(true);\n','')
+          s=s.replace('import * as React from "react";','import * as React from "react";\nimport { ThemePreview } from "./theme-preview";')
+          def clean_import(m):
+              names=[n.strip() for n in m[1].split(',') if n.strip()]
+              keep=[n for n in names if re.search(r'<'+re.escape(n)+r'\b',s)]
+              return 'import { '+', '.join(keep)+' } from "'+m[2]+'";' if keep else ''
+          s=re.sub(r'import\s*\{([^}]+)\}\s*from\s*"(@neumorphism-ui/registry/ui/[^"]+)";',clean_import,s)
+          p.write_text(s)
+          # Remove duplicated desktop anchor navigation only when the TOC is visible.
+          p=Path('docs/src/app.css'); s=p.read_text()
+          s=s.replace('@media (min-width: 1360px) {\n  .docs-toc {','@media (min-width: 1360px) {\n  .component-doc-quicknav {\n    display: none;\n  }\n\n  .docs-toc {')
+          p.write_text(s)
+          put('docs/playwright.detail.config.ts',r'''
+          import { defineConfig } from "@playwright/test";
+          import base from "./playwright.config";
+          export default defineConfig({
+            ...base, testDir:"./tests/detail", workers:2, maxFailures:0, timeout:30000,
+            outputDir:"test-results/docs-browser/catalog",
+            reporter:[["list"],["json",{outputFile:"test-results/detail-report.json"}]],
+            projects:[
+              {name:"desktop-light",use:{browserName:"chromium",viewport:{width:1440,height:1000},colorScheme:"light"}},
+              {name:"desktop-dark",use:{browserName:"chromium",viewport:{width:1440,height:1000},colorScheme:"dark"}},
+              {name:"mobile-light",use:{browserName:"chromium",viewport:{width:390,height:844},colorScheme:"light",isMobile:true,hasTouch:true}},
+              {name:"mobile-dark",use:{browserName:"chromium",viewport:{width:390,height:844},colorScheme:"dark",isMobile:true,hasTouch:true}},
+            ],
+          });
+          ''')
+          put('docs/tests/detail/catalog.spec.ts',r'''
+          import { expect, test } from "@playwright/test";
+          import { readFileSync } from "node:fs";
+          const catalog=JSON.parse(readFileSync(new URL("../../../registry/catalog.json",import.meta.url),"utf8")) as {items:{name:string;type:string}[]};
+          const entries=catalog.items.filter(item=>item.type==="registry:ui");
+          for(const {name} of entries) test(`catalog detail: ${name}`,async({page},info)=>{
+            const errors:string[]=[];page.on("pageerror",error=>errors.push(error.message));
+            const response=await page.goto(`/en/components/${name}`);
+            expect(response?.status()).toBe(200);
+            const panel=page.locator(".component-example-panel").first();
+            await expect(panel).toBeVisible();
+            await page.evaluate(()=>document.fonts.ready);
+            await panel.scrollIntoViewIfNeeded();
+            await panel.screenshot({path:info.outputPath(`${name}.png`),animations:"disabled"});
+            const geometry=await panel.evaluate(element=>{
+              const rect=element.getBoundingClientRect();
+              return {width:rect.width,height:rect.height,pageWidth:document.documentElement.scrollWidth,viewport:innerWidth,controls:Array.from(element.querySelectorAll("button,input,select,textarea,[role=slider]")).filter(e=>e.getBoundingClientRect().width>0).map(e=>{const r=e.getBoundingClientRect();return {slot:e.getAttribute("data-slot"),name:e.getAttribute("aria-label")??e.textContent?.slice(0,40),width:r.width,height:r.height};})};
+            });
+            await info.attach("geometry",{body:JSON.stringify(geometry,null,2),contentType:"application/json"});
+            expect(geometry.pageWidth).toBeLessThanOrEqual(geometry.viewport+1);
+            expect(errors).toEqual([]);
+          });
+          test("theme preview saves, pauses, removes and recreates a real local state",async({page},info)=>{
+            await page.goto("/en/customize");const preview=page.locator("[data-theme-price-preview]");
+            const input=preview.locator('input[type="number"]');const save=preview.getByRole("button",{name:"Save",exact:true});
+            await expect(save).toBeDisabled();await input.fill("240");await save.click();
+            await expect(preview.getByRole("status")).toContainText("$240.00");
+            await expect(preview.getByRole("progressbar")).toHaveAttribute("aria-valuenow",/78/);
+            const alert=preview.getByRole("status");const icon=await alert.locator(":scope > svg").boundingBox();const title=await alert.locator('[data-slot="alert-title"]').boundingBox();
+            expect(icon!.x+icon!.width).toBeLessThanOrEqual(title!.x);
+            await preview.getByRole("switch").uncheck();await expect(alert).toContainText("Alerts paused");
+            await preview.getByRole("button",{name:"Delete alert",exact:true}).click();await expect(alert).toContainText("Alert removed");
+            await input.fill("0");await save.click();await expect(input).toHaveAttribute("aria-invalid","true");await expect(input).toBeFocused();
+            await input.fill("250");await save.click();await expect(input).not.toHaveAttribute("aria-invalid","true");await expect(alert).toContainText("$250.00");
+            await expect(preview.getByRole("link",{name:/View chart/})).toHaveAttribute("href","/en/charts");
+            await preview.screenshot({path:info.outputPath("theme-interaction.png")});
+          });
+          test("progress end cap inherits the real track radius",async({page})=>{
+            await page.goto("/en/components/progress");const fill=page.locator('.component-example-panel [data-slot="progress-indicator"]').first();
+            expect(await fill.evaluate(e=>parseFloat(getComputedStyle(e).borderTopRightRadius))).toBeGreaterThan(0);
+          });
+          test("single-line input families share a forty pixel outer control",async({page})=>{
+            for(const [slug,slot] of [["input","input"],["select","select"],["input-group","input-group"],["number-field","number-field-group"]]){
+              await page.goto(`/en/components/${slug}`);const control=page.locator(`.component-example-panel [data-slot="${slot}"]`).first();
+              await expect(control).toBeVisible();expect((await control.boundingBox())!.height).toBe(40);
+            }
+          });
+          ''')
+          # The catalog is at repository root, three parent directories above tests/detail's file URL.
+          edit('docs/tests/detail/catalog.spec.ts','../../../registry/catalog.json','../../../../registry/catalog.json')
+          put('docs/scripts/verify-deployed.mjs',r'''
+          import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+          import { isDeepStrictEqual } from 'node:util';
+          const origin='https://neumorphism-ui.dev';
+          const report={origin,checkedAt:new Date().toISOString(),commit:process.env.GITHUB_SHA??null,status:'unreachable',routes:[],items:[]};
+          const output=new URL('../test-results/deployment.json',import.meta.url);
+          async function get(path){const response=await fetch(origin+path,{signal:AbortSignal.timeout(15000)});if(!response.ok)throw new Error(`${path}: HTTP ${response.status}`);return response;}
+          try{
+            for(const path of ['/en','/en/components/button','/en/customize']){const response=await get(path);if(!response.headers.get('content-type')?.includes('text/html'))throw new Error(`${path}: not HTML`);report.routes.push({path,status:response.status});}
+            const catalog=JSON.parse(readFileSync(new URL('../../registry/catalog.json',import.meta.url),'utf8'));
+            for(const item of catalog.items){const path=`/r/${item.name}.json`;const remote=await(await get(path)).json();const local=JSON.parse(readFileSync(new URL(`../public${path}`,import.meta.url),'utf8'));report.items.push({name:item.name,matches:isDeepStrictEqual(remote,local)});}
+            report.status=report.items.every(item=>item.matches)?'verified':'mismatch';
+          }catch(error){report.error=error.message;report.cause=error.cause?.code??null;}
+          mkdirSync(new URL('../test-results/',import.meta.url),{recursive:true});writeFileSync(output,JSON.stringify(report,null,2)+'\n');
+          console.log(JSON.stringify(report,null,2));if(report.status!=='verified')process.exitCode=1;
+          ''')
+          p=Path('docs/package.json'); data=json.loads(p.read_text());data['scripts']['verify:deployed']='node scripts/verify-deployed.mjs';p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          p=Path('.github/workflows/verify.yml');s=p.read_text();needle='          npx playwright test --config=playwright.material.config.ts';assert needle in s;s=s.replace(needle,needle+'\n          npx playwright test --config=playwright.detail.config.ts');p.write_text(s)
+          Path('.github/workflows/review-workspace.yml').unlink()
+          PY
+      - name: Regenerate and validate the candidate
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           npm ci --prefix registry
           npm ci --prefix docs
           npm run build --prefix docs
-          mkdir -p review-workspace
-          git archive --format=tar.gz HEAD -o review-workspace/source.tar.gz
-          tar -czf review-workspace/runtime.tar.gz registry/node_modules docs/node_modules docs/dist docs/src/registry
-          cp "$(command -v node)" review-workspace/node
-          printf '%s\n' "$GITHUB_SHA" > review-workspace/commit.txt
-      - name: Record public deployment reachability
+          npm run lint --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run check:generated --prefix registry
+      - name: Install browser
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Run exact control and all-catalog checks
+        working-directory: docs
         run: |
+          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts
+          npx playwright test --config=playwright.material.config.ts
+          npx playwright test --config=playwright.detail.config.ts
+      - name: Check public deployment independently
+        continue-on-error: true
+        run: npm run verify:deployed --prefix docs
+      - name: Prepare generated Git tree without moving main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A
           node --input-type=module <<'JS'
-          import { writeFileSync } from 'node:fs';
-          const urls = ['https://neumorphism-ui.dev/en', 'https://neumorphism-ui.dev/r/button.json', 'https://neumorphism-ui.dev/r/neumorphism-ui.json'];
-          const results = await Promise.all(urls.map(async url => {
-            try {
-              const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
-              return { url, status: response.status, contentType: response.headers.get('content-type'), body: (await response.text()).slice(0, 30000) };
-            } catch (error) { return { url, error: error.message, cause: error.cause?.code ?? null }; }
-          }));
-          writeFileSync('review-workspace/deployment.json', JSON.stringify({ checkedAt: new Date().toISOString(), results }, null, 2));
-          console.log(JSON.stringify(results.map(({ body, ...result }) => result), null, 2));
+          import { execFileSync } from 'node:child_process';
+          import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const paths=git('diff','--cached','--name-only','-z').split('\0').filter(Boolean);
+          const tree=paths.map(path=>{const row=git('ls-files','--stage','--',path);return row?{path,mode:row.split(' ')[0],type:'blob',content:readFileSync(path,'utf8')}:{path,mode:'100644',type:'blob',sha:null};});
+          const response=await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/trees`,{method:'POST',headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({base_tree:git('rev-parse','HEAD^{tree}'),tree})});
+          const result=await response.json();if(!response.ok)throw new Error(JSON.stringify(result));
+          const record={parent:process.env.GITHUB_SHA,tree:result.sha,files:paths};
+          mkdirSync('docs/test-results/detail-review',{recursive:true});writeFileSync('docs/test-results/detail-review/prepared-tree.json',JSON.stringify(record,null,2));
+          console.log('PREPARED_TREE '+JSON.stringify(record));
           JS
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - name: Save small review evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: review-workspace
-          path: review-workspace
-          compression-level: 0
-          retention-days: 1
+          name: detail-review
+          path: docs/test-results
+          retention-days: 7
+          if-no-files-found: warn
