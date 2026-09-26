@@ -81,7 +81,7 @@ export const themePresets: readonly ThemePreset[] = [
     defaults: {
       depth: "balanced",
       lightDirection: "top-left",
-      surfaceRadius: 18,
+      surfaceRadius: 12,
       controlShape: "soft",
       motion: 180,
     },
@@ -326,7 +326,7 @@ export const defaultThemeSettings: ThemeSettings = {
   accent: null,
   depth: "balanced",
   lightDirection: "top-left",
-  surfaceRadius: 18,
+  surfaceRadius: 12,
   controlShape: "soft",
   motion: 180,
 };

@@ -23,7 +23,7 @@
   --border: rgb(83 99 123 / 0.18);
   --input: rgb(83 99 123 / 0.16);
   --ring: #0768da;
-  --radius: 18px;
+  --radius: 12px;
   --neu-surface: #ebecf0;
   --neu-surface-soft: #f2f3f5;
   --neu-surface-low: #dfe1e7;
@@ -41,8 +41,8 @@
   --neu-shadow-destructive-inset: inset 2px 2px 5px color-mix(in srgb, #b92e43 68%, black), inset -2px -2px 5px color-mix(in srgb, #b92e43 78%, white);
   --neu-overlay: rgb(15 23 42 / 0.28);
   --neu-radius-control: 12px;
-  --neu-radius-surface: 18px;
-  --neu-radius-overlay: calc(18px + 4px);
+  --neu-radius-surface: 12px;
+  --neu-radius-overlay: calc(12px + 4px);
   --neu-duration: 180ms;
   --neu-fill-raised: linear-gradient(135deg, color-mix(in srgb, #f2f3f5 12%, #ebecf0), #ebecf0);
   --neu-fill-primary: linear-gradient(135deg, #0768da, color-mix(in srgb, #0768da 94%, black));
@@ -76,7 +76,7 @@
   --border: rgb(255 255 255 / 0.10);
   --input: rgb(255 255 255 / 0.12);
   --ring: #5aa2ff;
-  --radius: 18px;
+  --radius: 12px;
   --neu-surface: #242731;
   --neu-surface-soft: #2b2f3c;
   --neu-surface-low: #1c1f28;
@@ -94,8 +94,8 @@
   --neu-shadow-destructive-inset: inset 2px 2px 5px color-mix(in srgb, #ff7685 68%, black), inset -2px -2px 5px color-mix(in srgb, #ff7685 78%, white);
   --neu-overlay: rgb(0 0 0 / 0.55);
   --neu-radius-control: 12px;
-  --neu-radius-surface: 18px;
-  --neu-radius-overlay: calc(18px + 4px);
+  --neu-radius-surface: 12px;
+  --neu-radius-overlay: calc(12px + 4px);
   --neu-duration: 180ms;
   --neu-fill-raised: linear-gradient(135deg, color-mix(in srgb, #2b2f3c 12%, #242731), #242731);
   --neu-fill-primary: linear-gradient(135deg, color-mix(in srgb, #5aa2ff 94%, white), #5aa2ff);

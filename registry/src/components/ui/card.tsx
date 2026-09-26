@@ -3,8 +3,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const cardVariants = {
-  raised: "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] shadow-[var(--neu-shadow-raised)]",
-  soft: "bg-[var(--neu-surface-soft)] shadow-[var(--neu-shadow-raised-sm)]",
+  raised: "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] shadow-[var(--neu-shadow-raised-sm)]",
+  soft: "bg-[var(--neu-surface-soft)] shadow-none",
   inset: "bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] shadow-[var(--neu-shadow-inset)]",
   flat: "border border-[color:var(--border)] bg-[var(--neu-surface)]",
 } as const;
@@ -21,7 +21,7 @@ function Card({ className, variant = "raised", ...props }: CardProps) {
       data-slot="card"
       data-variant={variant}
       className={cn(
-        "flex flex-col gap-5 rounded-[var(--neu-radius-surface)] border border-transparent py-6 text-[var(--card-foreground)] transition-[transform,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none",
+        "flex min-w-0 flex-col gap-4 rounded-[var(--neu-radius-surface)] border border-transparent py-5 text-[var(--card-foreground)] transition-shadow duration-[var(--neu-duration)] motion-reduce:transition-none",
         cardVariants[variant],
         className,
       )}
@@ -35,7 +35,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "grid auto-rows-min gap-1.5 px-6 has-[>[data-slot=card-action]]:grid-cols-[1fr_auto]",
+        "grid min-w-0 auto-rows-min gap-x-4 gap-y-1 px-5 has-[>[data-slot=card-action]]:grid-cols-[minmax(0,1fr)_auto]",
         className,
       )}
       {...props}
@@ -47,7 +47,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
   return (
     <h3
       data-slot="card-title"
-      className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+      className={cn("min-w-0 text-base font-semibold leading-6 tracking-tight [overflow-wrap:anywhere]", className)}
       {...props}
     />
   );
@@ -57,7 +57,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="card-description"
-      className={cn("text-sm leading-relaxed text-[var(--muted-foreground)]", className)}
+      className={cn("min-w-0 text-sm leading-relaxed text-[var(--muted-foreground)] [overflow-wrap:anywhere]", className)}
       {...props}
     />
   );
@@ -74,14 +74,14 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="card-content" className={cn("px-6", className)} {...props} />;
+  return <div data-slot="card-content" className={cn("min-w-0 px-5", className)} {...props} />;
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-footer"
-      className={cn("flex items-center px-6", className)}
+      className={cn("flex min-w-0 flex-wrap items-center gap-3 px-5", className)}
       {...props}
     />
   );
