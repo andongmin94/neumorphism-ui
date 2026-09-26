@@ -91,7 +91,12 @@ test("switch target, keyboard, form value and tabs retain native behavior", asyn
   await expect(activity).toHaveAttribute("aria-selected", "false");
   await page.keyboard.press("Enter");
   await expect(activity).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("tabpanel")).toContainText("recent workspace activity");
+  // The outgoing panel can remain mounted briefly while its exit state settles.
+  // Address the selected panel by its accessible name, then check the old one closes.
+  const activityPanel = page.getByRole("tabpanel", { name: "Activity", exact: true });
+  await expect(activityPanel).toBeVisible();
+  await expect(activityPanel).toContainText("recent workspace activity");
+  await expect(page.getByRole("tabpanel", { name: "Profile", exact: true })).toBeHidden();
   await page.screenshot({ path: info.outputPath("keyboard-controls.png"), fullPage: true });
 });
 

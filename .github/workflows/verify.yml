@@ -120,9 +120,12 @@ jobs:
       - name: Capture key documentation surfaces and interaction quality
         working-directory: docs
         run: |
-          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts
-          npx playwright test --config=playwright.material.config.ts
-          npx playwright test --config=playwright.detail.config.ts
+          # Collect every suite's evidence without concealing any failed assertion.
+          result=0
+          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts || result=1
+          npx playwright test --config=playwright.material.config.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts || result=1
+          exit "$result"
       - name: Save presentation screenshots
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
