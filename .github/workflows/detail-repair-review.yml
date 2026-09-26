@@ -1,0 +1,184 @@
+name: Detail repair review
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/detail-repair-review.yml]
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Apply exact source repairs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          paths = [Path('docs/components/docs/component-detail-preview.tsx'), Path('docs/components/docs/registry-showcase.tsx'), Path('docs/components/docs/component-docs-data.ts'), *Path('docs/i18n').glob('component-usage-code.*.ts')]
+          changed = []
+          svg = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">'
+          info = svg + '<circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7h.01" /></svg>'
+          warning = svg + '<circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 17h.01" /></svg>'
+          check = svg + '<path d="m5 12 4 4L19 6" /></svg>'
+          search = svg + '<circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>'
+          chevron = svg + '<path d="m6 9 6 6 6-6" /></svg>'
+          for path in paths:
+              source = path.read_text()
+              before = source
+              def imports(match):
+                  body = match.group(1)
+                  if 'DropdownMenuLabel' in body and not re.search(r'\bDropdownMenuGroup\b', body):
+                      body = re.sub(r'(^[ \t]*)DropdownMenuLabel,', r'\1DropdownMenuGroup,\n\1DropdownMenuLabel,', body, flags=re.M)
+                  return match.group(0).replace(match.group(1), body, 1)
+              source = re.sub(r'import\s*\{([^}]+)\}\s*from\s*[\"\'][^\n]+?[\"\']', imports, source)
+              def group(match):
+                  body, indent = match.group(3), match.group(2)
+                  if '<DropdownMenuLabel' not in body or '<DropdownMenuGroup' in body:
+                      return match.group(0)
+                  body = '\n'.join('  ' + line if line.strip() else line for line in body.split('\n'))
+                  return match.group(1) + '\n' + indent + '  <DropdownMenuGroup>' + body + '\n' + indent + '  </DropdownMenuGroup>' + match.group(4)
+              source, count = re.subn(r'(\n([ \t]*)<DropdownMenuContent\b[^>]*>)([\s\S]*?)(\n\2</DropdownMenuContent>)', group, source)
+              def alert(match):
+                  return match.group(0).replace('<span aria-hidden="true">i</span>', info).replace('<span aria-hidden="true">!</span>', warning).replace('<span aria-hidden="true">✓</span>', check)
+              source = re.sub(r'<Alert(?:\s[^>]*|)>([\s\S]*?)</Alert>', alert, source)
+              source = source.replace('<InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>', '<InputGroupAddon aria-hidden="true">' + search + '</InputGroupAddon>')
+              source = source.replace('<span aria-hidden="true">⌄</span>', chevron)
+              if source != before:
+                  path.write_text(source)
+                  changed.append(str(path))
+          assert len(changed) >= 6, changed
+          detail = paths[0].read_text()
+          assert '  DropdownMenuGroup,' in detail and '<DropdownMenuGroup>' in detail
+          assert '<span aria-hidden="true">i</span>' not in detail
+          assert '<span aria-hidden="true">!</span>' not in detail
+          print('SOURCE_REPAIRS', changed)
+          Path('docs/tests/detail/menu-composition.spec.ts').write_text('''import { expect, test } from "@playwright/test";
+          
+          for (const locale of ["en", "ko", "ja", "zh"]) {
+            test(`menu composition: ${locale} label, actions and copied source remain usable`, async ({ page }, info) => {
+              const errors: string[] = [];
+              page.on("pageerror", error => errors.push(error.message));
+              await page.goto(`/${locale}/components/dropdown-menu`);
+              const trigger = page.locator("[data-component-stage]").getByRole("button").first();
+              await trigger.click();
+              const menu = page.getByRole("menu").first();
+              await expect(menu).toBeVisible();
+              const label = menu.locator('[data-slot="dropdown-menu-label"]');
+              const group = menu.getByRole("group").filter({ has: label }).first();
+              await expect(group).toBeVisible();
+              await expect(group).toHaveAccessibleName((await label.innerText()).trim());
+              const checkbox = menu.getByRole("menuitemcheckbox");
+              await expect(checkbox).toHaveAttribute("aria-checked", "true");
+              await checkbox.click();
+              await expect(checkbox).toHaveAttribute("aria-checked", "false");
+              await page.screenshot({ path: info.outputPath(`menu-${locale}-open.png`), animations: "disabled" });
+              await page.keyboard.press("Escape");
+              await expect(menu).toBeHidden();
+              await expect(trigger).toBeFocused();
+              await trigger.click();
+              await expect(menu.getByRole("menuitemcheckbox")).toHaveAttribute("aria-checked", "false");
+              await page.keyboard.press("Escape");
+              await page.locator(".component-example-toolbar").getByRole("tab").nth(1).click();
+              await expect(page.locator(".component-example-code")).toContainText("DropdownMenuGroup");
+              expect(errors).toEqual([]);
+            });
+          }
+          
+          test("alert icons and compound search icon have their own aligned column", async ({ page }, info) => {
+            await page.goto("/en/components/alert");
+            const panel = page.locator(".component-example-panel");
+            const alerts = panel.locator('[data-slot="alert"]');
+            await expect(alerts).toHaveCount(3);
+            for (const alert of await alerts.all()) {
+              const icon = alert.locator(":scope > svg");
+              await expect(icon).toHaveCount(1);
+              const i = await icon.boundingBox();
+              const title = await alert.locator('[data-slot="alert-title"]').boundingBox();
+              expect(i!.width).toBe(16);
+              expect(i!.height).toBe(16);
+              expect(i!.x + i!.width + 8).toBeLessThanOrEqual(title!.x);
+              expect(Math.abs(i!.y - title!.y)).toBeLessThanOrEqual(3);
+            }
+            await panel.screenshot({ path: info.outputPath("alert-icon-columns.png"), animations: "disabled" });
+            await page.goto("/en/components/input-group");
+            const group = page.locator('.component-example-panel [data-slot="input-group"]').first();
+            const icon = await group.locator("svg").first().boundingBox();
+            const field = await group.locator("input").boundingBox();
+            expect(icon!.width).toBe(16);
+            expect(icon!.x + icon!.width).toBeLessThanOrEqual(field!.x);
+            expect(Math.abs(icon!.y + icon!.height / 2 - field!.y - field!.height / 2)).toBeLessThanOrEqual(1);
+          });
+          ''')
+          deploy = Path('docs/scripts/verify-deployed.mjs')
+          text = deploy.read_text()
+          assert "const origin='https://neumorphism-ui.dev';" in text
+          text = text.replace("const origin='https://neumorphism-ui.dev';", "const supplied=process.argv[2];\nif(!supplied)throw new Error('Usage: npm run verify:deployed -- https://deployment-origin');\nconst url=new URL(supplied);\nif(url.protocol!=='https:'||url.username||url.password||url.search||url.hash||url.pathname!=='/')throw new Error('Pass an HTTPS origin without a path or credentials');\nconst origin=url.origin;")
+          text = text.replace('commit:process.env.GITHUB_SHA??null', 'expectedCommit:process.env.GITHUB_SHA??null')
+          text = text.replace("const output=new URL('../test-results/deployment.json',import.meta.url);", "const output=new URL(`../test-results/deployment-${url.hostname}.json`,import.meta.url);")
+          text = text.replace("?'verified':'mismatch'", "?'registry-and-routes-match':'mismatch'").replace("report.status!=='verified'", "report.status!=='registry-and-routes-match'")
+          deploy.write_text(text)
+          PY
+      - name: Build and verify static source
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p docs/test-results/repair-review
+          npm ci --prefix registry
+          npm ci --prefix docs
+          grep -R -n 'MenuGroupContext\|must be.*Group' docs/node_modules/@base-ui/react/menu/group* | head -12 || true
+          npm run build --prefix docs
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run lint --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+      - name: Install browser
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Verify repaired interactions and the complete catalog
+        working-directory: docs
+        run: |
+          set -o pipefail
+          npx playwright test --config=playwright.detail.config.ts --reporter=list 2>&1 | tee test-results/repair-review/detail.log
+          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts --reporter=list 2>&1 | tee test-results/repair-review/presentation.log
+          npx playwright test --config=playwright.material.config.ts --reporter=list 2>&1 | tee test-results/repair-review/material.log
+      - name: Observe published domains independently
+        run: |
+          node docs/scripts/verify-deployed.mjs https://neumorphism-ui-kappa.vercel.app || true
+          node docs/scripts/verify-deployed.mjs https://neumorphism-ui.dev || true
+      - name: Prepare tested source tree for explicit MCP publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A
+          node --input-type=module <<'JS'
+          import {execFileSync} from 'node:child_process';
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const files=git('diff','--cached','--name-only','-z').split('\0').filter(Boolean);
+          if(files.some(p=>p.startsWith('.github/workflows/')))throw new Error('Only product source belongs in the prepared tree');
+          const tree=files.map(path=>({path,mode:'100644',type:'blob',content:readFileSync(path,'utf8')}));
+          const response=await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/trees`,{method:'POST',headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({base_tree:git('rev-parse','HEAD^{tree}'),tree})});
+          const result=await response.json();if(!response.ok)throw new Error(JSON.stringify(result));
+          const record={parent:process.env.GITHUB_SHA,tree:result.sha,files};
+          writeFileSync('docs/test-results/repair-review/prepared-tree.json',JSON.stringify(record,null,2));
+          console.log('PREPARED_TREE '+JSON.stringify(record));
+          JS
+      - name: Save review evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: detail-repair-review
+          path: docs/test-results
+          retention-days: 7
+          if-no-files-found: error
