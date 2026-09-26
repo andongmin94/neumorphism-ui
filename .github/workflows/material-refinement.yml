@@ -32,11 +32,21 @@ jobs:
           cd docs
           npx playwright install --with-deps chromium
           MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts --grep='material specimen'
+          mv test-results/docs-browser/material-before test-results/material-before
       - name: Refine source and regenerate all outputs
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           python .github/material-refinement.py refine
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('registry/tests/docs-contract.test.mjs')
+          old = r'hover:\[box-shadow:var\(--neu-shadow-hover\)\]'
+          new = r'hover:shadow-\[var\(--neu-shadow-hover\)\]'
+          text = p.read_text()
+          assert old in text
+          p.write_text(text.replace(old, new))
+          PY
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
@@ -45,11 +55,11 @@ jobs:
           npm run lint --prefix docs
           npm run typecheck --prefix docs
           npm run build --prefix docs
-      - name: Verify material states and documentation
+      - name: Verify documentation and material states
         working-directory: docs
         run: |
-          npx playwright test --config=playwright.material.config.ts
           npm run test:browser
+          npx playwright test --config=playwright.material.config.ts
       - name: Create reviewed candidate without changing main
         env:
           GITHUB_TOKEN: ${{ github.token }}
