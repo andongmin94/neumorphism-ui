@@ -44,6 +44,7 @@ jobs:
           writeFileSync('/tmp/surface-edits.json', brotliDecompressSync(archive));
           writeFileSync('/tmp/surface-refinements.py', await blob('8a6fb852230985aaa796d59bd758263dadd6b02c'));
           writeFileSync('/tmp/surface-usage.py', await blob('dc0e00c01ada9355673e74308cd1e907da7d459b'));
+          writeFileSync('/tmp/surface-tests.py', await blob('d82a93a2dd7ced1517fcfb82f21410a09e8ab81c'));
           writeFileSync('registry/scripts/generate-registry.mjs', await blob('047e330ca8ab9b771fd50ad1f0cb9d37871fe77f'));
           JS
           python <<'PY'
@@ -70,6 +71,7 @@ jobs:
           PY
           python /tmp/surface-refinements.py
           python /tmp/surface-usage.py
+          python /tmp/surface-tests.py
       - name: Static source and generated output
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -91,8 +93,8 @@ jobs:
         working-directory: docs
         run: |
           result=0
-          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts || result=1
           npx playwright test --config=playwright.material.config.ts || result=1
+          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts || result=1
           npx playwright test --config=playwright.detail.config.ts || result=1
           exit "$result"
       - name: Prepare source-owned Git objects without moving main
