@@ -53,6 +53,12 @@ jobs:
           text = text.replace(old, 'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50')
           text = text.replace('hover:text-[var(--foreground)]', 'hover:not-data-disabled:text-[var(--foreground)]')
           p.write_text(text)
+          for name in ['button', 'input', 'textarea', 'tabs', 'dialog']:
+              p = Path(f'registry/src/components/ui/{name}.tsx')
+              text = p.read_text().replace('outline-none', 'outline-hidden')
+              text = text.replace('outline-[var(--ring)]', 'outline-[color:var(--ring)]')
+              text = text.replace('outline-[var(--neu-error-text)]', 'outline-[color:var(--neu-error-text)]')
+              p.write_text(text)
           p = Path('docs/tests/material/material.spec.ts')
           text = p.read_text()
           old = '  const activity = page.getByRole("tab", { name: "Activity", exact: true });\n  await expect(activity).toBeFocused();\n  await expect(activity).toHaveAttribute("aria-selected", "true");'
@@ -70,7 +76,11 @@ jobs:
             await page.keyboard.press("Enter");
             await expect(activity).toHaveAttribute("aria-selected", "true");'''
           assert old in text
-          p.write_text(text.replace(old, new))
+          text = text.replace(old, new)
+          text = text.replace('outline: s.outlineWidth', 'outline: s.outlineWidth, outlineStyle: s.outlineStyle, outlineColor: s.outlineColor, focusVisible: e.matches(":focus-visible")')
+          text = text.replace('expect(parseFloat(focused.outline)).toBeGreaterThanOrEqual(2);', 'expect(parseFloat(focused.outline)).toBeGreaterThanOrEqual(2);\n    expect(focused.outlineStyle).toBe("solid");\n    expect(focused.outlineColor).not.toBe("rgba(0, 0, 0, 0)");\n    expect(focused.focusVisible).toBe(true);')
+          text = text.replace('await input.focus();\n    expect(await input.evaluate', 'await input.focus();\n    await expect(input).toHaveCSS("outline-style", "solid");\n    expect(await input.evaluate')
+          p.write_text(text)
           PY
           npm run lint --prefix registry
           npm run build --prefix registry
