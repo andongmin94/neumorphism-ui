@@ -26,7 +26,7 @@ function Switch({
         type="checkbox"
         role="switch"
         data-slot="switch"
-        className="peer absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
+        className="peer absolute inset-x-0 -inset-y-2.5 z-10 m-0 h-11 w-full cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
         disabled={disabled}
         onChange={(event) => {
           onChange?.(event);
@@ -36,9 +36,10 @@ function Switch({
       />
       <span
         aria-hidden="true"
-        className="flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-checked:[&>span]:translate-x-5"
+        data-slot="switch-track"
+        className="flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 shadow-[var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:bg-[var(--primary)] peer-checked:shadow-[var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-3 peer-focus-visible:outline-[color:var(--ring)] peer-checked:[&>span]:translate-x-5 rtl:peer-checked:[&>span]:-translate-x-5"
       >
-        <span className="size-5 rounded-full bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)] transition-transform duration-[var(--neu-duration)] motion-reduce:transition-none" />
+        <span data-slot="switch-thumb" className="size-[18px] shrink-0 rounded-full bg-[var(--neu-surface-soft)] shadow-[var(--neu-shadow-raised-sm)] transition-transform duration-[var(--neu-duration)] motion-reduce:transition-none" />
       </span>
     </span>
   );

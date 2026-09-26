@@ -27,7 +27,7 @@ function TabsList({ className, ...props }: TabsPrimitive.List.Props) {
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={mergeClassName<TabsPrimitive.List.State>(
-        "inline-flex h-11 w-fit items-center justify-center gap-1 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-1 [box-shadow:var(--neu-shadow-inset)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col",
+        "inline-flex h-11 max-w-full w-fit items-center justify-start overflow-x-auto gap-1 rounded-[var(--neu-radius-control)] border border-[color:var(--border)] bg-[var(--neu-surface)] p-1 shadow-[var(--neu-shadow-inset)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col",
         className,
       )}
       {...props}
@@ -43,7 +43,7 @@ function TabsTrigger({
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={mergeClassName<TabsPrimitive.Tab.State>(
-        "inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[calc(var(--neu-radius-control)-4px)] border border-transparent px-4 text-sm font-semibold whitespace-nowrap text-[var(--muted-foreground)] outline-none transition-[color,background-color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 data-[active]:border-[color:var(--neu-selected-border)] data-[active]:bg-[var(--neu-selected)] data-[active]:text-[var(--foreground)] data-[active]:[box-shadow:var(--neu-shadow-raised-sm)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex h-8 shrink-0 flex-1 items-center justify-center gap-1.5 rounded-[calc(var(--neu-radius-control)-4px)] border border-transparent px-4 text-sm font-semibold whitespace-nowrap text-[var(--muted-foreground)] outline-hidden transition-[color,background-color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-[-2px] focus-visible:outline-[color:var(--ring)] hover:not-data-disabled:text-[var(--foreground)] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[active]:border-[color:var(--neu-edge)] data-[active]:bg-[var(--neu-surface-soft)] data-[active]:text-[var(--foreground)] data-[active]:shadow-[var(--neu-shadow-raised-sm)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -59,7 +59,7 @@ function TabsContent({
     <TabsPrimitive.Panel
       data-slot="tabs-content"
       className={mergeClassName<TabsPrimitive.Panel.State>(
-        "flex-1 rounded-[var(--neu-radius-surface)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+        "flex-1 rounded-[var(--neu-radius-surface)] outline-hidden focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
         className,
       )}
       {...props}

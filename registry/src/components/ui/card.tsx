@@ -3,9 +3,9 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const cardVariants = {
-  raised: "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] [box-shadow:var(--neu-shadow-raised)]",
-  soft: "bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)]",
-  inset: "bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)]",
+  raised: "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] shadow-[var(--neu-shadow-raised)]",
+  soft: "bg-[var(--neu-surface-soft)] shadow-[var(--neu-shadow-raised-sm)]",
+  inset: "bg-[var(--neu-surface-low)] shadow-[var(--neu-shadow-inset)]",
   flat: "border border-[color:var(--border)] bg-[var(--neu-surface)]",
 } as const;
 

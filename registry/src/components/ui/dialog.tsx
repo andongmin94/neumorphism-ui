@@ -56,8 +56,9 @@ function DialogContent({
       <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
+        data-close-button={showCloseButton || undefined}
         className={mergeClassName<DialogPrimitive.Popup.State>(
-          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 [&[data-close-button]>[data-slot=dialog-header]]:pr-12 text-[var(--popover-foreground)] shadow-[var(--neu-shadow-floating)] outline-hidden transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
           className,
         )}
         {...props}
@@ -66,9 +67,9 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-4 right-4 grid size-8 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] disabled:pointer-events-none"
+            className="absolute top-3 right-3 grid size-10 place-items-center rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] shadow-[var(--neu-shadow-raised-sm)] outline-hidden transition-[color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:shadow-[var(--neu-shadow-inset)] disabled:pointer-events-none"
           >
-            <span aria-hidden="true">×</span>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="m6 6 12 12M6 18 18 6" /></svg>
             <span className="sr-only">{closeLabel}</span>
           </DialogPrimitive.Close>
         )}
@@ -81,7 +82,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      className={cn("flex flex-col gap-2 text-left", className)}
       {...props}
     />
   );
@@ -108,7 +109,7 @@ function DialogTitle({
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={mergeClassName<DialogPrimitive.Title.State>(
-        "text-lg leading-none font-semibold tracking-tight",
+        "text-lg leading-snug font-semibold tracking-tight",
         className,
       )}
       {...props}

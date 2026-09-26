@@ -30,5 +30,5 @@ test("compiled expanded examples are exactly the code displayed in English docum
 test("button hover changes elevation instead of reducing text contrast with brightness filters", () => {
   const source = fs.readFileSync(path.join(root, "src/components/ui/button.tsx"), "utf8");
   assert.doesNotMatch(source, /(?:hover|active):brightness-/);
-  assert.match(source, /hover:\[box-shadow:var\(--neu-shadow-hover\)\]/);
+  assert.match(source, /hover:shadow-\[var\(--neu-shadow-hover\)\]/);
 });

@@ -335,9 +335,9 @@ const depthProfiles: Record<
   ThemeDepth,
   { offset: number; blur: number; smallOffset: number; smallBlur: number }
 > = {
-  subtle: { offset: 4, blur: 10, smallOffset: 2, smallBlur: 6 },
-  balanced: { offset: 6, blur: 15, smallOffset: 2, smallBlur: 6 },
-  deep: { offset: 10, blur: 22, smallOffset: 4, smallBlur: 10 },
+  subtle: { offset: 3, blur: 8, smallOffset: 2, smallBlur: 5 },
+  balanced: { offset: 6, blur: 14, smallOffset: 3, smallBlur: 7 },
+  deep: { offset: 8, blur: 18, smallOffset: 4, smallBlur: 9 },
 };
 
 const directionVectors: Record<ThemeLightDirection, [number, number]> = {
@@ -450,9 +450,9 @@ export function buildThemeVariables(
       : settings.controlShape === "soft"
         ? "12px"
         : "10px";
-  const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 94%, transparent)`;
-  const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 97%, transparent)`;
-  const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 0 color-mix(in srgb, ${primary} 72%, white)`;
+  const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 62%, transparent)`;
+  const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 65%, transparent)`;
+  const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 0 color-mix(in srgb, ${primary} 86%, white)`;
   const primaryInsetShadow = shadowValue(
     x,
     y,
@@ -490,7 +490,7 @@ export function buildThemeVariables(
     "--neu-surface": tokens.surface,
     "--neu-surface-soft": tokens.surfaceSoft,
     "--neu-surface-low": tokens.surfaceLow,
-    "--neu-edge": tokens.edge,
+    "--neu-edge": `color-mix(in srgb, ${tokens.foreground} ${mode === "light" ? 10 : 9}%, transparent)`,
     "--neu-shadow-dark": tokens.shadowDark,
     "--neu-shadow-light": tokens.shadowLight,
     "--neu-shadow-raised": shadowValue(
@@ -499,7 +499,7 @@ export function buildThemeVariables(
       profile.offset,
       profile.blur,
       tokens.shadowDark,
-      tokens.shadowLight,
+      `color-mix(in srgb, ${tokens.shadowLight} 76%, transparent)`,
     ),
     "--neu-shadow-raised-sm": shadowValue(
       x,
@@ -508,7 +508,7 @@ export function buildThemeVariables(
       profile.smallBlur,
       tokens.shadowDark,
       raisedSmallLight,
-    ) + `, inset ${x}px ${y}px 0 ${tokens.edge}`,
+    ) + `, inset ${x}px ${y}px 0 color-mix(in srgb, ${tokens.edge} 45%, transparent)`,
     "--neu-shadow-inset": shadowValue(
       x,
       y,
@@ -528,6 +528,8 @@ export function buildThemeVariables(
       true,
     ),
     "--neu-shadow-primary": primaryShadow,
+    "--neu-shadow-primary-hover": shadowValue(x, y, profile.smallOffset + 1, profile.smallBlur + 3, tokens.shadowDark, raisedSmallLight) + `, inset ${x}px ${y}px 0 color-mix(in srgb, ${primary} 86%, white)`,
+    "--neu-fill-inset": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceLow} 35%, ${tokens.surface}), ${tokens.surface})`,
     "--neu-shadow-primary-inset": primaryInsetShadow,
     "--neu-shadow-destructive-inset": shadowValue(
       x,
@@ -552,7 +554,7 @@ export function buildThemeVariables(
     "--neu-selected-border": `color-mix(in srgb, ${primary} 44%, ${tokens.border})`,
     "--neu-error-text": mode === "light" ? `color-mix(in srgb, ${tokens.destructive} 76%, ${tokens.foreground})` : tokens.destructive,
     "--neu-shadow-hover": shadowValue(x, y, profile.smallOffset + 1, profile.smallBlur + 3, tokens.shadowDark, raisedSmallLight),
-    "--neu-shadow-floating": `0 16px 40px ${tokens.shadowDark}, 0 3px 8px ${tokens.shadowDark}, inset ${x}px ${y}px 0 ${tokens.edge}`,
+    "--neu-shadow-floating": `0 16px 40px ${tokens.shadowDark}, 0 3px 8px ${tokens.shadowDark}, inset ${x}px ${y}px 0 color-mix(in srgb, ${tokens.edge} 45%, transparent)`,
   };
 }
 
