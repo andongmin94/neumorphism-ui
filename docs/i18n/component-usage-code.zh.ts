@@ -28,7 +28,7 @@ export const componentUsageCodeZh = defineComponentUsageCode({
   </AccordionItem>
 </Accordion>`,
   alert: `<Alert variant="success">
-  <span aria-hidden="true">✓</span>
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
   <AlertTitle>更改已保存</AlertTitle>
   <AlertDescription>
     所有团队成员都可以看到这些更改。
@@ -113,19 +113,21 @@ export const componentUsageCodeZh = defineComponentUsageCode({
         打开菜单
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuLabel>工作区</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          创建副本
-          <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuCheckboxItem
-          checked={showDepthGrid}
-          onCheckedChange={setShowDepthGrid}
-        >
-          显示深度网格
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuItem variant="destructive">删除</DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>工作区</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            创建副本
+            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuCheckboxItem
+            checked={showDepthGrid}
+            onCheckedChange={setShowDepthGrid}
+          >
+            显示深度网格
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuItem variant="destructive">删除</DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -143,7 +145,7 @@ export const componentUsageCodeZh = defineComponentUsageCode({
   "input-group": `<div className="grid gap-2">
   <Label htmlFor="workspace">工作区</Label>
   <InputGroup>
-    <InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>
+    <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
     <InputGroupInput id="workspace" defaultValue="soft-interface" />
     <InputGroupButton type="button">搜索</InputGroupButton>
   </InputGroup>

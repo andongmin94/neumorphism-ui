@@ -46,6 +46,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
@@ -123,7 +124,7 @@ export function RegistryShowcase({ copy }: { copy: ShowcaseMessages }) {
           <div className="showcase-field showcase-field-wide">
             <Label htmlFor="showcase-search">{copy.form.workspace}</Label>
             <InputGroup>
-              <InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>
+              <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
               <InputGroupInput id="showcase-search" defaultValue="soft-interface" />
               <InputGroupButton>{copy.form.search}</InputGroupButton>
             </InputGroup>
@@ -355,21 +356,23 @@ export function RegistryShowcase({ copy }: { copy: ShowcaseMessages }) {
                 {copy.actions.openMenu}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuLabel>{copy.actions.workspace}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  {copy.actions.duplicate}{" "}
-                  <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuCheckboxItem
-                  checked={showDepthGrid}
-                  onCheckedChange={setShowDepthGrid}
-                >
-                  {copy.actions.showDepthGrid}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuItem variant="destructive">
-                  {copy.actions.delete}
-                </DropdownMenuItem>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>{copy.actions.workspace}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    {copy.actions.duplicate}{" "}
+                    <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuCheckboxItem
+                    checked={showDepthGrid}
+                    onCheckedChange={setShowDepthGrid}
+                  >
+                    {copy.actions.showDepthGrid}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuItem variant="destructive">
+                    {copy.actions.delete}
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

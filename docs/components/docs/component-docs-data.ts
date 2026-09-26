@@ -134,7 +134,7 @@ export const componentDocs = [
   AlertTitle,
 } from "@/components/ui/alert"`,
     usageCode: `<Alert variant="success">
-  <span aria-hidden="true">✓</span>
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
   <AlertTitle>저장했습니다</AlertTitle>
   <AlertDescription>
     변경 사항이 모든 팀원에게 반영되었습니다.
@@ -611,6 +611,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
@@ -625,19 +626,21 @@ import {
         메뉴 열기
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuLabel>Workspace</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          복제
-          <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuCheckboxItem
-          checked={showDepthGrid}
-          onCheckedChange={setShowDepthGrid}
-        >
-          깊이 격자 표시
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuItem variant="destructive">삭제</DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Workspace</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            복제
+            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuCheckboxItem
+            checked={showDepthGrid}
+            onCheckedChange={setShowDepthGrid}
+          >
+            깊이 격자 표시
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuItem variant="destructive">삭제</DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -786,7 +789,7 @@ import { Label } from "@/components/ui/label"`,
     usageCode: `<div className="grid gap-2">
   <Label htmlFor="workspace">Workspace</Label>
   <InputGroup>
-    <InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>
+    <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
     <InputGroupInput id="workspace" defaultValue="soft-interface" />
     <InputGroupButton type="button">검색</InputGroupButton>
   </InputGroup>

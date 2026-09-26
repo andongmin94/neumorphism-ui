@@ -28,7 +28,7 @@ export const componentUsageCodeJa = defineComponentUsageCode({
   </AccordionItem>
 </Accordion>`,
   alert: `<Alert variant="success">
-  <span aria-hidden="true">✓</span>
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
   <AlertTitle>変更を保存しました</AlertTitle>
   <AlertDescription>
     変更内容がすべてのチームメンバーに反映されました。
@@ -113,19 +113,21 @@ export const componentUsageCodeJa = defineComponentUsageCode({
         メニューを開く
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuLabel>ワークスペース</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          複製
-          <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuCheckboxItem
-          checked={showDepthGrid}
-          onCheckedChange={setShowDepthGrid}
-        >
-          深度グリッドを表示
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuItem variant="destructive">削除</DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>ワークスペース</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            複製
+            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuCheckboxItem
+            checked={showDepthGrid}
+            onCheckedChange={setShowDepthGrid}
+          >
+            深度グリッドを表示
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuItem variant="destructive">削除</DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -143,7 +145,7 @@ export const componentUsageCodeJa = defineComponentUsageCode({
   "input-group": `<div className="grid gap-2">
   <Label htmlFor="workspace">ワークスペース</Label>
   <InputGroup>
-    <InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>
+    <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
     <InputGroupInput id="workspace" defaultValue="soft-interface" />
     <InputGroupButton type="button">検索</InputGroupButton>
   </InputGroup>

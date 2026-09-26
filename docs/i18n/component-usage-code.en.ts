@@ -28,7 +28,7 @@ export const componentUsageCodeEn = defineComponentUsageCode({
   </AccordionItem>
 </Accordion>`,
   alert: `<Alert variant="success">
-  <span aria-hidden="true">✓</span>
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
   <AlertTitle>Changes saved</AlertTitle>
   <AlertDescription>
     Your changes are now available to every team member.
@@ -113,19 +113,21 @@ export const componentUsageCodeEn = defineComponentUsageCode({
         Open menu
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuLabel>Workspace</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Duplicate
-          <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuCheckboxItem
-          checked={showDepthGrid}
-          onCheckedChange={setShowDepthGrid}
-        >
-          Show depth grid
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Workspace</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            Duplicate
+            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuCheckboxItem
+            checked={showDepthGrid}
+            onCheckedChange={setShowDepthGrid}
+          >
+            Show depth grid
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -143,7 +145,7 @@ export const componentUsageCodeEn = defineComponentUsageCode({
   "input-group": `<div className="grid gap-2">
   <Label htmlFor="workspace">Workspace</Label>
   <InputGroup>
-    <InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>
+    <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
     <InputGroupInput id="workspace" defaultValue="soft-interface" />
     <InputGroupButton type="button">Search</InputGroupButton>
   </InputGroup>

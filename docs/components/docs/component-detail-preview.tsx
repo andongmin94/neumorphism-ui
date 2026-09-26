@@ -65,6 +65,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -236,7 +237,7 @@ export function ComponentDetailPreview({
       return (
         <PreviewStack>
           <Alert>
-            <span aria-hidden="true">i</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7h.01" /></svg>
             <AlertTitle>{copy.alert.newVersion}</AlertTitle>
             <AlertDescription>{copy.alert.newVersionBody}</AlertDescription>
           </Alert>
@@ -246,7 +247,7 @@ export function ComponentDetailPreview({
             <AlertDescription>{copy.alert.syncedBody}</AlertDescription>
           </Alert>
           <Alert variant="destructive">
-            <span aria-hidden="true">!</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 17h.01" /></svg>
             <AlertTitle>{copy.alert.missingTokens}</AlertTitle>
             <AlertDescription>{copy.alert.missingTokensBody}</AlertDescription>
           </Alert>
@@ -437,42 +438,44 @@ export function ComponentDetailPreview({
       return (
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="soft" />}>
-            {copy.dropdown.workspaceMenu} <span aria-hidden="true">⌄</span>
+            {copy.dropdown.workspaceMenu} <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>{copy.dropdown.workspace}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              {copy.dropdown.newPage}{" "}
-              <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>{copy.dropdown.duplicate}</DropdownMenuItem>
-            <DropdownMenuCheckboxItem
-              checked={showDepthGrid}
-              onCheckedChange={setShowDepthGrid}
-            >
-              {copy.dropdown.showDepthGrid}
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>{copy.dropdown.theme}</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuRadioGroup defaultValue="system">
-                  <DropdownMenuRadioItem value="light">
-                    {copy.dropdown.light}
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="dark">
-                    {copy.dropdown.dark}
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="system">
-                    {copy.dropdown.system}
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">
-              {copy.dropdown.deleteWorkspace}
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{copy.dropdown.workspace}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                {copy.dropdown.newPage}{" "}
+                <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>{copy.dropdown.duplicate}</DropdownMenuItem>
+              <DropdownMenuCheckboxItem
+                checked={showDepthGrid}
+                onCheckedChange={setShowDepthGrid}
+              >
+                {copy.dropdown.showDepthGrid}
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>{copy.dropdown.theme}</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup defaultValue="system">
+                    <DropdownMenuRadioItem value="light">
+                      {copy.dropdown.light}
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="dark">
+                      {copy.dropdown.dark}
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="system">
+                      {copy.dropdown.system}
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                {copy.dropdown.deleteWorkspace}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -518,7 +521,7 @@ export function ComponentDetailPreview({
             label={copy.inputGroup.search}
           >
             <InputGroup>
-              <InputGroupAddon aria-hidden="true">⌕</InputGroupAddon>
+              <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
               <InputGroupInput
                 id="docs-input-group-search"
                 placeholder={copy.inputGroup.searchPlaceholder}
