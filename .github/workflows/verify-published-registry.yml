@@ -1,0 +1,24 @@
+name: Published registry
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - name: Compare the public registry with this commit
+        run: node registry/scripts/verify-published-registry.mjs
+      - name: Save endpoint status and equality report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-registry
+          path: docs/test-results/published-registry
+          retention-days: 7
+          if-no-files-found: error

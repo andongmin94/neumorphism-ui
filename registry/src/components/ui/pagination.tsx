@@ -24,14 +24,14 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-2", className)}
+      className={cn("m-0 flex max-w-full flex-wrap items-center justify-center gap-1 p-0 list-none", className)}
       {...props}
     />
   );
 }
 
-function PaginationItem(props: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" {...props} />;
+function PaginationItem({ className, ...props }: React.ComponentProps<"li">) {
+  return <li data-slot="pagination-item" className={cn("flex min-w-0", className)} {...props} />;
 }
 
 type PaginationLinkProps = React.ComponentProps<"a"> & {
@@ -49,7 +49,7 @@ function PaginationLink({
       data-slot="pagination-link"
       data-active={isActive || undefined}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-[var(--neu-radius-control)] border text-sm font-semibold outline-none transition-[transform,box-shadow,color,background-color] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+        "inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--neu-radius-control)] border text-sm font-semibold leading-5 tabular-nums outline-none transition-[box-shadow,color,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:outline-[var(--ring)]",
         isActive
           ? "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--neu-accent-ink)] [box-shadow:var(--neu-shadow-raised-sm)]"
           : "border-transparent bg-transparent text-[var(--foreground)] hover:bg-[var(--neu-surface)] hover:[box-shadow:var(--neu-shadow-inset-sm)]",
@@ -68,10 +68,10 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      className={cn("w-auto gap-2 px-4", className)}
+      className={cn("h-auto min-h-10 w-auto max-w-full gap-1 px-2 py-2 text-center [overflow-wrap:anywhere]", className)}
       {...props}
     >
-      <span aria-hidden="true">←</span>
+      <svg aria-hidden="true" className="size-4 shrink-0 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m14 6-6 6 6 6" /></svg>
       {children ?? "Previous"}
     </PaginationLink>
   );
@@ -85,11 +85,11 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      className={cn("w-auto gap-2 px-4", className)}
+      className={cn("h-auto min-h-10 w-auto max-w-full gap-1 px-2 py-2 text-center [overflow-wrap:anywhere]", className)}
       {...props}
     >
       {children ?? "Next"}
-      <span aria-hidden="true">→</span>
+      <svg aria-hidden="true" className="size-4 shrink-0 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m10 6 6 6-6 6" /></svg>
     </PaginationLink>
   );
 }
@@ -108,7 +108,7 @@ function PaginationEllipsis({
       )}
       {...props}
     >
-      <span aria-hidden="true">•••</span>
+      <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
       <span className="sr-only">More pages</span>
     </span>
   );

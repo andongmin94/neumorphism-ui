@@ -55,7 +55,7 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={mergeClassName<AvatarPrimitive.Fallback.State>(
-        "flex size-full items-center justify-center rounded-full bg-[var(--neu-surface)] font-semibold text-[var(--muted-foreground)] [box-shadow:none]",
+        "flex size-full items-center justify-center rounded-full bg-[var(--neu-surface)] font-semibold leading-none text-[var(--muted-foreground)] [box-shadow:none]",
         className,
       )}
       {...props}
@@ -81,7 +81,7 @@ function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="avatar-group"
       className={cn(
-        "group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-[var(--background)]",
+        "group/avatar-group isolate flex items-center -space-x-2 *:data-[slot=avatar]:[box-shadow:0_0_0_2px_var(--neu-surface),var(--neu-shadow-raised-sm)]",
         className,
       )}
       {...props}
@@ -94,7 +94,7 @@ function AvatarGroupCount({ className, ...props }: React.ComponentProps<"div">) 
     <div
       data-slot="avatar-group-count"
       className={cn(
-        "relative flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-sm font-semibold text-[var(--muted-foreground)] ring-2 ring-[var(--background)] [box-shadow:var(--neu-shadow-raised-sm)] group-has-data-[size=lg]/avatar-group:size-12 group-has-data-[size=sm]/avatar-group:size-8",
+        "relative flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-sm font-semibold leading-none tabular-nums text-[var(--muted-foreground)] [box-shadow:0_0_0_2px_var(--neu-surface),var(--neu-shadow-raised-sm)] group-has-data-[size=lg]/avatar-group:size-12 group-has-data-[size=lg]/avatar-group:text-base group-has-data-[size=sm]/avatar-group:size-8 group-has-data-[size=sm]/avatar-group:text-xs",
         className,
       )}
       {...props}

@@ -10,7 +10,7 @@ const badgeVariants = {
   soft: "border-transparent bg-[var(--neu-surface-low)] text-[var(--muted-foreground)]",
   outline: "border-[color:var(--border)] bg-transparent text-[var(--foreground)]",
   destructive:
-    "border-transparent bg-[color:var(--destructive)]/12 text-[var(--destructive)]",
+    "border-transparent bg-[color:var(--destructive)]/12 text-[var(--neu-error-text)]",
 } as const;
 
 type BadgeVariant = keyof typeof badgeVariants;
@@ -25,7 +25,7 @@ function Badge({ className, variant = "default", ...props }: BadgeProps) {
       data-slot="badge"
       data-variant={variant}
       className={cn(
-        "inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-[var(--neu-radius-small)] border px-2 py-0.5 text-xs font-semibold leading-4 [&_svg]:pointer-events-none [&_svg]:size-3",
+        "inline-flex w-fit max-w-full min-w-0 items-center justify-center gap-1 whitespace-normal [overflow-wrap:anywhere] align-middle text-center rounded-[var(--neu-radius-small)] border px-2 py-0.5 text-xs font-semibold leading-4 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0",
         badgeVariants[variant],
         className,
       )}

@@ -71,7 +71,7 @@ function Slider({
             data-slot="slider-thumb"
             key={index}
             index={index}
-            className="relative block size-5 shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] [box-shadow:var(--neu-shadow-raised-sm)] after:absolute after:inset-1.5 after:rounded-full after:bg-[var(--neu-accent-ink)] outline-none transition-[box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-3 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50"
+            className="relative block size-5 shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] [box-shadow:var(--neu-shadow-raised-sm)] after:absolute after:inset-1.5 after:rounded-full after:bg-[var(--neu-accent-ink)] outline-none has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-[var(--ring)] transition-[box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none active:[box-shadow:var(--neu-shadow-inset)] disabled:pointer-events-none disabled:opacity-50"
           />
         ))}
       </SliderPrimitive.Control>

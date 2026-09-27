@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { makeRegistry, makeThemeCss, makeBootstrapModule } from "./theme-output.mjs";
+import { assertItemContent } from "./item-content.mjs";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const registry = makeRegistry();
@@ -15,9 +16,6 @@ assert.deepEqual(fs.readdirSync(path.join(root, "../docs/public/r")).sort(), exp
 for (const name of expectedFiles) assert.equal(read(`public/r/${name}`), read(`../docs/public/r/${name}`), `Out-of-sync endpoint: ${name}`);
 for (const expected of registry.items) {
   const built = JSON.parse(read(`public/r/${expected.name}.json`));
-  for (const key of ["name", "type", "dependencies", "registryDependencies", "cssVars", "css"]) {
-    assert.deepEqual(built[key], expected[key], `${expected.name}: ${key} differs from source`);
-  }
-  for (const file of built.files ?? []) assert.equal(file.content, read(file.path), `${expected.name}: installable source differs`);
+  assertItemContent(built, expected, read);
 }
-console.log(`Verified ${registry.items.length} items, shared tokens, bootstrap, and both endpoint copies.`);
+console.log(`Verified ${registry.items.length} complete item manifests, install targets, shared tokens, bootstrap, and both endpoint copies.`);

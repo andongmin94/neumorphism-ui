@@ -16,10 +16,10 @@ const buttonVariants = {
 } as const;
 
 const buttonSizes = {
-  sm: "h-8 px-3 text-xs",
-  default: "h-10 px-4 text-sm",
-  lg: "h-12 px-6 text-base",
-  icon: "size-10 p-0",
+  sm: "h-8 px-3 text-xs [--button-icon-size:0.875rem]",
+  default: "h-10 px-4 text-sm [--button-icon-size:1rem]",
+  lg: "h-12 px-6 text-base [--button-icon-size:1.25rem]",
+  icon: "size-10 p-0 [--button-icon-size:1.25rem]",
 } as const;
 
 type ButtonVariant = keyof typeof buttonVariants;
@@ -44,7 +44,7 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold leading-5 tracking-normal outline-hidden transition-[box-shadow,background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:outline-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:[background-image:none] disabled:border-[color:var(--muted-foreground)]/30 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold leading-5 tracking-normal outline-hidden transition-[box-shadow,background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:outline-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:[background-image:none] disabled:border-[color:var(--muted-foreground)]/30 [&_svg]:pointer-events-none [&_svg]:block [&_svg:not([class*=size-])]:size-[var(--button-icon-size)] [&_svg]:shrink-0",
         buttonVariants[variant],
         buttonSizes[size],
         className,
