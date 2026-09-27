@@ -24,36 +24,46 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Restore exact reviewed specimens and add inherited typography coverage
+      - name: Restore exact specimens and check supported action sizes
         run: |
-          for revision in 314f4cda75153672219af8e24db77acf38dd388c 48b145afbebd1d4e8cb84f88f0a1c4257a27672f e395ae572ef0d8cc7d4bb3e1fa2d1c4b9e240db5 4b61a256f192fa28ff5fbd5c32c7a3b5ffaaba0f; do git fetch --depth=1 origin "$revision"; done
+          for revision in 314f4cda75153672219af8e24db77acf38dd388c 48b145afbebd1d4e8cb84f88f0a1c4257a27672f e395ae572ef0d8cc7d4bb3e1fa2d1c4b9e240db5 4b61a256f192fa28ff5fbd5c32c7a3b5ffaaba0f 880f6d303a7f7b71f52d4b683cd9bea0b14b06b6; do git fetch --depth=1 origin "$revision"; done
           python3 - <<'PY'
           import re, subprocess, textwrap
           from pathlib import Path
-          text=subprocess.check_output(['git','show','4b61a256f192fa28ff5fbd5c32c7a3b5ffaaba0f:.github/workflows/composition-review.yml'],text=True)
-          block=re.findall(r"          python3 - <<'PY'\n(.*?)\n          PY",text,re.S)[0]
-          exec(compile(textwrap.dedent(block),'<exact specimen>','exec'))
+          text=subprocess.check_output(['git','show','880f6d303a7f7b71f52d4b683cd9bea0b14b06b6:.github/workflows/composition-review.yml'],text=True)
+          blocks=re.findall(r"          python3 - <<'PY'\n(.*?)\n          PY",text,re.S)
+          assert len(blocks)==2
+          exec(compile(textwrap.dedent(blocks[0]),'<exact specimen>','exec'))
+          Path('/tmp/composition-typography.py').write_text(textwrap.dedent(blocks[1]))
           p=Path('docs/tests/material/composition.tsx');s=p.read_text()
-          s=s.replace('import { Input }', 'import { Textarea } from "@/components/ui/textarea";\nimport { Input }')
-          s=s.replace('InputGroupAddon, InputGroupButton }','InputGroupAddon, InputGroupButton, InputGroupTextarea }')
-          marker='<Field><FieldLabel>Read-only identifier</FieldLabel>'
-          assert s.count(marker)==1
-          pair='''<label className="grid min-w-0 gap-2 text-sm font-semibold">Plain notes<Textarea aria-label="Plain notes" defaultValue="Input content keeps its own weight." /></label>
-                            <label className="grid min-w-0 gap-2 text-sm font-semibold">Compound notes<InputGroup><InputGroupTextarea aria-label="Compound notes" defaultValue="Input content keeps its own weight." /></InputGroup></label>
-                            '''
-          p.write_text(s.replace(marker,pair+marker))
+          target='function OverlayComposition() {'
+          s=s.replace(target,target+'''\n  const sizeQuery = new URLSearchParams(location.search).get("actionSize");
+            const actionSize = sizeQuery === "sm" || sizeQuery === "lg" ? sizeQuery : "default";
+            const shortActions = sizeQuery !== null;''')
+          s=s.replace('<Button variant="soft">Continue editing the existing workspace settings</Button>', '<Button size={actionSize} variant="soft">{shortActions ? "Cancel" : "Continue editing the existing workspace settings"}</Button>')
+          s=s.replace('<DialogClose render={<Button variant="primary" />}>Save and return to workspace overview</DialogClose>', '<DialogClose render={<Button size={actionSize} variant="primary" />}>{shortActions ? "Save" : "Save and return to workspace overview"}</DialogClose>')
+          s=s.replace('<AlertDialogCancel>Keep this workspace and continue editing</AlertDialogCancel>', '<AlertDialogCancel render={<Button size={actionSize} />}>{shortActions ? "Keep" : "Keep this workspace and continue editing"}</AlertDialogCancel>')
+          s=s.replace('<AlertDialogAction>Remove the workspace from this local example</AlertDialogAction>', '<AlertDialogAction render={<Button size={actionSize} variant="destructive" />}>{shortActions ? "Remove" : "Remove the workspace from this local example"}</AlertDialogAction>')
+          p.write_text(s)
           p=Path('docs/tests/material/composition.spec.ts');s=p.read_text()
-          marker='const a = await inset(plain), b = await inset(compound);'
+          marker='    test("input gutters and baselines agree in a real form"'
           assert s.count(marker)==1
-          checks='''
-                await expect(compound).toHaveCSS("font-weight", "400");
-                await expect(compound).toHaveCSS("letter-spacing", await plain.evaluate(e => getComputedStyle(e).letterSpacing));
-                for (const name of ["Plain notes", "Compound notes"]) {
-                  const notes = page.getByRole("textbox", { name, exact: true });
-                  await expect(notes).toHaveCSS("font-weight", "400");
-                  await expect(notes).toHaveCSS("line-height", "24px");
-                }'''
-          p.write_text(s.replace(marker,marker+checks))
+          test='''    test("modal action wrapping preserves small, default and large button sizes", async ({ page }) => {
+                for (const [size, height] of [["sm", 32], ["default", 40], ["lg", 48]] as const) {
+                  await page.goto(`/?composition=1&mode=${mode}&actionSize=${size}`);
+                  await page.getByRole("button", { name: "Open composition", exact: true }).click();
+                  const dialog = page.getByRole("dialog").filter({ has: page.getByRole("textbox", { name: "Dialog name", exact: true }) });
+                  const footer = dialog.locator('[data-slot="dialog-footer"]');
+                  for (const button of await footer.getByRole("button").all()) expect((await button.boundingBox())!.height).toBe(height);
+                  await footer.getByRole("button", { name: "Save", exact: true }).click();
+                  await page.getByRole("button", { name: "Confirm removal", exact: true }).click();
+                  const alert = page.getByRole("alertdialog");
+                  for (const button of await alert.locator('[data-slot="alert-dialog-footer"]').getByRole("button").all()) expect((await button.boundingBox())!.height).toBe(height);
+                  await alert.getByRole("button", { name: "Keep", exact: true }).click();
+                }
+              });
+          '''
+          p.write_text(s.replace(marker,test+marker))
           PY
       - name: Compile fixture and install browser
         run: |
@@ -77,14 +87,17 @@ jobs:
         run: |
           python3 /tmp/composition-1.py
           python3 /tmp/composition-extra.py
+          python3 /tmp/composition-typography.py
           python3 - <<'PY'
           from pathlib import Path
-          for name in ['input-group','textarea']:
+          for name in ['dialog','alert-dialog']:
               p=Path(f'registry/src/components/ui/{name}.tsx');s=p.read_text()
-              assert 'text-sm font-normal' not in s
-              p.write_text(s.replace('text-sm','text-sm font-normal tracking-normal'))
+              target='[&>button]:min-h-10'
+              assert s.count(target)==1
+              sizes='[&>button[data-size=sm]]:min-h-8 [&>button[data-size=sm]]:py-1 [&>button[data-size=lg]]:min-h-12 [&>button[data-size=icon]]:py-0'
+              p.write_text(s.replace(target,target+' '+sizes))
           p=Path('docs/visual-reference.md')
-          p.write_text(p.read_text()+'''\nComposed Input Group values and both multiline fields declare normal input weight and tracking, so bold parent labels cannot restyle entered text. Nested Combobox tests preserve Base UI's Escape behavior: a selected closed field clears first, then the parent Popover dismisses; the surrounding Dialog retains unsaved edits and restores focus.\n''')
+          p.write_text(p.read_text()+'''\nDialog and Alert Dialog footer actions grow for multiline labels without replacing the supported small/default/large minimum heights (32/40/48px). The same source-only tests exercise each real Button size in both modal footers.\n''')
           PY
       - name: Static checks and generated-source equality
         env:
