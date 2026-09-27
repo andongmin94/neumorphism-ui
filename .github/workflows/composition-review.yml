@@ -12,6 +12,9 @@ jobs:
   review:
     runs-on: ubuntu-latest
     timeout-minutes: 18
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -21,7 +24,7 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Restore exact review scripts and add bounded diagnostics
+      - name: Restore exact source review and correct test semantics
         run: |
           git fetch --depth=1 origin 314f4cda75153672219af8e24db77acf38dd388c
           python3 - <<'PY'
@@ -29,20 +32,51 @@ jobs:
           from pathlib import Path
           text=subprocess.check_output(['git','show','314f4cda75153672219af8e24db77acf38dd388c:.github/workflows/composition-review.yml'],text=True)
           blocks=re.findall(r"          python3 - <<'PY'\n(.*?)\n          PY",text,re.S)
-          assert len(blocks)==3, len(blocks)
+          assert len(blocks)==3
           for n,block in enumerate(blocks): Path(f'/tmp/composition-{n}.py').write_text(textwrap.dedent(block))
           exec(compile(Path('/tmp/composition-0.py').read_text(),'/tmp/composition-0.py','exec'))
           p=Path('docs/tests/material/composition.tsx');s=p.read_text()
           target='Save and return to workspace overview</DialogClose></DialogFooter>'
           assert s.count(target)==1
-          p.write_text(s.replace(target,target+'</DialogContent>'))
+          s=s.replace(target,target+'</DialogContent>')
+          s=s.replace('<DialogContent aria-label="Composition preferences">','<DialogContent>')
+          p.write_text(s)
           p=Path('docs/tests/material/composition.spec.ts');s=p.read_text()
-          s=s.replace('const phase =', 'test.setTimeout(15000);\nconst phase =')
+          s=s.replace('const phase =', 'test.setTimeout(20000);\nconst phase =')
           s=s.replace('const before = (await plan.boundingBox())!;', 'const before = (await plan.boundingBox())!; const originalScroll = await page.evaluate(() => scrollY);')
           s=s.replace('Math.abs((await plan.boundingBox())!.y - before.y)', 'Math.abs((await plan.boundingBox())!.y + await page.evaluate(() => scrollY) - before.y - originalScroll)')
           s=s.replace('and keep paste behavior', 'and preserve value entry')
           s=s.replace('await page.evaluate(() => document.fonts.ready); });', 'await page.evaluate(() => document.fonts.ready); await expect(page.getByRole("heading", { name: "Details that survive composition." })).toBeVisible({ timeout: 3000 }); });')
+          s=s.replace('name: "Composition preferences"', 'name: "WorkspaceDeploymentIdentifierWithoutAnyWordBreaks0123456789"')
+          s=s.replace('await tabs.first().focus(); await page.keyboard.press("ArrowDown"); await expect(tabs.last()).toBeFocused();', '''await tabs.first().focus();
+                await page.keyboard.press("ArrowDown");
+                await expect(tabs.nth(1)).toBeFocused();
+                await expect(tabs.nth(1)).toHaveAttribute("aria-disabled", "true");
+                await page.keyboard.press("Enter");
+                await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
+                await page.keyboard.press("ArrowDown"); await expect(tabs.last()).toBeFocused();''')
+          marker='    test("input gutters and baselines agree in a real form"'
+          assert marker in s
+          evidence='''    test("capture real default and open composition states", async ({ page }, info) => {
+                await page.screenshot({ path: info.outputPath(`${phase}-default.png`), fullPage: true, animations: "disabled" });
+                await page.getByRole("button", { name: "Open composition", exact: true }).click();
+                await expect(page.getByRole("dialog")).toBeVisible();
+                await page.screenshot({ path: info.outputPath(`${phase}-dialog.png`), animations: "disabled" });
+                await page.keyboard.press("Escape");
+                await page.getByRole("button", { name: "Open actions", exact: true }).click();
+                await expect(page.locator('[data-slot="dropdown-menu-content"]')).toBeVisible();
+                await page.screenshot({ path: info.outputPath(`${phase}-menu.png`), animations: "disabled" });
+                await page.getByRole("menuitem", { name: "More actions", exact: true }).focus();
+                await page.keyboard.press("ArrowRight");
+                await expect(page.locator('[data-slot="dropdown-menu-sub-content"]')).toBeVisible();
+                await page.screenshot({ path: info.outputPath(`${phase}-submenu.png`), animations: "disabled" });
+                await page.keyboard.press("Escape"); await page.keyboard.press("Escape");
+              });
+          '''
+          s=s.replace(marker,evidence+marker)
           p.write_text(s)
+          # Field uses a direct box-shadow declaration; read-only explicitly removes that layer.
+          p=Path('/tmp/composition-1.py');p.write_text(p.read_text().replace('read-only:shadow-none','read-only:[box-shadow:none]'))
           PY
       - name: Compile the fixture before browser probing
         run: |
@@ -52,17 +86,17 @@ jobs:
           npm run sync:docs --prefix registry
           npm run typecheck --prefix docs
           cd docs && npx playwright install --with-deps chromium
-      - name: Record a bounded unmodified-source probe
+      - name: Record bounded failures on the unmodified source
         working-directory: docs
         run: |
           mkdir -p test-results/composition-review
           set +e
-          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts composition.spec.ts --max-failures=4 --timeout=10000 2>&1 | tee test-results/composition-review/before.log
+          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts composition.spec.ts --max-failures=4 2>&1 | tee test-results/composition-review/before.log
           result=${PIPESTATUS[0]}
           set -e
           echo "$result" > test-results/composition-review/before-exit.txt
           cp test-results/material-report.json test-results/composition-review/before.json
-      - name: Apply source-owned fixes and check every source layer
+      - name: Apply source fixes and check every source layer
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
@@ -88,6 +122,7 @@ jobs:
         run: |
           MATERIAL_PHASE=after npx playwright test --config=playwright.material.config.ts --max-failures=4 2>&1 | tee test-results/composition-review/after.log
           cp test-results/material-report.json test-results/composition-review/after.json
+          node -e "const r=require('./test-results/material-report.json'); if(r.stats.unexpected || r.stats.skipped || r.stats.flaky) process.exit(1)"
       - name: Recheck all catalog and template surfaces
         working-directory: docs
         run: npx playwright test --config=playwright.detail.config.ts
