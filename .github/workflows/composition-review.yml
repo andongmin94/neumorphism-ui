@@ -24,61 +24,55 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Restore exact source review and correct test semantics
+      - name: Restore pinned review specimen and add native select coverage
         run: |
           git fetch --depth=1 origin 314f4cda75153672219af8e24db77acf38dd388c
+          git fetch --depth=1 origin 48b145afbebd1d4e8cb84f88f0a1c4257a27672f
           python3 - <<'PY'
           import re, subprocess, textwrap
           from pathlib import Path
-          text=subprocess.check_output(['git','show','314f4cda75153672219af8e24db77acf38dd388c:.github/workflows/composition-review.yml'],text=True)
-          blocks=re.findall(r"          python3 - <<'PY'\n(.*?)\n          PY",text,re.S)
-          assert len(blocks)==3
-          for n,block in enumerate(blocks): Path(f'/tmp/composition-{n}.py').write_text(textwrap.dedent(block))
-          exec(compile(Path('/tmp/composition-0.py').read_text(),'/tmp/composition-0.py','exec'))
+          text=subprocess.check_output(['git','show','48b145afbebd1d4e8cb84f88f0a1c4257a27672f:.github/workflows/composition-review.yml'],text=True)
+          block=re.findall(r"          python3 - <<'PY'\n(.*?)\n          PY",text,re.S)[0]
+          exec(compile(textwrap.dedent(block),'<review specimen>','exec'))
           p=Path('docs/tests/material/composition.tsx');s=p.read_text()
-          target='Save and return to workspace overview</DialogClose></DialogFooter>'
-          assert s.count(target)==1
-          s=s.replace(target,target+'</DialogContent>')
-          s=s.replace('<DialogContent aria-label="Composition preferences">','<DialogContent>')
+          s=s.replace('return <Combobox items={regions}>', 'return <Combobox items={regions} name="deploymentRegion">')
+          target='<NumberField defaultValue={12}'
+          s=s.replace(target,'''<label className="grid min-w-0 gap-2 text-sm font-semibold">Review channels<Select aria-label="Review channels" name="channels" multiple size={3} defaultValue={["release"]}><SelectItem value="release">Release reviews</SelectItem><SelectItem value="security">Security reviews</SelectItem><SelectItem value="access">Access reviews</SelectItem></Select></label>
+                            '''+target)
           p.write_text(s)
           p=Path('docs/tests/material/composition.spec.ts');s=p.read_text()
-          s=s.replace('const phase =', 'test.setTimeout(20000);\nconst phase =')
-          s=s.replace('const before = (await plan.boundingBox())!;', 'const before = (await plan.boundingBox())!; const originalScroll = await page.evaluate(() => scrollY);')
-          s=s.replace('Math.abs((await plan.boundingBox())!.y - before.y)', 'Math.abs((await plan.boundingBox())!.y + await page.evaluate(() => scrollY) - before.y - originalScroll)')
-          s=s.replace('and keep paste behavior', 'and preserve value entry')
-          s=s.replace('await page.evaluate(() => document.fonts.ready); });', 'await page.evaluate(() => document.fonts.ready); await expect(page.getByRole("heading", { name: "Details that survive composition." })).toBeVisible({ timeout: 3000 }); });')
-          s=s.replace('name: "Composition preferences"', 'name: "WorkspaceDeploymentIdentifierWithoutAnyWordBreaks0123456789"')
-          s=s.replace('await tabs.first().focus(); await page.keyboard.press("ArrowDown"); await expect(tabs.last()).toBeFocused();', '''await tabs.first().focus();
+          s=s.replace('await page.keyboard.press("ArrowDown"); await page.keyboard.press("Enter"); await expect(region).toHaveValue("Tokyo");', '''const option = page.getByRole("option", { name: "Tokyo", exact: true });
+                await expect(option).toBeVisible();
                 await page.keyboard.press("ArrowDown");
-                await expect(tabs.nth(1)).toBeFocused();
-                await expect(tabs.nth(1)).toHaveAttribute("aria-disabled", "true");
+                await expect(option).toHaveAttribute("data-highlighted", "");
                 await page.keyboard.press("Enter");
-                await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
-                await page.keyboard.press("ArrowDown"); await expect(tabs.last()).toBeFocused();''')
+                await expect(page.locator('input[name="deploymentRegion"]')).toHaveValue("Tokyo");
+                await expect(page.locator('[data-slot="combobox-content"]')).toBeHidden();
+                await expect(region).toHaveValue("Tokyo");''')
           marker='    test("input gutters and baselines agree in a real form"'
-          assert marker in s
-          evidence='''    test("capture real default and open composition states", async ({ page }, info) => {
-                await page.screenshot({ path: info.outputPath(`${phase}-default.png`), fullPage: true, animations: "disabled" });
-                await page.getByRole("button", { name: "Open composition", exact: true }).click();
-                await expect(page.getByRole("dialog")).toBeVisible();
-                await page.screenshot({ path: info.outputPath(`${phase}-dialog.png`), animations: "disabled" });
-                await page.keyboard.press("Escape");
-                await page.getByRole("button", { name: "Open actions", exact: true }).click();
-                await expect(page.locator('[data-slot="dropdown-menu-content"]')).toBeVisible();
-                await page.screenshot({ path: info.outputPath(`${phase}-menu.png`), animations: "disabled" });
-                await page.getByRole("menuitem", { name: "More actions", exact: true }).focus();
-                await page.keyboard.press("ArrowRight");
-                await expect(page.locator('[data-slot="dropdown-menu-sub-content"]')).toBeVisible();
-                await page.screenshot({ path: info.outputPath(`${phase}-submenu.png`), animations: "disabled" });
-                await page.keyboard.press("Escape"); await page.keyboard.press("Escape");
+          extra='''    test("native select sizes its own indicator and supports listbox and forced colors", async ({ page }, info) => {
+                const single = page.getByLabel("Composition preset");
+                expect((await single.boundingBox())!.width).toBe(160);
+                await expect(single).toHaveCSS("height", "40px");
+                expect(await single.evaluate(e => getComputedStyle(e).backgroundImage)).toContain("data:image/svg+xml");
+                await single.selectOption("sage"); await expect(single).toHaveValue("sage");
+                const list = page.getByRole("listbox", { name: "Review channels", exact: true });
+                await list.selectOption(["release", "access"]); await expect(list).toHaveValues(["release", "access"]);
+                expect(await list.evaluate(e => getComputedStyle(e).backgroundImage)).not.toContain("data:image/svg+xml");
+                await page.screenshot({ path: info.outputPath(`${phase}-select-sizing.png`), fullPage: true, animations: "disabled" });
+                await page.locator("main").evaluate(e => e.setAttribute("dir", "rtl"));
+                const position = await single.evaluate(e => getComputedStyle(e).backgroundPosition.split(",")[0]);
+                expect(position).toBe("12px 50%");
+                await page.locator("main").evaluate(e => e.removeAttribute("dir"));
+                await page.emulateMedia({ forcedColors: "active" });
+                await expect(single).toHaveCSS("appearance", "auto");
+                await expect(single).toHaveCSS("background-image", "none");
               });
           '''
-          s=s.replace(marker,evidence+marker)
-          p.write_text(s)
-          # Field uses a direct box-shadow declaration; read-only explicitly removes that layer.
-          p=Path('/tmp/composition-1.py');p.write_text(p.read_text().replace('read-only:shadow-none','read-only:[box-shadow:none]'))
+          assert marker in s
+          p.write_text(s.replace(marker,extra+marker))
           PY
-      - name: Compile the fixture before browser probing
+      - name: Compile fixture and install browser
         run: |
           npm ci --prefix registry
           npm ci --prefix docs
@@ -86,29 +80,54 @@ jobs:
           npm run sync:docs --prefix registry
           npm run typecheck --prefix docs
           cd docs && npx playwright install --with-deps chromium
-      - name: Record bounded failures on the unmodified source
+      - name: Record bounded failures on unmodified source
         working-directory: docs
         run: |
           mkdir -p test-results/composition-review
           set +e
-          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts composition.spec.ts --max-failures=4 2>&1 | tee test-results/composition-review/before.log
+          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts composition.spec.ts --max-failures=5 2>&1 | tee test-results/composition-review/before.log
           result=${PIPESTATUS[0]}
           set -e
           echo "$result" > test-results/composition-review/before-exit.txt
           cp test-results/material-report.json test-results/composition-review/before.json
-      - name: Apply source fixes and check every source layer
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Apply source-owned anatomy fixes
         run: |
           python3 /tmp/composition-1.py
           python3 - <<'PY'
           from pathlib import Path
+          p=Path('registry/src/components/ui/select.tsx');s=p.read_text()
+          s=s.replace('    <span data-slot="select-root" className="relative inline-flex w-full min-w-0">\n','')
+          start=s.index('      {!listbox && <svg ');end=s.index('\n    </span>',start)+len('\n    </span>')
+          s=s[:start]+s[end:]
+          s=s.replace('"peer w-full', '"w-full')
+          s=s.replace('[background-image:var(--neu-fill-inset)] ', '')
+          s=s.replace('disabled:[background-image:none] ', '')
+          s=s.replace('"min-h-24 px-3 py-2" : "h-10 py-2 ps-3 pe-10"', '"min-h-24 px-3 py-2 [background-image:var(--neu-fill-inset)] disabled:[background-image:none]" : "h-10 py-2 ps-3 pe-10 [background-image:var(--neu-select-arrow),var(--neu-fill-inset)] [background-size:1rem_1rem,auto] [background-position:right_0.75rem_center,center] rtl:[background-position:left_0.75rem_center,center] bg-no-repeat disabled:[background-image:var(--neu-select-arrow)] forced-colors:appearance-auto forced-colors:[background-image:none]"')
+          assert 'select-root' not in s and 'neu-select-arrow' in s
+          p.write_text(s)
+          p=Path('registry/src/theme.ts');s=p.read_text()
+          marker='    "--muted-foreground": tokens.mutedForeground,'
+          assert s.count(marker)==1
+          arrow='''
+              "--neu-select-arrow": `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${tokens.mutedForeground}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`)}")`,'''
+          p.write_text(s.replace(marker,marker+arrow))
+          p=Path('registry/src/components/ui/dropdown-menu.tsx');s=p.read_text()
+          marker='        alignOffset={alignOffset}\n'
+          assert s.count(marker)==2
+          p.write_text(s.replace(marker,marker+'        collisionPadding={8}\n'))
+          p=Path('registry/src/components/ui/context-menu.tsx');s=p.read_text();assert 'collisionPadding = 0' in s;p.write_text(s.replace('collisionPadding = 0','collisionPadding = 8'))
+          p=Path('registry/src/components/ui/combobox.tsx');s=p.read_text();s=s.replace('<Primitive.Positioner sideOffset={sideOffset}', '<Primitive.Positioner collisionPadding={8} sideOffset={sideOffset}');p.write_text(s)
           p=Path('docs/components/docs/navigation-preview.tsx');s=p.read_text()
           s=s.replace('import type { Locale }', 'import { useLocale } from "@/i18n/locale-provider";\nimport type { Locale }')
           s=s.replace('const t = copy[locale]; const id = React.useId();', 'const t = copy[locale]; const id = React.useId();\n  const { componentDocGroups } = useLocale();\n  const componentCount = componentDocGroups.reduce((total, group) => total + group.items.length, 0);')
           assert '{t.components} · 46' in s
           p.write_text(s.replace('{t.components} · 46', '{t.components} · {componentCount}'))
+          p=Path('docs/visual-reference.md');p.write_text(p.read_text()+'''\nNative Select owns its complete field geometry, including the preset-colored chevron. A separate full-width wrapper can no longer strand that chevron outside a custom-width select. Multi-select remains a native listbox without a dropdown glyph; forced-colors uses native appearance. Menus and submenus reserve 8px viewport clearance.\n''')
           PY
+      - name: Static checks and generated-source equality
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
@@ -117,16 +136,16 @@ jobs:
           npm run typecheck --prefix docs
           npm run build --prefix docs
           npm run check:generated --prefix registry
-      - name: Check corrected composition and existing material
+      - name: Check corrected compositions and existing material
         working-directory: docs
         run: |
           MATERIAL_PHASE=after npx playwright test --config=playwright.material.config.ts --max-failures=4 2>&1 | tee test-results/composition-review/after.log
           cp test-results/material-report.json test-results/composition-review/after.json
           node -e "const r=require('./test-results/material-report.json'); if(r.stats.unexpected || r.stats.skipped || r.stats.flaky) process.exit(1)"
-      - name: Recheck all catalog and template surfaces
+      - name: Recheck every catalog and template surface
         working-directory: docs
         run: npx playwright test --config=playwright.detail.config.ts
-      - name: Prepare exact tested tree without publishing
+      - name: Prepare exact reviewed tree without moving main
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
