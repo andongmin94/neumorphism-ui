@@ -58,3 +58,12 @@ Native Select owns its complete field geometry, including the preset-colored che
 Composed Input Group values and both multiline fields declare normal input weight and tracking, so bold parent labels cannot restyle entered text. Nested Combobox tests preserve Base UI's Escape behavior: a selected closed field clears first, then the parent Popover dismisses; the surrounding Dialog retains unsaved edits and restores focus.
 
 Dialog and Alert Dialog footer actions grow for multiline labels without replacing the supported small/default/large minimum heights (32/40/48px). The same source-only tests exercise each real Button size in both modal footers.
+
+
+## Document boundary ownership
+
+Article headers own the rule before the first section. Only subsequent sibling sections draw a leading rule; sections do not draw trailing rules. Header and section rules share the article width. Article rhythm uses one 32px spacing value, reduced to 24px on narrow screens. Reference labels occupy one actual grid row, not twenty implicit rows; untitled sections keep the full content width. TOC columns exist only when the TOC is displayed. Chart sections follow the same leading-rule contract and leave the final boundary to the site footer.
+
+`tests/detail/document-rhythm.spec.ts` checks all reference pages in desktop/mobile light/dark, intermediate widths and localized layout, plus landing/directory/gallery/chart/theme shells, preview-card boundaries and drawer navigation. The existing 56-component catalog pass also checks first and subsequent section boundaries. Nested table/list/preview separators retain their own semantic boundaries; this is not a blanket removal of borders.
+
+Reference link rows use a single internal separator with no residual rounded-card borders. Credits table headers and rows keep readable gutters and one row rule. The chart recipe grid owns its two/one-column layout, card padding and disclosure spacing explicitly; no missing earlier presentation layer is required.

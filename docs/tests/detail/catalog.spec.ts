@@ -8,6 +8,14 @@ for(const {name} of entries) test(`catalog detail: ${name}`,async({page},info)=>
   expect(response?.status()).toBe(200);
   const panel=page.locator(".component-example-panel").first();
   await expect(panel).toBeVisible();
+  const article = page.locator(".component-doc-article");
+  await expect(article.locator(":scope > .component-doc-intro")).toHaveCSS("border-bottom-width", "1px");
+  await expect(article.locator(":scope > .component-doc-section").first()).toHaveCSS("border-top-width", "0px");
+  await expect(article.locator(":scope > .component-doc-section").first()).toHaveCSS("padding-top", "0px");
+  for (const section of await article.locator(":scope > .component-doc-section + .component-doc-section").all()) {
+    await expect(section).toHaveCSS("border-top-width", "1px");
+    await expect(section).toHaveCSS("border-bottom-width", "0px");
+  }
   await page.evaluate(()=>document.fonts.ready);
   await panel.scrollIntoViewIfNeeded();
   await panel.screenshot({path:info.outputPath(`${name}.png`),animations:"disabled"});
