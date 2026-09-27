@@ -1,0 +1,357 @@
+name: Composition finish review
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/composition-review.yml]
+permissions:
+  contents: write
+concurrency:
+  group: composition-finish-review
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Add source-only composition specimens and regression checks
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('docs/tests/material/main.tsx')
+          s=p.read_text()
+          s='import { CompositionSpecimen } from "./composition";\n'+s
+          s=s.replace('render(<Specimen />);','render(new URLSearchParams(location.search).has("composition") ? <CompositionSpecimen /> : <Specimen />);')
+          p.write_text(s)
+          p=Path('docs/playwright.material.config.ts')
+          p.write_text(p.read_text().replace('testMatch: "material.spec.ts"','testMatch: ["material.spec.ts", "composition.spec.ts"]'))
+          Path('docs/tests/material/composition.tsx').write_text(r'''import * as React from "react";
+          import { Button } from "@/components/ui/button";
+          import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+          import { Input } from "@/components/ui/input";
+          import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
+          import { Select, SelectItem } from "@/components/ui/select";
+          import { Form } from "@/components/ui/form";
+          import { Field, FieldLabel, FieldControl, FieldError } from "@/components/ui/field";
+          import { NumberField, NumberFieldGroup, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } from "@/components/ui/number-field";
+          import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+          import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
+          import { DatePicker } from "@/components/ui/date-picker";
+          import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+          import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+          import { Popover, PopoverTrigger, PopoverContent, PopoverTitle } from "@/components/ui/popover";
+          import { Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem, ComboboxEmpty } from "@/components/ui/combobox";
+          import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
+          import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from "@/components/ui/context-menu";
+          import { buildThemeVariables, defaultThemeSettings, getThemePreset, type ThemePresetId } from "../../src/registry/theme";
+          import "./styles.css";
+
+          const identifier = "WorkspaceDeploymentIdentifierWithoutAnyWordBreaks0123456789";
+          const regions = ["Seoul", "Tokyo", "Singapore", ...Array.from({ length: 28 }, (_, i) => `Region ${i + 1}`)];
+          function RegionPicker() {
+            return <Combobox items={regions}><ComboboxInput aria-label="Deployment region" placeholder="Choose a deployment region" /><ComboboxContent><ComboboxEmpty>No matching regions</ComboboxEmpty><ComboboxList>{(item: string) => <ComboboxItem key={item} value={item}>{item}</ComboboxItem>}</ComboboxList></ComboboxContent></Combobox>;
+          }
+          function WorkspaceForm() {
+            const [saved, setSaved] = React.useState(false);
+            return <Card data-testid="form-card"><CardHeader><CardTitle>Workspace settings</CardTitle><CardDescription>Equal control geometry, independent validation, one recessed face.</CardDescription></CardHeader><CardContent>
+              <Form onSubmit={e => { e.preventDefault(); setSaved(true); }}>
+                <div className="grid items-start gap-5 sm:grid-cols-2">
+                  <Field name="workspace"><FieldLabel>Workspace name</FieldLabel><FieldControl aria-label="Workspace name" required /><FieldError match="valueMissing">Enter the workspace name before saving. Other controls keep their alignment.</FieldError></Field>
+                  <label className="grid min-w-0 gap-2 text-sm font-semibold">Plan<Select aria-label="Workspace plan" defaultValue="team"><SelectItem value="team">Team workspace</SelectItem><SelectItem value="personal">Personal workspace</SelectItem></Select></label>
+                  <label className="grid min-w-0 gap-2 text-sm font-semibold">Plain field<Input aria-label="Plain field" defaultValue="Same left gutter" /></label>
+                  <label className="grid min-w-0 gap-2 text-sm font-semibold">Compound field<InputGroup data-testid="compound"><InputGroupInput aria-label="Compound field" defaultValue="Same left gutter" /><InputGroupButton aria-label="Copy field">Copy</InputGroupButton></InputGroup></label>
+                  <label className="grid min-w-0 gap-2 text-sm font-semibold">Search<InputGroup data-testid="icon-compound"><InputGroupAddon><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5" /></svg></InputGroupAddon><InputGroupInput aria-label="Compound search" placeholder="Search your workspace" /></InputGroup></label>
+                  <NumberField defaultValue={12} min={0} max={999999}><label htmlFor="composition-seats" className="text-sm font-semibold">Seats</label><NumberFieldGroup className="w-full"><NumberFieldDecrement aria-label="Remove seat" /><NumberFieldInput id="composition-seats" aria-label="Workspace seats" /><NumberFieldIncrement aria-label="Add seat" /></NumberFieldGroup></NumberField>
+                  <Field><FieldLabel>Read-only identifier</FieldLabel><FieldControl aria-label="Read-only identifier" readOnly defaultValue="team_001" /></Field>
+                  <label className="grid min-w-0 gap-2 text-sm font-semibold">Region requiring attention<Combobox items={regions}><ComboboxInput aria-label="Invalid region" aria-invalid="true" aria-describedby="region-error" /><ComboboxContent><ComboboxList>{(item: string) => <ComboboxItem key={item} value={item}>{item}</ComboboxItem>}</ComboboxList></ComboboxContent></Combobox><span id="region-error" className="text-xs font-normal text-[var(--neu-error-text)]">Choose a supported deployment region.</span></label>
+                </div>
+                <div className="flex flex-wrap items-center gap-4"><Button type="submit" variant="primary">Save workspace</Button><output>{saved ? "Workspace saved" : "Unsaved workspace"}</output></div>
+              </Form>
+            </CardContent></Card>;
+          }
+          function NarrowComposition() {
+            const [date, setDate] = React.useState<Date>();
+            return <section className="grid content-start gap-7" aria-label="Narrow compositions">
+              <Card className="w-full max-w-[320px]" data-testid="narrow-card"><CardHeader><CardTitle>Account verification</CardTitle><CardDescription>Six cells inside a real card, not a full-width preview.</CardDescription></CardHeader><CardContent className="grid gap-5">
+                <InputOTP aria-label="Verification code" maxLength={6}><InputOTPGroup><InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} /></InputOTPGroup><InputOTPSeparator /><InputOTPGroup><InputOTPSlot index={3} /><InputOTPSlot index={4} /><InputOTPSlot index={5} /></InputOTPGroup></InputOTP>
+                <DatePicker label="Review date" placeholder="Choose the first available review date for this workspace" value={date} onValueChange={setDate} startMonth={new Date(2026, 8, 1)} endMonth={new Date(2026, 11, 1)} />
+              </CardContent></Card>
+              <Card className="w-full max-w-[400px]" data-testid="vertical-card"><CardHeader><CardTitle>Workspace sections</CardTitle></CardHeader><CardContent><Tabs orientation="vertical" defaultValue="profile"><TabsList aria-label="Vertical sections"><TabsTrigger value="profile">Profile</TabsTrigger><TabsTrigger value="locked" disabled>Access</TabsTrigger><TabsTrigger value="activity">Activity</TabsTrigger></TabsList><TabsContent value="profile"><Input aria-label="Nested tab field" defaultValue="Editable" /><p className="mt-3 text-sm leading-6 [overflow-wrap:anywhere]">{identifier}</p></TabsContent><TabsContent value="activity"><p className="text-sm">Latest workspace activity.</p></TabsContent></Tabs></CardContent></Card>
+            </section>;
+          }
+          function OverlayComposition() {
+            const [action, setAction] = React.useState("No action selected");
+            return <section className="grid content-start gap-5" aria-label="Overlay compositions">
+              <h2 className="text-xl font-semibold">Nested task surfaces</h2>
+              <div className="flex flex-wrap gap-4">
+                <Dialog><DialogTrigger render={<Button />}>Open composition</DialogTrigger><DialogContent aria-label="Composition preferences"><DialogHeader><DialogTitle>{identifier}</DialogTitle><DialogDescription>A long project identifier and translated actions must stay within the plate.</DialogDescription></DialogHeader>
+                  <Input aria-label="Dialog name" defaultValue="Studio" />
+                  <Popover><PopoverTrigger render={<Button />}>Schedule options</PopoverTrigger><PopoverContent><PopoverTitle>Deployment schedule</PopoverTitle><RegionPicker /><p className="text-xs text-[var(--muted-foreground)]">Select a region, then return to the parent dialog.</p></PopoverContent></Popover>
+                  <Dialog><DialogTrigger render={<Button variant="soft" />}>Advanced preferences</DialogTrigger><DialogContent aria-label="Advanced preferences"><DialogHeader><DialogTitle>Advanced preferences</DialogTitle><DialogDescription>The parent remains underneath, not beside the child.</DialogDescription></DialogHeader><Input aria-label="Advanced name" defaultValue="Preview" /><DialogFooter><DialogClose render={<Button />}>Back to preferences</DialogClose></DialogFooter></DialogContent></Dialog>
+                  <DialogFooter><Button variant="soft">Continue editing the existing workspace settings</Button><DialogClose render={<Button variant="primary" />}>Save and return to workspace overview</DialogClose></DialogFooter>
+                </Dialog>
+                <AlertDialog><AlertDialogTrigger render={<Button variant="destructive" />}>Confirm removal</AlertDialogTrigger><AlertDialogContent><AlertDialogTitle>Remove {identifier}</AlertDialogTitle><AlertDialogDescription>This local example does not delete server data.</AlertDialogDescription><AlertDialogFooter><AlertDialogCancel>Keep this workspace and continue editing</AlertDialogCancel><AlertDialogAction>Remove the workspace from this local example</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
+                <DropdownMenu><DropdownMenuTrigger render={<Button />}>Open actions</DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem onClick={() => setAction("Exported")}>{identifier}<DropdownMenuShortcut>Ctrl E</DropdownMenuShortcut></DropdownMenuItem><DropdownMenuSub><DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger><DropdownMenuSubContent>{Array.from({ length: 24 }, (_, i) => <DropdownMenuItem key={i} onClick={() => setAction(`Action ${i + 1}`)}>Action {i + 1}</DropdownMenuItem>)}</DropdownMenuSubContent></DropdownMenuSub></DropdownMenuContent></DropdownMenu>
+              </div>
+              <ContextMenu><ContextMenuTrigger className="grid min-h-24 place-items-center rounded-[var(--neu-radius-surface)] border border-dashed border-[var(--border)] px-4 text-sm">Context actions</ContextMenuTrigger><ContextMenuContent>{Array.from({ length: 24 }, (_, i) => <ContextMenuItem key={i} onClick={() => setAction(`Context ${i + 1}`)}>Context {i + 1}{i === 0 ? ` ${identifier}` : ""}</ContextMenuItem>)}</ContextMenuContent></ContextMenu>
+              <output aria-live="polite">{action}</output>
+            </section>;
+          }
+          export function CompositionSpecimen() {
+            const params = new URLSearchParams(location.search);
+            const mode = params.get("mode") === "dark" ? "dark" : "light";
+            const [preset, setPreset] = React.useState<ThemePresetId>("air");
+            React.useLayoutEffect(() => {
+              for (const [key, value] of Object.entries(buildThemeVariables({ ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset }, mode))) document.documentElement.style.setProperty(key, value);
+              document.documentElement.classList.toggle("dark", mode === "dark");
+              document.documentElement.style.colorScheme = mode;
+            }, [mode, preset]);
+            return <main className="mx-auto max-w-6xl px-5 py-8"><header className="mb-8 flex flex-wrap items-end justify-between gap-5"><div><p className="mb-2 font-mono text-xs text-[var(--muted-foreground)]">SOURCE COMPONENTS / COMPOSITION REVIEW</p><h1 className="text-3xl font-semibold tracking-tight">Details that survive composition.</h1></div><Select aria-label="Composition preset" value={preset} onChange={e => setPreset(e.target.value as ThemePresetId)} className="max-w-40">{["air", "lavender", "sage", "clay", "graphite"].map(id => <SelectItem key={id} value={id}>{id}</SelectItem>)}</Select></header><div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]"><WorkspaceForm /><NarrowComposition /><div className="lg:col-span-2"><OverlayComposition /></div></div></main>;
+          }
+          ''')
+          Path('docs/tests/material/composition.spec.ts').write_text(r'''import { expect, test, type Locator } from "@playwright/test";
+          const phase = process.env.MATERIAL_PHASE ?? "after";
+          async function fits(locator: Locator) {
+            expect(await locator.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
+          }
+          async function visibleTarget(locator: Locator) {
+            await expect(locator).toBeInViewport({ ratio: 1 });
+            expect(await locator.evaluate(e => { const r = e.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return !!top && e.contains(top); })).toBe(true);
+          }
+          for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) {
+            test.describe(`${mode} ${width}`, () => {
+              test.use({ viewport: { width, height: 900 } });
+              test.beforeEach(async ({ page }) => { await page.goto(`/?composition=1&mode=${mode}`); await page.evaluate(() => document.fonts.ready); });
+              test.afterEach(async ({ page }, info) => { await page.screenshot({ path: info.outputPath(`${phase}-composition.png`), fullPage: true, animations: "disabled" }); });
+              test("input gutters and baselines agree in a real form", async ({ page }) => {
+                const plain = page.getByRole("textbox", { name: "Plain field", exact: true });
+                const compound = page.getByRole("textbox", { name: "Compound field", exact: true });
+                const inset = async (e: Locator) => e.evaluate(el => { const s = getComputedStyle(el); const r = el.getBoundingClientRect(); const group = el.closest('[data-slot="input-group"]')?.getBoundingClientRect() ?? r; return { x: r.x + parseFloat(s.paddingLeft) + parseFloat(s.borderLeftWidth) - group.x, h: group.height, line: parseFloat(s.lineHeight), inside: r.height - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom) - parseFloat(s.borderTopWidth) - parseFloat(s.borderBottomWidth) }; });
+                const a = await inset(plain), b = await inset(compound);
+                expect(b.h).toBe(a.h); expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(1); expect(b.inside).toBeGreaterThanOrEqual(b.line);
+                const group = page.locator('[data-slot="number-field-group"]');
+                const input = page.getByRole("textbox", { name: "Workspace seats" });
+                expect((await input.boundingBox())!.width).toBeGreaterThan((await group.boundingBox())!.width / 2);
+              });
+              test("validation and read-only state do not lose their visual meaning", async ({ page }) => {
+                const field = page.getByRole("textbox", { name: "Workspace name", exact: true });
+                const plan = page.getByLabel("Workspace plan");
+                const before = (await plan.boundingBox())!;
+                await page.getByRole("button", { name: "Save workspace", exact: true }).click();
+                await expect(page.locator('[data-slot="field-error"]')).toBeVisible();
+                expect(Math.abs((await plan.boundingBox())!.y - before.y)).toBeLessThanOrEqual(width < 640 ? 100 : 1);
+                await field.fill("Team workspace"); await page.getByRole("button", { name: "Save workspace", exact: true }).click();
+                await expect(page.getByText("Workspace saved", { exact: true })).toBeVisible();
+                await expect(page.getByRole("textbox", { name: "Read-only identifier" })).toHaveCSS("box-shadow", "none");
+                const invalid = page.getByRole("combobox", { name: "Invalid region", exact: true });
+                expect(await invalid.evaluate(e => getComputedStyle(e).borderTopColor)).toBe(await page.evaluate(() => { const e = document.createElement('span'); e.style.color = 'var(--destructive)'; document.body.append(e); const c = getComputedStyle(e).color; e.remove(); return c; }));
+                await fits(page.getByTestId("form-card"));
+              });
+              test("six OTP cells fit inside a narrow card and keep paste behavior", async ({ page }) => {
+                await fits(page.getByTestId("narrow-card").locator('[data-slot="card-content"]'));
+                const otp = page.getByRole("textbox", { name: "Verification code" });
+                await otp.fill("123456"); await expect(otp).toHaveValue("123456");
+                const slots = page.locator('[data-slot="input-otp-slot"]');
+                expect(await slots.allTextContents()).toEqual(["1", "2", "3", "4", "5", "6"]);
+                for (const cell of await slots.all()) expect((await cell.boundingBox())!.width).toBeGreaterThanOrEqual(30);
+                const picker = page.locator('[data-slot="date-picker"]');
+                const button = picker.getByRole("button").first();
+                expect((await button.boundingBox())!.height).toBe(40);
+                const text = button.locator('span').first();
+                expect((await text.boundingBox())!.height).toBeLessThanOrEqual(24);
+              });
+              test("vertical tabs keep full-height targets and leave room for panel content", async ({ page }) => {
+                const card = page.getByTestId("vertical-card"); await fits(card.locator('[data-slot="card-content"]'));
+                const tabs = card.getByRole("tab");
+                for (const tab of await tabs.all()) expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(32);
+                const input = page.getByRole("textbox", { name: "Nested tab field" });
+                const panel = card.getByRole("tabpanel"); const i = (await input.boundingBox())!, p = (await panel.boundingBox())!;
+                expect(i.x + i.width).toBeLessThanOrEqual(p.x + p.width + 1);
+                await tabs.first().focus(); await page.keyboard.press("ArrowDown"); await expect(tabs.last()).toBeFocused();
+                await page.keyboard.press("Enter"); await expect(page.getByText("Latest workspace activity.", { exact: true })).toBeVisible();
+              });
+              test("long dialog text and action labels remain inside their surfaces", async ({ page }) => {
+                await page.getByRole("button", { name: "Open composition", exact: true }).click();
+                const dialog = page.getByRole("dialog", { name: "Composition preferences", exact: true });
+                await fits(dialog); await fits(dialog.locator('[data-slot="dialog-footer"]'));
+                const save = dialog.getByRole("button", { name: "Save and return to workspace overview", exact: true });
+                await save.scrollIntoViewIfNeeded(); await visibleTarget(save); await save.click();
+                await expect(dialog).toBeHidden();
+                await page.getByRole("button", { name: "Confirm removal", exact: true }).click();
+                const alert = page.getByRole("alertdialog"); await fits(alert); await fits(alert.locator('[data-slot="alert-dialog-footer"]'));
+                await alert.getByRole("button", { name: "Keep this workspace and continue editing", exact: true }).click();
+              });
+              test("nested combobox and child dialog preserve parent focus and edits", async ({ page }) => {
+                const trigger = page.getByRole("button", { name: "Open composition", exact: true }); await trigger.click();
+                const dialog = page.getByRole("dialog", { name: "Composition preferences", exact: true });
+                await dialog.getByRole("textbox", { name: "Dialog name" }).fill("Unsaved local work");
+                const schedule = dialog.getByRole("button", { name: "Schedule options", exact: true }); await schedule.click();
+                const region = page.getByRole("combobox", { name: "Deployment region", exact: true }); await region.fill("Tokyo");
+                await page.keyboard.press("ArrowDown"); await page.keyboard.press("Enter"); await expect(region).toHaveValue("Tokyo");
+                await page.keyboard.press("Escape"); await expect(schedule).toBeFocused();
+                const advanced = dialog.getByRole("button", { name: "Advanced preferences", exact: true }); await advanced.click();
+                const child = page.getByRole("dialog", { name: "Advanced preferences", exact: true });
+                const close = child.getByRole("button", { name: "Back to preferences", exact: true }); await visibleTarget(close); await close.click();
+                await expect(advanced).toBeFocused(); await expect(dialog.getByRole("textbox", { name: "Dialog name" })).toHaveValue("Unsaved local work");
+                await page.keyboard.press("Escape"); await expect(trigger).toBeFocused();
+              });
+              test("long menu items and submenu ends remain reachable on short screens", async ({ page }) => {
+                await page.setViewportSize({ width, height: 450 });
+                const trigger = page.getByRole("button", { name: "Open actions", exact: true }); await trigger.click();
+                const root = page.locator('[data-slot="dropdown-menu-content"]'); await fits(root);
+                expect((await root.boundingBox())!.width).toBeLessThanOrEqual(width - 16);
+                const sub = page.getByRole("menuitem", { name: "More actions", exact: true });
+                await sub.focus(); await page.keyboard.press("ArrowRight");
+                const menu = page.locator('[data-slot="dropdown-menu-sub-content"]'); await expect(menu).toBeVisible();
+                expect((await menu.boundingBox())!.height).toBeLessThanOrEqual(434);
+                await page.keyboard.press("End"); const last = page.getByRole("menuitem", { name: "Action 24", exact: true });
+                await expect(last).toBeFocused(); await visibleTarget(last); await page.keyboard.press("Enter");
+                await expect(page.getByText("Action 24", { exact: true })).toBeVisible(); await expect(trigger).toBeFocused();
+              });
+              test("context menu scrolls its long action list without moving the page", async ({ page }) => {
+                await page.setViewportSize({ width, height: 450 });
+                await page.getByText("Context actions", { exact: true }).click({ button: "right" });
+                const menu = page.locator('[data-slot="context-menu-content"]'); await expect(menu).toBeVisible(); await fits(menu);
+                expect((await menu.boundingBox())!.height).toBeLessThanOrEqual(450);
+                await page.keyboard.press("End"); const last = page.getByRole("menuitem", { name: "Context 24", exact: true });
+                await expect(last).toBeFocused(); await visibleTarget(last); await page.keyboard.press("Enter");
+                await expect(page.getByText("Context 24", { exact: true })).toBeVisible();
+              });
+            });
+          }
+          test("all presets retain composition geometry at a 320px reflow width", async ({ page }) => {
+            await page.setViewportSize({ width: 320, height: 500 });
+            for (const mode of ["light", "dark"]) {
+              await page.goto(`/?composition=1&mode=${mode}`);
+              for (const preset of ["air", "lavender", "sage", "clay", "graphite"]) {
+                await page.getByLabel("Composition preset").selectOption(preset);
+                expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+                await fits(page.getByTestId("narrow-card")); await fits(page.getByTestId("vertical-card"));
+              }
+            }
+          });
+          ''')
+          PY
+      - name: Build baseline inputs and browser
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          cd docs && npx playwright install --with-deps chromium
+      - name: Record unmodified-source boundary failures
+        working-directory: docs
+        run: |
+          mkdir -p test-results/composition-review
+          set +e
+          MATERIAL_PHASE=before npx playwright test --config=playwright.material.config.ts composition.spec.ts > test-results/composition-review/before.log 2>&1
+          result=$?
+          set -e
+          echo "$result" > test-results/composition-review/before-exit.txt
+          cp test-results/material-report.json test-results/composition-review/before.json
+          cat test-results/composition-review/before.log
+      - name: Correct owning component anatomy without changing the material
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def edit(name, before, after, count=1):
+              p=Path('registry/src/components/ui/'+name+'.tsx');s=p.read_text()
+              if s.count(before)!=count: raise RuntimeError(f'{name}: expected {count} targets, found {s.count(before)}: {before}')
+              p.write_text(s.replace(before,after))
+          edit('input-group','items-center gap-1 rounded-','items-center gap-2 rounded-')
+          edit('input-group','items-center gap-2 px-3 text-sm','items-center gap-2 px-2 first:pe-0 last:ps-0 text-sm')
+          edit('input-group','bg-transparent px-3 py-1.5 text-sm','bg-transparent px-2 py-1 text-sm leading-5')
+          edit('input-group','bg-transparent px-3 py-2 text-sm','bg-transparent px-2 py-2 text-sm')
+          edit('number-field','h-7.5 w-20 min-w-0 bg-transparent','h-7.5 w-20 min-w-0 flex-1 bg-transparent')
+          edit('field','data-invalid:border-[var(--destructive)]','data-invalid:border-[var(--destructive)] aria-invalid:border-[var(--destructive)] aria-invalid:focus-visible:outline-[color:var(--neu-error-text)] read-only:shadow-none read-only:[background-image:none] read-only:border-[color:var(--input)] read-only:bg-[var(--neu-surface-soft)]')
+          edit('combobox','disabled:opacity-60 disabled:shadow-none','aria-invalid:border-[var(--destructive)] aria-invalid:focus-visible:outline-[color:var(--neu-error-text)] read-only:shadow-none read-only:[background-image:none] read-only:border-[color:var(--input)] read-only:bg-[var(--neu-surface-soft)] disabled:opacity-60 disabled:shadow-none')
+          edit('combobox','w-[var(--anchor-width)] min-w-48 max-w-[calc(100vw-2rem)]','flex max-h-[var(--available-height)] w-[var(--anchor-width)] min-w-48 max-w-[var(--available-width)] flex-col overflow-hidden')
+          edit('combobox','max-h-[min(18rem,var(--available-height))] overflow-y-auto','min-h-0 max-h-72 flex-1 overflow-x-hidden overflow-y-auto')
+          edit('combobox','relative flex min-h-10 cursor-default','relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default')
+          edit('tabs','flex w-full flex-col gap-3','flex w-full min-w-0 flex-col gap-3')
+          edit('tabs','inline-flex h-11 max-w-full w-fit','inline-flex h-11 min-w-0 shrink-0 max-w-full w-fit')
+          edit('tabs','data-[orientation=vertical]:flex-col','data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:max-w-[50%] [&[data-orientation=vertical]>[data-slot=tabs-trigger]]:flex-none')
+          edit('tabs','flex-1 rounded-[var(--neu-radius-surface)]','min-w-0 flex-1 rounded-[var(--neu-radius-surface)]')
+          edit('input-otp','flex max-w-full items-center gap-2','flex min-w-0 max-w-full items-center gap-2')
+          edit('input-otp','relative flex size-10 shrink-0','relative flex h-10 w-10 min-w-0 shrink')
+          edit('date-picker','className="min-w-0 flex-1 justify-between whitespace-normal','className="min-w-0 flex-1 justify-between px-3 whitespace-nowrap')
+          edit('date-picker','<span>{display ?? placeholder}</span>','<span className="min-w-0 flex-1 truncate">{display ?? placeholder}</span>')
+          edit('dialog','flex flex-col gap-2 text-left','flex min-w-0 flex-col gap-2 text-left')
+          edit('dialog','text-lg leading-snug font-semibold tracking-tight','min-w-0 text-lg leading-snug font-semibold tracking-tight [overflow-wrap:anywhere]')
+          edit('dialog','text-sm leading-relaxed text-[var(--muted-foreground)]','min-w-0 text-sm leading-relaxed text-[var(--muted-foreground)] [overflow-wrap:anywhere]')
+          edit('dialog','flex flex-col-reverse gap-2 sm:flex-row sm:justify-end','flex min-w-0 flex-col-reverse gap-2 sm:flex-row sm:flex-wrap sm:justify-end [&>button]:min-h-10 [&>button]:h-auto [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:[overflow-wrap:anywhere] [&>button]:py-2')
+          edit('alert-dialog','text-base font-semibold leading-6 tracking-tight','min-w-0 text-base font-semibold leading-6 tracking-tight [overflow-wrap:anywhere]')
+          edit('alert-dialog','text-sm leading-relaxed text-[var(--muted-foreground)]','min-w-0 text-sm leading-relaxed text-[var(--muted-foreground)] [overflow-wrap:anywhere]')
+          edit('alert-dialog','flex flex-col gap-3 sm:flex-row sm:justify-end','flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-end [&>button]:min-h-10 [&>button]:h-auto [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:[overflow-wrap:anywhere] [&>button]:py-2')
+          edit('dropdown-menu','max-h-[var(--available-height)] min-w-36','max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-36')
+          edit('dropdown-menu','min-w-36 origin-[var(--transform-origin)] overflow-hidden','max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto overscroll-contain')
+          edit('dropdown-menu','relative flex min-h-10 cursor-default','relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default',3)
+          edit('dropdown-menu','flex cursor-default items-center gap-2','flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2')
+          edit('dropdown-menu','ml-auto text-xs tracking-widest','ml-auto shrink-0 whitespace-nowrap text-xs tracking-widest')
+          edit('context-menu','min-w-40 origin-[var(--transform-origin)] overflow-hidden','max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-40 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto overscroll-contain')
+          edit('context-menu','relative flex min-h-10 cursor-default','relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default',3)
+          edit('context-menu','flex cursor-default items-center gap-2','flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2')
+          # Footer descendants must wrap in the same way when used by Sheet.
+          p=Path('docs/visual-reference.md')
+          p.write_text(p.read_text()+'''\n\n## Composition finish boundaries\n\nThe material remains unchanged. Input Group gutters and text line boxes match standalone fields; Number Field expands its numeric area inside full-width groups. Read-only and invalid fields remain visually distinct when composed with Field or Combobox. Narrow cards retain all OTP slots; Date Picker keeps a one-line value with the full accessible label. Vertical tabs retain target heights and let the panel shrink. Dialog and Alert Dialog titles, descriptions and action labels wrap within the task surface. Menu and submenu lists constrain both axes and scroll independently.\n\nThe source-only composition specimen covers four desktop/mobile light/dark contexts, 320px reflow in five presets, validation recovery, nested Popover/Combobox and child Dialog focus recovery, and long menu lists at 450px height. This is a defined supported-composition regression set, not a claim about arbitrary application CSS or all assistive technologies.\n''')
+          PY
+      - name: Static checks and generated-source equality
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run check:generated --prefix registry
+      - name: Verify corrected source-only states and every documentation surface
+        working-directory: docs
+        run: |
+          MATERIAL_PHASE=after npx playwright test --config=playwright.material.config.ts
+          cp test-results/material-report.json test-results/composition-review/after.json
+          npx playwright test --config=playwright.detail.config.ts
+      - name: Prepare the exact reviewed tree without moving main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm .github/workflows/composition-review.yml
+          git add registry docs .github/workflows/composition-review.yml
+          mkdir -p /tmp/composition-evidence
+          git diff --cached --binary > /tmp/composition-evidence/reviewed.patch
+          git diff --cached --stat > /tmp/composition-evidence/change-stat.txt
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.request
+          from pathlib import Path
+          base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
+          paths=subprocess.check_output(['git','diff','--cached','--name-only','-z'],text=True).split('\0')
+          elements=[]
+          for name in filter(None,paths):
+              path=Path(name)
+              elements.append({'path':name,'mode':'100644','type':'blob',**({'content':path.read_text()} if path.is_file() else {'sha':None})})
+          request=urllib.request.Request(f'https://api.github.com/repos/{os.environ["GITHUB_REPOSITORY"]}/git/trees',data=json.dumps({'base_tree':base,'tree':elements}).encode(),headers={'Authorization':f'Bearer {os.environ["GH_TOKEN"]}','Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST')
+          with urllib.request.urlopen(request,timeout=90) as response: result=json.load(response)
+          Path('/tmp/composition-evidence/prepared-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':result['sha']},indent=2))
+          print('Reviewed tree:',result['sha'])
+          PY
+      - name: Preserve before and after evidence
+        if: always()
+        run: |
+          mkdir -p /tmp/composition-evidence
+          cp -r docs/test-results /tmp/composition-evidence/ || true
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: composition-finish-review
+          path: /tmp/composition-evidence
+          retention-days: 7
+          if-no-files-found: error
