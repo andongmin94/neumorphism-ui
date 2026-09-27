@@ -20,7 +20,7 @@ function PopoverContent({ className, side = "bottom", align = "center", sideOffs
         <Primitive.Popup
           data-slot="popover-content"
           className={mergeClassName<Primitive.Popup.State>(
-            "grid w-80 max-w-[calc(100vw-2rem)] max-h-[var(--available-height)] gap-3 overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-5 text-sm text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none origin-[var(--transform-origin)] transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:scale-95 data-[ending-style]:opacity-0",
+            "grid w-80 max-w-[calc(100vw-2rem)] max-h-[var(--available-height)] gap-3 overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-5 text-sm text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none origin-[var(--transform-origin)] transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:scale-95 data-[ending-style]:opacity-0",
             className,
           )}
           {...props}

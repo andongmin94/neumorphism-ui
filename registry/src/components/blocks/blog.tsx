@@ -171,7 +171,7 @@ export function Blog({
         </p>
       </header>
 
-      <section className="grid gap-4 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 [box-shadow:var(--neu-shadow-inset)]">
+      <section className="grid gap-4 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-transparent py-4 shadow-none">
         <div className="grid gap-2">
           <label htmlFor="blog-search" className="text-xs font-semibold">
             {t.search}

@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function Menubar({ className, ...props }: Primitive.Props) {
-  return <Primitive data-slot="menubar" className={mergeClassName<Primitive.State>("flex w-fit max-w-full flex-wrap items-center gap-1 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-1.5 font-sans [box-shadow:var(--neu-shadow-raised-sm)]", className)} {...props} />;
+  return <Primitive data-slot="menubar" className={mergeClassName<Primitive.State>("flex w-fit max-w-full flex-wrap items-center gap-1 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-1 font-sans [box-shadow:var(--neu-shadow-inset-sm)]", className)} {...props} />;
 }
 function MenubarTrigger({ className, ...props }: Menu.Trigger.Props) {
-  return <Menu.Trigger data-slot="menubar-trigger" className={mergeClassName<Menu.Trigger.State>("inline-flex min-h-9 items-center rounded-[var(--neu-radius-control)] px-3 py-2 text-sm font-semibold text-[var(--foreground)] outline-none transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none hover:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] data-[popup-open]:bg-[var(--neu-selected)] data-[popup-open]:[box-shadow:var(--neu-shadow-inset)] data-disabled:pointer-events-none data-disabled:opacity-50", className)} {...props} />;
+  return <Menu.Trigger data-slot="menubar-trigger" className={mergeClassName<Menu.Trigger.State>("inline-flex min-h-9 items-center rounded-[var(--neu-radius-control)] px-3 py-2 text-sm font-semibold text-[var(--foreground)] outline-none transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none hover:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] data-[popup-open]:bg-[var(--neu-surface)] data-[popup-open]:text-[var(--neu-accent-ink)] data-[popup-open]:[box-shadow:var(--neu-shadow-inset)] data-disabled:pointer-events-none data-disabled:opacity-50", className)} {...props} />;
 }
 
 // Menubar supplies roving focus; the existing menu parts supply popup behavior.

@@ -417,6 +417,24 @@ export function parseThemeSettings(value: string | null): ThemeSettings | null {
   }
 }
 
+/** The accent belongs on the face, not necessarily across the whole face. */
+function readableAccent(accent: string, surface: string, foreground: string) {
+  const channels = (hex: string) => [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
+  const luminance = (rgb: number[]) => rgb.map(value => {
+    const channel = value / 255;
+    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  }).reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index]!, 0);
+  const a = channels(accent), f = channels(foreground), b = luminance(channels(surface));
+  for (let step = 0; step <= 20; step++) {
+    const rgb = a.map((value, index) => Math.round(value + (f[index]! - value) * step / 20));
+    const l = luminance(rgb);
+    if ((Math.max(l, b) + 0.05) / (Math.min(l, b) + 0.05) >= 4.5) {
+      return '#' + rgb.map(value => value.toString(16).padStart(2, '0')).join('');
+    }
+  }
+  return foreground;
+}
+
 function shadowValue(
   x: number,
   y: number,
@@ -448,8 +466,8 @@ export function buildThemeVariables(
     settings.controlShape === "pill"
       ? "999px"
       : settings.controlShape === "soft"
-        ? "12px"
-        : "10px";
+        ? "8px"
+        : "6px";
   const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 84%, transparent)`;
   const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 86%, transparent)`;
   const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`;
@@ -543,8 +561,10 @@ export function buildThemeVariables(
     "--neu-overlay":
       mode === "light" ? "rgb(15 23 42 / 0.28)" : "rgb(0 0 0 / 0.55)",
     "--neu-radius-control": controlRadius,
+    "--neu-radius-small": "4px",
+    "--neu-accent-ink": readableAccent(primary, tokens.surface, tokens.foreground),
     "--neu-radius-surface": `${settings.surfaceRadius}px`,
-    "--neu-radius-overlay": `calc(${settings.surfaceRadius}px + 4px)`,
+    "--neu-radius-overlay": `${settings.surfaceRadius}px`,
     "--neu-duration": `${settings.motion}ms`,
     "--neu-fill-raised": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceSoft} 12%, ${tokens.surface}), ${tokens.surface})`,
     "--neu-fill-primary": primaryForeground === "#ffffff"

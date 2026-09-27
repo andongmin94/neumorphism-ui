@@ -4,7 +4,7 @@ import { Toolbar as Primitive } from "@base-ui/react/toolbar";
 import { mergeClassName } from "@/lib/utils";
 
 function Toolbar({ className, ...props }: Primitive.Root.Props) {
-  return <Primitive.Root data-slot="toolbar" className={mergeClassName<Primitive.Root.State>("flex w-fit max-w-full flex-wrap items-center gap-2 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-2 [box-shadow:var(--neu-shadow-raised-sm)] data-[orientation=vertical]:flex-col", className)} {...props} />;
+  return <Primitive.Root data-slot="toolbar" className={mergeClassName<Primitive.Root.State>("flex w-fit max-w-full flex-wrap items-center gap-2 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-1 [box-shadow:var(--neu-shadow-inset-sm)] data-[orientation=vertical]:flex-col", className)} {...props} />;
 }
 function ToolbarGroup({ className, ...props }: Primitive.Group.Props) {
   return <Primitive.Group data-slot="toolbar-group" className={mergeClassName<Primitive.Group.State>("flex items-center gap-1", className)} {...props} />;

@@ -7,6 +7,14 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { buildThemeVariables, defaultThemeSettings, getThemePreset, type ThemePresetId } from "../../src/registry/theme";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Toggle } from "@/components/ui/toggle";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
+import { NumberField, NumberFieldGroup, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } from "@/components/ui/number-field";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import "./styles.css";
 
 function Specimen() {
@@ -40,6 +48,27 @@ function Specimen() {
       <div className="grid min-w-0 content-start gap-7"><Card className="min-w-0"><CardHeader><CardTitle>Navigation</CardTitle><CardDescription>Selected, hovered and focused are different states.</CardDescription></CardHeader><CardContent><Tabs defaultValue="profile"><TabsList aria-label="Workspace sections"><TabsTrigger value="profile">Profile</TabsTrigger><TabsTrigger value="access" disabled>Access</TabsTrigger><TabsTrigger value="activity">Activity</TabsTrigger></TabsList><TabsContent value="profile"><p className="py-4 text-sm leading-relaxed text-[var(--muted-foreground)]">Profile settings for your workspace.</p></TabsContent><TabsContent value="activity"><p className="py-4 text-sm leading-relaxed text-[var(--muted-foreground)]">Your recent workspace activity.</p></TabsContent></Tabs></CardContent></Card>
       <Card variant="flat" className="min-w-0"><CardHeader><CardTitle>Task surface</CardTitle><CardDescription>Only an overlay needs a floating shadow.</CardDescription></CardHeader><CardFooter><Dialog><DialogTrigger render={<Button />}>Open preferences</DialogTrigger><DialogContent><DialogHeader><DialogTitle>A longer preferences title stays clear of the close control</DialogTitle><DialogDescription>All settings remain reachable on a short mobile screen.</DialogDescription></DialogHeader><label className="grid gap-2 text-sm">Project name<Input defaultValue="Side project" /></label>{Array.from({ length: 10 }, (_, i) => <p key={i} className="text-sm leading-relaxed text-[var(--muted-foreground)]">Setting {i + 1}. Keep a clear hierarchy without stacking raised panels inside this task.</p>)}<DialogFooter><DialogClose render={<Button variant="primary" />}>Done</DialogClose></DialogFooter></DialogContent></Dialog></CardFooter></Card></div>
     </div>
+    <section id="family-anatomy" className="mt-10 border-t border-[var(--border)] pt-8">
+      <h2 className="mb-6 text-xl font-semibold">One material across the collection</h2>
+      <div className="grid gap-8 md:grid-cols-2">
+        <section className="grid content-start gap-5" aria-label="Selection anatomy">
+          <h3 className="text-sm font-semibold">Selection</h3>
+          <div className="flex flex-wrap items-center gap-6">
+            <label className="inline-flex items-center gap-3 text-sm"><Checkbox defaultChecked />Square well</label>
+            <label className="inline-flex items-center gap-3 text-sm"><Checkbox checked="indeterminate" />Mixed value</label><label className="inline-flex items-center gap-3 text-sm"><Checkbox disabled />Unavailable choice</label><label className="inline-flex items-center gap-3 text-sm"><Switch disabled />Unavailable switch</label>
+          </div>
+          <RadioGroup defaultValue="compact" aria-label="Material density"><label className="flex items-center gap-3 text-sm"><RadioGroupItem value="compact" />Compact</label><label className="flex items-center gap-3 text-sm"><RadioGroupItem value="roomy" />Roomy</label></RadioGroup>
+          <div className="flex items-center gap-3"><Toggle defaultPressed>Selected</Toggle><Toggle>Unselected</Toggle><Badge variant="primary">Local only</Badge></div>
+        </section>
+        <section className="grid content-start gap-5" aria-label="Readout anatomy">
+          <h3 className="text-sm font-semibold">Readouts</h3>
+          <NumberField defaultValue={3} min={0} max={12}><NumberFieldGroup><NumberFieldDecrement aria-label="Fewer seats" /><NumberFieldInput aria-label="Material seats" /><NumberFieldIncrement aria-label="More seats" /></NumberFieldGroup></NumberField>
+          <Slider defaultValue={[64]} thumbLabels={["Material volume"]} />
+          <Progress aria-label="Material completion" value={64} />
+        </section>
+        <section className="md:col-span-2"><Accordion defaultValue={["one"]}><AccordionItem value="one"><AccordionTrigger>One open disclosure, not another raised card</AccordionTrigger><AccordionContent>Details sit in the same material. Only the state boundary needs depth.</AccordionContent></AccordionItem><AccordionItem value="two"><AccordionTrigger>Another section</AccordionTrigger><AccordionContent>Keyboard and focus behavior remain owned by Base UI.</AccordionContent></AccordionItem></Accordion></section>
+      </div>
+    </section>
   </main>;
 }
 createRoot(document.getElementById("root")!).render(<Specimen />);

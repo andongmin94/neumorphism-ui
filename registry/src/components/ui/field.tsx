@@ -7,11 +7,11 @@ function Field({ className, ...props }: Primitive.Root.Props) {
   return <Primitive.Root data-slot="field" className={mergeClassName<Primitive.Root.State>("grid min-w-0 gap-2", className)} {...props} />;
 }
 function FieldLabel({ className, ...props }: Primitive.Label.Props) {
-  return <Primitive.Label data-slot="field-label" className={mergeClassName<Primitive.Label.State>("w-fit text-sm font-semibold text-[var(--foreground)] data-disabled:opacity-50", className)} {...props} />;
+  return <Primitive.Label data-slot="field-label" className={mergeClassName<Primitive.Label.State>("w-fit text-sm font-semibold text-[var(--foreground)] data-disabled:opacity-60", className)} {...props} />;
 }
 function FieldControl({ className, ...props }: Primitive.Control.Props) {
   return <Primitive.Control data-slot="field-control" className={mergeClassName<Primitive.Control.State>(
-    "h-10 w-full min-w-0 rounded-[var(--neu-radius-control)] border border-[color:var(--input)] bg-[var(--neu-surface)] px-3.5 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[box-shadow,border-color] duration-[var(--neu-duration)] motion-reduce:transition-none placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/25 data-invalid:border-[var(--destructive)] disabled:cursor-not-allowed disabled:opacity-50", className,
+    "h-10 w-full min-w-0 rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] px-3 text-sm font-normal tracking-normal text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[box-shadow,border-color] duration-[var(--neu-duration)] motion-reduce:transition-none placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[color:var(--ring)] data-invalid:border-[var(--destructive)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none disabled:[background-image:none] disabled:border-[color:var(--input)]", className,
   )} {...props} />;
 }
 function FieldDescription({ className, ...props }: Primitive.Description.Props) {

@@ -11,7 +11,7 @@ function Table({ className, containerProps, ...props }: React.ComponentProps<"ta
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn("w-full caption-bottom text-sm leading-5 tabular-nums", className)}
         {...props}
       />
     </div>
@@ -23,7 +23,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
     <thead
       data-slot="table-header"
       className={cn(
-        "bg-[var(--neu-surface-low)] text-[var(--foreground)] [&_tr]:border-b [&_tr]:border-[var(--border)]",
+        "bg-[var(--neu-surface-soft)] text-[var(--foreground)] [&_tr]:border-b [&_tr]:border-[var(--border)]",
         className,
       )}
       {...props}
@@ -46,7 +46,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-t border-[var(--border)] bg-[var(--neu-surface-low)] font-medium text-[var(--foreground)] [&>tr]:last:border-b-0",
+        "border-t border-[var(--border)] bg-[var(--neu-surface-soft)] font-medium text-[var(--foreground)] [&>tr]:last:border-b-0",
         className,
       )}
       {...props}
@@ -59,7 +59,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b border-[var(--border)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none hover:bg-[var(--neu-surface-soft)] data-[state=selected]:bg-[var(--neu-surface-low)] data-[state=selected]:[box-shadow:var(--neu-shadow-inset)]",
+        "border-b border-[var(--border)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none hover:bg-[var(--neu-surface-soft)] data-[state=selected]:bg-[var(--neu-surface-soft)]",
         className,
       )}
       {...props}

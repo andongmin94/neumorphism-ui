@@ -1,9 +1,9 @@
 .header { gap: 10px; }
 .badge { width: fit-content; }
-.title { margin: 2px 0 0; font-size: 24px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.2; }
-.form { display: grid; gap: 20px; }
+.title { margin: 2px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.2; }
+.form { display: grid; gap: 16px; }
 .field { display: grid; gap: 8px; }
-.setting { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.setting { padding: 14px 0; border-block: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .settingCopy { display: grid; gap: 4px; }
 .settingCopy p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }

@@ -24,7 +24,7 @@ function Avatar({ className, size = "default", ...props }: AvatarProps) {
       data-size={size}
       className={mergeClassName<AvatarPrimitive.Root.State>(
         cn(
-          "group/avatar relative flex shrink-0 overflow-hidden rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]",
+          "group/avatar relative flex shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]",
           avatarSizes[size],
         ),
         className,
@@ -39,7 +39,7 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
     <AvatarPrimitive.Image
       data-slot="avatar-image"
       className={mergeClassName<AvatarPrimitive.Image.State>(
-        "aspect-square size-full object-cover",
+        "aspect-square size-full rounded-full object-cover",
         className,
       )}
       {...props}
@@ -55,7 +55,7 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={mergeClassName<AvatarPrimitive.Fallback.State>(
-        "flex size-full items-center justify-center rounded-full bg-[var(--neu-surface-low)] font-semibold text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-inset)]",
+        "flex size-full items-center justify-center rounded-full bg-[var(--neu-surface)] font-semibold text-[var(--muted-foreground)] [box-shadow:none]",
         className,
       )}
       {...props}

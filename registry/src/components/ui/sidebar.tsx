@@ -357,7 +357,7 @@ function menuClassName(
   return cn(
     "flex h-9 w-full min-w-0 items-center gap-2 overflow-hidden rounded-[var(--neu-radius-control)] px-3 text-left text-sm font-medium text-[var(--foreground)] outline-none transition-[background-color,box-shadow,color] duration-[var(--neu-duration)] motion-reduce:transition-none hover:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50",
     isActive &&
-      "bg-[var(--neu-surface-low)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset-sm)]",
+      "bg-[var(--neu-surface)] text-[var(--neu-accent-ink)] [box-shadow:var(--neu-shadow-inset-sm)]",
     collapsed &&
       "justify-center px-2 [&>span:last-child]:sr-only",
     className,

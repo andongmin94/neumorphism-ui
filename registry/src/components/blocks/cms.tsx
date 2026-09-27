@@ -279,7 +279,7 @@ export function CmsWorkspace({
           [t.published, publishedCount],
           [t.unsaved, unsavedCount],
         ].map(([label, value]) => (
-          <div key={String(label)} className="rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 [box-shadow:var(--neu-shadow-raised-sm)]">
+          <div key={String(label)} className="rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 text-center [box-shadow:var(--neu-shadow-inset)] first:[box-shadow:var(--neu-shadow-raised-sm)] first:text-[var(--neu-accent-ink)]">
             <dt className="text-xs text-[var(--muted-foreground)]">{label}</dt>
             <dd className="mt-2 text-2xl font-semibold tabular-nums">{value}</dd>
           </div>

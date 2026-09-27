@@ -58,11 +58,11 @@ function Slider({
       >
         <SliderPrimitive.Track
           data-slot="slider-track"
-          className="relative grow overflow-hidden rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset)] data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-2 data-[orientation=vertical]:grow-0"
+          className="relative grow overflow-hidden rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset)] data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-2 data-[orientation=vertical]:grow-0"
         >
           <SliderPrimitive.Indicator
             data-slot="slider-range"
-            className="rounded-[inherit] bg-[var(--primary)] [box-shadow:inset_0_1px_rgb(255_255_255_/_0.24)] data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+            className="rounded-[inherit] bg-[var(--primary)] data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
           />
         </SliderPrimitive.Track>
         {values.map((_, index) => (
@@ -71,7 +71,7 @@ function Slider({
             data-slot="slider-thumb"
             key={index}
             index={index}
-            className="block size-5 shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-3 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50"
+            className="relative block size-5 shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] [box-shadow:var(--neu-shadow-raised-sm)] after:absolute after:inset-1.5 after:rounded-full after:bg-[var(--neu-accent-ink)] outline-none transition-[box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-3 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50"
           />
         ))}
       </SliderPrimitive.Control>

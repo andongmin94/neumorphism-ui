@@ -145,7 +145,7 @@ function LinkHub({
         ) : null}
       </header>
 
-      <section className="grid gap-3 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 [box-shadow:var(--neu-shadow-inset)]">
+      <section className="grid gap-3 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-transparent py-4 shadow-none">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
           {t.destinations}
         </p>
@@ -177,7 +177,7 @@ function LinkHub({
               rel={link.external ? "noreferrer" : undefined}
               data-highlighted={link.highlighted}
               className={cn(
-                "flex min-h-24 w-full items-center gap-3 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 text-left text-[var(--foreground)] no-underline [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:[box-shadow:var(--neu-shadow-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] data-[highlighted=true]:border-transparent data-[highlighted=true]:bg-[var(--primary)] data-[highlighted=true]:text-[var(--primary-foreground)] data-[highlighted=true]:[box-shadow:var(--neu-shadow-primary)]",
+                "flex min-h-24 w-full items-center gap-3 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 text-left text-[var(--foreground)] no-underline [box-shadow:var(--neu-shadow-raised-sm)] outline-none transition-[box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:[box-shadow:var(--neu-shadow-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:[box-shadow:var(--neu-shadow-inset)] data-[highlighted=true]:border-transparent data-[highlighted=true]:bg-[var(--neu-surface)] data-[highlighted=true]:text-[var(--neu-accent-ink)] data-[highlighted=true]:[box-shadow:var(--neu-shadow-raised-sm)]",
               )}
             >
               <span

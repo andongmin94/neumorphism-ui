@@ -68,3 +68,12 @@ test("UI additions do not reinstall global theme and actual controls opt out of 
     for (const file of item.files) { const source = fs.readFileSync(new URL(`../${file.path}`, import.meta.url), "utf8"); if (source.includes("duration-[var(--neu-duration)]")) assert.ok(source.includes("motion-reduce:transition-none"), item.name); if (source.includes("animate-pulse")) assert.ok(source.includes("motion-reduce:animate-none"), item.name); }
   }
 });
+
+test("accent lettering is readable on the neutral material in every preset and custom accent", () => {
+  for (const preset of themePresets) for (const mode of ["light", "dark"]) for (const accent of [null, "#000000", "#ffffff", "#ffff00", "#ff00ff", "#12abcf", "#777777"]) {
+    const tokens = buildThemeVariables({ ...defaultThemeSettings, ...preset.defaults, presetId: preset.id, accent }, mode);
+    assert.ok(contrast(tokens["--neu-accent-ink"], tokens["--neu-surface"]) >= 4.5, `${preset.id}/${mode}/${accent}`);
+    assert.ok(tokens["--neu-radius-small"]);
+    assert.ok(tokens["--neu-radius-control"]);
+  }
+});

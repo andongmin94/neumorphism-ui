@@ -29,7 +29,7 @@ function AccordionItem({
     <AccordionPrimitive.Item
       data-slot="accordion-item"
       className={mergeClassName<AccordionPrimitive.Item.State>(
-        "mb-3 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] last:mb-0",
+        "mb-2 overflow-hidden rounded-[var(--neu-radius-control)] border border-transparent border-b-[color:var(--border)] bg-transparent has-[[aria-expanded=true]]:border-transparent has-[[aria-expanded=true]]:bg-[var(--neu-surface)] has-[[aria-expanded=true]]:[box-shadow:var(--neu-shadow-inset-sm)] last:mb-0",
         className,
       )}
       {...props}
@@ -47,18 +47,13 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={mergeClassName<AccordionPrimitive.Trigger.State>(
-          "group/accordion-trigger flex flex-1 items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-[var(--foreground)] outline-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
+          "group/accordion-trigger flex flex-1 items-center justify-between gap-4 px-4 py-3.5 text-left text-sm font-semibold text-[var(--foreground)] outline-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
           className,
         )}
         {...props}
       >
         {children}
-        <span
-          className="accordion-indicator pointer-events-none grid size-6 shrink-0 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-base leading-none text-[var(--primary)] [box-shadow:var(--neu-shadow-raised-sm)] transition-[box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none group-aria-expanded/accordion-trigger:rotate-45 group-aria-expanded/accordion-trigger:[box-shadow:var(--neu-shadow-inset)]"
-          aria-hidden="true"
-        >
-          +
-        </span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="accordion-indicator pointer-events-none size-4 shrink-0 text-[var(--neu-accent-ink)] transition-transform duration-[var(--neu-duration)] motion-reduce:transition-none group-aria-expanded/accordion-trigger:rotate-45"><path d="M5 12h14M12 5v14" /></svg>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );
@@ -78,7 +73,7 @@ function AccordionContent({
       )}
       {...props}
     >
-      <div className="px-5 pt-0 pb-5 leading-relaxed">{children}</div>
+      <div className="px-4 pt-0 pb-4 leading-relaxed">{children}</div>
     </AccordionPrimitive.Panel>
   );
 }

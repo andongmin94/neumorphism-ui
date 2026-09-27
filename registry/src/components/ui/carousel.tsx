@@ -171,7 +171,7 @@ function CarouselPrevious({
       size={size}
       aria-label={label}
       className={cn(
-        "absolute z-10 size-9",
+        "absolute z-10 size-10",
         orientation === "horizontal"
           ? "left-2 top-1/2 -translate-y-1/2"
           : "top-2 left-1/2 -translate-x-1/2",
@@ -181,7 +181,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <span aria-hidden="true">{orientation === "horizontal" ? "←" : "↑"}</span>
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m14 6-6 6 6 6" : "m6 14 6-6 6 6"} /></svg>
     </Button>
   );
 }
@@ -201,7 +201,7 @@ function CarouselNext({
       size={size}
       aria-label={label}
       className={cn(
-        "absolute z-10 size-9",
+        "absolute z-10 size-10",
         orientation === "horizontal"
           ? "right-2 top-1/2 -translate-y-1/2"
           : "bottom-2 left-1/2 -translate-x-1/2",
@@ -211,7 +211,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <span aria-hidden="true">{orientation === "horizontal" ? "→" : "↓"}</span>
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m10 6 6 6-6 6" : "m6 10 6 6 6-6"} /></svg>
     </Button>
   );
 }

@@ -13,7 +13,7 @@ function ResizablePanelGroup({
     <ResizablePrimitive.Group
       data-slot="resizable-panel-group"
       className={cn(
-        "flex h-full w-full min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset)]",
+        "flex h-full w-full min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:none]",
         className,
       )}
       {...props}
@@ -44,7 +44,7 @@ function ResizableHandle({
       {withHandle ? (
         <span
           aria-hidden="true"
-          className="z-10 grid min-h-8 min-w-5 place-items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-xs text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)]"
+          className="z-10 grid min-h-8 min-w-5 place-items-center rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-xs text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)]"
         >
           ⋮
         </span>

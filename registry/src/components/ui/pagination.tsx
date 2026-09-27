@@ -49,10 +49,10 @@ function PaginationLink({
       data-slot="pagination-link"
       data-active={isActive || undefined}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border text-sm font-semibold outline-none transition-[transform,box-shadow,color,background-color] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+        "inline-flex size-10 items-center justify-center rounded-[var(--neu-radius-control)] border text-sm font-semibold outline-none transition-[transform,box-shadow,color,background-color] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
         isActive
-          ? "border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-primary)]"
-          : "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] hover:-translate-y-0.5",
+          ? "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--neu-accent-ink)] [box-shadow:var(--neu-shadow-raised-sm)]"
+          : "border-transparent bg-transparent text-[var(--foreground)] hover:bg-[var(--neu-surface)] hover:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}
       {...props}

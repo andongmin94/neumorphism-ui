@@ -37,7 +37,7 @@ function DatePicker({ label, value, onValueChange, id, name, className, placehol
   return <div data-slot="date-picker" className={cn("flex min-w-0 items-center gap-2", className)}>
     {name && <input type="hidden" name={name} value={value ? dateOnly(value) : ""} disabled={disabled} />}
     <Popover open={open && !disabled} onOpenChange={setOpen}>
-      <PopoverTrigger render={<Button ref={trigger} id={id} disabled={disabled} aria-invalid={invalid || undefined} aria-describedby={describedBy} aria-label={`${label}: ${display ?? placeholder}`} className="min-w-0 flex-1 justify-between whitespace-normal text-start aria-invalid:border-[var(--destructive)]" />}>
+      <PopoverTrigger render={<Button ref={trigger} id={id} disabled={disabled} aria-invalid={invalid || undefined} aria-describedby={describedBy} aria-label={`${label}: ${display ?? placeholder}`} className="min-w-0 flex-1 justify-between whitespace-normal text-start font-normal shadow-[var(--neu-shadow-inset)] [background-image:var(--neu-fill-inset)] hover:shadow-[var(--neu-shadow-inset)] aria-invalid:border-[var(--destructive)]" />}>
         <span>{display ?? placeholder}</span>
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M7 3v4m10-4v4M3 11h18" /></svg>
       </PopoverTrigger>
@@ -46,7 +46,7 @@ function DatePicker({ label, value, onValueChange, id, name, className, placehol
         <Calendar mode="single" required autoFocus selected={value} defaultMonth={value ?? startMonth} onSelect={date => { onValueChange(date); setOpen(false); }} locale={locale} disabled={disabledDates} startMonth={startMonth} endMonth={endMonth} className="border-0 [box-shadow:none]" />
       </PopoverContent>
     </Popover>
-    {value && <Button variant="ghost" size="icon" disabled={disabled} aria-label={clearLabel} onClick={() => { onValueChange(undefined); trigger.current?.focus(); }}><span aria-hidden="true">×</span></Button>}
+    {value && <Button variant="ghost" size="icon" disabled={disabled} aria-label={clearLabel} onClick={() => { onValueChange(undefined); trigger.current?.focus(); }}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18" /></svg></Button>}
   </div>;
 }
 

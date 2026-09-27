@@ -13,9 +13,9 @@ function MeterValue({ className, ...props }: Primitive.Value.Props) {
   return <Primitive.Value data-slot="meter-value" className={mergeClassName<Primitive.Value.State>("text-sm font-semibold tabular-nums text-[var(--foreground)]", className)} {...props} />;
 }
 function MeterTrack({ className, ...props }: Primitive.Track.Props) {
-  return <Primitive.Track data-slot="meter-track" className={mergeClassName<Primitive.Track.State>("h-2.5 overflow-hidden rounded-full bg-[var(--neu-surface-low)] [box-shadow:var(--neu-shadow-inset-sm)]", className)} {...props} />;
+  return <Primitive.Track data-slot="meter-track" className={mergeClassName<Primitive.Track.State>("h-3 overflow-hidden rounded-full bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-inset-sm)]", className)} {...props} />;
 }
 function MeterIndicator({ className, ...props }: Primitive.Indicator.Props) {
-  return <Primitive.Indicator data-slot="meter-indicator" className={mergeClassName<Primitive.Indicator.State>("h-full rounded-full bg-[var(--primary)] [background-image:var(--neu-fill-primary)] [box-shadow:inset_0_1px_0_var(--neu-edge)] transition-[width] duration-[var(--neu-duration)] motion-reduce:transition-none", className)} {...props} />;
+  return <Primitive.Indicator data-slot="meter-indicator" className={mergeClassName<Primitive.Indicator.State>("h-full rounded-full bg-[var(--primary)] [background-image:var(--neu-fill-primary)] [box-shadow:none] transition-[width] duration-[var(--neu-duration)] motion-reduce:transition-none", className)} {...props} />;
 }
 export { Meter, MeterLabel, MeterValue, MeterTrack, MeterIndicator };

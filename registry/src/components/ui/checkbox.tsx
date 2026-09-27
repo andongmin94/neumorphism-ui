@@ -58,7 +58,7 @@ function Checkbox({
         ref={setRef}
         type="checkbox"
         data-slot="checkbox"
-        className="peer absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-md opacity-0 disabled:cursor-not-allowed"
+        className="peer absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-[var(--neu-radius-small)] opacity-0 disabled:cursor-not-allowed"
         checked={checked === "indeterminate" ? false : checked}
         defaultChecked={checked === undefined ? defaultChecked : undefined}
         disabled={disabled}
@@ -75,20 +75,10 @@ function Checkbox({
       />
       <span
         aria-hidden="true"
-        className="relative flex size-5 items-center justify-center rounded-md border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--primary-foreground)] [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:bg-[var(--primary)] peer-checked:[box-shadow:var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-indeterminate:bg-[var(--primary)] peer-indeterminate:[box-shadow:var(--neu-shadow-primary-inset)] peer-checked:[&_[data-check]]:opacity-100 peer-indeterminate:[&_[data-indeterminate]]:opacity-100"
+        className="relative flex size-5 items-center justify-center rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--neu-accent-ink)] [box-shadow:var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:bg-[var(--neu-surface)] peer-disabled:opacity-50 peer-disabled:shadow-none peer-disabled:border-[color:var(--muted-foreground)]/40 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--background)] peer-indeterminate:bg-[var(--neu-surface)] peer-checked:[&_[data-check]]:opacity-100 peer-indeterminate:[&_[data-indeterminate]]:opacity-100"
       >
-        <span
-          data-check=""
-          className="absolute text-xs font-black leading-none opacity-0 transition-opacity"
-        >
-          ✓
-        </span>
-        <span
-          data-indeterminate=""
-          className="absolute text-sm font-black leading-none opacity-0 transition-opacity"
-        >
-          −
-        </span>
+        <svg data-check="" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="absolute size-3.5 opacity-0 transition-opacity"><path d="m5 12 4 4L19 6" /></svg>
+        <svg data-indeterminate="" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="absolute size-3.5 opacity-0 transition-opacity"><path d="M5 12h14" /></svg>
       </span>
     </span>
   );

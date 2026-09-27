@@ -22,7 +22,7 @@ type SheetContentProps = Primitive.Popup.Props & { side?: keyof typeof sides; cl
 function SheetContent({ className, side = "right", closeLabel = "Close", children, ...props }: SheetContentProps) {
   return <DialogPortal><DialogOverlay />
     <Primitive.Popup data-slot="sheet-content" data-side={side} className={mergeClassName<Primitive.Popup.State>(
-      `fixed z-50 flex flex-col gap-6 overflow-y-auto overscroll-contain border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 pt-16 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none ${sides[side]}`, className,
+      `fixed z-50 flex flex-col gap-6 overflow-y-auto overscroll-contain border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-6 pt-16 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none ${sides[side]}`, className,
     )} {...props}>
       {children}
       <Primitive.Close render={<Button size="icon" variant="soft" />} className="absolute top-4 right-4" aria-label={closeLabel}><span aria-hidden="true">×</span></Primitive.Close>

@@ -28,7 +28,7 @@ function DataTable<TData>({ table, caption, emptyMessage = "No results.", childr
 function DataTableColumnHeader<TData, TValue>({ column, title }: { column: Column<TData, TValue>; title: string }) {
   "use no memo";
   if (!column.getCanSort()) return <span>{title}</span>;
-  return <Button variant="ghost" size="sm" className="-ms-3 gap-2 text-inherit" onClick={column.getToggleSortingHandler()}>{title}<span aria-hidden="true" className="w-3">{column.getIsSorted() === "asc" ? "↑" : column.getIsSorted() === "desc" ? "↓" : "↕"}</span></Button>;
+  return <Button variant="ghost" size="sm" className="-ms-3 gap-2 text-inherit" onClick={column.getToggleSortingHandler()}>{title}<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={column.getIsSorted() === "asc" ? "M12 19V5m-5 5 5-5 5 5" : column.getIsSorted() === "desc" ? "M12 5v14m-5-5 5 5 5-5" : "M8 19V5m-4 4 4-4 4 4M16 5v14m-4-4 4 4 4-4"} /></svg></Button>;
 }
 
 type PaginationLabels = { previous: string; next: string; rowsPerPage: string; page: (current: number, total: number) => string };

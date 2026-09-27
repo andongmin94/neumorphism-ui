@@ -28,7 +28,7 @@ export function ChartContainer({
     <section
       data-slot="chart"
       aria-labelledby={`${id}-title`}
-      className={cn("grid min-w-0 gap-5 rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] p-5 text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] sm:p-6", className)}
+      className={cn("grid min-w-0 gap-5 rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] p-5 text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]", className)}
       {...props}
     >
       <header className="flex flex-wrap items-start justify-between gap-4">
@@ -40,7 +40,7 @@ export function ChartContainer({
       </header>
       {summary != null && <p className="text-sm font-medium tabular-nums">{summary}</p>}
       {empty ? (
-        <div role="status" className="grid h-64 place-items-center rounded-xl border border-dashed border-[var(--border)] p-6 text-center text-sm text-[var(--muted-foreground)]">{emptyLabel}</div>
+        <div role="status" className="grid h-64 place-items-center rounded-[var(--neu-radius-surface)] border border-dashed border-[var(--border)] p-6 text-center text-sm text-[var(--muted-foreground)]">{emptyLabel}</div>
       ) : (
         <div
           role="group" aria-label={title} aria-describedby={`${id}-description`}

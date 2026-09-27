@@ -27,7 +27,7 @@ function Marquee({
   const itemNodes = items.map((item, index) => (
     <span
       data-slot="marquee-item"
-      className="shrink-0 whitespace-nowrap rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-4 py-2 text-sm font-semibold [box-shadow:var(--neu-shadow-raised-sm)]"
+      className="shrink-0 whitespace-nowrap rounded-[var(--neu-radius-small)] border border-[color:var(--border)] bg-[var(--neu-surface)] px-4 py-2 text-sm font-medium"
       key={index}
     >
       {item}
@@ -39,7 +39,7 @@ function Marquee({
       data-slot="marquee"
       aria-label={label}
       className={cn(
-        "relative w-full min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] p-3 pr-24 [box-shadow:var(--neu-shadow-inset)]",
+        "relative w-full min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-3 pr-16",
         className,
       )}
       {...props}
@@ -60,9 +60,9 @@ function Marquee({
         aria-pressed={paused}
         aria-label={paused ? resumeLabel : pauseLabel}
         onClick={() => setPaused((value) => !value)}
-        className="absolute right-2 top-2 z-10 h-8 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-3 text-xs font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]"
+        className="absolute right-2 top-2 z-10 inline-flex size-10 items-center justify-center rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-3 text-xs font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]"
       >
-        {paused ? "▶" : "Ⅱ"}
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={paused ? "m8 5 11 7-11 7Z" : "M8 5v14M16 5v14"} /></svg>
       </button>
       <div
         data-slot="marquee-track"

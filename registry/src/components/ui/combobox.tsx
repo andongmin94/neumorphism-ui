@@ -8,7 +8,7 @@ const ComboboxTrigger = Primitive.Trigger;
 const ComboboxValue = Primitive.Value;
 const ComboboxClear = Primitive.Clear;
 function ComboboxInput({ className, ...props }: Primitive.Input.Props) {
-  return <Primitive.Input data-slot="combobox-input" className={mergeClassName<Primitive.Input.State>("h-10 w-full min-w-0 rounded-[var(--neu-radius-control)] border border-[color:var(--input)] bg-[var(--neu-surface)] px-3.5 text-sm text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[border-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]/25 disabled:opacity-50", className)} {...props} />;
+  return <Primitive.Input data-slot="combobox-input" className={mergeClassName<Primitive.Input.State>("h-10 w-full min-w-0 rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] px-3 text-sm font-normal tracking-normal text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset)] outline-none transition-[border-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none placeholder:text-[var(--muted-foreground)] focus-visible:border-[var(--ring)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[color:var(--ring)] disabled:opacity-60 disabled:shadow-none disabled:[background-image:none] disabled:border-[color:var(--input)]", className)} {...props} />;
 }
 type ComboboxContentProps = Primitive.Popup.Props & { sideOffset?: number; align?: Primitive.Positioner.Props["align"] };
 function ComboboxContent({ className, sideOffset = 8, align = "start", ...props }: ComboboxContentProps) {
@@ -20,7 +20,7 @@ function ComboboxList({ className, ...props }: Primitive.List.Props) {
   return <Primitive.List data-slot="combobox-list" className={mergeClassName<Primitive.List.State>("max-h-[min(18rem,var(--available-height))] overflow-y-auto overscroll-contain scroll-py-1 outline-none empty:p-0", className)} {...props} />;
 }
 function ComboboxItem({ className, children, ...props }: Primitive.Item.Props) {
-  return <Primitive.Item data-slot="combobox-item" className={mergeClassName<Primitive.Item.State>("relative flex min-h-10 cursor-default items-center gap-2 rounded-[calc(var(--neu-radius-control)-3px)] border border-transparent py-2 pr-3 pl-8 outline-none data-highlighted:border-[color:var(--neu-selected-border)] data-highlighted:bg-[var(--neu-selected)] data-selected:font-semibold data-disabled:opacity-40 data-disabled:pointer-events-none", className)} {...props}>
+  return <Primitive.Item data-slot="combobox-item" className={mergeClassName<Primitive.Item.State>("relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] border border-transparent py-2 pr-3 pl-8 outline-none data-highlighted:border-transparent data-highlighted:bg-[var(--neu-surface)] data-highlighted:[box-shadow:var(--neu-shadow-inset-sm)] data-selected:font-semibold data-disabled:opacity-40 data-disabled:pointer-events-none", className)} {...props}>
     <Primitive.ItemIndicator className="absolute left-2.5 inline-flex size-3.5 items-center justify-center"><span aria-hidden="true">✓</span></Primitive.ItemIndicator>{children}
   </Primitive.Item>;
 }

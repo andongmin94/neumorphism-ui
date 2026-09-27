@@ -58,7 +58,7 @@ function DialogContent({
         data-slot="dialog-content"
         data-close-button={showCloseButton || undefined}
         className={mergeClassName<DialogPrimitive.Popup.State>(
-          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-6 [&[data-close-button]>[data-slot=dialog-header]]:pr-12 text-[var(--popover-foreground)] shadow-[var(--neu-shadow-floating)] outline-hidden transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain -translate-x-1/2 -translate-y-1/2 gap-5 rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-6 [&[data-close-button]>[data-slot=dialog-header]]:pr-12 text-[var(--popover-foreground)] shadow-[var(--neu-shadow-floating)] outline-hidden transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-closed:scale-95 data-closed:opacity-0 data-open:scale-100 data-open:opacity-100",
           className,
         )}
         {...props}

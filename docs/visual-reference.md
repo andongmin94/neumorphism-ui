@@ -18,3 +18,25 @@ The diamond infographic and circular gauges are not copied into the documentatio
 ## Evidence
 
 `tests/detail/sculptural-layout.spec.ts` checks the depth count, nesting, centred readouts, internal bounds, long content, locale reflow and draft/save/delete/recovery behavior. The permanent Verify workflow also runs the existing complete catalog, material and documentation interaction suites. Screenshots are visual-review evidence, not proof that every possible composition is complete.
+
+## Collection-wide application
+
+The source contract now applies beyond Card and the Theme Studio example:
+
+| Family | Material and anatomy |
+| --- | --- |
+| Actions | Neutral small plates, readable accent lettering, recessed press, separate focus outline. Soft/destructive secondary actions do not all compete at the raised level. |
+| Inputs | One recessed face, 40px default height, 12px text gutter, inner controls use a smaller corner. Disabled and read-only states stay distinguishable. |
+| Selection | Square checkbox wells with SVG marks; circular radio wells; neutral switch tracks with a colored moving thumb; one segmented tray, not multiple nested raised trays. |
+| Readouts | A neutral slider disc with an accent center, rounded linear troughs, flat quantitative marks. No circular-gauge component was added. |
+| Disclosure/navigation | Flat closed rows and quiet navigation trays; selected/expanded state owns depth. No raised decorative button surrounding a disclosure icon. |
+| Overlays | A single floating plate; typography and corners match the main material. Popup state/focus behavior remains with the existing primitive. |
+| Data/media | Planar table rows; image captions share the face material; avatar status markers are not clipped by the photo. |
+| Templates | Dashboard/data-manager/CMS summaries use one raised readout and supporting recessed readouts. Filter fields no longer sit inside another inset box. |
+| Documentation | Same sibling shell. Open preview canvases, flat choice/progress wrappers, quiet directory cards that raise on interaction. No docs-specific large radius overriding the registry geometry. |
+
+`--neu-radius-small`, `--neu-radius-control`, and `--neu-radius-surface` describe distinct sizes. Default Air uses 4px / 8px / 12px. The installed base and docs resolve the same Tailwind radius tokens. Round avatar/radio/slider parts remain round intentionally. Accent lettering is contrast-adjusted against the actual preset surface, including custom accents; data fills keep their original accent.
+
+Every one of the 56 catalog entries remains in the four-viewport/mode catalog suite. Structural primitives such as Label, Separator and Form stay flat; inherited pieces such as Carousel/Date Picker reuse the updated Button or Popover. A component does not need a new shadow to belong to the system. Native select option popups remain platform-owned.
+
+The source-only material fixture now includes selection/readout/disclosure compositions and keyboard checks without loading docs CSS. `surface-system.spec.ts` checks form geometry, checkbox mark alignment, open preview hierarchy, neutral primary pressed/focus state, global search, and all eight template pages. This is a defined regression set, not exhaustive certification of every possible composition.

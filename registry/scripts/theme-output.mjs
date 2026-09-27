@@ -8,7 +8,7 @@ const theme = {
   "font-sans": "var(--neu-font-sans)",
   "font-mono": "var(--neu-font-mono)",
   ...Object.fromEntries(colors.map((name) => [`color-${name}`, `var(--${name})`])),
-  "radius-sm": "calc(var(--radius) - 4px)", "radius-md": "calc(var(--radius) - 2px)", "radius-lg": "var(--radius)", "radius-xl": "calc(var(--radius) + 4px)",
+  "radius-sm": "var(--neu-radius-small)", "radius-md": "var(--neu-radius-control)", "radius-lg": "var(--neu-radius-surface)", "radius-xl": "var(--neu-radius-overlay)",
   ...Object.fromEntries(["raised", "raised-sm", "inset", "primary"].map((name) => [`shadow-neu-${name}`, `var(--neu-shadow-${name})`])),
 };
 const css = {
@@ -17,7 +17,7 @@ const css = {
     ".neu-raised": { background: "var(--neu-surface)", "box-shadow": "var(--neu-shadow-raised)" },
     ".neu-raised-sm": { background: "var(--neu-surface)", "box-shadow": "var(--neu-shadow-raised-sm)" },
     ".neu-inset": { background: "var(--neu-surface)", "box-shadow": "var(--neu-shadow-inset)" },
-    ".neu-primary": { background: "var(--primary)", color: "var(--primary-foreground)", "box-shadow": "var(--neu-shadow-primary)" },
+    ".neu-primary": { background: "var(--neu-surface)", "background-image": "var(--neu-fill-raised)", color: "var(--neu-accent-ink)", "box-shadow": "var(--neu-shadow-raised-sm)" },
   },
   "@media (prefers-reduced-motion: reduce)": {
     ".neu-raised, .neu-raised-sm, .neu-inset, .neu-primary": { "transition-duration": "0.01ms !important", "animation": "none !important" },

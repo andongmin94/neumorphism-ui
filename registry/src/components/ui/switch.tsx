@@ -37,9 +37,9 @@ function Switch({
       <span
         aria-hidden="true"
         data-slot="switch-track"
-        className="flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 shadow-[var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:bg-[var(--primary)] peer-checked:shadow-[var(--neu-shadow-primary-inset)] peer-disabled:opacity-50 peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-3 peer-focus-visible:outline-[color:var(--ring)] peer-checked:[&>span]:translate-x-5 rtl:peer-checked:[&>span]:-translate-x-5"
+        className="flex size-full items-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-0.5 shadow-[var(--neu-shadow-inset)] transition-[background-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none peer-checked:[&>span]:bg-[var(--primary)] peer-checked:[&>span]:[background-image:var(--neu-fill-primary)] peer-disabled:opacity-50 peer-disabled:shadow-none peer-disabled:border-[color:var(--muted-foreground)]/40 peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-3 peer-focus-visible:outline-[color:var(--ring)] peer-checked:[&>span]:translate-x-5 rtl:peer-checked:[&>span]:-translate-x-5"
       >
-        <span data-slot="switch-thumb" className="size-[18px] shrink-0 rounded-full bg-[var(--neu-surface-soft)] shadow-[var(--neu-shadow-raised-sm)] transition-transform duration-[var(--neu-duration)] motion-reduce:transition-none" />
+        <span data-slot="switch-thumb" className="size-[18px] shrink-0 rounded-full bg-[var(--neu-surface)] shadow-[var(--neu-shadow-raised-sm)] transition-[transform,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none" />
       </span>
     </span>
   );

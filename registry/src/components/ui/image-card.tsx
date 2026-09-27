@@ -21,7 +21,7 @@ function ImageCard({
     <figure
       data-slot="image-card"
       className={cn(
-        "w-full max-w-sm overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised)]",
+        "w-full max-w-sm overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]",
         className,
       )}
       {...props}
@@ -35,7 +35,7 @@ function ImageCard({
       {caption !== undefined ? (
         <figcaption
           data-slot="image-card-caption"
-          className="border-t border-[var(--border)] bg-[var(--neu-surface-soft)] px-4 py-3 text-sm leading-relaxed"
+          className="border-t border-[var(--border)] bg-[var(--neu-surface)] px-4 py-3 text-sm leading-relaxed"
         >
           {caption}
         </figcaption>

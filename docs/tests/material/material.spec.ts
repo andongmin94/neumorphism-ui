@@ -7,6 +7,7 @@ for (const preset of ["air", "lavender", "sage", "clay", "graphite"]) for (const
     if (mode === "dark") await page.getByRole("button", { name: "Change mode" }).click();
     await expect(page.locator("html")).toHaveAttribute("data-material", `${preset}-${mode}`);
     await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator("#family-anatomy [data-slot=checkbox-root] > [aria-hidden=true]").first()).toHaveCSS("border-top-left-radius", "4px");
     await page.mouse.move(0, 0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`material-${preset}-${mode}.png`), fullPage: true });
@@ -70,8 +71,8 @@ test("switch target, keyboard, form value and tabs retain native behavior", asyn
   expect(await page.locator("#workspace").evaluate(e => new FormData(e as HTMLFormElement).has("notifications"))).toBe(false);
   await page.keyboard.press("Space");
   await expect(toggle).toBeChecked();
-  const track = page.locator('[data-slot="switch-track"]');
-  const thumb = page.locator('[data-slot="switch-thumb"]');
+  const track = page.locator('#workspace [data-slot="switch-track"]');
+  const thumb = page.locator('#workspace [data-slot="switch-thumb"]');
   const t = await track.boundingBox(); const h = await thumb.boundingBox();
   expect(h!.y - t!.y).toBeGreaterThanOrEqual(2);
   expect(t!.y + t!.height - h!.y - h!.height).toBeGreaterThanOrEqual(2);
@@ -153,4 +154,37 @@ test("continuous material and borderless depth survive interaction", async ({ pa
   expect(await input.evaluate(e => getComputedStyle(e).boxShadow)).toContain("inset");
   await expect(input).toHaveCSS("outline-style", "solid");
   await page.screenshot({ path: info.outputPath("continuous-material-focus.png"), fullPage: true });
+});
+
+
+test("source-only family anatomy shares physical geometry without docs CSS", async ({ page }, info) => {
+  await page.goto("/");
+  for (const mode of ["light", "dark"]) {
+    if (mode === "dark") await page.getByRole("button", { name: "Change mode" }).click();
+    const area = page.locator("#family-anatomy");
+    const face = area.locator('[data-slot=checkbox-root] > [aria-hidden=true]').first();
+    expect(await face.evaluate(e => getComputedStyle(e).borderTopLeftRadius)).toBe("4px");
+    for (const name of ["Unavailable choice", "Unavailable switch"]) {
+      const input = area.getByLabel(name, { exact: true });
+      await expect(input).toBeDisabled();
+      const face = input.locator("xpath=following-sibling::span");
+      // Tailwind's shadow-none preserves transparent ring/shadow slots.
+      // Both serializations paint no shadow; a visible layer still fails.
+      const transparent = "rgba\\(0, 0, 0, 0\\) 0px 0px 0px 0px";
+      await expect(face).toHaveCSS("box-shadow", new RegExp(`^(?:none|${transparent}(?:, ${transparent})*)$`));
+      expect(await face.evaluate(e => getComputedStyle(e).borderTopColor)).not.toBe("rgba(0, 0, 0, 0)");
+    }
+    const seats = area.getByRole("textbox", { name: "Material seats" });
+    await expect(seats).toHaveValue(mode === "light" ? "3" : "4");
+    await area.getByRole("button", { name: "More seats" }).click();
+    await expect(seats).toHaveValue(mode === "light" ? "4" : "5");
+    const slider = area.getByRole("slider", { name: "Material volume" });
+    await slider.focus(); await page.keyboard.press("ArrowRight");
+    await expect(slider).toHaveAttribute("aria-valuenow", mode === "light" ? "65" : "66");
+    await page.locator("#family-anatomy").screenshot({ path: info.outputPath(`source-families-${mode}.png`) });
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+    await page.locator("#family-anatomy").screenshot({ path: info.outputPath(`source-families-${mode}-mobile.png`) });
+    await page.setViewportSize({ width: 1200, height: 1000 });
+  }
 });

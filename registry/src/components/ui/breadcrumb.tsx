@@ -43,7 +43,7 @@ function BreadcrumbLink({
     <a
       data-slot="breadcrumb-link"
       className={cn(
-        "rounded-md outline-none transition-colors hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+        "rounded-[var(--neu-radius-small)] outline-none transition-colors hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
         className,
       )}
       {...props}

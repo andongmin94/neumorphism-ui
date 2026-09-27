@@ -12,12 +12,12 @@
 .heading h2 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.035em; line-height: 1.2; }
 .state { display: inline-flex; align-items: center; gap: 7px; color: var(--muted-foreground); font-size: 12px; }
 .state > span { width: 5px; height: 5px; flex: none; border-radius: 50%; background: currentColor; }
-.state[data-dirty] { color: var(--primary); }
+.state[data-dirty] { color: var(--neu-accent-ink); }
 .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin: 0 0 32px; }
 .metric { display: grid; min-width: 0; min-height: 116px; align-content: center; justify-items: center; gap: 8px; padding: 18px 10px; border-radius: calc(var(--neu-radius-surface) * .6); text-align: center; }
 .metric dt { grid-row: 2; color: var(--muted-foreground); font-size: 12px; line-height: 1.35; }
 .metric dd { grid-row: 1; min-width: 0; margin: 0; color: var(--foreground); font-size: clamp(23px, 3.4cqi, 32px); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.045em; line-height: 1.15; }
-.featured dd, .featured dt { color: var(--primary); }
+.featured dd, .featured dt { color: var(--neu-accent-ink); }
 .body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 36px; }
 .editor, .conditions { min-width: 0; }
 .body h3 { margin: 0 0 16px; font-size: 15px; font-weight: 650; letter-spacing: -.02em; line-height: 1.4; }
@@ -33,7 +33,7 @@
 .progress small { color: var(--muted-foreground); font-size: 11px; }
 .footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; }
 .chartLink { display: inline-flex; min-height: 40px; align-items: center; gap: 6px; color: var(--foreground); font-size: 13px; font-weight: 600; text-decoration: none; }
-.chartLink:hover { color: var(--primary); }
+.chartLink:hover { color: var(--neu-accent-ink); }
 .chartLink:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 4px; }
 .conditions { border-left: 1px solid var(--border); padding-left: 28px; }
 .conditions > h3 { margin-bottom: 4px; }

@@ -25,9 +25,9 @@
   --shadow-soft: var(--neu-shadow-raised-sm);
   --shadow-inset: var(--neu-shadow-inset);
   --shadow-accent: var(--neu-shadow-primary);
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 28px;
+  --radius-sm: var(--neu-radius-small);
+  --radius-md: var(--neu-radius-control);
+  --radius-lg: var(--neu-radius-surface);
   --radius-pill: 999px;
   --site-font-sans: var(--neu-font-sans);
   --site-font-mono: var(--neu-font-mono);
@@ -1186,6 +1186,8 @@ a {
   place-items: center;
   padding: clamp(1.25rem, 5vw, 4rem);
   overflow: hidden;
+  box-shadow: none;
+  background: var(--neu-surface);
 }
 
 .component-example-panel > * {
@@ -1242,10 +1244,10 @@ a {
 .component-preview-field > span,
 .component-preview-caption {
   color: var(--docs-muted);
-  font-size: 0.63rem;
-  font-weight: 820;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .component-preview-subsection {
@@ -1254,10 +1256,10 @@ a {
   justify-content: space-between;
   gap: 2rem;
   padding: 1rem;
-  border: 1px solid var(--line-light);
-  border-radius: 18px;
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 .component-preview-card-grid {
@@ -1297,11 +1299,11 @@ a {
   display: inline-flex;
   width: fit-content;
   align-items: center;
-  gap: 0.7rem;
   color: var(--foreground-soft);
-  font-size: 0.78rem;
-  font-weight: 720;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 550;
+  gap: 10px;
 }
 
 .component-preview-hint {
@@ -1312,11 +1314,12 @@ a {
 .component-preview-progress {
   display: grid;
   gap: 0.7rem;
-  padding: 1rem;
-  border: 1px solid var(--line-light);
-  border-radius: 17px;
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .component-preview-progress > div {
@@ -1339,13 +1342,14 @@ a {
   display: flex;
   width: min(100%, 560px);
   align-items: center;
-  gap: 0.8rem;
-  padding: 1rem;
-  border: 1px solid var(--line-light);
-  border-radius: 17px;
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
   cursor: pointer;
+  padding: 14px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 12px;
 }
 
 .component-preview-choice-card > span:last-child,
@@ -1357,13 +1361,14 @@ a {
 
 .component-preview-choice-card strong,
 .component-preview-setting strong {
-  font-size: 0.78rem;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .component-preview-choice-card small,
 .component-preview-setting small {
   color: var(--docs-muted);
-  font-size: 0.66rem;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -1371,9 +1376,10 @@ a {
   width: min(100%, 580px);
   height: 280px;
   padding: 0.6rem;
-  border: 1px solid var(--line-light);
-  background: var(--surface);
-  box-shadow: var(--shadow-inset);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 .component-preview-scroll-row {
@@ -1430,10 +1436,10 @@ a {
 .component-preview-skeleton-card {
   width: min(100%, 520px);
   overflow: hidden;
-  border: 1px solid var(--line-light);
-  border-radius: 22px;
   background: var(--surface);
-  box-shadow: var(--shadow-soft);
+  border-radius: var(--neu-radius-surface);
+  box-shadow: none;
+  border: 1px solid var(--line);
 }
 
 .component-preview-skeleton-cover {
@@ -1486,16 +1492,17 @@ a {
 
 .component-preview-tab-panel {
   display: grid;
-  min-height: 190px;
   align-content: center;
   gap: 0.45rem;
-  padding: 1.5rem;
-  border: 1px solid var(--line-light);
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
   color: var(--foreground-soft);
   font-size: 0.78rem;
   line-height: 1.65;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  min-height: 140px;
+  padding: 24px 0;
 }
 
 .component-preview-tab-panel strong {
@@ -1876,6 +1883,8 @@ a {
   .component-example-panel {
     min-height: 330px;
     padding: 1rem;
+    box-shadow: none;
+    background: var(--neu-surface);
   }
 
   .component-preview-card-grid {
@@ -2266,6 +2275,8 @@ a {
 
 .component-example-panel {
   min-height: 320px;
+  box-shadow: none;
+  background: var(--neu-surface);
 }
 
 
@@ -2405,21 +2416,24 @@ a {
 .component-directory-card {
   display: grid;
   min-width: 0;
-  gap: 1rem;
   padding: 1rem;
-  border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgb(255 255 255 / 0.08);
   transition:
     border-color 160ms ease,
     background 160ms ease,
     transform 160ms ease;
+  border: 1px solid var(--docs-line-soft);
+  background: var(--neu-surface);
+  box-shadow: none;
+  min-height: 176px;
+  gap: 14px;
 }
 
 .component-directory-card:hover {
   border-color: rgb(18 103 244 / 0.28);
   background: var(--surface);
-  transform: translateY(-2px);
+  box-shadow: var(--neu-shadow-raised-sm);
+  transform: none;
 }
 
 .component-directory-card > a {
@@ -2743,21 +2757,26 @@ a {
   width: 100%;
   padding: 0.62rem;
   border: 1px solid transparent;
-  border-radius: 12px;
   background: transparent;
   color: var(--foreground);
   cursor: pointer;
   text-align: left;
+  border-radius: var(--neu-radius-control);
 }
 
 .theme-preset-grid > button:hover,
 .theme-preset-grid > button.is-active {
-  border-color: var(--line);
-  background: var(--surface-low);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-preset-grid > button.is-active {
-  color: var(--docs-accent);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-preset-swatch {
@@ -2903,10 +2922,10 @@ a {
 }
 
 .theme-direction-grid button.is-active {
-  border-color: rgb(18 103 244 / 0.32);
-  background: var(--surface-low);
-  box-shadow: var(--shadow-inset);
-  color: var(--docs-accent);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-studio-workbench {
@@ -3040,6 +3059,7 @@ a {
   .theme-preset-grid > button {
     grid-template-columns: 1fr;
     align-content: start;
+    border-radius: var(--neu-radius-control);
   }
 
   .theme-preset-grid small {
@@ -3075,6 +3095,7 @@ a {
 
   .theme-preset-grid > button {
     grid-template-columns: 2rem minmax(0, 1fr);
+    border-radius: var(--neu-radius-control);
   }
 
   .theme-segmented-stacked {
@@ -3426,9 +3447,11 @@ html {
 }
 
 .docs-primary-action {
-  border-color: var(--foreground);
-  background: var(--foreground);
-  color: var(--background);
+  border-color: var(--neu-edge);
+  background: var(--neu-surface);
+  background-image: var(--neu-fill-raised);
+  box-shadow: var(--neu-shadow-raised-sm);
+  color: var(--neu-accent-ink);
 }
 
 .docs-secondary-action:hover {
@@ -3723,16 +3746,18 @@ html {
   align-content: space-between;
   min-width: 0;
   padding: 1rem;
-  border: 1px solid var(--line);
   border-radius: 8px;
-  background: transparent;
-  box-shadow: none;
   transition: border-color 150ms ease;
+  border: 1px solid var(--docs-line-soft);
+  background: var(--neu-surface);
+  box-shadow: none;
+  min-height: 176px;
+  gap: 14px;
 }
 
 .component-directory-card:hover {
   border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
-  box-shadow: none;
+  box-shadow: var(--neu-shadow-raised-sm);
   transform: none;
 }
 
@@ -4122,8 +4147,10 @@ html {
 
 .theme-preset-grid > button:hover,
 .theme-preset-grid > button.is-active {
-  background: var(--surface-low);
-  box-shadow: none;
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-segmented {
@@ -4141,12 +4168,16 @@ html {
 
 .theme-segmented button.is-active,
 .theme-preview-mode button.is-active {
-  background: var(--surface-low);
-  box-shadow: none;
+  color: var(--neu-accent-ink);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-raised-sm);
 }
 
 .theme-direction-grid button.is-active {
-  box-shadow: none;
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-preview-toolbar {
@@ -4400,10 +4431,10 @@ html {
   gap: 0.625rem;
   padding: 0.4rem 0.5rem;
   border: 1px solid transparent;
-  border-radius: 8px;
   background: transparent;
   box-shadow: none;
   text-align: left;
+  border-radius: var(--neu-radius-control);
 }
 
 .theme-preset-grid > button:hover {
@@ -4413,10 +4444,10 @@ html {
 }
 
 .theme-preset-grid > button.is-active {
-  border-color: color-mix(in srgb, var(--ring) 42%, transparent);
-  background: color-mix(in srgb, var(--primary) 7%, var(--surface-low));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ring) 10%, transparent);
-  color: var(--foreground);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-preset-swatch {
@@ -4527,9 +4558,9 @@ html {
 
 .theme-segmented button.is-active,
 .theme-preview-mode button.is-active {
-  background: var(--surface);
+  color: var(--neu-accent-ink);
+  background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
-  color: var(--primary);
 }
 
 .theme-direction-grid {
@@ -4554,10 +4585,10 @@ html {
 }
 
 .theme-direction-grid button.is-active {
-  border-color: color-mix(in srgb, var(--ring) 44%, transparent);
-  background: var(--surface-low);
-  box-shadow: var(--neu-shadow-inset);
-  color: var(--primary);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-radius-control {
@@ -4990,10 +5021,11 @@ html {
 }
 
 .docs-primary-action {
-  border-color: color-mix(in srgb, var(--docs-accent) 62%, var(--line-light));
-  background: var(--docs-accent);
-  box-shadow: var(--docs-primary);
-  color: var(--docs-accent-foreground);
+  border-color: var(--neu-edge);
+  background: var(--neu-surface);
+  background-image: var(--neu-fill-raised);
+  box-shadow: var(--neu-shadow-raised-sm);
+  color: var(--neu-accent-ink);
 }
 
 .docs-secondary-action {
@@ -5004,6 +5036,7 @@ html {
 .docs-primary-action:hover,
 .docs-secondary-action:hover {
   transform: translateY(-2px);
+  box-shadow: var(--neu-shadow-hover);
 }
 
 .docs-secondary-action:hover {
@@ -5011,10 +5044,10 @@ html {
 }
 
 .docs-primary-action:active {
-  background: var(--primary);
-  box-shadow: var(--neu-shadow-primary-inset);
   color: var(--primary-foreground);
   transform: translateY(1px);
+  box-shadow: var(--neu-shadow-inset);
+  background: var(--neu-surface);
 }
 
 .docs-secondary-action:active {
@@ -5207,23 +5240,26 @@ html {
 .component-directory-card {
   border-color: var(--line-light);
   border-radius: var(--docs-radius-md);
-  background: var(--surface);
-  box-shadow: none;
   transition:
     box-shadow 160ms ease,
     transform 160ms ease;
+  border: 1px solid var(--docs-line-soft);
+  background: var(--neu-surface);
+  box-shadow: none;
+  min-height: 176px;
+  gap: 14px;
 }
 
 .component-directory-card:hover {
   border-color: var(--line-light);
-  box-shadow: var(--docs-raised);
-  transform: translateY(-2px);
+  box-shadow: var(--neu-shadow-raised-sm);
+  transform: none;
 }
 
 .component-directory-card:active {
   background: var(--surface-low);
-  box-shadow: var(--docs-inset);
-  transform: translateY(1px);
+  box-shadow: var(--neu-shadow-inset-sm);
+  transform: none;
 }
 
 .component-directory-card .compact-install {
@@ -5428,6 +5464,7 @@ html {
 
 .theme-preset-grid > button {
   border-color: transparent;
+  border-radius: var(--neu-radius-control);
 }
 
 .theme-preset-grid > button:hover {
@@ -5437,9 +5474,10 @@ html {
 }
 
 .theme-preset-grid > button.is-active {
-  border-color: var(--line-light);
-  background: var(--surface-low);
-  box-shadow: var(--docs-inset);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-accent-control input[type="color"],
@@ -5451,21 +5489,25 @@ html {
 }
 
 .theme-direction-grid button.is-active {
-  background: var(--surface-low);
-  box-shadow: var(--docs-inset);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-segmented,
 .theme-preview-toolbar .theme-preview-mode {
-  border-color: var(--line-light);
-  background: var(--surface-low);
-  box-shadow: var(--docs-inset);
+  border-color: transparent;
+  border-radius: var(--neu-radius-control);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
 }
 
 .theme-segmented button.is-active,
 .theme-preview-mode button.is-active {
-  background: var(--surface);
-  box-shadow: var(--docs-raised);
+  color: var(--neu-accent-ink);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-raised-sm);
 }
 
 .mobile-nav-panel {
@@ -5569,9 +5611,10 @@ html {
 }
 
 .theme-preset-grid > button.is-active {
-  border-color: color-mix(in srgb, var(--ring) 42%, transparent);
-  background: color-mix(in srgb, var(--primary) 7%, var(--surface-low));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ring) 10%, transparent);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-accent-control input[type="color"],
@@ -5582,21 +5625,24 @@ html {
 }
 
 .theme-direction-grid button.is-active {
-  border-color: color-mix(in srgb, var(--ring) 44%, transparent);
-  background: var(--surface-low);
-  box-shadow: var(--neu-shadow-inset);
+  border-color: transparent;
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
+  color: var(--neu-accent-ink);
 }
 
 .theme-segmented,
 .theme-preview-toolbar .theme-preview-mode {
-  border-color: var(--line-light);
-  background: var(--surface-low);
-  box-shadow: var(--neu-shadow-inset);
+  border-color: transparent;
+  border-radius: var(--neu-radius-control);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-inset-sm);
 }
 
 .theme-segmented button.is-active,
 .theme-preview-mode button.is-active {
-  background: var(--surface);
+  color: var(--neu-accent-ink);
+  background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
 }
 
@@ -6388,7 +6434,8 @@ body {
   border: 1px solid var(--docs-line-strong);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-raised-sm);
+  box-shadow: none;
+  border-color: var(--docs-line-soft);
 }
 
 .component-example-toolbar {
@@ -6404,8 +6451,8 @@ body {
   padding: 32px 24px;
   border: 0;
   border-radius: 0;
-  background: var(--neu-surface);
   box-shadow: none;
+  background: var(--neu-surface);
 }
 
 .component-example-code {
@@ -6509,9 +6556,11 @@ body {
 }
 
 .docs-primary-action {
-  background: var(--primary);
-  box-shadow: var(--neu-shadow-primary);
-  color: var(--primary-foreground);
+  border-color: var(--neu-edge);
+  background: var(--neu-surface);
+  background-image: var(--neu-fill-raised);
+  box-shadow: var(--neu-shadow-raised-sm);
+  color: var(--neu-accent-ink);
 }
 
 .docs-secondary-action {
@@ -6521,7 +6570,9 @@ body {
 }
 
 .docs-primary-action:hover {
-  box-shadow: var(--neu-shadow-primary-hover);
+  box-shadow: var(--neu-shadow-hover);
+  color: var(--neu-accent-ink);
+  background: var(--neu-surface);
 }
 
 .docs-secondary-action:hover {
@@ -6529,7 +6580,8 @@ body {
 }
 
 .docs-primary-action:active {
-  box-shadow: var(--neu-shadow-primary-inset);
+  box-shadow: var(--neu-shadow-inset);
+  background: var(--neu-surface);
 }
 
 .docs-secondary-action:active {
@@ -6567,7 +6619,8 @@ body {
   border: 1px solid var(--docs-line-strong);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-raised);
+  box-shadow: var(--neu-shadow-raised-sm);
+  border-color: var(--neu-edge);
 }
 
 .home-preview-card .interactive-preview {
@@ -6762,26 +6815,26 @@ body {
 .component-directory-card {
   display: flex;
   min-width: 0;
-  min-height: 188px;
   flex-direction: column;
-  gap: 18px;
   padding: 18px;
-  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
-  background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-raised-sm);
   color: var(--foreground);
   text-decoration: none;
   transition:
     box-shadow 150ms ease,
     transform 150ms ease;
+  border: 1px solid var(--docs-line-soft);
+  background: var(--neu-surface);
+  box-shadow: none;
+  min-height: 176px;
+  gap: 14px;
 }
 
 .component-directory-card:hover,
 .component-directory-card:focus-visible {
   background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-raised);
-  transform: translateY(-2px);
+  box-shadow: var(--neu-shadow-raised-sm);
+  transform: none;
 }
 
 .component-directory-card-top,
@@ -6965,6 +7018,7 @@ body {
   border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
+  border-color: var(--neu-edge);
   box-shadow: var(--neu-shadow-raised-sm);
 }
 
@@ -6978,8 +7032,8 @@ body {
   overflow: hidden;
   border: 0;
   border-bottom: 1px solid var(--docs-line-strong);
-  background: var(--neu-surface-low);
-  box-shadow: var(--neu-shadow-inset-sm);
+  background: var(--neu-surface);
+  box-shadow: none;
 }
 
 .template-preview-stage,
@@ -7098,10 +7152,10 @@ body {
 }
 
 .charts-workbench-frame {
-  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
-  background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-raised-sm);
+  box-shadow: none;
+  border: 0;
+  background: transparent;
 }
 
 .chart-reference-grid {
@@ -7114,6 +7168,7 @@ body {
   border: 1px solid var(--docs-line-strong);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
+  border-color: var(--docs-line-soft);
 }
 
 .theme-studio-page > .theme-studio {
@@ -7532,9 +7587,12 @@ body {
   }
 
   .component-directory-card {
-    min-height: 164px;
-    gap: 14px;
     padding: 16px;
+    border: 1px solid var(--docs-line-soft);
+    background: var(--neu-surface);
+    box-shadow: none;
+    min-height: 176px;
+    gap: 14px;
   }
 
   .docs-content-layout,
@@ -7558,6 +7616,8 @@ body {
   .component-example-panel {
     min-height: 230px;
     padding: 24px 16px;
+    box-shadow: none;
+    background: var(--neu-surface);
   }
 
   .special-page-header-inner,

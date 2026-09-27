@@ -6,19 +6,19 @@ const buttonVariants = {
   default:
     "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:none] text-[var(--foreground)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
   primary:
-    "border-transparent bg-[var(--primary)] [background-image:var(--neu-fill-primary)] active:[background-image:none] text-[var(--primary-foreground)] shadow-[var(--neu-shadow-primary)] hover:shadow-[var(--neu-shadow-primary-hover)] active:shadow-[var(--neu-shadow-primary-inset)]",
+    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:var(--neu-fill-inset)] text-[var(--neu-accent-ink)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
   soft:
-    "border-[color:var(--neu-edge)] bg-[var(--neu-surface-soft)] text-[var(--foreground)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
+    "border-transparent bg-[var(--neu-surface-soft)] text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface)] hover:shadow-[var(--neu-shadow-raised-sm)] active:shadow-[var(--neu-shadow-inset)]",
   ghost:
     "border-transparent bg-transparent text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface-soft)] active:bg-[var(--neu-surface-low)] active:shadow-[var(--neu-shadow-inset)]",
   destructive:
-    "border-transparent bg-[var(--destructive)] text-[var(--destructive-foreground)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-destructive-inset)]",
+    "border-transparent bg-[color:var(--destructive)]/8 text-[var(--neu-error-text)] shadow-none hover:shadow-[var(--neu-shadow-raised-sm)] active:shadow-[var(--neu-shadow-inset)]",
 } as const;
 
 const buttonSizes = {
   sm: "h-8 px-3 text-xs",
-  default: "h-10 px-5 text-sm",
-  lg: "h-12 px-7 text-base",
+  default: "h-10 px-4 text-sm",
+  lg: "h-12 px-6 text-base",
   icon: "size-10 p-0",
 } as const;
 
@@ -44,7 +44,7 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold outline-hidden transition-[box-shadow,background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:outline-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:[background-image:none] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--neu-radius-control)] border font-semibold leading-5 tracking-normal outline-hidden transition-[box-shadow,background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:outline-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:[background-image:none] disabled:border-[color:var(--muted-foreground)]/30 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         buttonVariants[variant],
         buttonSizes[size],
         className,
