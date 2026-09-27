@@ -40,3 +40,8 @@ The source contract now applies beyond Card and the Theme Studio example:
 Every one of the 56 catalog entries remains in the four-viewport/mode catalog suite. Structural primitives such as Label, Separator and Form stay flat; inherited pieces such as Carousel/Date Picker reuse the updated Button or Popover. A component does not need a new shadow to belong to the system. Native select option popups remain platform-owned.
 
 The source-only material fixture now includes selection/readout/disclosure compositions and keyboard checks without loading docs CSS. `surface-system.spec.ts` checks form geometry, checkbox mark alignment, open preview hierarchy, neutral primary pressed/focus state, global search, and all eight template pages. This is a defined regression set, not exhaustive certification of every possible composition.
+
+
+## Overlay occlusion review
+
+The sticky documentation header is below registry backdrops and popups. Sheet, Dialog and Drawer checks include actual hit testing over the header, not only visible DOM nodes. Sheet title and close control remain unobscured at normal and 500px viewport heights in all four desktop/mobile light/dark projects.
