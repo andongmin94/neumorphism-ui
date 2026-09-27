@@ -1,0 +1,409 @@
+name: Document boundary review
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/document-boundary-review.yml]
+permissions:
+  contents: write
+concurrency:
+  group: document-boundary-review
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Prepare permanent regression checks and guarded source edits
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          Path('/tmp/divider-patch.py').write_text(r'''
+          from pathlib import Path
+          import re
+          p = Path('docs/src/app.css')
+          s = p.read_text()
+          original = s
+          def edit(before, after):
+              global s
+              assert s.count(before) == 1, (before[:100], s.count(before))
+              s = s.replace(before, after)
+          edit('  --docs-toc-width: 200px;', '  --docs-toc-width: 200px;\n  --docs-section-space: 32px;')
+          edit('  grid-template-columns: minmax(0, var(--docs-content-max)) var(--docs-toc-width);', '  grid-template-columns: minmax(0, 1fr);')
+          edit(""".docs-page-header,
+          .component-doc-intro {
+            margin: 0 0 38px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--docs-line-strong);
+          }""", """/* An article header owns its first boundary. Later sections own only their leading rule. */
+          .docs-page-header,
+          .component-doc-intro {
+            max-width: none;
+            margin: 0 0 var(--docs-section-space);
+            padding-bottom: var(--docs-section-space);
+            border-bottom: 1px solid var(--docs-line-strong);
+          }""")
+          edit(""".docs-content-section,
+          .component-doc-section {
+            padding: 26px 0 34px;
+            border-top: 1px solid var(--docs-line-soft);
+          }
+
+          .docs-content-section:first-of-type,
+          .component-doc-section:first-of-type {
+            border-top: 0;
+          }""", """.docs-content-section,
+          .component-doc-section {
+            margin: 0;
+            padding: var(--docs-section-space) 0;
+            border-top: 0;
+            border-bottom: 0;
+          }
+
+          .docs-content-section + .docs-content-section,
+          .component-doc-section + .component-doc-section {
+            border-top: 1px solid var(--docs-line-soft);
+          }
+
+          .docs-page-header + .docs-content-section,
+          .component-doc-intro + .component-doc-section {
+            padding-top: 0;
+          }""")
+          edit(""".docs-reference-article > .docs-page-header {
+            max-width: 900px;
+            padding-bottom: 30px;
+          }
+
+          .docs-reference-article > .docs-content-section {
+            display: grid;
+            grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+            column-gap: 42px;
+            row-gap: 10px;
+            padding-block: 28px;
+            border-top: 1px solid var(--docs-line-strong);
+          }
+
+          .docs-reference-article > .docs-content-section > h2 {
+            grid-row: 1 / span 20;
+          }
+
+          .docs-reference-article > .docs-content-section > :not(h2) {
+            grid-column: 2;
+          }""", """/* Only titled reference sections need a label column. No synthetic empty rows. */
+          .docs-reference-article > .docs-content-section:has(> h2) {
+            display: grid;
+            grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+            column-gap: 32px;
+            row-gap: 16px;
+            align-items: start;
+          }
+
+          .docs-reference-article > .docs-content-section > h2 {
+            grid-column: 1;
+            grid-row: 1;
+            margin: 0;
+            line-height: 1.3;
+          }
+
+          .docs-reference-article > .docs-content-section:has(> h2) > :not(h2) {
+            min-width: 0;
+            grid-column: 2;
+            margin-block: 0;
+          }""")
+          edit("""  .docs-reference-article > .docs-content-section {
+              display: block;
+            }
+
+            .docs-reference-article > .docs-content-section > :not(h2) {
+              grid-column: auto;
+            }""", """  .docs-reference-article > .docs-content-section:has(> h2) {
+              grid-template-columns: minmax(0, 1fr);
+            }
+
+            .docs-reference-article > .docs-content-section:has(> h2) > :not(h2) {
+              grid-column: 1;
+            }""")
+          edit("""  .docs-page-header,
+            .component-doc-intro {
+              margin-bottom: 28px;
+              padding-bottom: 24px;
+            }""", """  :root {
+              --docs-section-space: 24px;
+            }""")
+          edit("""@media (min-width: 1360px) {
+            .component-doc-quicknav""", """@media (min-width: 1360px) {
+            .docs-content-layout:has(> .docs-toc) {
+              grid-template-columns: minmax(0, var(--docs-content-max)) var(--docs-toc-width);
+            }
+
+            .component-doc-quicknav""")
+          edit(""".charts-product-section,
+          .charts-operational-section,
+          .charts-reference-section {
+            padding: 40px;
+            border-top: 0;
+            border-bottom: 1px solid var(--docs-line-strong);
+          }""", """.charts-product-section,
+          .charts-operational-section,
+          .charts-reference-section {
+            padding: 40px;
+            border-top: 0;
+            border-bottom: 0;
+          }
+
+          .charts-gallery-page > section + section {
+            border-top: 1px solid var(--docs-line-soft);
+          }""")
+          marker = s.index('/* Neobrutal documentation shell parity.')
+          base, canonical = s[:marker], s[marker:]
+          removed = []
+          def remove_old(match):
+              selectors, body = match.group(1).strip(), match.group(2)
+              targets = {'.docs-page-header', '.component-doc-intro', '.docs-content-section', '.component-doc-section'}
+              parts = {v.strip() for v in selectors.split(',')}
+              if not parts or not parts.issubset(targets):
+                  return match.group(0)
+              props = r'(?:border-(?:top|bottom)(?:-width|-style|-color)?|padding(?:-block|-top|-bottom)?|margin(?:-block|-top|-bottom)?|max-width)'
+              new_body = re.sub(r'(?m)^\s*' + props + r'\s*:[^;{}]+;\n?', '', body)
+              if new_body != body:
+                  removed.append(selectors)
+              return '\n' + selectors + ' {\n' + new_body.strip('\n') + '\n}' if new_body.strip() else ''
+          base = re.sub(r'\n([^{}@]+)\{([^{}]*)\}', remove_old, base)
+          s = base + canonical
+          p.write_text(s)
+          Path('/tmp/divider-evidence').mkdir(exist_ok=True)
+          Path('/tmp/divider-evidence/app-before.css').write_text(original)
+          Path('/tmp/divider-evidence/app-after.css').write_text(s)
+          Path('/tmp/divider-evidence/removed-rule-owners.txt').write_text('\n'.join(removed))
+          p = Path('docs/tests/detail/catalog.spec.ts')
+          c = p.read_text()
+          target = '  await expect(panel).toBeVisible();\n'
+          assert c.count(target) == 1
+          c = c.replace(target, target + """  const article = page.locator(".component-doc-article");
+            await expect(article.locator(":scope > .component-doc-intro")).toHaveCSS("border-bottom-width", "1px");
+            await expect(article.locator(":scope > .component-doc-section").first()).toHaveCSS("border-top-width", "0px");
+            await expect(article.locator(":scope > .component-doc-section").first()).toHaveCSS("padding-top", "0px");
+            for (const section of await article.locator(":scope > .component-doc-section + .component-doc-section").all()) {
+              await expect(section).toHaveCSS("border-top-width", "1px");
+              await expect(section).toHaveCSS("border-bottom-width", "0px");
+            }
+          """)
+          p.write_text(c)
+          p = Path('docs/visual-reference.md')
+          p.write_text(p.read_text() + """
+
+          ## Document boundary ownership
+
+          Article headers own the rule before the first section. Only subsequent sibling sections draw a leading rule; sections do not draw trailing rules. Header and section rules share the article width. Article rhythm uses one 32px spacing value, reduced to 24px on narrow screens. Reference labels occupy one actual grid row, not twenty implicit rows; untitled sections keep the full content width. TOC columns exist only when the TOC is displayed. Chart sections follow the same leading-rule contract and leave the final boundary to the site footer.
+
+          `tests/detail/document-rhythm.spec.ts` checks all reference pages in desktop/mobile light/dark, intermediate widths and localized layout, plus landing/directory/gallery/chart/theme shells, preview-card boundaries and drawer navigation. The existing 56-component catalog pass also checks first and subsequent section boundaries. Nested table/list/preview separators retain their own semantic boundaries; this is not a blanket removal of borders.
+          """)
+          print('Patched owning rules. Removed obsolete declarations from:', removed)
+          ''')
+          Path('docs/tests/detail/document-rhythm.spec.ts').write_text(r'''
+          import { expect, test, type Page } from "@playwright/test";
+          const references = ["", "installation", "design-tokens", "registry", "resources", "accessibility", "verification", "credits"];
+          async function referenceMetrics(page: Page) {
+            return page.locator(".docs-reference-article").evaluate(article => {
+              const header = article.querySelector<HTMLElement>(":scope > .docs-page-header")!;
+              const sections = [...article.querySelectorAll<HTMLElement>(":scope > .docs-content-section")];
+              const rect = (element: HTMLElement) => {
+                const box = element.getBoundingClientRect();
+                const css = getComputedStyle(element);
+                return { x: box.x, y: box.y, right: box.right, bottom: box.bottom, width: box.width,
+                  topRule: parseFloat(css.borderTopWidth), bottomRule: parseFloat(css.borderBottomWidth),
+                  paddingTop: parseFloat(css.paddingTop), paddingBottom: parseFloat(css.paddingBottom),
+                  marginTop: parseFloat(css.marginTop), marginBottom: parseFloat(css.marginBottom) };
+              };
+              return { header: rect(header), spacing: parseFloat(getComputedStyle(article).getPropertyValue("--docs-section-space")),
+                sections: sections.map(section => {
+                  const heading = section.querySelector<HTMLElement>(":scope > h2");
+                  const body = [...section.children].find(child => child !== heading) as HTMLElement | undefined;
+                  const rows = getComputedStyle(section).gridTemplateRows;
+                  return { ...rect(section), heading: heading ? rect(heading) : null, body: body ? rect(body) : null,
+                    gridRows: rows === "none" ? 0 : rows.split(" ").length, children: section.children.length };
+                }), pageWidth: document.documentElement.scrollWidth, viewport: innerWidth };
+            });
+          }
+          async function checkReference(page: Page) {
+            const metrics = await referenceMetrics(page);
+            const first = metrics.sections[0];
+            expect(metrics.header.bottomRule, "header owns the first boundary").toBe(1);
+            expect(first.topRule, "first section must not repeat the header rule").toBe(0);
+            expect(first.paddingTop, "first section must not add a second top gap").toBe(0);
+            expect(Math.abs(metrics.header.right - first.right), "header and section rules have equal width").toBeLessThanOrEqual(1);
+            expect(Math.abs(first.y - metrics.header.bottom - metrics.spacing), "one spacing owner after the header").toBeLessThanOrEqual(1);
+            for (const [index, section] of metrics.sections.entries()) {
+              expect(section.bottomRule).toBe(0);
+              if (index > 0) expect(section.topRule, "later sections keep one leading rule").toBe(1);
+              expect(section.gridRows, "no twenty-row implicit grid beneath a short heading").toBeLessThanOrEqual(section.children);
+              if (section.heading && section.body && Math.abs(section.heading.y - section.body.y) < 100) {
+                expect(section.body.marginTop, "reference copy starts without a stray paragraph margin").toBe(0);
+              }
+              if (!section.heading && section.body) {
+                expect(section.body.width, "untitled sections must not reserve an empty label column").toBeGreaterThanOrEqual(section.width - 2);
+              }
+            }
+            expect(metrics.pageWidth).toBeLessThanOrEqual(metrics.viewport + 1);
+            return metrics;
+          }
+          for (const slug of references) {
+            test(`reference boundary: ${slug || "index"}`, async ({ page }, info) => {
+              const response = await page.goto(`/en/docs${slug ? `/${slug}` : ""}`);
+              expect(response?.status()).toBe(200);
+              await page.evaluate(() => document.fonts.ready);
+              const metrics = await referenceMetrics(page);
+              await info.attach("section-metrics", { body: JSON.stringify(metrics, null, 2), contentType: "application/json" });
+              await page.screenshot({ path: info.outputPath(`${slug || "index"}-top.png`), animations: "disabled" });
+              await page.locator(".docs-reference-article").screenshot({ path: info.outputPath(`${slug || "index"}-article.png`), animations: "disabled" });
+              await checkReference(page);
+            });
+          }
+          for (const entry of [
+            { name: "home", path: "/en", header: ".directory-hero", next: ".component-directory" },
+            { name: "components", path: "/en/components", header: ".special-page-header", next: ".component-directory" },
+            { name: "templates", path: "/en/templates", header: ".template-gallery-header", next: ".template-gallery" },
+            { name: "charts", path: "/en/charts", header: ".charts-gallery-hero", next: ".charts-product-section" },
+            { name: "styling", path: "/en/customize", header: ".theme-studio-page-hero", next: ".theme-studio-page > .theme-studio" },
+          ]) {
+            test(`product boundary: ${entry.name}`, async ({ page }, info) => {
+              await page.goto(entry.path);
+              await expect(page.locator(entry.header)).toHaveCSS("border-bottom-width", "1px");
+              await expect(page.locator(entry.next)).toHaveCSS("border-top-width", "0px");
+              expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+              await page.screenshot({ path: info.outputPath(`${entry.name}-boundary.png`), animations: "disabled" });
+              if (entry.name === "charts") {
+                const sections = page.locator(".charts-gallery-page > section");
+                expect(await sections.count()).toBeGreaterThan(1);
+                for (let i = 0; i < await sections.count(); i++) {
+                  await expect(sections.nth(i)).toHaveCSS("border-bottom-width", "0px");
+                  await expect(sections.nth(i)).toHaveCSS("border-top-width", i ? "1px" : "0px");
+                }
+                await expect(page.locator(".site-footer")).toHaveCSS("border-top-width", "1px");
+                await page.locator(".site-footer").scrollIntoViewIfNeeded();
+                await page.screenshot({ path: info.outputPath("charts-footer.png"), animations: "disabled" });
+              }
+              if (entry.name === "templates") {
+                for (const card of await page.locator(".template-card").all()) {
+                  await expect(card.locator(".template-card-preview")).toHaveCSS("border-bottom-width", "1px");
+                  await expect(card.locator(".template-card-body")).toHaveCSS("border-top-width", "0px");
+                }
+              }
+            });
+          }
+          test("drawer and preview retain single internal boundaries", async ({ page }, info) => {
+            await page.goto("/en/components/button");
+            await expect(page.locator(".component-example-toolbar").first()).toHaveCSS("border-bottom-width", "1px");
+            await expect(page.locator(".component-example-panel").first()).toHaveCSS("border-top-width", "0px");
+            await page.setViewportSize({ width: 390, height: 844 });
+            await page.getByRole("button", { name: "Open docs menu" }).click();
+            await expect(page.locator(".mobile-nav-heading")).toHaveCSS("border-bottom-width", "1px");
+            await expect(page.locator(".mobile-nav-scroll")).toHaveCSS("border-top-width", "0px");
+            await page.screenshot({ path: info.outputPath("drawer-boundary.png"), animations: "disabled" });
+            await page.keyboard.press("Escape");
+          });
+          test("reference rhythm survives localization, intermediate widths and text zoom", async ({ page }, info) => {
+            test.skip(info.project.name !== "desktop-light", "one dedicated responsive pass");
+            for (const width of [320, 820, 1280]) {
+              await page.setViewportSize({ width, height: 1000 });
+              for (const locale of ["en", "ko", "ja", "zh"]) {
+                await page.goto(`/${locale}/docs/design-tokens`);
+                await checkReference(page);
+                await page.screenshot({ path: info.outputPath(`tokens-${locale}-${width}.png`), animations: "disabled" });
+              }
+              await page.goto("/en/docs/installation");
+              await checkReference(page);
+              await expect(page.locator(".docs-toc")).toBeHidden();
+              const columns = await page.locator(".docs-content-layout").evaluate(element => getComputedStyle(element).gridTemplateColumns.split(" "));
+              expect(columns, "a hidden TOC must not leave an empty column").toHaveLength(1);
+            }
+            await page.setViewportSize({ width: 820, height: 1000 });
+            await page.goto("/en/docs/design-tokens");
+            await page.addStyleTag({ content: "html { font-size: 200%; }" });
+            await checkReference(page);
+            await page.screenshot({ path: info.outputPath("tokens-200-percent-text.png"), animations: "disabled" });
+          });
+          ''')
+          PY
+      - name: Build the unchanged product for the before evidence
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix docs
+          cd docs && npx playwright install --with-deps chromium
+      - name: Reproduce reference boundary defects before changing CSS
+        working-directory: docs
+        run: |
+          mkdir -p /tmp/divider-evidence
+          set +e
+          npx playwright test --config=playwright.detail.config.ts document-rhythm.spec.ts --grep 'reference boundary' --project=desktop-light --output=test-results/divider-before 2>&1 | tee /tmp/divider-evidence/before.log
+          result=${PIPESTATUS[0]}
+          set -e
+          echo "$result" > /tmp/divider-evidence/before-exit.txt
+          cp test-results/detail-report.json /tmp/divider-evidence/before.json
+          test "$result" -ne 0
+      - name: Correct owning CSS rules and regenerate documentation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 /tmp/divider-patch.py
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run check:generated --prefix registry
+      - name: Verify corrected boundaries across documentation and catalog
+        working-directory: docs
+        run: |
+          npx playwright test --config=playwright.detail.config.ts document-rhythm.spec.ts catalog.spec.ts --output=test-results/divider-after 2>&1 | tee /tmp/divider-evidence/after.log
+          cp test-results/detail-report.json /tmp/divider-evidence/after.json
+          node -e "const r=require('./test-results/detail-report.json'); if(r.stats.unexpected || r.stats.flaky) process.exit(1)"
+      - name: Prepare the exact tested tree without moving main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm .github/workflows/document-boundary-review.yml
+          git add docs .github/workflows/document-boundary-review.yml
+          git diff --cached --stat > /tmp/divider-evidence/change-stat.txt
+          git diff --cached --binary > /tmp/divider-evidence/reviewed.patch
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          def api(endpoint, payload):
+              return json.loads(subprocess.check_output(['gh','api','--method','POST',endpoint,'--input','-'],input=json.dumps(payload).encode()))
+          repo=os.environ['GITHUB_REPOSITORY']
+          base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
+          elements=[]
+          for line in subprocess.check_output(['git','diff','--cached','--name-status'],text=True).splitlines():
+              status,path=line.split('\t',1)
+              if status=='D':
+                  elements.append({'path':path,'mode':'100644','type':'blob','sha':None})
+              else:
+                  blob=api(f'repos/{repo}/git/blobs',{'content':Path(path).read_text(),'encoding':'utf-8'})
+                  elements.append({'path':path,'mode':'100644','type':'blob','sha':blob['sha']})
+          tree=api(f'repos/{repo}/git/trees',{'base_tree':base,'tree':elements})
+          Path('/tmp/divider-evidence/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':tree['sha'],'files':elements},indent=2))
+          print('TESTED_TREE',tree['sha'])
+          PY
+      - name: Preserve evidence
+        if: always()
+        run: |
+          mkdir -p /tmp/divider-evidence
+          cp -r docs/test-results/divider-* /tmp/divider-evidence/ 2>/dev/null || true
+          cp docs/src/app.css /tmp/divider-evidence/app-current.css
+          cp docs/tests/detail/document-rhythm.spec.ts /tmp/divider-evidence/
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: document-boundary-review
+          path: /tmp/divider-evidence
+          retention-days: 7
+          if-no-files-found: error
