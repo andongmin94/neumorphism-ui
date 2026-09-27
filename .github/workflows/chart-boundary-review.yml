@@ -1,0 +1,187 @@
+name: Chart boundary review
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/chart-boundary-review.yml]
+permissions:
+  contents: write
+concurrency:
+  group: chart-boundary-review
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Add permanent initial-render and resized-chart checks
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          Path('docs/tests/detail/chart-boundary.spec.ts').write_text(r'''
+          import { expect, test } from "@playwright/test";
+          const pages = [
+            { name: "dashboard", path: "/en/templates/dashboard" },
+            { name: "chart", path: "/en/components/chart" },
+            { name: "chart-gallery", path: "/en/charts" },
+          ];
+          test.describe("server-rendered chart boundaries", () => {
+            test.use({ javaScriptEnabled: false });
+            for (const entry of pages) {
+              test(`${entry.name} fits before scripts measure its container`, async ({ page }, info) => {
+                const response = await page.goto(entry.path);
+                expect(response?.status()).toBe(200);
+                await page.evaluate(() => document.fonts.ready);
+                const plots = page.locator('[data-slot="chart-plot"]');
+                expect(await plots.count()).toBeGreaterThan(0);
+                const metrics = await page.evaluate(() => ({
+                  width: document.documentElement.scrollWidth,
+                  viewport: innerWidth,
+                  plots: [...document.querySelectorAll('[data-slot="chart-plot"]')].map(element => {
+                    const box = element.getBoundingClientRect();
+                    return { x: box.x, width: box.width, height: box.height };
+                  }),
+                }));
+                await info.attach("pre-hydration-metrics", { body: JSON.stringify(metrics, null, 2), contentType: "application/json" });
+                await plots.first().scrollIntoViewIfNeeded();
+                await page.screenshot({ path: info.outputPath(`${entry.name}-before-hydration.png`), animations: "disabled" });
+                expect(metrics.width, "SSR must not impose a guessed 480px plot on a narrow screen").toBeLessThanOrEqual(page.viewportSize()!.width + 1);
+                for (const plot of metrics.plots) expect(plot.height).toBe(256);
+                const exactData = page.locator('[data-slot="chart"] > details').first();
+                await exactData.locator("summary").click();
+                await expect(exactData.locator("table")).toBeVisible();
+                expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
+              });
+            }
+          });
+          for (const entry of pages) {
+            test(`hydrated ${entry.name} keeps real chart and tooltip geometry`, async ({ page }, info) => {
+              await page.goto(entry.path);
+              await page.evaluate(() => document.fonts.ready);
+              const plot = page.locator('[data-slot="chart-plot"]').first();
+              const surface = plot.locator("svg.recharts-surface");
+              await expect(surface).toBeVisible();
+              for (const width of [page.viewportSize()!.width, 320, 820]) {
+                await page.setViewportSize({ width, height: 1000 });
+                await expect.poll(async () => {
+                  const inner = await surface.boundingBox();
+                  const outer = await plot.boundingBox();
+                  return !!inner && !!outer && inner.width > 100 && Math.abs(inner.width - outer.width) <= 1;
+                }, { message: "Recharts measures the actual plot width after resize" }).toBe(true);
+                expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width + 1);
+                await expect(plot).toHaveCSS("overflow-x", "visible");
+                await expect(plot).toHaveCSS("height", "256px");
+              }
+              await plot.scrollIntoViewIfNeeded();
+              await surface.focus();
+              await page.keyboard.press("ArrowRight");
+              await expect(surface).toBeFocused();
+              await page.screenshot({ path: info.outputPath(`${entry.name}-hydrated.png`), animations: "disabled" });
+              const exactData = page.locator('[data-slot="chart"] > details').first();
+              await exactData.locator("summary").click();
+              await expect(exactData.locator("table")).toBeVisible();
+            });
+          }
+          ''')
+          PY
+      - name: Build unchanged source and install browser
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix docs
+          cd docs && npx playwright install --with-deps chromium
+      - name: Record genuine overflow without browser hydration
+        working-directory: docs
+        run: |
+          mkdir -p /tmp/chart-boundary-evidence
+          set +e
+          npx playwright test --config=playwright.detail.config.ts chart-boundary.spec.ts --grep 'server-rendered' --project=mobile-dark --output=test-results/chart-before 2>&1 | tee /tmp/chart-boundary-evidence/before.log
+          result=${PIPESTATUS[0]}
+          set -e
+          cp test-results/detail-report.json /tmp/chart-boundary-evidence/before.json
+          echo "$result" > /tmp/chart-boundary-evidence/before-exit.txt
+          test "$result" -ne 0
+      - name: Remove guessed dimensions at the source boundary
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('registry/src/components/ui/chart.tsx')
+          source=p.read_text()
+          before='<ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 480, height: 256 }}>'
+          after='''{/* The fixed-height plot reserves space; Recharts measures its real width.
+              A guessed SSR width expands narrow mobile viewports before hydration. */}
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>'''
+          assert source.count(before)==1
+          p.write_text(source.replace(before,after))
+          p=Path('docs/visual-reference.md')
+          p.write_text(p.read_text()+"\nInitial chart geometry does not guess a desktop width during server rendering. The plot reserves its 256px height while ResponsiveContainer measures the available width. Exact-data disclosure stays available without JavaScript. `chart-boundary.spec.ts` checks unhydrated and hydrated chart/dashboard/gallery pages, resizing to 320px and 820px without clipping plots or tooltips. This closes the transient 521px mobile viewport caught by the full divider review.\n")
+          PY
+      - name: Source checks and generated output
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run check:generated --prefix registry
+      - name: Recheck initial render, every composed surface and document boundary
+        working-directory: docs
+        run: |
+          set +e
+          npx playwright test --config=playwright.detail.config.ts chart-boundary.spec.ts surface-system.spec.ts document-rhythm.spec.ts --output=test-results/chart-after 2>&1 | tee /tmp/chart-boundary-evidence/after.log
+          result=${PIPESTATUS[0]}
+          set -e
+          cp test-results/detail-report.json /tmp/chart-boundary-evidence/after.json
+          test "$result" -eq 0
+          node -e "const r=require('./test-results/detail-report.json'); if(r.stats.unexpected || r.stats.flaky) process.exit(1)"
+      - name: Prepare the tested tree without changing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm .github/workflows/chart-boundary-review.yml
+          git add registry docs .github/workflows/chart-boundary-review.yml
+          git diff --cached --stat > /tmp/chart-boundary-evidence/change-stat.txt
+          git diff --cached --binary > /tmp/chart-boundary-evidence/reviewed.patch
+          python3 - <<'PY'
+          import json,os,subprocess
+          from pathlib import Path
+          def api(endpoint,payload):
+              return json.loads(subprocess.check_output(['gh','api','--method','POST',endpoint,'--input','-'],input=json.dumps(payload).encode()))
+          repo=os.environ['GITHUB_REPOSITORY'];base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip();elements=[]
+          for line in subprocess.check_output(['git','diff','--cached','--name-status'],text=True).splitlines():
+              status,path=line.split('\t',1)
+              if status=='D': elements.append({'path':path,'mode':'100644','type':'blob','sha':None})
+              else:
+                  blob=api(f'repos/{repo}/git/blobs',{'content':Path(path).read_text(),'encoding':'utf-8'})
+                  elements.append({'path':path,'mode':'100644','type':'blob','sha':blob['sha']})
+          tree=api(f'repos/{repo}/git/trees',{'base_tree':base,'tree':elements})
+          Path('/tmp/chart-boundary-evidence/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':tree['sha'],'files':elements},indent=2))
+          print('TESTED_TREE',tree['sha'])
+          PY
+      - name: Preserve review evidence
+        if: always()
+        run: |
+          mkdir -p /tmp/chart-boundary-evidence
+          cp -r docs/test-results/chart-* /tmp/chart-boundary-evidence/ 2>/dev/null || true
+          cp registry/src/components/ui/chart.tsx /tmp/chart-boundary-evidence/
+          cp docs/tests/detail/chart-boundary.spec.ts /tmp/chart-boundary-evidence/
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: chart-boundary-review
+          path: /tmp/chart-boundary-evidence
+          retention-days: 7
+          if-no-files-found: error
