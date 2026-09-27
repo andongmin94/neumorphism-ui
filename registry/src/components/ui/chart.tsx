@@ -47,7 +47,9 @@ export function ChartContainer({
           data-slot="chart-plot"
           className="h-64 min-w-0 text-xs [&_.recharts-surface:focus-visible]:outline-2 [&_.recharts-surface:focus-visible]:outline-offset-2 [&_.recharts-surface:focus-visible]:outline-[var(--ring)]"
         >
-          <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 480, height: 256 }}>
+          {/* The fixed-height plot reserves space; Recharts measures its real width.
+    A guessed SSR width expands narrow mobile viewports before hydration. */}
+    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             {children}
           </ResponsiveContainer>
         </div>
