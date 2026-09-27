@@ -14,7 +14,7 @@ function Tabs({
       data-slot="tabs"
       orientation={orientation}
       className={mergeClassName<TabsPrimitive.Root.State>(
-        "flex w-full flex-col gap-3 data-[orientation=vertical]:flex-row",
+        "flex w-full min-w-0 flex-col gap-3 data-[orientation=vertical]:flex-row",
         className,
       )}
       {...props}
@@ -27,7 +27,7 @@ function TabsList({ className, ...props }: TabsPrimitive.List.Props) {
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={mergeClassName<TabsPrimitive.List.State>(
-        "inline-flex h-11 max-w-full w-fit items-center justify-start overflow-x-auto gap-1 rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] p-1 shadow-[var(--neu-shadow-inset)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col",
+        "inline-flex h-11 min-w-0 shrink-0 max-w-full w-fit items-center justify-start overflow-x-auto gap-1 rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] p-1 shadow-[var(--neu-shadow-inset)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:max-w-[50%] [&[data-orientation=vertical]>[data-slot=tabs-trigger]]:flex-none",
         className,
       )}
       {...props}
@@ -59,7 +59,7 @@ function TabsContent({
     <TabsPrimitive.Panel
       data-slot="tabs-content"
       className={mergeClassName<TabsPrimitive.Panel.State>(
-        "flex-1 rounded-[var(--neu-radius-surface)] outline-hidden focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+        "min-w-0 flex-1 rounded-[var(--neu-radius-surface)] outline-hidden focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
         className,
       )}
       {...props}

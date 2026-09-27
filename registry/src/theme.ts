@@ -496,6 +496,7 @@ export function buildThemeVariables(
     "--secondary-foreground": tokens.foreground,
     "--muted": tokens.surfaceLow,
     "--muted-foreground": tokens.mutedForeground,
+    "--neu-select-arrow": `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${tokens.mutedForeground}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`)}")`,
     "--accent": tokens.surfaceSoft,
     "--accent-foreground": primary,
     "--destructive": tokens.destructive,

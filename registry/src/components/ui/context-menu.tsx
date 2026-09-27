@@ -55,7 +55,7 @@ function ContextMenuContent({
   className,
   collisionAvoidance,
   collisionBoundary,
-  collisionPadding = 0,
+  collisionPadding = 8,
   disableAnchorTracking,
   positionMethod,
   side = "right",
@@ -84,7 +84,7 @@ function ContextMenuContent({
           {...props}
           className={(state) =>
             cn(
-              "min-w-40 origin-[var(--transform-origin)] overflow-hidden rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+              "max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-40 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto overscroll-contain rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
               typeof className === "function" ? className(state) : className,
             )
           }
@@ -136,7 +136,7 @@ function ContextMenuItem({
       {...props}
       className={(state) =>
         cn(
-          "relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:pl-8 data-[variant=destructive]:text-[var(--destructive)] data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:pl-8 data-[variant=destructive]:text-[var(--destructive)] data-disabled:pointer-events-none data-disabled:opacity-50",
           typeof className === "function" ? className(state) : className,
         )
       }
@@ -161,7 +161,7 @@ function ContextMenuSubTrigger({
       {...props}
       className={(state) =>
         cn(
-          "flex cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:pl-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
+          "flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:pl-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
           typeof className === "function" ? className(state) : className,
         )
       }
@@ -199,7 +199,7 @@ function ContextMenuCheckboxItem({
       {...props}
       className={(state) =>
         cn(
-          "relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
           typeof className === "function" ? className(state) : className,
         )
       }
@@ -231,7 +231,7 @@ function ContextMenuRadioItem({
       {...props}
       className={(state) =>
         cn(
-          "relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
           typeof className === "function" ? className(state) : className,
         )
       }

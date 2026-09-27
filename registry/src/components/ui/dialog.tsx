@@ -82,7 +82,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2 text-left", className)}
+      className={cn("flex min-w-0 flex-col gap-2 text-left", className)}
       {...props}
     />
   );
@@ -93,7 +93,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        "flex min-w-0 flex-col-reverse gap-2 sm:flex-row sm:flex-wrap sm:justify-end [&>button]:min-h-10 [&>button[data-size=sm]]:min-h-8 [&>button[data-size=sm]]:py-1 [&>button[data-size=lg]]:min-h-12 [&>button[data-size=icon]]:py-0 [&>button]:h-auto [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:[overflow-wrap:anywhere] [&>button]:py-2",
         className,
       )}
       {...props}
@@ -109,7 +109,7 @@ function DialogTitle({
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={mergeClassName<DialogPrimitive.Title.State>(
-        "text-lg leading-snug font-semibold tracking-tight",
+        "min-w-0 text-lg leading-snug font-semibold tracking-tight [overflow-wrap:anywhere]",
         className,
       )}
       {...props}
@@ -125,7 +125,7 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={mergeClassName<DialogPrimitive.Description.State>(
-        "text-sm leading-relaxed text-[var(--muted-foreground)]",
+        "min-w-0 text-sm leading-relaxed text-[var(--muted-foreground)] [overflow-wrap:anywhere]",
         className,
       )}
       {...props}

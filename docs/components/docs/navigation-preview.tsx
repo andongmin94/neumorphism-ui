@@ -3,6 +3,7 @@
 import * as React from "react";
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport } from "@neumorphism-ui/registry/ui/navigation-menu";
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarCheckboxItem } from "@neumorphism-ui/registry/ui/menubar";
+import { useLocale } from "@/i18n/locale-provider";
 import type { Locale } from "@/i18n/config";
 
 const copy = {
@@ -13,7 +14,9 @@ const copy = {
 };
 export function NavigationPreview({ slug, locale }: { slug: "navigation-menu" | "menubar"; locale: Locale }) {
   const t = copy[locale]; const id = React.useId();
+  const { componentDocGroups } = useLocale();
+  const componentCount = componentDocGroups.reduce((total, group) => total + group.items.length, 0);
   const [showStatus, setShowStatus] = React.useState(true); const [created, setCreated] = React.useState(false);
-  if (slug === "navigation-menu") return <div className="grid w-full gap-5"><NavigationMenu aria-label={t.product}><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger>{t.product}</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href={`#${id}-components`}>{t.components}</NavigationMenuLink><NavigationMenuLink href={`#${id}-themes`}>{t.themes}</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem><NavigationMenuItem><NavigationMenuLink href={`#${id}-guide`}>{t.guides}</NavigationMenuLink></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport /></NavigationMenu><div className="grid gap-2 text-sm text-[var(--muted-foreground)]"><p id={`${id}-guide`}>{t.guideText}</p><p id={`${id}-components`}>{t.components} · 46</p><p id={`${id}-themes`}>{t.themes} · 5</p></div></div>;
+  if (slug === "navigation-menu") return <div className="grid w-full gap-5"><NavigationMenu aria-label={t.product}><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger>{t.product}</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href={`#${id}-components`}>{t.components}</NavigationMenuLink><NavigationMenuLink href={`#${id}-themes`}>{t.themes}</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem><NavigationMenuItem><NavigationMenuLink href={`#${id}-guide`}>{t.guides}</NavigationMenuLink></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport /></NavigationMenu><div className="grid gap-2 text-sm text-[var(--muted-foreground)]"><p id={`${id}-guide`}>{t.guideText}</p><p id={`${id}-components`}>{t.components} · {componentCount}</p><p id={`${id}-themes`}>{t.themes} · 5</p></div></div>;
   return <div className="grid w-full gap-4"><Menubar aria-label={t.file}><MenubarMenu><MenubarTrigger>{t.file}</MenubarTrigger><MenubarContent><MenubarItem onClick={() => setCreated(true)}>{t.create}</MenubarItem><MenubarItem disabled>{t.archived}</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>{t.view}</MenubarTrigger><MenubarContent><MenubarCheckboxItem checked={showStatus} onCheckedChange={setShowStatus}>{t.status}</MenubarCheckboxItem></MenubarContent></MenubarMenu></Menubar>{showStatus && <p role="status" className="text-sm text-[var(--muted-foreground)]">{created ? t.created : t.ready}</p>}</div>;
 }

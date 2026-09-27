@@ -45,3 +45,16 @@ The source-only material fixture now includes selection/readout/disclosure compo
 ## Overlay occlusion review
 
 The sticky documentation header is below registry backdrops and popups. Sheet, Dialog and Drawer checks include actual hit testing over the header, not only visible DOM nodes. Sheet title and close control remain unobscured at normal and 500px viewport heights in all four desktop/mobile light/dark projects.
+
+
+## Composition finish boundaries
+
+The material remains unchanged. Input Group gutters and text line boxes match standalone fields; Number Field expands its numeric area inside full-width groups. Read-only and invalid fields remain visually distinct when composed with Field or Combobox. Narrow cards retain all OTP slots; Date Picker keeps a one-line value with the full accessible label. Vertical tabs retain target heights and let the panel shrink. Dialog and Alert Dialog titles, descriptions and action labels wrap within the task surface. Menu and submenu lists constrain both axes and scroll independently.
+
+The source-only composition specimen covers four desktop/mobile light/dark contexts, 320px reflow in five presets, validation recovery, nested Popover/Combobox and child Dialog focus recovery, and long menu lists at 450px height. This is a defined supported-composition regression set, not a claim about arbitrary application CSS or all assistive technologies.
+
+Native Select owns its complete field geometry, including the preset-colored chevron. A separate full-width wrapper can no longer strand that chevron outside a custom-width select. Multi-select remains a native listbox without a dropdown glyph; forced-colors uses native appearance. Menus and submenus reserve 8px viewport clearance.
+
+Composed Input Group values and both multiline fields declare normal input weight and tracking, so bold parent labels cannot restyle entered text. Nested Combobox tests preserve Base UI's Escape behavior: a selected closed field clears first, then the parent Popover dismisses; the surrounding Dialog retains unsaved edits and restores focus.
+
+Dialog and Alert Dialog footer actions grow for multiline labels without replacing the supported small/default/large minimum heights (32/40/48px). The same source-only tests exercise each real Button size in both modal footers.

@@ -38,6 +38,7 @@ function DropdownMenuContent({
       <DropdownMenuPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
+        collisionPadding={8}
         className="isolate z-50 outline-none"
         side={side}
         sideOffset={sideOffset}
@@ -45,7 +46,7 @@ function DropdownMenuContent({
         <DropdownMenuPrimitive.Popup
           data-slot="dropdown-menu-content"
           className={mergeClassName<DropdownMenuPrimitive.Popup.State>(
-            "max-h-[var(--available-height)] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
             className,
           )}
           {...props}
@@ -74,7 +75,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={mergeClassName<DropdownMenuPrimitive.Item.State>(
-        "relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[color,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:pl-8 data-[variant=destructive]:text-[var(--destructive)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[color,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:pl-8 data-[variant=destructive]:text-[var(--destructive)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -93,7 +94,7 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       checked={checked}
       className={mergeClassName<DropdownMenuPrimitive.CheckboxItem.State>(
-        "relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
+        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}
       {...props}
@@ -121,7 +122,7 @@ function DropdownMenuRadioItem({
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={mergeClassName<DropdownMenuPrimitive.RadioItem.State>(
-        "relative flex min-h-10 cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
+        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}
       {...props}
@@ -179,7 +180,7 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<"spa
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "ml-auto text-xs tracking-widest text-[var(--muted-foreground)]",
+        "ml-auto shrink-0 whitespace-nowrap text-xs tracking-widest text-[var(--muted-foreground)]",
         className,
       )}
       {...props}
@@ -204,7 +205,7 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={mergeClassName<DropdownMenuPrimitive.SubmenuTrigger.State>(
-        "flex cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:pl-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
+        "flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:pl-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
         className,
       )}
       {...props}
@@ -233,6 +234,7 @@ function DropdownMenuSubContent({
       <DropdownMenuPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
+        collisionPadding={8}
         className="isolate z-50 outline-none"
         side={side}
         sideOffset={sideOffset}
@@ -240,7 +242,7 @@ function DropdownMenuSubContent({
         <DropdownMenuPrimitive.Popup
           data-slot="dropdown-menu-sub-content"
           className={mergeClassName<DropdownMenuPrimitive.Popup.State>(
-            "min-w-36 origin-[var(--transform-origin)] overflow-hidden rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto overscroll-contain rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
             className,
           )}
           {...props}

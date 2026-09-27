@@ -16,7 +16,7 @@ function InputOTP({
     <OTPInput
       data-slot="input-otp"
       containerClassName={cn(
-        "flex max-w-full items-center gap-2 has-disabled:opacity-50",
+        "flex min-w-0 max-w-full items-center gap-2 has-disabled:opacity-50",
         containerClassName,
       )}
       spellCheck={false}
@@ -51,7 +51,7 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "relative flex size-10 shrink-0 items-center justify-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] text-sm font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset-sm)] outline-none transition-[border-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none data-[active=true]:z-10 data-[active=true]:border-[var(--ring)] data-[active=true]:ring-2 data-[active=true]:ring-[color:var(--ring)]/20 data-[active=true]:[box-shadow:var(--neu-shadow-inset-sm)]",
+        "relative flex h-10 w-10 min-w-0 shrink items-center justify-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] text-sm font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-inset-sm)] outline-none transition-[border-color,box-shadow] duration-[var(--neu-duration)] motion-reduce:transition-none data-[active=true]:z-10 data-[active=true]:border-[var(--ring)] data-[active=true]:ring-2 data-[active=true]:ring-[color:var(--ring)]/20 data-[active=true]:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}
       {...props}

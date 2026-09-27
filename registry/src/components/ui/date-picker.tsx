@@ -37,8 +37,8 @@ function DatePicker({ label, value, onValueChange, id, name, className, placehol
   return <div data-slot="date-picker" className={cn("flex min-w-0 items-center gap-2", className)}>
     {name && <input type="hidden" name={name} value={value ? dateOnly(value) : ""} disabled={disabled} />}
     <Popover open={open && !disabled} onOpenChange={setOpen}>
-      <PopoverTrigger render={<Button ref={trigger} id={id} disabled={disabled} aria-invalid={invalid || undefined} aria-describedby={describedBy} aria-label={`${label}: ${display ?? placeholder}`} className="min-w-0 flex-1 justify-between whitespace-normal text-start font-normal shadow-[var(--neu-shadow-inset)] [background-image:var(--neu-fill-inset)] hover:shadow-[var(--neu-shadow-inset)] aria-invalid:border-[var(--destructive)]" />}>
-        <span>{display ?? placeholder}</span>
+      <PopoverTrigger render={<Button ref={trigger} id={id} disabled={disabled} aria-invalid={invalid || undefined} aria-describedby={describedBy} aria-label={`${label}: ${display ?? placeholder}`} className="min-w-0 flex-1 justify-between px-3 whitespace-nowrap text-start font-normal shadow-[var(--neu-shadow-inset)] [background-image:var(--neu-fill-inset)] hover:shadow-[var(--neu-shadow-inset)] aria-invalid:border-[var(--destructive)]" />}>
+        <span className="min-w-0 flex-1 truncate">{display ?? placeholder}</span>
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M7 3v4m10-4v4M3 11h18" /></svg>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto gap-0 p-1">

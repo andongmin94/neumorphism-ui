@@ -17,13 +17,13 @@ function AlertDialogContent({ className, ...props }: Primitive.Popup.Props) {
   </Primitive.Portal>;
 }
 function AlertDialogTitle({ className, ...props }: Primitive.Title.Props) {
-  return <Primitive.Title data-slot="alert-dialog-title" className={mergeClassName<Primitive.Title.State>("text-base font-semibold leading-6 tracking-tight", className)} {...props} />;
+  return <Primitive.Title data-slot="alert-dialog-title" className={mergeClassName<Primitive.Title.State>("min-w-0 text-base font-semibold leading-6 tracking-tight [overflow-wrap:anywhere]", className)} {...props} />;
 }
 function AlertDialogDescription({ className, ...props }: Primitive.Description.Props) {
-  return <Primitive.Description data-slot="alert-dialog-description" className={mergeClassName<Primitive.Description.State>("text-sm leading-relaxed text-[var(--muted-foreground)]", className)} {...props} />;
+  return <Primitive.Description data-slot="alert-dialog-description" className={mergeClassName<Primitive.Description.State>("min-w-0 text-sm leading-relaxed text-[var(--muted-foreground)] [overflow-wrap:anywhere]", className)} {...props} />;
 }
 function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="alert-dialog-footer" className={cn("flex flex-col gap-3 sm:flex-row sm:justify-end", className)} {...props} />;
+  return <div data-slot="alert-dialog-footer" className={cn("flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-end [&>button]:min-h-10 [&>button[data-size=sm]]:min-h-8 [&>button[data-size=sm]]:py-1 [&>button[data-size=lg]]:min-h-12 [&>button[data-size=icon]]:py-0 [&>button]:h-auto [&>button]:max-w-full [&>button]:whitespace-normal [&>button]:[overflow-wrap:anywhere] [&>button]:py-2", className)} {...props} />;
 }
 function AlertDialogCancel({ render = <Button />, ...props }: Primitive.Close.Props) {
   return <Primitive.Close data-slot="alert-dialog-cancel" render={render} {...props} />;
