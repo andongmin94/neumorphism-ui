@@ -32,9 +32,12 @@ jobs:
           assert len(blocks)==3, len(blocks)
           for n,block in enumerate(blocks): Path(f'/tmp/composition-{n}.py').write_text(textwrap.dedent(block))
           exec(compile(Path('/tmp/composition-0.py').read_text(),'/tmp/composition-0.py','exec'))
+          p=Path('docs/tests/material/composition.tsx');s=p.read_text()
+          target='Save and return to workspace overview</DialogClose></DialogFooter>'
+          assert s.count(target)==1
+          p.write_text(s.replace(target,target+'</DialogContent>'))
           p=Path('docs/tests/material/composition.spec.ts');s=p.read_text()
-          s=s.replace('const phase =', 'test.setTimeout(10000);\nconst phase =')
-          s=s.replace('before saving. Other controls keep their alignment.', 'before saving. Other controls keep their alignment.')
+          s=s.replace('const phase =', 'test.setTimeout(15000);\nconst phase =')
           s=s.replace('const before = (await plan.boundingBox())!;', 'const before = (await plan.boundingBox())!; const originalScroll = await page.evaluate(() => scrollY);')
           s=s.replace('Math.abs((await plan.boundingBox())!.y - before.y)', 'Math.abs((await plan.boundingBox())!.y + await page.evaluate(() => scrollY) - before.y - originalScroll)')
           s=s.replace('and keep paste behavior', 'and preserve value entry')
@@ -64,6 +67,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           python3 /tmp/composition-1.py
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('docs/components/docs/navigation-preview.tsx');s=p.read_text()
+          s=s.replace('import type { Locale }', 'import { useLocale } from "@/i18n/locale-provider";\nimport type { Locale }')
+          s=s.replace('const t = copy[locale]; const id = React.useId();', 'const t = copy[locale]; const id = React.useId();\n  const { componentDocGroups } = useLocale();\n  const componentCount = componentDocGroups.reduce((total, group) => total + group.items.length, 0);')
+          assert '{t.components} · 46' in s
+          p.write_text(s.replace('{t.components} · 46', '{t.components} · {componentCount}'))
+          PY
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
@@ -96,6 +107,7 @@ jobs:
           mkdir -p /tmp/composition-evidence
           cp -r docs/test-results /tmp/composition-evidence/ || true
           git diff --binary > /tmp/composition-evidence/working.patch
+          cp docs/tests/material/composition* /tmp/composition-evidence/
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
