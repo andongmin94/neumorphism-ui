@@ -59,8 +59,8 @@ jobs:
           old='months: "relative flex max-w-full flex-wrap justify-center gap-6"';assert old in s
           s=s.replace(old,'months: cn("relative flex max-w-full flex-col flex-wrap gap-6", props.showWeekNumber ? "@min-[calc(39.5rem+2px)]/calendar:flex-row" : "@min-[calc(35rem+2px)]/calendar:flex-row")')
           p.write_text(s)
-          p=Path('docs/tests/material/refinement.tsx');s=p.read_text();needle='        </section>\n        <section className="grid min-w-0 content-start gap-4"><h2 className="font-semibold">Range and week numbers</h2>';assert needle in s
-          s=s.replace(needle,'''          <div data-testid="intrinsic-calendar" className="flex justify-start"><Calendar defaultMonth={new Date(2026, 8, 1)} today={new Date(2026, 8, 15)} /></div>
+          p=Path('docs/tests/material/refinement.tsx');s=p.read_text();needle='      </section>\n      <section className="grid min-w-0 content-start gap-4"><h2 className="font-semibold">Range and week numbers</h2>';assert needle in s
+          s=s.replace(needle,'''        <div data-testid="intrinsic-calendar" className="flex justify-start"><Calendar defaultMonth={new Date(2026, 8, 1)} today={new Date(2026, 8, 15)} /></div>
           '''+needle)
           p.write_text(s)
           p=Path('docs/tests/material/refinement.spec.ts');s=p.read_text();needle="        expect(outer.width).toBeLessThanOrEqual(parent.width + 1);";assert needle in s
