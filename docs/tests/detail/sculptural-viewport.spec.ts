@@ -23,8 +23,14 @@ test("sculptural preview remains visible through its bottom status on short scre
   // manufacture a complete screenshot or conceal a clipped status.
   for (const height of [viewport.height, 500]) {
     await page.setViewportSize({ width: viewport.width, height });
-    await status.scrollIntoViewIfNeeded();
+    // Minimum scrolling can leave fractional mobile bounds flush with the edge.
+    // Center in the real scrollport without relaxing full visibility or changing layout.
+    await status.evaluate(element => element.scrollIntoView({ block: "center", inline: "nearest", behavior: "instant" }));
     await expect(status).toBeInViewport({ ratio: 1 });
+    await info.attach(`status-bounds-${height}`, {
+      body: JSON.stringify({ viewport: page.viewportSize(), bounds: await status.boundingBox() }),
+      contentType: "application/json",
+    });
     const painted = await status.evaluate(element => {
       const lastLine = element.querySelector('[data-slot="alert-description"] > span:last-child');
       if (!lastLine) return false;
