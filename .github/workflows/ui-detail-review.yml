@@ -11,6 +11,8 @@ jobs:
     timeout-minutes: 18
     permissions:
       contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -20,129 +22,48 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Recover the immutable review scripts
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Restore immutable, previously tested review steps
         run: |
           mkdir -p /tmp/ui-detail-evidence
           python - <<'PY'
           import urllib.request,json,base64,os,textwrap
           from pathlib import Path
-          url='https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/contents/.github/workflows/ui-detail-review.yml?ref=60814a10a250c97ad3c09293152e544cbd4e05e5'
-          request=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
-          with urllib.request.urlopen(request) as response: old=base64.b64decode(json.load(response)['content']).decode()
-          for name,filename in [('Prepare source-only specimens and permanent assertions','prepare'),('Correct source-owned anatomy and dependency validation','patch'),('Prepare the tested tree for review, without moving main','tree')]:
-            marker='      - name: '+name+'\n'; assert old.count(marker)==1
+          url='https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/contents/.github/workflows/ui-detail-review.yml?ref=87d99b79dc96aa3679aa6e71b59137518821d2aa'
+          req=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+          with urllib.request.urlopen(req) as response: old=base64.b64decode(json.load(response)['content']).decode()
+          for name,filename in [('Recover the immutable review scripts','recover'),('Build unchanged product and preserve before evidence','before'),('Apply source refinements and registry checks','apply'),('Verify source, complete generated endpoints and documentation','verify'),('Validate compact control geometry and supported compositions','browser')]:
+            marker='      - name: '+name+'\n';assert old.count(marker)==1
             block=old.split(marker,1)[1].split('      - name:',1)[0]
-            script=textwrap.dedent(block.split('        run: |\n',1)[1])
-            Path('/tmp/'+filename+'.sh').write_text('set -eu\n'+script)
+            script=textwrap.dedent(block.split('        run: |\n',1)[1]);Path('/tmp/review2-'+filename+'.sh').write_text('set -eu\n'+script)
           PY
-          bash /tmp/prepare.sh
+          bash /tmp/review2-recover.sh
+      - name: Preserve the original component render
+        run: bash /tmp/review2-before.sh
+      - name: Apply the reviewed source and finish compact calendar proportions
+        run: |
+          bash /tmp/review2-apply.sh
           python - <<'PY'
           from pathlib import Path
-          p=Path('docs/tests/material/refinement.spec.ts'); s=p.read_text()
-          old="await expect(page.getByTestId('menu-value')).toContainText('compact');\n      await page.getByRole('button', { name: 'Display options', exact: true }).click();\n      const sub = page.getByRole('menuitem', { name: 'More options', exact: true });\n      await sub.focus(); await page.keyboard.press('ArrowRight');"
-          new="""await expect(page.getByTestId('menu-value')).toContainText('compact');
-                // Base UI RadioItem keeps the menu open by default.
-                await expect(popup).toBeVisible();
-                await page.keyboard.press('Escape');
-                await expect(popup).not.toBeVisible();
-                const trigger = page.getByRole('button', { name: 'Display options', exact: true });
-                await expect(trigger).toBeFocused();
-                await trigger.press('ArrowDown');
-                await expect(popup).toBeVisible();
-                await page.keyboard.press('End');
-                const sub = page.getByRole('menuitem', { name: 'More options', exact: true });
-                await expect(sub).toBeFocused();
-                await page.keyboard.press('ArrowRight');"""
-          assert old in s; s=s.replace(old,new)
-          s=s.replace("const caption = calendar.locator('.rdp-caption_label');","const caption = calendar.getByRole('status');")
-          s=s.replace("      if (await caption.count()) {\n        const a = (await caption.boundingBox())!, b = (await navButton.boundingBox())!;\n        expect(Math.abs(a.y + a.height / 2 - b.y - b.height / 2)).toBeLessThanOrEqual(1);\n      }", "      const a = (await caption.boundingBox())!, b = (await navButton.boundingBox())!;\n      expect(Math.abs(a.y + a.height / 2 - b.y - b.height / 2)).toBeLessThanOrEqual(1);\n      const c = (await calendar.boundingBox())!;\n      expect(Math.abs(a.x + a.width / 2 - c.x - c.width / 2)).toBeLessThanOrEqual(1);")
-          needle='        const fixture = page.getByTestId(id);'
-          assert needle in s
-          s=s.replace(needle,needle+"\n        const parent = (await fixture.locator('..').boundingBox())!, outer = (await fixture.boundingBox())!;\n        expect(outer.width).toBeLessThanOrEqual(parent.width + 1);")
+          p=Path('registry/src/components/ui/calendar.tsx');s=p.read_text()
+          old='<div data-slot="calendar" className="max-w-full">';assert old in s
+          s=s.replace(old,'<div data-slot="calendar" className="@container/calendar max-w-full">')
+          old='months: "relative flex max-w-full flex-wrap justify-center gap-6"';assert old in s
+          s=s.replace(old,'months: "relative flex max-w-full flex-col flex-wrap gap-6 @min-[40rem]/calendar:flex-row"');p.write_text(s)
+          p=Path('docs/tests/material/refinement.spec.ts');s=p.read_text();needle="        expect(outer.width).toBeLessThanOrEqual(parent.width + 1);";assert needle in s
+          s=s.replace(needle,needle+"\n        if (id === 'range-calendar' && outer.width < 640) {\n          const plate = (await fixture.locator('[data-slot=\"calendar\"] > div').boundingBox())!;\n          const grid = (await fixture.locator('table').first().boundingBox())!;\n          expect(plate.width - grid.width).toBeLessThanOrEqual(34);\n        }")
           p.write_text(s)
+          p=Path('docs/visual-reference.md');p.write_text(p.read_text()+'\nCalendar month layout uses its containing width, not a viewport breakpoint: compact hosts keep a content-sized vertical plate rather than a wide empty tray. The source specimen checks plate-to-grid gutters in addition to overflow.\n')
           PY
-      - name: Build unchanged product and preserve before evidence
-        run: |
-          npm ci --prefix registry
-          npm ci --prefix docs
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          cd docs
-          npx playwright install --with-deps chromium
-          REFINEMENT_PHASE=before MATERIAL_PHASE=refinement-before npx playwright test --config=playwright.material.config.ts refinement.spec.ts --grep 'specimen capture'
-      - name: Apply source refinements and registry checks
-        run: |
-          bash /tmp/patch.sh
-          python - <<'PY'
-          from pathlib import Path
-          def replace(path,old,new):
-            p=Path(path);s=p.read_text();assert old in s,(path,old);p.write_text(s.replace(old,new))
-          calendar='registry/src/components/ui/calendar.tsx'
-          replace(calendar,'"w-fit max-w-full rounded-','"w-fit min-w-0 max-w-full rounded-')
-          replace(calendar,'months: "relative flex max-w-full flex-col gap-6 sm:flex-row"','months: "relative flex max-w-full flex-wrap justify-center gap-6"')
-          replace(calendar,'caption_label: "text-sm font-semibold"','caption_label: "min-w-0 text-center text-sm font-semibold leading-5 text-balance"')
-          badge='registry/src/components/ui/badge.tsx'
-          replace(badge,'[overflow-wrap:anywhere] align-middle','[overflow-wrap:anywhere] break-keep text-balance align-middle')
-          p=Path('registry/scripts/item-content.mjs');s=p.read_text();needle='  for (const [key, value] of Object.entries(expected)) {';assert s.count(needle)==1
-          s=s.replace(needle,'  const allowedKeys = new Set(["$schema", "files", ...Object.keys(expected)]);\n  for (const key of Object.keys(built)) {\n    assert.ok(allowedKeys.has(key), `${expected.name}: unexpected ${key} in built item`);\n  }\n'+needle);p.write_text(s)
-          p=Path('registry/tests/item-side-effects.test.mjs')
-          p.write_text('''import assert from "node:assert/strict";
-          import test from "node:test";
-          import { assertItemContent } from "../scripts/item-content.mjs";
-          const schema = "https://ui.shadcn.com/schema/registry-item.json";
-          const source = "export const value = 1;\\n";
-          const manifest = { name: "specimen", type: "registry:ui", files: [{ path: "src/components/ui/specimen.ts", type: "registry:ui" }] };
-          const built = () => ({ ...manifest, $schema: schema, files: manifest.files.map(file => ({ ...file, content: source })) });
-          test("an unchanged source-owned endpoint is accepted", () => {
-            assert.doesNotThrow(() => assertItemContent(built(), manifest, () => source));
-          });
-          for (const [key, value] of Object.entries({
-            css: { body: { display: "none" } }, cssVars: { light: { background: "red" } },
-            registryDependencies: ["@neumorphism-ui/neumorphism-ui"], dependencies: ["undeclared-package"], envVars: { UNDECLARED_SETTING: "value" },
-          })) test(`built endpoints cannot add undeclared ${key}`, () => {
-            assert.throws(() => assertItemContent({ ...built(), [key]: value }, manifest, () => source), new RegExp(`unexpected ${key}`));
-          });
-          test("style-only items still reject hidden installation effects", () => {
-            const style = { name: "style-test", type: "registry:style", cssVars: { light: { background: "#eee" } } };
-            assert.doesNotThrow(() => assertItemContent({ $schema: schema, ...style }, style, () => source));
-            assert.throws(() => assertItemContent({ $schema: schema, ...style, dependencies: ["extra"] }, style, () => source), /unexpected dependencies/);
-          });
-          ''')
-          p=Path('docs/tests/material/control-anatomy.spec.ts');s=p.read_text();needle='      const badge = page.getByTestId("long-badge");';assert needle in s
-          p.write_text(s.replace(needle,needle+'\n      await expect(badge).toHaveCSS("word-break", "keep-all");\n      await expect(badge).toHaveCSS("text-wrap-style", "balance");'))
-          p=Path('QUALITY.md');p.write_text(p.read_text()+'''\n\n## Published registry observation — 2026-09-28\n\nThe hosted public-endpoint verifier at run `36361076717` could not resolve\n`neumorphism-ui.dev` (`getaddrinfo ENOTFOUND`) before receiving an HTTP response.\nThe canonical `/r/registry.json` and README initialization path are therefore a\nrelease blocker, not a passed installation check. A Vercel deployment-success\nstatus does not establish that the custom domain resolves. Configure/verify the\ncanonical domain and DNS, then run the `Published registry` workflow against the\ndeployed commit; retain its HTTP and complete-item equality report. Do not\nreplace the canonical origin with an unverified guessed deployment URL.\n\nLocal generation, complete manifest/file equality, acyclic dependency checks,\nand fresh Next.js/Vite installation verification remain independent signals.\n''')
-          p=Path('README.md');s=p.read_text();needle='## First installation\n';assert needle in s
-          p.write_text(s.replace(needle,needle+'\n**Public endpoint status:** the hosted check on 2026-09-28 could not resolve\n`neumorphism-ui.dev`. The commands below require the canonical domain to resolve.\nSee [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28) for the\nrelease blocker and re-verification procedure.\n'))
-          p=Path('docs/visual-reference.md');p.write_text(p.read_text()+'\nLong status badges preserve word boundaries and balance wrapped lines. Multi-month calendars wrap according to available container width instead of forcing a desktop row. Built registry endpoints reject undeclared root properties such as CSS, environment variables or dependencies; style-only items are checked too.\n')
-          PY
-      - name: Verify source, complete generated endpoints and documentation
-        run: |
-          npm run lint --prefix registry
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          npm test --prefix registry
-          npm run lint --prefix docs
-          npm run typecheck --prefix docs
-          npm run build --prefix docs
-          npm run check:generated --prefix registry
-      - name: Validate compact control geometry and supported compositions
-        run: |
-          cd docs
-          result=0
-          MATERIAL_PHASE=refinement-after npx playwright test --config=playwright.material.config.ts || result=1
-          npx playwright test --config=playwright.detail.config.ts catalog.spec.ts menu-composition.spec.ts || result=1
-          exit "$result"
-      - name: Prepare the exact tested tree without moving main
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Check source, complete endpoints and documentation
+        run: bash /tmp/review2-verify.sh
+      - name: Validate real control geometry and catalog integration
+        run: bash /tmp/review2-browser.sh
+      - name: Prepare the exact tested tree without changing main
         run: bash /tmp/tree.sh
-      - name: Preserve source and all verification evidence
+      - name: Preserve evidence and exact reviewed source
         if: always()
         run: |
           cp -R docs/test-results /tmp/ui-detail-evidence/ || true
-          cp /tmp/prepare.sh /tmp/patch.sh /tmp/tree.sh /tmp/ui-detail-evidence/ || true
           tar -czf /tmp/ui-detail-evidence/review-source.tar.gz registry/src registry/scripts registry/tests docs/tests/material docs/playwright.material.config.ts docs/visual-reference.md QUALITY.md README.md
           git diff HEAD --stat > /tmp/ui-detail-evidence/working-diff.txt
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
