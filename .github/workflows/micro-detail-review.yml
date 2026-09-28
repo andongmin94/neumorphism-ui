@@ -8,7 +8,9 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -18,45 +20,104 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Preserve source and installed dependency contracts
+      - name: Apply the reviewed source changes with exact preimage checks
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p /tmp/micro-detail
-          git archive --format=tar.gz HEAD > /tmp/micro-detail/source.tar.gz
-          git rev-parse HEAD > /tmp/micro-detail/source-sha.txt
-          npm ci --prefix registry
-          npm ci --prefix docs
-          tar -czf /tmp/micro-detail/resizable-contract.tar.gz -C registry/node_modules/react-resizable-panels .
-      - name: Build and inspect actual layout ownership
+          python - <<'PY'
+          import base64,hashlib,json,lzma,os,urllib.request
+          from pathlib import Path,PurePosixPath
+          parts=[]
+          for sha in ['09e63666df8942f075e2958460c034a302d9374e','3825d58150c4a55a89f41264b09d102b78dae1a6']:
+            req=urllib.request.Request('https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/git/blobs/'+sha,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+            with urllib.request.urlopen(req,timeout=20) as response: blob=json.load(response)
+            part=base64.b64decode(blob['content'])
+            assert hashlib.sha1(b'blob '+str(len(part)).encode()+b'\0'+part).hexdigest()==sha
+            parts.append(part)
+          raw=lzma.decompress(base64.b64decode(b''.join(parts)))
+          assert hashlib.sha256(raw).hexdigest()=='60924551f02204029379b72208e6e81befe6038c9665cd550d7f2dc5c0eb2713'
+          changes=json.loads(raw)
+          for change in changes:
+            name=change['path'];p=Path(name)
+            assert not PurePosixPath(name).is_absolute() and '..' not in PurePosixPath(name).parts
+            assert not name.startswith(('.github/','.git/'))
+            if 'create' in change:
+              assert not p.exists(),name
+              p.parent.mkdir(parents=True,exist_ok=True);p.write_text(change['create'])
+            else:
+              before=p.read_bytes();assert hashlib.sha256(before).hexdigest()==change['sha256'],name
+              text=before.decode()
+              for start,end,replacement in reversed(change['edits']): text=text[:start]+replacement+text[end:]
+              p.write_text(text)
+          Path('/tmp/micro-detail/authored-files.json').write_text(json.dumps([c['path'] for c in changes],indent=2))
+          PY
+      - name: Generate registry endpoints and validate source and documentation
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
           npm run build --prefix docs
-          cd docs
-          npx playwright install --with-deps chromium
-          cat > tests/detail/micro-observe.spec.ts <<'TS'
-          import { test } from '@playwright/test';
-          import { writeFileSync } from 'node:fs';
-          test('micro detail baseline geometry', async ({ page }, info) => {
-            await page.goto('/en/components/resizable');
-            await page.evaluate(() => document.fonts.ready);
-            const group = page.locator('.component-example-panel [data-slot=resizable-panel-group]');
-            await group.waitFor();
-            const data = await group.evaluate(el => {
-              const result = [];
-              for (let e: Element | null = el; e && result.length < 5; e = e.parentElement) {
-                const c = getComputedStyle(e), r = e.getBoundingClientRect();
-                result.push({ tag: e.tagName, slot: e.getAttribute('data-slot'), className: e.className, inline: e.getAttribute('style'), width:r.width, height:r.height, computed: {height:c.height,minHeight:c.minHeight,display:c.display,flex:c.flex,alignItems:c.alignItems}});
-              }
-              return result;
-            });
-            writeFileSync(info.outputPath('resizable-geometry.json'), JSON.stringify(data,null,2));
-            await page.locator('.component-example-panel').screenshot({path:info.outputPath('resizable-before.png')});
-          });
-          TS
-          npx playwright test --config=playwright.detail.config.ts --grep 'micro detail baseline geometry|catalog detail: (pagination|marquee|resizable|image-card|breadcrumb|input-group|switch|toggle|sidebar|accordion|collapsible|data-table)$' --output=test-results/docs-browser/micro-before
-      - name: Keep baseline evidence
+          git diff --check
+      - name: Install the review browser
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Exercise source-only materials and all micro-design cases
+        working-directory: docs
+        run: |
+          MATERIAL_PHASE=micro-finish npx playwright test --config=playwright.material.config.ts --max-failures=8
+          cp test-results/material-report.json /tmp/micro-detail/material-report.json
+      - name: Capture actual documentation examples in all locales and modes
+        working-directory: docs
+        run: |
+          npx playwright test --config=playwright.detail.config.ts --grep 'micro finish docs|catalog detail: (pagination|marquee|resizable|image-card|breadcrumb|input-group|switch|toggle|sidebar|accordion|collapsible|data-table)$' --output=test-results/docs-browser/micro-after --max-failures=8
+          cp test-results/detail-report.json /tmp/micro-detail/detail-report.json
+      - name: Prepare the tested product tree without moving main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,subprocess,urllib.request,urllib.error
+          from pathlib import Path
+          authored=set(json.loads(Path('/tmp/micro-detail/authored-files.json').read_text()))
+          untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines())
+          assert untracked<=authored,untracked-authored
+          subprocess.run(['git','add','--',*sorted(authored)],check=True)
+          changed=set(subprocess.check_output(['git','diff','HEAD','--name-only'],text=True).splitlines())
+          extra=changed-authored
+          assert all(name.startswith(('registry/public/r/','docs/public/r/','registry/tests/examples/')) or name=='registry/registry.json' for name in extra),extra
+          assert not any(name.startswith('.github/') for name in changed)
+          entries=[{'path':name,'mode':'100644','type':'blob','content':Path(name).read_text()} for name in sorted(changed)]
+          base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
+          request=urllib.request.Request('https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/git/trees',data=json.dumps({'base_tree':base,'tree':entries}).encode(),headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST')
+          try:
+            with urllib.request.urlopen(request,timeout=30) as response: created=json.load(response)
+          except urllib.error.HTTPError as error:
+            print(error.read().decode());raise
+          Path('/tmp/micro-detail/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':created['sha'],'files':sorted(changed),'removeWorkflow':'.github/workflows/micro-detail-review.yml'},indent=2))
+          PY
+      - name: Retain actual screenshots, reports and changed source
         if: always()
-        run: cp -R docs/test-results /tmp/micro-detail/ || true
+        run: |
+          if [ -d docs/test-results ]; then cp -R docs/test-results /tmp/micro-detail/; fi
+          git diff HEAD > /tmp/micro-detail/changes.diff
+          python - <<'PY'
+          import json,tarfile
+          from pathlib import Path
+          names=Path('/tmp/micro-detail/authored-files.json')
+          if names.exists():
+            with tarfile.open('/tmp/micro-detail/authored-source.tar.gz','w:gz') as archive:
+              for name in json.loads(names.read_text()):
+                if Path(name).exists(): archive.add(name,arcname=name)
+          PY
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
