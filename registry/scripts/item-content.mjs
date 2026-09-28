@@ -3,6 +3,10 @@ import assert from "node:assert/strict";
 /** Compare a built endpoint with its complete source-owned manifest. */
 export function assertItemContent(built, expected, readSource) {
   assert.equal(built.$schema, "https://ui.shadcn.com/schema/registry-item.json", `${expected.name}: item schema`);
+  const allowedKeys = new Set(["$schema", "files", ...Object.keys(expected)]);
+  for (const key of Object.keys(built)) {
+    assert.ok(allowedKeys.has(key), `${expected.name}: unexpected ${key} in built item`);
+  }
   for (const [key, value] of Object.entries(expected)) {
     if (key !== "files") assert.deepEqual(built[key], value, `${expected.name}: ${key} differs from source`);
   }

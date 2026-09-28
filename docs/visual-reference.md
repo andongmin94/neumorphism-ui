@@ -69,3 +69,14 @@ Article headers own the rule before the first section. Only subsequent sibling s
 Reference link rows use a single internal separator with no residual rounded-card borders. Credits table headers and rows keep readable gutters and one row rule. The chart recipe grid owns its two/one-column layout, card padding and disclosure spacing explicitly; no missing earlier presentation layer is required.
 
 Initial chart geometry does not guess a desktop width during server rendering. The plot reserves its 256px height while ResponsiveContainer measures the available width. Exact-data disclosure stays available without JavaScript. `chart-boundary.spec.ts` checks unhydrated and hydrated chart/dashboard/gallery pages, resizing to 320px and 820px without clipping plots or tooltips. This closes the transient 521px mobile viewport caught by the full divider review.
+
+
+## Small-control finishing and registry audit
+
+Button and Toggle glyphs track the supported size without replacing caller-owned icon sizes. Avatar groups retain a separating silhouette and matching counter typography. Long badges wrap, the Slider outlines its visible thumb, and segmented selection uses one raised plate inside one recessed tray. Calendar cells now share their container width, including week-number and multi-month layouts; navigation is vertically centered on the caption. Combobox checks, menu radio marks and submenu chevrons use fixed SVG geometry rather than font glyphs, with logical inline gutters.
+
+The source-only control-anatomy and refinement specimens cover these structures in desktop/mobile light/dark, plus compact calendars and RTL menu marks. Registry verification compares complete generated item objects, not only source file contents, and rejects local dependency cycles. The public endpoint check remains a separate signal: its report must show successful HTTP and exact equality before a deployment is called verified.
+
+Long status badges preserve word boundaries and balance wrapped lines. Multi-month calendars wrap according to available container width instead of forcing a desktop row. Built registry endpoints reject undeclared root properties such as CSS, environment variables or dependencies; style-only items are checked too.
+
+Multi-month calendars use ordinary intrinsic flex layout: months wrap within the host, their tables fill the available plate, and date buttons retain their bounded control size. The source specimen checks narrow hosts, natural flex sizing, plate-to-grid gutters and wide two-month rows. No size-containment wrapper or browser-width workaround is introduced.

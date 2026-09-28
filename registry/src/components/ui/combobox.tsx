@@ -20,8 +20,8 @@ function ComboboxList({ className, ...props }: Primitive.List.Props) {
   return <Primitive.List data-slot="combobox-list" className={mergeClassName<Primitive.List.State>("min-h-0 max-h-72 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain scroll-py-1 outline-none empty:p-0", className)} {...props} />;
 }
 function ComboboxItem({ className, children, ...props }: Primitive.Item.Props) {
-  return <Primitive.Item data-slot="combobox-item" className={mergeClassName<Primitive.Item.State>("relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] border border-transparent py-2 pr-3 pl-8 outline-none data-highlighted:border-transparent data-highlighted:bg-[var(--neu-surface)] data-highlighted:[box-shadow:var(--neu-shadow-inset-sm)] data-selected:font-semibold data-disabled:opacity-40 data-disabled:pointer-events-none", className)} {...props}>
-    <Primitive.ItemIndicator className="absolute left-2.5 inline-flex size-3.5 items-center justify-center"><span aria-hidden="true">✓</span></Primitive.ItemIndicator>{children}
+  return <Primitive.Item data-slot="combobox-item" className={mergeClassName<Primitive.Item.State>("relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] border border-transparent py-2 pe-3 ps-8 outline-none data-highlighted:border-transparent data-highlighted:bg-[var(--neu-surface)] data-highlighted:[box-shadow:var(--neu-shadow-inset-sm)] data-selected:font-semibold data-disabled:opacity-40 data-disabled:pointer-events-none", className)} {...props}>
+    <Primitive.ItemIndicator className="pointer-events-none absolute start-2.5 inline-flex size-4 items-center justify-center text-[var(--neu-accent-ink)]"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg></Primitive.ItemIndicator>{children}
   </Primitive.Item>;
 }
 function ComboboxEmpty({ className, ...props }: Primitive.Empty.Props) {

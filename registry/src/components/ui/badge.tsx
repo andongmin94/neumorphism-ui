@@ -25,7 +25,7 @@ function Badge({ className, variant = "default", ...props }: BadgeProps) {
       data-slot="badge"
       data-variant={variant}
       className={cn(
-        "inline-flex w-fit max-w-full min-w-0 items-center justify-center gap-1 whitespace-normal [overflow-wrap:anywhere] align-middle text-center rounded-[var(--neu-radius-small)] border px-2 py-0.5 text-xs font-semibold leading-4 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0",
+        "inline-flex w-fit max-w-full min-w-0 items-center justify-center gap-1 whitespace-normal [overflow-wrap:anywhere] break-keep text-balance align-middle text-center rounded-[var(--neu-radius-small)] border px-2 py-0.5 text-xs font-semibold leading-4 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0",
         badgeVariants[variant],
         className,
       )}

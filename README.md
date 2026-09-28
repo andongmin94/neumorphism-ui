@@ -13,6 +13,11 @@ remaining release work.
 
 ## First installation
 
+**Public endpoint status:** the hosted check on 2026-09-28 could not resolve
+`neumorphism-ui.dev`. The commands below require the canonical domain to resolve.
+See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28) for the
+release blocker and re-verification procedure.
+
 Use React 19, Tailwind CSS 4 and an initialized shadcn project. Select Base UI:
 
 ```bash

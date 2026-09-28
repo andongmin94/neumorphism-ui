@@ -75,7 +75,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={mergeClassName<DropdownMenuPrimitive.Item.State>(
-        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[color,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:pl-8 data-[variant=destructive]:text-[var(--destructive)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[color,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:ps-8 data-[variant=destructive]:text-[var(--neu-error-text)] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -94,12 +94,12 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       checked={checked}
       className={mergeClassName<DropdownMenuPrimitive.CheckboxItem.State>(
-        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
+        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pe-2.5 ps-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2.5 grid size-4 place-items-center text-[var(--primary)]">
+      <span className="pointer-events-none absolute start-2.5 grid size-4 place-items-center text-[var(--neu-accent-ink)]">
         <DropdownMenuPrimitive.CheckboxItemIndicator>
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
         </DropdownMenuPrimitive.CheckboxItemIndicator>
@@ -122,16 +122,14 @@ function DropdownMenuRadioItem({
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={mergeClassName<DropdownMenuPrimitive.RadioItem.State>(
-        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
+        "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pe-2.5 ps-8 text-sm outline-none select-none transition-colors duration-[var(--neu-duration)] motion-reduce:transition-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2.5 grid size-4 place-items-center text-[var(--primary)]">
+      <span className="pointer-events-none absolute start-2.5 grid size-4 place-items-center text-[var(--neu-accent-ink)]">
         <DropdownMenuPrimitive.RadioItemIndicator>
-          <span className="text-base leading-none" aria-hidden="true">
-            •
-          </span>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4" /></svg>
         </DropdownMenuPrimitive.RadioItemIndicator>
       </span>
       {children}
@@ -151,7 +149,7 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={mergeClassName<DropdownMenuPrimitive.GroupLabel.State>(
-        "px-2.5 py-1.5 text-xs font-semibold text-[var(--muted-foreground)] data-[inset=true]:pl-8",
+        "px-2.5 py-1.5 text-xs font-semibold text-[var(--muted-foreground)] data-[inset=true]:ps-8",
         className,
       )}
       {...props}
@@ -180,7 +178,7 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<"spa
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "ml-auto shrink-0 whitespace-nowrap text-xs tracking-widest text-[var(--muted-foreground)]",
+        "ms-auto shrink-0 whitespace-nowrap text-xs tracking-widest text-[var(--muted-foreground)]",
         className,
       )}
       {...props}
@@ -205,18 +203,13 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={mergeClassName<DropdownMenuPrimitive.SubmenuTrigger.State>(
-        "flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:pl-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
+        "flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:ps-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
         className,
       )}
       {...props}
     >
       {children}
-      <span
-        className="ml-auto text-base text-[var(--muted-foreground)]"
-        aria-hidden="true"
-      >
-        ›
-      </span>
+      <svg aria-hidden="true" className="ms-auto size-4 shrink-0 text-[var(--muted-foreground)] rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m9 5 7 7-7 7" /></svg>
     </DropdownMenuPrimitive.SubmenuTrigger>
   );
 }

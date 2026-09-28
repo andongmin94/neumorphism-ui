@@ -113,3 +113,18 @@ Keep docs and registry modular. Prefer dependencies already in use. Do not add
 temporary compatibility APIs. Generated output is source-derived. Temporary
 materialization workflows and staged patch files must not remain in the shipped
 `main` tree.
+
+
+## Published registry observation — 2026-09-28
+
+The hosted public-endpoint verifier at run `36361076717` could not resolve
+`neumorphism-ui.dev` (`getaddrinfo ENOTFOUND`) before receiving an HTTP response.
+The canonical `/r/registry.json` and README initialization path are therefore a
+release blocker, not a passed installation check. A Vercel deployment-success
+status does not establish that the custom domain resolves. Configure/verify the
+canonical domain and DNS, then run the `Published registry` workflow against the
+deployed commit; retain its HTTP and complete-item equality report. Do not
+replace the canonical origin with an unverified guessed deployment URL.
+
+Local generation, complete manifest/file equality, acyclic dependency checks,
+and fresh Next.js/Vite installation verification remain independent signals.

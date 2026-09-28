@@ -150,6 +150,21 @@ export function validateRegistry(registry) {
         assert(dependencyName !== item.name, `${item.name} cannot depend on itself.`);
       }
     }
+    const byName = new Map(registry.items.map(item => [item.name, item]));
+    const visited = new Set();
+    const visiting = [];
+    function visit(name) {
+      const cycleStart = visiting.indexOf(name);
+      assert(cycleStart === -1, `Registry dependency cycle: ${[...visiting.slice(cycleStart), name].join(" -> ")}`);
+      if (visited.has(name)) return;
+      visiting.push(name);
+      for (const dependency of byName.get(name).registryDependencies ?? []) {
+        if (dependency.startsWith("@neumorphism-ui/")) visit(dependency.slice("@neumorphism-ui/".length));
+      }
+      visiting.pop();
+      visited.add(name);
+    }
+    for (const name of itemNames) visit(name);
   } catch (error) {
     errors.push(error instanceof Error ? error.message : String(error));
   }

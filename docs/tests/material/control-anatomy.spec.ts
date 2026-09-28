@@ -46,6 +46,8 @@ for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) 
     });
     test("long badges fit and keyboard focus outlines the visible slider thumb", async ({ page }, info) => {
       const badge = page.getByTestId("long-badge");
+      await expect(badge).toHaveCSS("word-break", "keep-all");
+      await expect(badge).toHaveCSS("text-wrap-style", "balance");
       expect(await badge.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
       expect((await badge.boundingBox())!.width).toBeLessThanOrEqual(176);
       await expect(badge.locator("svg")).toHaveCSS("width", "12px");

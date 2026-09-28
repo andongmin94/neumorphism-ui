@@ -111,7 +111,7 @@ function ContextMenuLabel({
       data-inset={inset}
       role="presentation"
       className={cn(
-        "px-2.5 py-1.5 text-xs font-semibold text-[var(--muted-foreground)] data-[inset=true]:pl-8",
+        "px-2.5 py-1.5 text-xs font-semibold text-[var(--muted-foreground)] data-[inset=true]:ps-8",
         className,
       )}
       {...props}
@@ -136,7 +136,7 @@ function ContextMenuItem({
       {...props}
       className={(state) =>
         cn(
-          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:pl-8 data-[variant=destructive]:text-[var(--destructive)] data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none transition-[background-color,color] duration-[var(--neu-duration)] motion-reduce:transition-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[highlighted]:text-[var(--foreground)] data-[inset=true]:ps-8 data-[variant=destructive]:text-[var(--neu-error-text)] data-disabled:pointer-events-none data-disabled:opacity-50",
           typeof className === "function" ? className(state) : className,
         )
       }
@@ -161,13 +161,13 @@ function ContextMenuSubTrigger({
       {...props}
       className={(state) =>
         cn(
-          "flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:pl-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
+          "flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] px-2.5 py-2 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-[inset=true]:ps-8 data-[popup-open]:bg-[var(--neu-surface-low)]",
           typeof className === "function" ? className(state) : className,
         )
       }
     >
       {children}
-      <span className="ml-auto text-base text-[var(--muted-foreground)]" aria-hidden="true">›</span>
+      <svg aria-hidden="true" className="ms-auto size-4 shrink-0 text-[var(--muted-foreground)] rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m9 5 7 7-7 7" /></svg>
     </ContextMenuPrimitive.SubmenuTrigger>
   );
 }
@@ -199,12 +199,12 @@ function ContextMenuCheckboxItem({
       {...props}
       className={(state) =>
         cn(
-          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pe-2.5 ps-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
           typeof className === "function" ? className(state) : className,
         )
       }
     >
-      <span className="pointer-events-none absolute left-2.5 grid size-4 place-items-center text-[var(--primary)]">
+      <span className="pointer-events-none absolute start-2.5 grid size-4 place-items-center text-[var(--neu-accent-ink)]">
         <ContextMenuPrimitive.CheckboxItemIndicator>
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
         </ContextMenuPrimitive.CheckboxItemIndicator>
@@ -231,14 +231,14 @@ function ContextMenuRadioItem({
       {...props}
       className={(state) =>
         cn(
-          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
+          "relative flex min-h-10 min-w-0 [overflow-wrap:anywhere] cursor-default items-center gap-2 rounded-[var(--neu-radius-small)] py-2 pe-2.5 ps-8 text-sm outline-none select-none data-[highlighted]:bg-[var(--neu-surface)] data-[highlighted]:[box-shadow:var(--neu-shadow-inset-sm)] data-disabled:pointer-events-none data-disabled:opacity-50",
           typeof className === "function" ? className(state) : className,
         )
       }
     >
-      <span className="pointer-events-none absolute left-2.5 grid size-4 place-items-center text-[var(--primary)]">
+      <span className="pointer-events-none absolute start-2.5 grid size-4 place-items-center text-[var(--neu-accent-ink)]">
         <ContextMenuPrimitive.RadioItemIndicator>
-          <span aria-hidden="true">•</span>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4" /></svg>
         </ContextMenuPrimitive.RadioItemIndicator>
       </span>
       {children}
@@ -265,7 +265,7 @@ function ContextMenuShortcut({ className, ...props }: React.ComponentProps<"span
   return (
     <span
       data-slot="context-menu-shortcut"
-      className={cn("ml-auto text-xs tracking-widest text-[var(--muted-foreground)]", className)}
+      className={cn("ms-auto text-xs tracking-widest text-[var(--muted-foreground)]", className)}
       {...props}
     />
   );
