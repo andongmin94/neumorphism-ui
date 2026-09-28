@@ -1,0 +1,66 @@
+name: Micro detail review
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/micro-detail-review.yml]
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Preserve source and installed dependency contracts
+        run: |
+          mkdir -p /tmp/micro-detail
+          git archive --format=tar.gz HEAD > /tmp/micro-detail/source.tar.gz
+          git rev-parse HEAD > /tmp/micro-detail/source-sha.txt
+          npm ci --prefix registry
+          npm ci --prefix docs
+          tar -czf /tmp/micro-detail/resizable-contract.tar.gz -C registry/node_modules/react-resizable-panels .
+      - name: Build and inspect actual layout ownership
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm run build --prefix docs
+          cd docs
+          npx playwright install --with-deps chromium
+          cat > tests/detail/micro-observe.spec.ts <<'TS'
+          import { test } from '@playwright/test';
+          import { writeFileSync } from 'node:fs';
+          test('micro detail baseline geometry', async ({ page }, info) => {
+            await page.goto('/en/components/resizable');
+            await page.evaluate(() => document.fonts.ready);
+            const group = page.locator('.component-example-panel [data-slot=resizable-panel-group]');
+            await group.waitFor();
+            const data = await group.evaluate(el => {
+              const result = [];
+              for (let e: Element | null = el; e && result.length < 5; e = e.parentElement) {
+                const c = getComputedStyle(e), r = e.getBoundingClientRect();
+                result.push({ tag: e.tagName, slot: e.getAttribute('data-slot'), className: e.className, inline: e.getAttribute('style'), width:r.width, height:r.height, computed: {height:c.height,minHeight:c.minHeight,display:c.display,flex:c.flex,alignItems:c.alignItems}});
+              }
+              return result;
+            });
+            writeFileSync(info.outputPath('resizable-geometry.json'), JSON.stringify(data,null,2));
+            await page.locator('.component-example-panel').screenshot({path:info.outputPath('resizable-before.png')});
+          });
+          TS
+          npx playwright test --config=playwright.detail.config.ts --grep 'micro detail baseline geometry|catalog detail: (pagination|marquee|resizable|image-card|breadcrumb|input-group|switch|toggle|sidebar|accordion|collapsible|data-table)$' --output=test-results/docs-browser/micro-before
+      - name: Keep baseline evidence
+        if: always()
+        run: cp -R docs/test-results /tmp/micro-detail/ || true
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: micro-detail-review
+          path: /tmp/micro-detail
+          retention-days: 7
+          if-no-files-found: error
