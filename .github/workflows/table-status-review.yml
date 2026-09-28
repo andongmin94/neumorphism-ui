@@ -1,4 +1,5 @@
 name: Table status review
+# Repeat the unchanged review because its completed run and artifact became unavailable.
 on:
   push:
     branches: [main]
