@@ -195,9 +195,7 @@ function LinkHub({
                 ) : null}
                 {link.external ? <span className="sr-only">{t.newTab}</span> : null}
               </span>
-              <span aria-hidden="true" className="text-sm opacity-60">
-                {link.external ? "↗" : "→"}
-              </span>
+              <svg aria-hidden="true" className="size-4 shrink-0 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={link.external ? "M6 18 18 6M8 6h10v10" : "M4 12h16m-6-6 6 6-6 6"} /></svg>
             </a>
           </li>
         ))}

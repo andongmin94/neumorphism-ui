@@ -354,7 +354,7 @@ export const componentDocs = [
   <Button variant="primary">변경 저장</Button>
   <Button variant="soft">취소</Button>
   <Button variant="ghost">나중에</Button>
-  <Button size="icon" aria-label="항목 추가">+</Button>
+  <Button size="icon" aria-label="항목 추가"><svg aria-hidden="true"  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
 </div>`,
     props: [
       {

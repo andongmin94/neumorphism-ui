@@ -80,12 +80,12 @@ export function ThemeStudio() {
   const directionOptions: {
     id: ThemeLightDirection;
     label: string;
-    arrow: string;
+    path: string;
   }[] = [
-    { id: "top-left", label: copy.topLeft, arrow: "↘" },
-    { id: "top-right", label: copy.topRight, arrow: "↙" },
-    { id: "bottom-left", label: copy.bottomLeft, arrow: "↗" },
-    { id: "bottom-right", label: copy.bottomRight, arrow: "↖" },
+    { id: "top-left", label: copy.topLeft, path: "M6 6 18 18M8 18h10V8" },
+    { id: "top-right", label: copy.topRight, path: "M18 6 6 18M6 8v10h10" },
+    { id: "bottom-left", label: copy.bottomLeft, path: "M6 18 18 6M8 6h10v10" },
+    { id: "bottom-right", label: copy.bottomRight, path: "M18 18 6 6M6 16V6h10" },
   ];
   const [settings, setSettings] =
     React.useState<ThemeSettings>(defaultThemeSettings);
@@ -191,7 +191,7 @@ export function ThemeStudio() {
                 />
                 <strong>{item.name}</strong>
                 {settings.presetId === item.id ? (
-                  <span className="theme-preset-check" aria-hidden="true">✓</span>
+                  <span className="theme-preset-check" aria-hidden="true"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg></span>
                 ) : null}
               </button>
             ))}
@@ -255,7 +255,7 @@ export function ThemeStudio() {
                 title={option.label}
                 type="button"
               >
-                {option.arrow}
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={option.path} /></svg>
               </button>
             ))}
           </div>

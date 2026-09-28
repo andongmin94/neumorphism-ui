@@ -26,3 +26,14 @@ test("all authored breadcrumb examples use an atomic destination item", () => {
   const css = read("../../docs/src/app.css");
   assert.doesNotMatch(css, /component-preview-pagination-wide|pagination-desktop-only/);
 });
+
+test("close and navigation control geometry is independent of font glyphs", () => {
+  for (const file of ["sheet", "sidebar"]) {
+    const source = read(`../src/components/ui/${file}.tsx`);
+    assert.doesNotMatch(source, /[×☰]/);
+    assert.match(source, /<svg aria-hidden="true"/);
+  }
+  const input = read("../src/components/ui/input-group.tsx");
+  assert.match(input, /svg:not\(\[class\*=size-\]\)/);
+  assert.match(input, /min-h-7\.5 min-w-0 max-w-full/);
+});

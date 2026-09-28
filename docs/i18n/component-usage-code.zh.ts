@@ -70,7 +70,7 @@ export const componentUsageCodeZh = defineComponentUsageCode({
   <Button variant="primary">保存更改</Button>
   <Button variant="soft">取消</Button>
   <Button variant="ghost">稍后处理</Button>
-  <Button size="icon" aria-label="添加项目">+</Button>
+  <Button size="icon" aria-label="添加项目"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
 </div>`,
   card: `<Card variant="raised">
   <CardHeader>

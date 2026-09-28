@@ -105,3 +105,25 @@ The baseline is `ddb5ff82`. Keep the ten collected cases distinct from an exhaus
 | MD-10 | Accordion + Collapsible | One shared visual grammar: plus while collapsed, minus while expanded, driven by the primitive's `aria-expanded`. |
 
 Generation now refreshes the existing compiled examples from the English displayed snippets, in addition to the four live-source workflow examples. Registry metadata, both generated endpoint copies and consumer fixtures are verified together. No new catalog item, package, compatibility mode or alternate origin is introduced. Public verification compares all 80 items and installs from the deployed canonical origin; a local pass alone does not establish publication.
+
+
+## Remaining control geometry and caller behavior
+
+Sheet close, Sidebar trigger and the copied Button icon example use SVG geometry,
+including the documentation copy, close and direction controls and existing
+workspace links. SidebarTrigger composes its internal action with the caller's
+onClick, respects preventDefault and retains supplied children. Documentation
+search reset returns focus to the remaining input instead of removing the focused
+button without a destination.
+
+Input Group actions preserve their 30px minimum rather than fixing their height:
+long localized multiline labels wrap within the same field and can still submit.
+Default short actions keep the 40px field height. Addon and action icons preserve
+caller-owned size classes, consistently with Button and Toggle.
+
+The source-only micro completion specimen covers 320/390/1440px in light/dark,
+callback/cancellation behavior, SVG size overrides, long action submission and
+Sheet close/focus recovery. The existing MD specimen also covers 320px and drags
+the actual textarea resize grip instead of assigning an inline test height.
+These are defined regression checks, not native-device or assistive-technology
+certification. Generated registry and displayed examples remain source-derived.

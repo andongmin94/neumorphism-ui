@@ -70,7 +70,7 @@ export const componentUsageCodeJa = defineComponentUsageCode({
   <Button variant="primary">変更を保存</Button>
   <Button variant="soft">キャンセル</Button>
   <Button variant="ghost">あとで</Button>
-  <Button size="icon" aria-label="項目を追加">+</Button>
+  <Button size="icon" aria-label="項目を追加"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
 </div>`,
   card: `<Card variant="raised">
   <CardHeader>

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-for (const mode of ["light", "dark"]) for (const width of [390, 1440]) {
+for (const mode of ["light", "dark"]) for (const width of [320, 390, 1440]) {
   test.describe(`micro finish ${mode} ${width}`, () => {
     test.use({ viewport: { width, height: 1000 } });
     test.beforeEach(async ({ page }) => {
@@ -86,8 +86,13 @@ for (const mode of ["light", "dark"]) for (const width of [390, 1440]) {
       expect(g.width - f.width).toBeLessThanOrEqual(12); expect(b.y).toBeGreaterThanOrEqual(f.y + f.height);
       await field.fill("A long message retains the whole input width. ".repeat(8)); await send.click();
       await expect(area.getByRole("status", { name: "Sent message" })).toContainText("whole input width");
-      await field.evaluate(e => { (e as HTMLElement).style.height = "180px"; });
+      await field.scrollIntoViewIfNeeded();
+      const beforeResize = (await field.boundingBox())!;
+      const gripX = beforeResize.x + beforeResize.width - 4, gripY = beforeResize.y + beforeResize.height - 4;
+      await page.mouse.move(gripX, gripY); await page.mouse.down();
+      await page.mouse.move(gripX, gripY + 64, { steps: 8 }); await page.mouse.up();
       const enlarged = (await field.boundingBox())!, moved = (await send.boundingBox())!;
+      expect(enlarged.height).toBeGreaterThan(beforeResize.height + 32);
       expect(moved.y).toBeGreaterThanOrEqual(enlarged.y + enlarged.height);
       await expect(field).toHaveCSS("resize", "vertical");
       await area.screenshot({ path: info.outputPath("input-group.png") });

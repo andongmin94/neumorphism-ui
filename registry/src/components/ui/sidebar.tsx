@@ -226,6 +226,8 @@ function Sidebar({
 function SidebarTrigger({
   className,
   label = "Toggle sidebar",
+  children,
+  onClick,
   ...props
 }: React.ComponentProps<typeof Button> & { label?: string }) {
   const { isMobile, open, openMobile, toggleSidebar } = useSidebar();
@@ -238,12 +240,12 @@ function SidebarTrigger({
       aria-expanded={isMobile ? openMobile : open}
       className={cn("size-9", className)}
       onClick={(event) => {
-        props.onClick?.(event);
+        onClick?.(event);
         if (!event.defaultPrevented) toggleSidebar();
       }}
       {...props}
     >
-      <span aria-hidden="true">☰</span>
+      {children ?? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6h16M4 12h16M4 18h16" /></svg>}
     </Button>
   );
 }

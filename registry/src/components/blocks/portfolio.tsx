@@ -177,12 +177,12 @@ export function Portfolio({
           ) : null}
           {profile.github ? (
             <a href={profile.github} target="_blank" rel="noreferrer" className="hover:underline">
-              GitHub <span aria-hidden="true">↗</span><span className="sr-only">{t.newTab}</span>
+              GitHub <svg aria-hidden="true" className="inline-block size-4 align-text-bottom" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 18 18 6M8 6h10v10" /></svg><span className="sr-only">{t.newTab}</span>
             </a>
           ) : null}
           {profile.linkedin ? (
             <a href={profile.linkedin} target="_blank" rel="noreferrer" className="hover:underline">
-              LinkedIn <span aria-hidden="true">↗</span><span className="sr-only">{t.newTab}</span>
+              LinkedIn <svg aria-hidden="true" className="inline-block size-4 align-text-bottom" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 18 18 6M8 6h10v10" /></svg><span className="sr-only">{t.newTab}</span>
             </a>
           ) : null}
         </section>

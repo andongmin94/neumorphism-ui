@@ -82,7 +82,7 @@ export function ComponentDirectory() {
             value={query}
           />
           {query ? (
-            <button aria-label={messages.directory.reset} onClick={() => setQuery("")} type="button">×</button>
+            <button aria-label={messages.directory.reset} onClick={() => { setQuery(""); searchRef.current?.focus(); }} type="button"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m6 6 12 12M6 18 18 6" /></svg></button>
           ) : (
             <kbd>/</kbd>
           )}
@@ -123,7 +123,7 @@ export function ComponentDirectory() {
               {formatMessage(messages.directory.resultCount, { count: visibleItems.length })}
             </p>
             <Link href={localeHref(locale, "/templates")}>
-              Templates <span aria-hidden="true">→</span>
+              Templates <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h16m-6-6 6 6-6 6" /></svg>
             </Link>
           </div>
 
@@ -145,7 +145,7 @@ export function ComponentDirectory() {
                   </div>
                   <div className="component-directory-card-footer">
                     <code>@neumorphism-ui/{component.slug}</code>
-                    <span aria-hidden="true">→</span>
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h16m-6-6 6 6-6 6" /></svg>
                   </div>
                 </Link>
               ))}
