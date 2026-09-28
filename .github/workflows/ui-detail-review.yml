@@ -1,0 +1,322 @@
+name: UI detail review
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/ui-detail-review.yml]
+permissions:
+  contents: read
+jobs:
+  public-registry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - run: node registry/scripts/verify-published-registry.mjs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: public-registry-review
+          path: docs/test-results/published-registry
+          retention-days: 7
+  refinement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Prepare source-only specimens and permanent assertions
+        run: |
+          mkdir -p /tmp/ui-detail-evidence
+          cat > docs/tests/material/refinement.html <<'HTML'
+          <!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Calendar and menu anatomy</title></head><body><div id="root"></div><script type="module" src="./refinement.tsx"></script></body></html>
+          HTML
+          cat > docs/tests/material/refinement.tsx <<'TSX'
+          import * as React from "react";
+          import { createRoot } from "react-dom/client";
+          import { DirectionProvider } from "@base-ui/react/direction-provider";
+          import { Button } from "@/components/ui/button";
+          import { Calendar } from "@/components/ui/calendar";
+          import { Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem } from "@/components/ui/combobox";
+          import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuCheckboxItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+          import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuRadioGroup, ContextMenuRadioItem, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent, ContextMenuItem } from "@/components/ui/context-menu";
+          import { buildThemeVariables, defaultThemeSettings, getThemePreset, type ThemePresetId } from "../../src/registry/theme";
+          import "./styles.css";
+          function Specimen() {
+            const query = new URLSearchParams(location.search);
+            const mode = query.get("mode") === "dark" ? "dark" : "light";
+            const dir = query.get("dir") === "rtl" ? "rtl" : "ltr";
+            const preset = getThemePreset((query.get("preset") ?? "air") as ThemePresetId);
+            const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 8, 15));
+            const [density, setDensity] = React.useState("comfortable");
+            const [checked, setChecked] = React.useState(true);
+            const [city, setCity] = React.useState<string | null>("Seoul");
+            const [action, setAction] = React.useState("No action");
+            React.useLayoutEffect(() => {
+              for (const [name, value] of Object.entries(buildThemeVariables({ ...defaultThemeSettings, ...preset.defaults, presetId: preset.id }, mode))) document.documentElement.style.setProperty(name, value);
+              document.documentElement.classList.toggle("dark", mode === "dark");
+              document.documentElement.dir = dir;
+            }, [mode, preset, dir]);
+            return <DirectionProvider direction={dir}><main className="mx-auto max-w-5xl px-4 py-8">
+              <h1 className="mb-8 text-2xl font-semibold tracking-tight">Calendar and menu anatomy</h1>
+              <div className="grid min-w-0 gap-8 md:grid-cols-2">
+                <section className="grid min-w-0 content-start gap-4"><h2 className="font-semibold">Calendar in a 228px container</h2>
+                  <div data-testid="narrow-calendar" className="w-[228px] max-w-full"><Calendar mode="single" defaultMonth={new Date(2026, 8, 1)} today={new Date(2026, 8, 15)} selected={date} onSelect={setDate} /></div>
+                  <output data-testid="date-value" className="text-sm text-[var(--muted-foreground)]">{date?.getDate() ?? "No date"}</output>
+                </section>
+                <section className="grid min-w-0 content-start gap-4"><h2 className="font-semibold">Range and week numbers</h2>
+                  <div data-testid="range-calendar" className="max-w-full"><Calendar mode="range" numberOfMonths={2} showWeekNumber defaultMonth={new Date(2026, 8, 1)} today={new Date(2026, 8, 15)} selected={{ from: new Date(2026, 8, 14), to: new Date(2026, 8, 18) }} /></div>
+                </section>
+                <section className="grid content-start gap-4"><h2 className="font-semibold">Menu selection and submenu</h2>
+                  <DropdownMenu><DropdownMenuTrigger render={<Button />}>Display options</DropdownMenuTrigger><DropdownMenuContent>
+                    <DropdownMenuRadioGroup value={density} onValueChange={setDensity}><DropdownMenuRadioItem value="compact">Compact</DropdownMenuRadioItem><DropdownMenuRadioItem value="comfortable">Comfortable</DropdownMenuRadioItem></DropdownMenuRadioGroup>
+                    <DropdownMenuCheckboxItem checked={checked} onCheckedChange={setChecked} closeOnClick={false}>Show status</DropdownMenuCheckboxItem>
+                    <DropdownMenuSub><DropdownMenuSubTrigger>More options</DropdownMenuSubTrigger><DropdownMenuSubContent><DropdownMenuItem onClick={() => setAction("Copied")}>Copy link</DropdownMenuItem><DropdownMenuItem variant="destructive">Remove</DropdownMenuItem></DropdownMenuSubContent></DropdownMenuSub>
+                  </DropdownMenuContent></DropdownMenu>
+                  <output data-testid="menu-value" className="text-sm">{density} / {action}</output>
+                  <ContextMenu dir={dir}><ContextMenuTrigger className="grid min-h-20 place-items-center rounded-[var(--neu-radius-control)] border border-[var(--border)] text-sm">Context options</ContextMenuTrigger><ContextMenuContent>
+                    <ContextMenuRadioGroup value={density} onValueChange={setDensity}><ContextMenuRadioItem value="compact">Compact</ContextMenuRadioItem><ContextMenuRadioItem value="comfortable">Comfortable</ContextMenuRadioItem></ContextMenuRadioGroup>
+                    <ContextMenuSub><ContextMenuSubTrigger>More options</ContextMenuSubTrigger><ContextMenuSubContent><ContextMenuItem onClick={() => setAction("Copied")}>Copy link</ContextMenuItem></ContextMenuSubContent></ContextMenuSub>
+                  </ContextMenuContent></ContextMenu>
+                </section>
+                <section className="grid content-start gap-4"><h2 className="font-semibold">Combobox selected mark</h2>
+                  <Combobox items={["Busan", "London", "Seoul", "Tokyo"]} value={city} onValueChange={setCity}><ComboboxInput aria-label="Choose city" /><ComboboxContent><ComboboxList>{item => <ComboboxItem key={item} value={item}>{item}</ComboboxItem>}</ComboboxList></ComboboxContent></Combobox>
+                  <output data-testid="city-value" className="text-sm">{city}</output>
+                </section>
+              </div>
+            </main></DirectionProvider>;
+          }
+          createRoot(document.getElementById("root")!).render(<Specimen />);
+          TSX
+          cat > docs/tests/material/refinement.spec.ts <<'TEST'
+          import { expect, test } from "@playwright/test";
+          const phase = process.env.REFINEMENT_PHASE ?? "after";
+          for (const mode of ["light", "dark"]) for (const width of [390, 1440]) {
+            test.describe(`${mode} ${width}`, () => {
+              test.use({ viewport: { width, height: 1000 } });
+              test.beforeEach(async ({ page }) => {
+                await page.goto(`/refinement.html?mode=${mode}`);
+                await expect(page.getByRole("heading", { name: "Calendar and menu anatomy", exact: true })).toBeVisible();
+                await page.evaluate(() => document.fonts.ready);
+              });
+              test("specimen capture", async ({ page }, info) => {
+                await page.screenshot({ path: info.outputPath(`${phase}-calendar.png`), fullPage: true, animations: "disabled" });
+                await page.getByRole("button", { name: "Display options", exact: true }).click();
+                await expect(page.locator('[data-slot="dropdown-menu-content"]')).toBeVisible();
+                await page.screenshot({ path: info.outputPath(`${phase}-menu.png`), animations: "disabled" });
+                await info.attach("calendar bounds", { body: JSON.stringify(await page.getByTestId("narrow-calendar").evaluate(e => ({ width: e.clientWidth, content: e.scrollWidth }))), contentType: "application/json" });
+              });
+              test("calendar cells follow the containing plate rather than viewport width", async ({ page }, info) => {
+                for (const id of ["narrow-calendar", "range-calendar"]) {
+                  const fixture = page.getByTestId(id);
+                  expect(await fixture.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
+                  for (const grid of await fixture.locator('table').all()) {
+                    const bounds = (await fixture.boundingBox())!;
+                    const r = (await grid.boundingBox())!;
+                    expect(r.x).toBeGreaterThanOrEqual(bounds.x - 1);
+                    expect(r.x + r.width).toBeLessThanOrEqual(bounds.x + bounds.width + 1);
+                    const cells = grid.locator('tbody tr').first().locator('td');
+                    const widths = await cells.evaluateAll(es => es.map(e => e.getBoundingClientRect().width));
+                    expect(Math.max(...widths) - Math.min(...widths)).toBeLessThanOrEqual(1);
+                    for (const button of await grid.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(28);
+                  }
+                }
+                const calendar = page.getByTestId("narrow-calendar");
+                const grid = calendar.getByRole('grid');
+                const day = grid.getByRole('button', { name: /September 16/ });
+                await day.click(); await expect(page.getByTestId('date-value')).toHaveText('16');
+                await page.keyboard.press('ArrowRight'); await page.keyboard.press('Enter');
+                await expect(page.getByTestId('date-value')).toHaveText('17');
+                const caption = calendar.locator('.rdp-caption_label');
+                const navButton = calendar.getByRole('button', { name: /previous month/i });
+                if (await caption.count()) {
+                  const a = (await caption.boundingBox())!, b = (await navButton.boundingBox())!;
+                  expect(Math.abs(a.y + a.height / 2 - b.y - b.height / 2)).toBeLessThanOrEqual(1);
+                }
+                await calendar.screenshot({ path: info.outputPath('calendar-selected.png') });
+              });
+              test("menu marks have fixed geometry and selection survives keyboard use", async ({ page }, info) => {
+                await page.getByRole('button', { name: 'Display options', exact: true }).click();
+                const popup = page.locator('[data-slot="dropdown-menu-content"]');
+                const selected = popup.getByRole('menuitemradio', { name: 'Comfortable', exact: true });
+                await expect(selected.locator('svg')).toHaveCount(1);
+                await expect(selected.locator('svg')).toHaveCSS('width', '16px');
+                const arrow = popup.getByRole('menuitem', { name: 'More options', exact: true }).locator('svg');
+                await expect(arrow).toHaveCSS('width', '16px');
+                const row = (await selected.boundingBox())!, dot = (await selected.locator('svg').boundingBox())!;
+                expect(Math.abs(row.y + row.height / 2 - dot.y - dot.height / 2)).toBeLessThanOrEqual(1);
+                await popup.getByRole('menuitemradio', { name: 'Compact', exact: true }).click();
+                await expect(page.getByTestId('menu-value')).toContainText('compact');
+                await page.getByRole('button', { name: 'Display options', exact: true }).click();
+                const sub = page.getByRole('menuitem', { name: 'More options', exact: true });
+                await sub.focus(); await page.keyboard.press('ArrowRight');
+                await expect(page.locator('[data-slot="dropdown-menu-sub-content"]')).toBeVisible();
+                await page.getByRole('menuitem', { name: 'Copy link', exact: true }).click();
+                await expect(page.getByTestId('menu-value')).toContainText('Copied');
+                await expect(page.getByRole('button', { name: 'Display options', exact: true })).toBeFocused();
+                await page.getByText('Context options', { exact: true }).click({ button: 'right' });
+                const context = page.locator('[data-slot="context-menu-content"]');
+                await expect(context.getByRole('menuitemradio', { name: 'Compact', exact: true }).locator('svg')).toHaveCSS('width', '16px');
+                await context.screenshot({ path: info.outputPath('context-menu.png') });
+              });
+              test("combobox and directional marks remain aligned in RTL", async ({ page }, info) => {
+                await page.goto(`/refinement.html?mode=${mode}&dir=rtl`);
+                await page.getByRole('combobox', { name: 'Choose city', exact: true }).click();
+                const option = page.getByRole('option', { name: 'Seoul', exact: true });
+                await expect(option).toBeVisible();
+                await expect(option.locator('svg')).toHaveCSS('width', '16px');
+                const r = (await option.boundingBox())!, mark = (await option.locator('svg').boundingBox())!;
+                expect(r.x + r.width - mark.x - mark.width).toBeLessThanOrEqual(12);
+                await page.getByRole('option', { name: 'Tokyo', exact: true }).click();
+                await expect(page.getByTestId('city-value')).toHaveText('Tokyo');
+                await page.getByRole('button', { name: 'Display options', exact: true }).click();
+                const popup = page.locator('[data-slot="dropdown-menu-content"]');
+                await expect(popup.getByRole('menuitem', { name: 'More options', exact: true }).locator('svg')).toHaveCSS('rotate', '180deg');
+                await popup.screenshot({ path: info.outputPath('menu-rtl.png') });
+              });
+            });
+          }
+          TEST
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/playwright.material.config.ts')
+          s=p.read_text(); old='"control-anatomy.spec.ts"]'; assert old in s
+          p.write_text(s.replace(old,'"control-anatomy.spec.ts", "refinement.spec.ts"]'))
+          PY
+      - name: Build unchanged product and capture baseline
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          cd docs
+          npx playwright install --with-deps chromium
+          REFINEMENT_PHASE=before MATERIAL_PHASE=refinement-before npx playwright test --config=playwright.material.config.ts refinement.spec.ts --grep 'specimen capture'
+      - name: Correct source-owned anatomy and dependency validation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          def edit(path, old, new, count=1):
+            p=Path(path); s=p.read_text(); assert s.count(old)==count,(path,old,s.count(old));p.write_text(s.replace(old,new))
+          c='registry/src/components/ui/calendar.tsx'
+          edit(c,'months: "relative flex flex-col gap-6 sm:flex-row"','months: "relative flex max-w-full flex-col gap-6 sm:flex-row"')
+          edit(c,'month: "flex flex-col gap-3"','month: "flex min-w-0 max-w-full flex-col gap-3 w-[calc(var(--cell-size)*var(--calendar-columns))]"')
+          edit(c,'[--cell-size:clamp(1.75rem,7.5vw,2.25rem)]", className)','[--cell-size:clamp(1.75rem,7.5vw,2.25rem)]", props.showWeekNumber ? "[--calendar-columns:8]" : "[--calendar-columns:7]", className)')
+          edit(c,'nav: "pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between"','nav: "pointer-events-none absolute inset-x-0 top-0 flex h-10 items-center justify-between"')
+          edit(c,'month_grid: "border-collapse"','month_grid: "w-full table-fixed border-collapse"')
+          edit(c,'weekday: "h-8 w-[var(--cell-size)]','weekday: "h-8')
+          edit(c,'week_number_header: "w-[var(--cell-size)]"','week_number_header: "h-8 text-center"')
+          edit(c,'day: "size-[var(--cell-size)] p-0','day: "h-[var(--cell-size)] p-0')
+          edit(c,'day_button: "grid size-[var(--cell-size)]','day_button: "grid h-[var(--cell-size)] w-full min-w-0')
+          arrow='<svg aria-hidden="true" className="ms-auto size-4 shrink-0 text-[var(--muted-foreground)] rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m9 5 7 7-7 7" /></svg>'
+          dot='<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4" /></svg>'
+          for name in ['dropdown-menu','context-menu']:
+            p=Path(f'registry/src/components/ui/{name}.tsx'); s=p.read_text()
+            s,n=re.subn(r'<span\s+className="ml-auto text-base text-\[var\(--muted-foreground\)\]"\s+aria-hidden="true"\s*>\s*›\s*</span>',arrow,s); assert n==1,(name,'arrow',n)
+            s,n=re.subn(r'<span(?: className="text-base leading-none")? aria-hidden="true">\s*•\s*</span>',dot,s); assert n==1,(name,'dot',n)
+            s=s.replace('absolute left-2.5','absolute start-2.5').replace('pl-8','ps-8').replace('pr-2.5','pe-2.5').replace('ml-auto','ms-auto').replace('text-[var(--primary)]','text-[var(--neu-accent-ink)]').replace('data-[variant=destructive]:text-[var(--destructive)]','data-[variant=destructive]:text-[var(--neu-error-text)]')
+            p.write_text(s)
+          b='registry/src/components/ui/combobox.tsx'
+          edit(b,'pr-3 pl-8','pe-3 ps-8')
+          edit(b,'<Primitive.ItemIndicator className="absolute left-2.5 inline-flex size-3.5 items-center justify-center"><span aria-hidden="true">✓</span></Primitive.ItemIndicator>', '<Primitive.ItemIndicator className="pointer-events-none absolute start-2.5 inline-flex size-4 items-center justify-center text-[var(--neu-accent-ink)]"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg></Primitive.ItemIndicator>')
+          p=Path('registry/scripts/registry-utils.mjs'); s=p.read_text()
+          marker='  } catch (error) {'; assert s.count(marker)==1
+          s=s.replace(marker,'''    const byName = new Map(registry.items.map(item => [item.name, item]));
+              const visited = new Set();
+              const visiting = [];
+              function visit(name) {
+                const cycleStart = visiting.indexOf(name);
+                assert(cycleStart === -1, `Registry dependency cycle: ${[...visiting.slice(cycleStart), name].join(" -> ")}`);
+                if (visited.has(name)) return;
+                visiting.push(name);
+                for (const dependency of byName.get(name).registryDependencies ?? []) {
+                  if (dependency.startsWith("@neumorphism-ui/")) visit(dependency.slice("@neumorphism-ui/".length));
+                }
+                visiting.pop();
+                visited.add(name);
+              }
+              for (const name of itemNames) visit(name);
+          '''+marker)
+          p.write_text(s)
+          testdir=Path('registry/tests'); assert testdir.is_dir()
+          (testdir/'dependency-graph.test.mjs').write_text('''import assert from "node:assert/strict";
+          import test from "node:test";
+          import { readRegistry, validateRegistry } from "../scripts/registry-utils.mjs";
+          test("the current registry has an acyclic local dependency graph", () => {
+            assert.deepEqual(validateRegistry(readRegistry()), []);
+          });
+          test("two valid local references cannot introduce an installation cycle", () => {
+            const registry = readRegistry();
+            const first = registry.items.find(item => item.name === "button");
+            const second = registry.items.find(item => item.name === "card");
+            first.registryDependencies = [...new Set([...first.registryDependencies, "@neumorphism-ui/card"])];
+            second.registryDependencies = [...new Set([...second.registryDependencies, "@neumorphism-ui/button"])];
+            assert.match(validateRegistry(registry).join("\\n"), /Registry dependency cycle:/);
+          });
+          ''')
+          p=Path('docs/visual-reference.md')
+          p.write_text(p.read_text()+'''\n\n## Small-control finishing and registry audit\n\nButton and Toggle glyphs track the supported size without replacing caller-owned icon sizes. Avatar groups retain a separating silhouette and matching counter typography. Long badges wrap, the Slider outlines its visible thumb, and segmented selection uses one raised plate inside one recessed tray. Calendar cells now share their container width, including week-number and multi-month layouts; navigation is vertically centered on the caption. Combobox checks, menu radio marks and submenu chevrons use fixed SVG geometry rather than font glyphs, with logical inline gutters.\n\nThe source-only control-anatomy and refinement specimens cover these structures in desktop/mobile light/dark, plus compact calendars and RTL menu marks. Registry verification compares complete generated item objects, not only source file contents, and rejects local dependency cycles. The public endpoint check remains a separate signal: its report must show successful HTTP and exact equality before a deployment is called verified.\n''')
+          PY
+      - name: Verify source and regenerated registry
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run check:generated --prefix registry
+      - name: Validate the new anatomy and existing supported compositions
+        run: |
+          cd docs
+          MATERIAL_PHASE=refinement-after npx playwright test --config=playwright.material.config.ts
+          npx playwright test --config=playwright.detail.config.ts catalog.spec.ts menu-composition.spec.ts
+      - name: Prepare the tested tree for review, without moving main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm .github/workflows/ui-detail-review.yml
+          git add -A
+          git diff --cached --binary > /tmp/ui-detail-evidence/changes.diff
+          git diff --cached --stat > /tmp/ui-detail-evidence/changes.txt
+          tar -czf /tmp/ui-detail-evidence/source-review.tar.gz registry/src registry/scripts registry/tests docs/tests/material docs/visual-reference.md
+          python - <<'PY'
+          import os, json, subprocess, base64, urllib.request
+          from pathlib import Path
+          repo=os.environ['GITHUB_REPOSITORY']; token=os.environ['GH_TOKEN']
+          def api(path,body):
+            req=urllib.request.Request('https://api.github.com/repos/'+repo+path, json.dumps(body).encode(),headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST')
+            with urllib.request.urlopen(req) as response: return json.load(response)
+          base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
+          entries=[]
+          for file in subprocess.check_output(['git','diff','--cached','--name-only','-z']).decode().split('\0'):
+            if not file: continue
+            p=Path(file)
+            sha=api('/git/blobs',{'content':base64.b64encode(p.read_bytes()).decode(),'encoding':'base64'})['sha'] if p.exists() else None
+            entries.append({'path':file,'mode':'100644','type':'blob','sha':sha})
+          tree=api('/git/trees',{'base_tree':base,'tree':entries})
+          Path('/tmp/ui-detail-evidence/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':tree['sha'],'files':[e['path'] for e in entries]},indent=2))
+          PY
+      - name: Preserve evidence and test reports
+        if: always()
+        run: |
+          cp -R docs/test-results /tmp/ui-detail-evidence/ || true
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: ui-detail-review
+          path: /tmp/ui-detail-evidence
+          retention-days: 7
+          if-no-files-found: error
