@@ -44,7 +44,7 @@ jobs:
           s=s.replace(marker,marker+'\nimport { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";')
           marker='    </div>\n    <section data-testid="pagination"';assert s.count(marker)==1
           addition='''      <section data-testid="table-statuses" className="grid min-w-0 content-start gap-5"><h2 className="text-base font-semibold">Readable table statuses</h2>
-                  <div data-testid="narrow-table-host" className="w-80 max-w-full min-w-0">
+                  <div data-testid="narrow-table-host" className="w-full max-w-80 min-w-0">
                     <Table containerProps={{ role: "region", "aria-label": "Status table", tabIndex: 0 }}>
                       <TableHeader><TableRow>{["Symbol", "Price", "Change", "Status"].map(label => <TableHead key={label}>{label}</TableHead>)}</TableRow></TableHeader>
                       <TableBody>{[["NVDA", "$181.92", "+2.41%", "Open"], ["005930", "₩72,400", "+1.08%", "Selected"], ["TSLA", "$318.27", "−0.64%", "Watch"]].map(row => <TableRow key={row[0]}><TableCell>{row[0]}</TableCell><TableCell>{row[1]}</TableCell><TableCell>{row[2]}</TableCell><TableCell><Badge variant="primary">{row[3]}</Badge></TableCell></TableRow>)}</TableBody>
@@ -108,7 +108,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import base64,json,os,subprocess,urllib.request
+          import json,os,subprocess,urllib.request
           from pathlib import Path
           workflow='.github/workflows/table-status-review.yml'
           Path(workflow).unlink()
