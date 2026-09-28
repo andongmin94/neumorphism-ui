@@ -33,7 +33,7 @@ jobs:
           with urllib.request.urlopen(req) as response: old=base64.b64decode(json.load(response)['content']).decode()
           for name,filename in [('Recover the immutable review scripts','recover'),('Build unchanged product and preserve before evidence','before'),('Apply source refinements and registry checks','apply'),('Verify source, complete generated endpoints and documentation','verify'),('Validate compact control geometry and supported compositions','browser')]:
             marker='      - name: '+name+'\n';assert old.count(marker)==1
-            block=old.split(marker,1)[1].split('      - name:',1)[0]
+            block=old.split(marker,1)[1].split('\n      - name:',1)[0]
             script=textwrap.dedent(block.split('        run: |\n',1)[1]);Path('/tmp/review2-'+filename+'.sh').write_text('set -eu\n'+script)
           PY
           bash /tmp/review2-recover.sh
