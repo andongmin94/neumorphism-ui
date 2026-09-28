@@ -129,6 +129,9 @@ test("editable theme CSS remains current while highlighting and copying", async 
   const shell = page.locator('#theme-output .code-shell[data-code-language="css"]');
   for (const name of ["Sage", "Clay", "Air"]) {
     await controls.getByRole("button", { name, exact: true }).click();
+    // Check the transition itself, not only the settled highlighted output.
+    expect(await shell.locator("pre").count()).toBe(1);
+    expect(await shell.locator("pre").textContent()).toContain(`— ${name} ·`);
     const pre = await expectDarkPlus(shell);
     const item = JSON.parse(readFileSync(new URL(`../../../registry/public/r/style-${name.toLowerCase()}.json`, import.meta.url), "utf8"));
     for (const mode of ["light", "dark"]) {

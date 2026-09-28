@@ -13,7 +13,7 @@ function HighlightedCode({ code, lang }: Pick<CodeProps, "code" | "lang">) {
 export function DynamicCode(props: CodeProps) {
   return (
     <CodeFrame {...props}>
-      <Suspense fallback={<CodePre><code>{props.code}</code></CodePre>}>
+      <Suspense key={`${props.lang}:${props.code}`} fallback={<CodePre><code>{props.code}</code></CodePre>}>
         <HighlightedCode code={props.code} lang={props.lang} />
       </Suspense>
     </CodeFrame>
