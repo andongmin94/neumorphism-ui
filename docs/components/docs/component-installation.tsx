@@ -2,8 +2,7 @@
 
 import * as React from "react";
 
-import { CopyableCode } from "@/components/docs/copyable-code";
-import { InstallCommand } from "@/components/docs/install-command";
+import { DynamicCode } from "@/components/docs/dynamic-code";
 import { useLocale } from "@/i18n/locale-provider";
 import {
   Tabs,
@@ -117,7 +116,7 @@ async function fetchRegistryItem(name: string, signal: AbortSignal) {
   return (await response.json()) as RegistryItem;
 }
 
-export function ComponentInstallation({ slug }: { slug: string }) {
+export function ComponentInstallation({ slug, command }: { slug: string; command: React.ReactNode }) {
   const { messages } = useLocale();
   const [source, setSource] = React.useState<{ slug: string; bundle: ManualBundle | null; error: boolean } | null>(null);
   const bundle = source?.slug === slug ? source.bundle : null;
@@ -170,7 +169,7 @@ export function ComponentInstallation({ slug }: { slug: string }) {
         </TabsTrigger>
       </TabsList>
       <TabsContent className="component-installation-panel" value="cli">
-        <InstallCommand name={slug} />
+        {command}
         <p>{messages.installationPanel.cli}</p>
       </TabsContent>
       <TabsContent className="component-installation-panel" value="manual">
@@ -217,7 +216,7 @@ export function ComponentInstallation({ slug }: { slug: string }) {
                 </div>
               </div>
               {packages.length ? (
-                <CopyableCode
+                <DynamicCode lang="bash"
                   code={`npm install ${packages.join(" ")}`}
                   label={`${slug} ${messages.installationPanel.packages}`}
                 />
@@ -243,11 +242,11 @@ export function ComponentInstallation({ slug }: { slug: string }) {
                     </div>
                   </div>
                   <div className="component-source-file">
-                    <div>
+                    <div className="component-source-file-heading">
                       <span>app/globals.css</span>
                       <small>{dependency.name}.json / cssVars + css</small>
                     </div>
-                    <CopyableCode
+                    <DynamicCode lang="css"
                       code={formatBaseCss(dependency)}
                       label={messages.installationPanel.baseTokens}
                       multiline
@@ -274,11 +273,11 @@ export function ComponentInstallation({ slug }: { slug: string }) {
                       </div>
                     </div>
                     <div className="component-source-file">
-                      <div>
+                      <div className="component-source-file-heading">
                         <span>{getManualTarget(file, dependency.name)}</span>
                         <small>{file.path}</small>
                       </div>
-                      <CopyableCode
+                      <DynamicCode lang={file.path.endsWith(".tsx") ? "tsx" : "ts"}
                         code={file.content}
                         label={`${dependency.name} ${messages.installationPanel.localDependencies}`}
                         multiline
@@ -298,11 +297,11 @@ export function ComponentInstallation({ slug }: { slug: string }) {
                   </div>
                 </div>
                 <div className="component-source-file">
-                  <div>
+                  <div className="component-source-file-heading">
                     <span>{getManualTarget(file, slug)}</span>
                     <small>{file.path}</small>
                   </div>
-                  <CopyableCode
+                  <DynamicCode lang={file.path.endsWith(".tsx") ? "tsx" : "ts"}
                     code={file.content}
                     label={`${slug} ${messages.installationPanel.componentSource}`}
                     multiline

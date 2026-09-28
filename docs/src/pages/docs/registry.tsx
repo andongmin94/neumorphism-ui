@@ -53,8 +53,8 @@ export default async function RegistryArchitecturePage({ lang }: { lang: string 
         <section className="docs-content-section">
           <h2>{t.install}</h2>
           <p><code>{REGISTRY_NAMESPACE}</code> resolves through one URL template, and shadcn follows each item's declared registry dependencies.</p>
-          <CopyableCode code={urlTemplate} label="Registry URL template" />
-          <InstallCommand name="button" />
+          <CopyableCode lang="text" code={urlTemplate} label="Registry URL template" />
+          <InstallCommand locale={locale} name="button" />
           <p>Independent-install CI creates fresh projects per file-bearing item. Template items build in Next.js; other items build in both Next.js and Vite.</p>
         </section>
 

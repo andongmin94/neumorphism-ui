@@ -76,7 +76,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           </div>
 
           <div className="component-doc-intro-actions">
-            <InstallCommand compact name={component.slug} />
+            <InstallCommand locale={locale} compact name={component.slug} />
             <a
               className="component-doc-registry-link"
               href={`/r/${component.slug}.json`}
@@ -100,7 +100,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
             <h2>{messages.common.preview}</h2>
           </div>
           <ComponentExample
-            code={component.usageCode}
+            code={<CopyableCode lang="tsx" code={component.usageCode} label={`${slug} ${messages.common.code}`} multiline />}
             copy={componentPreviewMessages[locale]}
             slug={component.slug}
           />
@@ -110,7 +110,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           <div className="component-doc-section-heading">
             <h2>{messages.common.installation}</h2>
           </div>
-          <ComponentInstallation slug={component.slug} />
+          <ComponentInstallation slug={component.slug} command={<InstallCommand locale={locale} name={component.slug} />} />
           <p className="docs-section-note">
             {messages.componentDetail.firstUsePrefix}{" "}
             <Link href={localeHref(locale, "/docs/installation")}>
@@ -124,10 +124,10 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           <div className="component-doc-section-heading">
             <h2>{messages.common.usage}</h2>
           </div>
-          {exampleItems.length > 1 && <CopyableCode code={exampleInstall} label={`${messages.common.usage}: ${messages.common.installation}`} />}
+          {exampleItems.length > 1 && <CopyableCode lang="bash" code={exampleInstall} label={`${messages.common.usage}: ${messages.common.installation}`} />}
           <div className="component-doc-code-block">
             <h3>Import</h3>
-            <CopyableCode
+            <CopyableCode lang="tsx"
               code={component.importCode}
               label={formatMessage(messages.componentDetail.importCode, {
                 title: component.title,
@@ -137,7 +137,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           </div>
           <div className="component-doc-code-block">
             <h3>Example</h3>
-            <CopyableCode
+            <CopyableCode lang="tsx"
               code={component.usageCode}
               label={formatMessage(messages.componentDetail.usageCode, {
                 title: component.title,

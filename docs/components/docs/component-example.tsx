@@ -1,6 +1,6 @@
 "use client";
 
-import { CopyableCode } from "@/components/docs/copyable-code";
+import type { ReactNode } from "react";
 import { ComponentDetailPreview } from "@/components/docs/component-detail-preview";
 import type { ComponentPreviewMessages } from "@/i18n/component-preview-messages";
 import { useLocale } from "@/i18n/locale-provider";
@@ -12,7 +12,7 @@ import {
 } from "@neumorphism-ui/registry/ui/tabs";
 
 type ComponentExampleProps = {
-  code: string;
+  code: ReactNode;
   copy: ComponentPreviewMessages;
   slug: string;
 };
@@ -39,11 +39,7 @@ export function ComponentExample({
         </div>
       </TabsContent>
       <TabsContent className="component-example-code" value="code">
-        <CopyableCode
-          code={code}
-          label={`${slug} ${messages.common.code}`}
-          multiline
-        />
+        {code}
       </TabsContent>
     </Tabs>
   );

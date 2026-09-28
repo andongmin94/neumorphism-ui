@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ThemePreview } from "./theme-preview";
 
-import { CopyableCode } from "@/components/docs/copyable-code";
+import { DynamicCode } from "@/components/docs/dynamic-code";
 import { getInstallCommand } from "@/components/docs/registry-config";
 import { useLocale } from "@/i18n/locale-provider";
 import {
@@ -356,7 +356,7 @@ export function ThemeStudio() {
           <TabsContent value="css">
             <p>{copy.cssBody}</p>
             <div className="theme-output-code">
-              <CopyableCode
+              <DynamicCode lang="css"
                 code={generatedCss}
                 label={copy.cssLabel}
                 multiline
@@ -368,14 +368,14 @@ export function ThemeStudio() {
             <div className="theme-registry-commands">
               <div>
                 <span>{copy.dryRun}</span>
-                <CopyableCode
+                <DynamicCode lang="bash"
                   code={`${getInstallCommand(preset.registryName)} --dry-run`}
                   label={`${preset.name} · ${copy.dryRun}`}
                 />
               </div>
               <div>
                 <span>{copy.install}</span>
-                <CopyableCode
+                <DynamicCode lang="bash"
                   code={getInstallCommand(preset.registryName)}
                   label={`${preset.name} · ${copy.install}`}
                 />

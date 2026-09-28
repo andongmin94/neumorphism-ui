@@ -1,3 +1,4 @@
+import { CopyableCode } from "@/components/docs/copyable-code";
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
@@ -41,7 +42,7 @@ export default function ResourcesPage({ lang }: { lang: string }) {
 
         <section className="docs-content-section">
           <h2>{t.engineering}</h2>
-          <pre><code>{verificationCommands}</code></pre>
+          <CopyableCode lang="bash" code={verificationCommands} label="Verification commands" multiline />
         </section>
 
         <section className="docs-content-section">

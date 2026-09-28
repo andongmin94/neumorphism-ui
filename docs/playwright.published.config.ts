@@ -4,7 +4,8 @@ import base from "./playwright.config";
 const registry = JSON.parse(readFileSync(new URL("../registry/public/r/registry.json", import.meta.url), "utf8")) as { homepage: string };
 export default defineConfig({
   ...base,
-  testMatch: ["**/presentation.spec.ts", "**/registry-origin.spec.ts"],
+  testDir: "./tests",
+  testMatch: ["**/browser/presentation.spec.ts", "**/browser/registry-origin.spec.ts", "**/detail/docs-reading.spec.ts"],
   use: { ...base.use, baseURL: new URL(registry.homepage).origin },
   webServer: undefined,
   outputDir: "test-results/published-browser",

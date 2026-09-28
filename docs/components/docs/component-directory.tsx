@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import styles from "./component-directory.module.css";
 import { Link } from "fumapress/client";
 
 import type { ComponentDocCategory } from "@/components/docs/component-docs-data";
@@ -131,19 +132,19 @@ export function ComponentDirectory() {
             <div className="component-directory-grid">
               {visibleItems.map((component) => (
                 <Link
-                  className="component-directory-card"
+                  className={`component-directory-card ${styles.card}`}
                   href={localeHref(locale, `/components/${component.slug}`)}
                   key={component.slug}
                 >
-                  <div className="component-directory-card-top">
+                  <div className={styles.top}>
                     <span>{component.categoryLabel}</span>
                     <code>source</code>
                   </div>
-                  <div className="component-directory-card-body">
+                  <div className={styles.body}>
                     <h3>{component.title}</h3>
                     <p>{component.summary}</p>
                   </div>
-                  <div className="component-directory-card-footer">
+                  <div className={styles.footer}>
                     <code>@neumorphism-ui/{component.slug}</code>
                     <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h16m-6-6 6 6-6 6" /></svg>
                   </div>

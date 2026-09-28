@@ -43,7 +43,7 @@ export default async function InstallationPage({ lang }: { lang: string }) {
         <section className="docs-content-section" id="project">
           <h2>{messages.installationPage.projectTitle}</h2>
           <p>{messages.installationPage.projectBody}</p>
-          <CopyableCode
+          <CopyableCode lang="bash"
             code={initCommand}
             label={messages.installationPage.initLabel}
           />
@@ -52,7 +52,7 @@ export default async function InstallationPage({ lang }: { lang: string }) {
         <section className="docs-content-section" id="configure">
           <h2>{messages.installationPage.configureTitle}</h2>
           <p>{messages.installationPage.configureBody}</p>
-          <CopyableCode
+          <CopyableCode lang="bash"
             code={getRegistryAddCommand(requestOrigin)}
             label={messages.installationPage.registryCommandLabel}
           />
@@ -65,7 +65,7 @@ export default async function InstallationPage({ lang }: { lang: string }) {
                 url: registryUrlTemplate,
               })}
             </p>
-            <CopyableCode
+            <CopyableCode lang="json"
               code={getComponentsJsonRegistry(requestOrigin)}
               label={messages.installationPage.configLabel}
               multiline
@@ -76,10 +76,10 @@ export default async function InstallationPage({ lang }: { lang: string }) {
         <section className="docs-content-section" id="component">
           <h2>{messages.installationPage.componentTitle}</h2>
           <p>{messages.installationPage.componentBody}</p>
-          <InstallCommand name="neumorphism-ui" />
+          <InstallCommand locale={locale} name="neumorphism-ui" />
           <p>{{ ko: "기본 테마 설치 후 Next.js의 app/layout.tsx 또는 Vite의 src/main.tsx에서 폰트 CSS를 한 번 가져옵니다. 앱 번들러가 폰트 파일을 함께 제공합니다.", en: "After installing the base, import the font CSS once in app/layout.tsx (Next.js) or src/main.tsx (Vite). Your bundler serves the font assets with your application.", ja: "基本テーマの後、Next.jsのapp/layout.tsxまたはViteのsrc/main.tsxでフォントCSSを一度読み込みます。", zh: "安装基础主题后，在Next.js的app/layout.tsx或Vite的src/main.tsx中导入一次字体CSS。" }[locale]}</p>
-          <CopyableCode code={'import "pretendard/dist/web/variable/pretendardvariable.css";'} label="Pretendard" />
-          <CopyableCode code={`${getInstallCommand("button")} --overwrite`} label={messages.installationPage.installLabel} />
+          <CopyableCode lang="tsx" code={'import "pretendard/dist/web/variable/pretendardvariable.css";'} label="Pretendard" />
+          <CopyableCode lang="bash" code={`${getInstallCommand("button")} --overwrite`} label={messages.installationPage.installLabel} />
           <p className="docs-section-note">
             {messages.installationPage.componentNote}
           </p>
@@ -89,12 +89,12 @@ export default async function InstallationPage({ lang }: { lang: string }) {
           <h2>{messages.installationPage.themeTitle}</h2>
           <p>{messages.installationPage.themeBody}</p>
           <h3>Dry run</h3>
-          <CopyableCode
+          <CopyableCode lang="bash"
             code={styleDryRunCommand}
             label={messages.installationPage.dryRunLabel}
           />
           <h3>Install</h3>
-          <CopyableCode
+          <CopyableCode lang="bash"
             code={styleInstallCommand}
             label={messages.installationPage.installLabel}
           />

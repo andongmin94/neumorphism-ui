@@ -250,17 +250,17 @@ export function Example() {
               <h3>{recipe.title}</h3>
               <p>{recipe.description}</p>
 
-              <InstallCommand compact name={recipe.source.name} />
+              <InstallCommand locale={locale} compact name={recipe.source.name} />
 
               <details>
                 <summary>{page.usage}</summary>
-                <CopyableCode code={recipe.code} label={page.usage} multiline />
+                <CopyableCode lang="tsx" code={recipe.code} label={page.usage} multiline />
               </details>
 
               <details>
                 <summary>{page.source}</summary>
                 {recipe.source.files.map((file) => (
-                  <CopyableCode
+                  <CopyableCode lang="tsx"
                     code={file.content}
                     key={file.path}
                     label={file.target ?? file.path}

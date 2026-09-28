@@ -229,9 +229,9 @@ export default function TemplatePage({
         <section className="docs-content-section mt-10" id="installation">
           <h2>{t.install}</h2>
           <p>{t.base}</p>
-          <InstallCommand name={source.name} />
+          <InstallCommand locale={locale} name={source.name} />
           <h3>{t.use}</h3>
-          <CopyableCode code={usage} label={t.use} multiline />
+          <CopyableCode lang="tsx" code={usage} label={t.use} multiline />
           <h3>{t.integration}</h3>
           <p>{templateNote(slug, locale)}</p>
           {(slug === "settings" || slug === "data-manager" || slug === "cms") && (
@@ -246,7 +246,7 @@ export default function TemplatePage({
               <summary>
                 <code>{file.target ?? file.path}</code>
               </summary>
-              <CopyableCode code={file.content} label={file.target ?? file.path} multiline />
+              <CopyableCode lang="tsx" code={file.content} label={file.target ?? file.path} multiline />
             </details>
           ))}
         </section>

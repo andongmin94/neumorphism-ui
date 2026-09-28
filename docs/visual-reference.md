@@ -127,3 +127,32 @@ Sheet close/focus recovery. The existing MD specimen also covers 320px and drags
 the actual textarea resize grip instead of assigning an inline test height.
 These are defined regression checks, not native-device or assistive-technology
 certification. Generated registry and displayed examples remain source-derived.
+
+
+## Directory material and readable code
+
+Directory cards use the same raised material tokens at rest as the installed Card,
+with pressed inset and a separate keyboard outline. Mobile spacing does not remove
+the material. Obsolete global card rules are removed; the component stylesheet is
+the only owner. The results link keeps its SVG inline with its label.
+Directory, template and chart-reference titles use 700 weight; directory descriptions
+use 500 weight at 14px. Supporting documentation copy has a stronger contrast. These
+are documentation rules, not a new global weight forced onto installed UI previews.
+
+All documentation code panels reuse the existing Fumadocs Shiki renderer with VS Code
+Dark+ in both page modes. TSX/TS source, shell commands, CSS and JSON declare their
+languages at the call site; ordinary inline code remains inline. The renderer retains
+raw copy bytes, keyboard-scrollable pre elements and the original current CSS value
+during edits. Source-file headings no longer style descendant code tokens.
+
+`docs-reading.spec.ts` checks idle/pressed/focused cards, all four locales at 320px,
+Dark+ token colors and type, exact copied registry source, JSON and shell grammars,
+editable CSS, template/chart source, and static highlighted code without client JS.
+The same tests also run against the published origin. No installable item or package
+is added by this documentation change.
+
+Static documentation is highlighted in the server/static-rendering layer and passed
+as content into the client tab and clipboard frame. Only client-edited output and
+fetched registry source use the live renderer. Both renderers share the same Dark+
+options, pre geometry and clipboard surface. No-JavaScript checks verify that
+static usage snippets already contain the actual colored token markup.

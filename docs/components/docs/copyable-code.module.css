@@ -1,0 +1,62 @@
+/* VS Code Dark+ editor surface in both site modes. Inline code is not an editor. */
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #454545;
+  border-radius: var(--neu-radius-control);
+  background: #1e1e1e;
+  color: #d4d4d4;
+  color-scheme: dark;
+  box-shadow: inset 1px 1px 3px #00000040;
+}
+.multiline { align-items: start; padding: 18px; }
+.shell pre {
+  min-width: 0;
+  max-height: 32rem;
+  margin: 0;
+  padding: 2px;
+  overflow: auto;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: var(--neu-font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.7;
+  tab-size: 2;
+  white-space: pre;
+  scrollbar-width: thin;
+  scrollbar-color: #5a5a5a #1e1e1e;
+}
+.shell pre > code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  font: inherit;
+}
+.shell :global(.shiki) span { color: var(--shiki-dark); }
+.shell pre:focus-visible { outline: 2px solid #75beff; outline-offset: 3px; }
+.shell > :global(.copy-button) {
+  min-width: 76px;
+  min-height: 40px;
+  justify-content: center;
+  align-self: start;
+  padding: 8px;
+  border-color: #454545;
+  border-radius: var(--neu-radius-small);
+  background: #252526;
+  box-shadow: 1px 1px 3px #00000040, -1px -1px 2px #ffffff08;
+  color: #d4d4d4;
+  transform: none;
+}
+.shell > :global(.copy-button):hover { background: #333333; color: #ffffff; }
+.shell > :global(.copy-button):active { box-shadow: inset 1px 1px 3px #00000060; }
+.shell > :global(.copy-button):focus-visible { outline: 2px solid #75beff; outline-offset: 3px; }
+@media (max-width: 560px) {
+  .shell { gap: 10px; padding: 12px; }
+  .shell > :global(.copy-button) { min-width: 40px; }
+  .shell > :global(.copy-button) > span:not(:global(.sr-only)) { display: none; }
+}

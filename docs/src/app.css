@@ -226,45 +226,6 @@ a {
   cursor: pointer;
 }
 
-.code-shell {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.62rem 0.64rem 0.62rem 1rem;
-  border: 1px solid var(--line-light);
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: var(--shadow-inset);
-}
-
-.code-shell code,
-.code-shell pre {
-  min-width: 0;
-  margin: 0;
-  overflow-x: auto;
-  color: var(--foreground-soft);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.7;
-  scrollbar-width: thin;
-  white-space: pre;
-}
-
-.code-shell-multiline {
-  align-items: flex-start;
-  padding-block: 1rem;
-}
-
-.code-shell-multiline > .copy-button {
-  align-self: flex-start;
-}
-
-.code-shell-multiline pre {
-  padding: 0 0.2rem;
-}
-
 .copy-button {
   display: inline-flex;
   flex: 0 0 auto;
@@ -918,16 +879,6 @@ a {
     padding-right: 0.4rem;
   }
 
-  .code-shell {
-    align-items: stretch;
-    padding-left: 0.8rem;
-  }
-
-  .code-shell code {
-    align-self: center;
-    font-size: 0.64rem;
-  }
-
   .copy-button > span:nth-child(2) {
     display: none;
   }
@@ -1183,12 +1134,6 @@ a {
 .component-example-code {
   min-height: 390px;
   padding: 1rem;
-}
-
-.component-example-code .code-shell {
-  min-height: 356px;
-  border-radius: 16px;
-  background: var(--surface);
 }
 
 .component-example-code .code-shell pre {
@@ -1639,30 +1584,24 @@ a {
   gap: 0.65rem;
 }
 
-.component-source-file > div {
+.component-source-file-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
 }
 
-.component-source-file > div span {
+.component-source-file-heading span {
   color: var(--foreground-soft);
   font-family: var(--font-sans);
   font-size: 0.65rem;
   font-weight: 760;
 }
 
-.component-source-file > div small {
+.component-source-file-heading small {
   color: var(--docs-muted);
   font-family: var(--font-sans);
   font-size: 0.55rem;
-}
-
-.component-source-file .code-shell {
-  align-items: flex-start;
-  max-height: 520px;
-  padding: 1rem;
 }
 
 .component-source-file .code-shell pre {
@@ -1891,7 +1830,7 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .component-source-file > div {
+  .component-source-file-heading {
     display: grid;
   }
 
@@ -2388,68 +2327,6 @@ a {
   gap: 0.9rem;
 }
 
-.component-directory-card {
-  display: grid;
-  min-width: 0;
-  padding: 1rem;
-  border-radius: 16px;
-  transition:
-    border-color 160ms ease,
-    background 160ms ease,
-    transform 160ms ease;
-  border: 1px solid var(--docs-line-soft);
-  background: var(--neu-surface);
-  box-shadow: none;
-  min-height: 176px;
-  gap: 14px;
-}
-
-.component-directory-card:hover {
-  border-color: rgb(18 103 244 / 0.28);
-  background: var(--surface);
-  box-shadow: var(--neu-shadow-raised-sm);
-  transform: none;
-}
-
-.component-directory-card > a {
-  display: grid;
-  min-height: 116px;
-  align-content: start;
-}
-
-.component-directory-card h4 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0.55rem 0 0.35rem;
-  font-size: 0.96rem;
-  letter-spacing: -0.025em;
-}
-
-.component-directory-card h4 span {
-  color: var(--docs-muted);
-  transition:
-    color 160ms ease,
-    transform 160ms ease;
-}
-
-.component-directory-card:hover h4 span {
-  color: var(--docs-accent);
-  transform: translateX(2px);
-}
-
-.component-directory-card p {
-  margin: 0;
-  color: var(--docs-muted);
-  font-size: 0.7rem;
-  line-height: 1.55;
-}
-
-.component-directory-card .compact-install {
-  border-radius: 10px;
-}
-
 .component-directory-empty {
   display: grid;
   min-height: 280px;
@@ -2573,10 +2450,6 @@ a {
 
   .component-directory-grid {
     grid-template-columns: 1fr;
-  }
-
-  .component-directory-card > a {
-    min-height: 92px;
   }
 
   .registry-showcase {
@@ -3683,47 +3556,6 @@ html {
   gap: 0.65rem;
 }
 
-.component-directory-card {
-  display: grid;
-  align-content: space-between;
-  min-width: 0;
-  padding: 1rem;
-  border-radius: 8px;
-  transition: border-color 150ms ease;
-  border: 1px solid var(--docs-line-soft);
-  background: var(--neu-surface);
-  box-shadow: none;
-  min-height: 176px;
-  gap: 14px;
-}
-
-.component-directory-card:hover {
-  border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
-  box-shadow: var(--neu-shadow-raised-sm);
-  transform: none;
-}
-
-.component-directory-card > a {
-  padding: 0;
-}
-
-.component-directory-card h4 {
-  margin: 0;
-  font-size: 0.82rem;
-}
-
-.component-directory-card p {
-  margin: 0.45rem 0 0;
-  font-size: 0.67rem;
-  line-height: 1.55;
-}
-
-.component-directory-card .compact-install {
-  margin-top: 1rem;
-  border-radius: 6px;
-  box-shadow: none;
-}
-
 .docs-theme-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3909,12 +3741,6 @@ html {
   border-radius: 0;
   background: color-mix(in srgb, var(--surface-low) 50%, transparent);
   box-shadow: none;
-}
-
-.component-example-code .code-shell {
-  min-height: 300px;
-  border: 0;
-  border-radius: 0;
 }
 
 .component-doc-code-block + .component-doc-code-block {
@@ -5046,12 +4872,6 @@ html {
   font-weight: 700;
 }
 
-.code-shell {
-  border-color: var(--line-light);
-  background: var(--surface-low);
-  box-shadow: var(--docs-inset);
-}
-
 .copy-button {
   border-color: var(--line-light);
   background: var(--surface);
@@ -5140,37 +4960,6 @@ html {
 
 .component-directory-grid {
   gap: 1rem;
-}
-
-.component-directory-card {
-  border-color: var(--line-light);
-  border-radius: var(--docs-radius-md);
-  transition:
-    box-shadow 160ms ease,
-    transform 160ms ease;
-  border: 1px solid var(--docs-line-soft);
-  background: var(--neu-surface);
-  box-shadow: none;
-  min-height: 176px;
-  gap: 14px;
-}
-
-.component-directory-card:hover {
-  border-color: var(--line-light);
-  box-shadow: var(--neu-shadow-raised-sm);
-  transform: none;
-}
-
-.component-directory-card:active {
-  background: var(--surface-low);
-  box-shadow: var(--neu-shadow-inset-sm);
-  transform: none;
-}
-
-.component-directory-card .compact-install {
-  border: 1px solid var(--line-light);
-  background: var(--surface-low);
-  box-shadow: var(--docs-inset);
 }
 
 .docs-theme-list {
@@ -5446,7 +5235,6 @@ html {
     transform: none;
   }
 
-  .component-directory-card:hover,
   .docs-theme-list > a:hover {
     box-shadow: none;
     transform: none;
@@ -5678,13 +5466,13 @@ pre, code, kbd, samp { font-family: var(--neu-font-mono); font-variant-ligatures
   --docs-canvas: var(--background);
   --docs-line-strong: color-mix(in srgb, var(--foreground) 15%, transparent);
   --docs-line-soft: color-mix(in srgb, var(--foreground) 9%, transparent);
-  --docs-text-soft: color-mix(in srgb, var(--foreground) 68%, var(--background));
+  --docs-text-soft: color-mix(in srgb, var(--foreground) 80%, var(--background));
 }
 
 .dark {
   --docs-line-strong: color-mix(in srgb, white 17%, transparent);
   --docs-line-soft: color-mix(in srgb, white 10%, transparent);
-  --docs-text-soft: color-mix(in srgb, white 72%, var(--background));
+  --docs-text-soft: color-mix(in srgb, white 80%, var(--background));
 }
 
 html {
@@ -6153,6 +5941,7 @@ body {
   color: var(--docs-text-soft);
   font-size: 1rem;
   line-height: 1.65;
+  font-weight: 500;
 }
 
 .component-doc-breadcrumb {
@@ -6299,12 +6088,14 @@ body {
   margin: 0 0 14px;
   font-size: 1.6rem;
   letter-spacing: -0.035em;
+  font-weight: 700;
 }
 
 .docs-content-section h3,
 .component-doc-code-block h3 {
   margin: 24px 0 10px;
   font-size: 1rem;
+  font-weight: 650;
 }
 
 .docs-content-section p,
@@ -6313,6 +6104,13 @@ body {
   color: var(--docs-text-soft);
   font-size: 0.88rem;
   line-height: 1.75;
+}
+
+.docs-content-section > p,
+.docs-content-section > ul,
+.docs-content-section > ol,
+.component-doc-section > p {
+  font-weight: 500;
 }
 
 .docs-link-list {
@@ -6452,6 +6250,7 @@ body {
   color: var(--docs-text-soft);
   font-size: 1.05rem;
   line-height: 1.7;
+  font-weight: 500;
 }
 
 .directory-hero-actions {
@@ -6571,12 +6370,14 @@ body {
   margin: 0 0 6px;
   font-size: 1.45rem;
   letter-spacing: -0.035em;
+  font-weight: 700;
 }
 
 .component-directory-toolbar p {
   margin: 0;
   color: var(--foreground-soft);
   font-size: 0.82rem;
+  font-weight: 500;
 }
 
 .component-directory-search {
@@ -6720,6 +6521,9 @@ body {
 }
 
 .component-directory-results-head a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--foreground);
   font-size: 0.75rem;
   font-weight: 680;
@@ -6731,87 +6535,6 @@ body {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   border: 0;
-}
-
-.component-directory-card {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  padding: 18px;
-  border-radius: var(--neu-radius-surface);
-  color: var(--foreground);
-  text-decoration: none;
-  transition:
-    box-shadow 150ms ease,
-    transform 150ms ease;
-  border: 1px solid var(--docs-line-soft);
-  background: var(--neu-surface);
-  box-shadow: none;
-  min-height: 176px;
-  gap: 14px;
-}
-
-.component-directory-card:hover,
-.component-directory-card:focus-visible {
-  background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-raised-sm);
-  transform: none;
-}
-
-.component-directory-card-top,
-.component-directory-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.component-directory-card-top > span,
-.component-directory-card-top code {
-  color: var(--foreground-soft);
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  text-transform: uppercase;
-}
-
-.component-directory-card-top code {
-  padding: 3px 6px;
-  border: 1px solid var(--docs-line-soft);
-  border-radius: 4px;
-  background: var(--neu-surface-low);
-}
-
-.component-directory-card-body {
-  flex: 1;
-}
-
-.component-directory-card h3 {
-  margin: 0 0 8px;
-  font-size: 1.08rem;
-  letter-spacing: -0.025em;
-}
-
-.component-directory-card p {
-  margin: 0;
-  color: var(--docs-text-soft);
-  font-size: 0.78rem;
-  line-height: 1.65;
-}
-
-.component-directory-card-footer {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid var(--docs-line-soft);
-  color: var(--foreground-soft);
-  font-size: 0.68rem;
-}
-
-.component-directory-card-footer code {
-  min-width: 0;
-  overflow: hidden;
-  font-size: 0.62rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .component-directory-empty {
@@ -6904,6 +6627,7 @@ body {
   color: var(--docs-text-soft);
   font-size: 1rem;
   line-height: 1.65;
+  font-weight: 500;
 }
 
 .template-gallery-header small {
@@ -7003,6 +6727,7 @@ body {
 .template-card-featured .template-card-heading h2 {
   margin: 6px 0 0;
   font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .template-card-body > p {
@@ -7010,6 +6735,7 @@ body {
   color: var(--docs-text-soft);
   font-size: 0.82rem;
   line-height: 1.65;
+  font-weight: 500;
 }
 
 .template-tags {
@@ -7097,9 +6823,11 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 24px;
-  border: 1px solid var(--docs-line-soft);
+  border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
+  background-image: var(--neu-fill-raised);
+  box-shadow: var(--neu-shadow-raised-sm);
 }
 
 .chart-reference-meta {
@@ -7116,6 +6844,7 @@ body {
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.35;
+  font-weight: 700;
 }
 
 .chart-reference-card > p {
@@ -7123,6 +6852,7 @@ body {
   color: var(--docs-text-soft);
   font-size: 0.85rem;
   line-height: 1.65;
+  font-weight: 500;
 }
 
 .chart-reference-card > details {
@@ -7595,15 +7325,6 @@ body {
 
   .component-directory-browser {
     padding: 0 18px 32px;
-  }
-
-  .component-directory-card {
-    padding: 16px;
-    border: 1px solid var(--docs-line-soft);
-    background: var(--neu-surface);
-    box-shadow: none;
-    min-height: 176px;
-    gap: 14px;
   }
 
   .docs-content-layout,

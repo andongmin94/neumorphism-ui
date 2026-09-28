@@ -1,3 +1,4 @@
+import { CopyableCode } from "@/components/docs/copyable-code";
 import { notFound } from "fumapress/router";
 
 import { isLocale } from "@/i18n/config";
@@ -63,7 +64,7 @@ export default function VerificationPage({ lang }: { lang: string }) {
 
         <section className="docs-content-section">
           <h2>{t.source}</h2>
-          <pre><code>{commands}</code></pre>
+          <CopyableCode lang="bash" code={commands} label="Verification commands" multiline />
           <p>Registry tests verify dependency closure, documented examples, theme contracts and generated-source assumptions before browser work begins.</p>
         </section>
 
