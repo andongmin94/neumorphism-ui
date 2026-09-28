@@ -139,7 +139,8 @@ jobs:
           npm run build --prefix docs
       - name: Inspect all locales and both screen sizes and themes
         working-directory: docs
-        run: npx playwright test --config=playwright.detail.config.ts --grep 'carousel shadow clearance|catalog detail: carousel$' --output=test-results/docs-browser/carousel-after
+        run: |
+          npx playwright test --config=playwright.detail.config.ts --grep 'carousel shadow clearance|catalog detail: carousel$' --output=test-results/docs-browser/carousel-after
       - name: Prepare the tested tree without moving main
         env:
           GH_TOKEN: ${{ github.token }}
