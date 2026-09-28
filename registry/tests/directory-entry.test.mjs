@@ -6,8 +6,8 @@ const entry = JSON.parse(
 );
 
 assert.equal(entry.name, "@neumorphism-ui");
-assert.equal(entry.homepage, "https://neumorphism-ui.dev");
-assert.equal(entry.url, "https://neumorphism-ui.dev/r/{name}.json");
+assert.equal(entry.homepage, "https://neumorphism-ui.andongmin.com");
+assert.equal(entry.url, "https://neumorphism-ui.andongmin.com/r/{name}.json");
 assert.match(entry.description, /Base UI/);
 assert.match(entry.logo, /^<svg\b/);
 assert.match(entry.logo, /viewBox=['"]0 0 200 200['"]/);

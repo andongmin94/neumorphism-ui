@@ -23,7 +23,7 @@ const versions = {
 };
 
 const { values } = parseArgs({
-  options: { shard: { type: "string", default: "1/1" } },
+  options: { shard: { type: "string", default: "1/1" }, published: { type: "boolean", default: false } },
 });
 assert.match(values.shard, /^[1-9]\d*\/[1-9]\d*$/, "Use --shard=index/count (1-based)");
 const [shard, shardCount] = values.shard.split("/").map(Number);
@@ -169,7 +169,7 @@ function fixture(directory, target, registryOrigin) {
     write(
       directory,
       "src/app/layout.tsx",
-      'import "../globals.css"; export default function Layout({ children }: { children: React.ReactNode }) { return <html lang="en"><body>{children}</body></html>; }\n',
+      'import "../globals.css"; import "pretendard/dist/web/variable/pretendardvariable.css"; export default function Layout({ children }: { children: React.ReactNode }) { return <html lang="en"><body>{children}</body></html>; }\n',
     );
     write(
       directory,
@@ -185,7 +185,7 @@ function fixture(directory, target, registryOrigin) {
     write(
       directory,
       "src/main.tsx",
-      'import { createRoot } from "react-dom/client"; import "./globals.css"; createRoot(document.getElementById("root")!).render(<main>Independent registry item</main>);\n',
+      'import { createRoot } from "react-dom/client"; import "./globals.css"; import "pretendard/dist/web/variable/pretendardvariable.css"; createRoot(document.getElementById("root")!).render(<main>Independent registry item</main>);\n',
     );
     write(
       directory,
@@ -209,6 +209,9 @@ async function verifyItem(item, target, registryOrigin) {
   try {
     fixture(directory, target, registryOrigin);
     await run(npm, ["install", "--no-audit", "--no-fund"], directory, log);
+    // Match the documented initialization: install the shared base once first.
+    await run(process.execPath, [cli, "add", "--yes", "--cwd", directory, "@neumorphism-ui/neumorphism-ui"], root, log);
+    assert.ok(fs.readFileSync(path.join(directory, "src/globals.css"), "utf8").includes("--neu-surface"), "Shared base tokens must be installed");
     await run(
       process.execPath,
       [cli, "add", "--yes", "--cwd", directory, "@neumorphism-ui/" + item.name],
@@ -232,7 +235,7 @@ async function worker(registryOrigin) {
   for (let item; (item = queue.shift()); ) {
     const targets = item.name.startsWith("template-") || item.categories?.includes("template") ? ["next"] : ["next", "vite"];
     for (const target of targets) {
-      const record = await verifyItem(item, target, registryOrigin);
+      const record = { ...await verifyItem(item, target, registryOrigin), registryOrigin, source: values.published ? "published" : "generated", sourceCommit: process.env.EXPECTED_COMMIT ?? process.env.GITHUB_SHA ?? null };
       records.push(record);
       console.log(
         (record.passed ? "PASS" : "FAIL") +
@@ -251,10 +254,12 @@ async function worker(registryOrigin) {
 }
 
 try {
-  const registryOrigin = "http://127.0.0.1:" + (await listen(registryServer));
+  const registryOrigin = values.published
+    ? new URL(registry.homepage).origin
+    : "http://127.0.0.1:" + (await listen(registryServer));
   await Promise.all(Array.from({ length: 2 }, () => worker(registryOrigin)));
 } finally {
-  await new Promise((resolve) => registryServer.close(resolve));
+  if (registryServer.listening) await new Promise((resolve) => registryServer.close(resolve));
 }
 
 const expectedTargets = selected.reduce(

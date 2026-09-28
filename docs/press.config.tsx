@@ -29,7 +29,7 @@ const config = defineConfig({
   translations,
   site: {
     name: "Neumorphism UI",
-    baseUrl: "https://neumorphism-ui.dev",
+    baseUrl: "https://neumorphism-ui.andongmin.com",
     hreflang: { zh: "zh-CN" },
   },
   meta: {
@@ -40,7 +40,7 @@ const config = defineConfig({
           <meta name="description" content="Source-owned neumorphic React components for Base UI and shadcn projects." />
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Neumorphism UI" />
-          <meta property="og:image" content="https://neumorphism-ui.dev/og.png" />
+          <meta property="og:image" content="https://neumorphism-ui.andongmin.com/og.png" />
           <meta name="twitter:card" content="summary_large_image" />
           <script dangerouslySetInnerHTML={{ __html: getThemeBootstrapScript() }} />
         </>

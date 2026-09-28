@@ -1,4 +1,4 @@
-const FALLBACK_ORIGIN = "https://neumorphism-ui.dev";
+const FALLBACK_ORIGIN = "https://neumorphism-ui.andongmin.com";
 
 export async function getRequestOrigin() {
   const configured = process.env.NEUMORPHISM_UI_ORIGIN?.trim();

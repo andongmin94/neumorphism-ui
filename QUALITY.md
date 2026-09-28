@@ -117,14 +117,20 @@ materialization workflows and staged patch files must not remain in the shipped
 
 ## Published registry observation — 2026-09-28
 
-The hosted public-endpoint verifier at run `36361076717` could not resolve
-`neumorphism-ui.dev` (`getaddrinfo ENOTFOUND`) before receiving an HTTP response.
-The canonical `/r/registry.json` and README initialization path are therefore a
-release blocker, not a passed installation check. A Vercel deployment-success
-status does not establish that the custom domain resolves. Configure/verify the
-canonical domain and DNS, then run the `Published registry` workflow against the
-deployed commit; retain its HTTP and complete-item equality report. Do not
-replace the canonical origin with an unverified guessed deployment URL.
+The earlier public probe failed to resolve `neumorphism-ui.dev`. Repository
+metadata identifies `https://neumorphism-ui.andongmin.com` as the deployed
+homepage; the old origin in README, registry metadata and docs was a source
+configuration defect, not evidence that the deployed homepage was offline.
+A hosted probe verified HTTP 200 on the configured homepage and its registry
+index, calendar and table endpoints before changing the authored origins.
+
+Source configuration, generated indexes, installation instructions and page
+metadata now use the configured homepage. The `Published registry` workflow
+checks out the exact main commit reported successful by Vercel, compares the
+index and all 80 complete item objects, runs the independent installation
+matrix against the public origin, and exercises the live documentation.
+A deployment status alone is not a passed public check: inspect the actual
+workflow result and its HTTP, installation and browser evidence.
 
 Local generation, complete manifest/file equality, acyclic dependency checks,
 and fresh Next.js/Vite installation verification remain independent signals.

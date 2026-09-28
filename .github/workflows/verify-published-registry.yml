@@ -1,24 +1,92 @@
 name: Published registry
 on:
   workflow_dispatch:
+  status:
 permissions:
   contents: read
+concurrency:
+  group: published-registry-${{ github.event.sha || github.sha }}
+  cancel-in-progress: false
+env:
+  EXPECTED_COMMIT: ${{ github.event.sha || github.sha }}
 jobs:
-  published:
+  endpoints:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event.context == 'Vercel' && github.event.state == 'success' && github.event.sha == github.sha))
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.EXPECTED_COMMIT }}
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24
-      - name: Compare the public registry with this commit
+      - name: Compare actual public HTTP responses with the exact deployed source
         run: node registry/scripts/verify-published-registry.mjs
-      - name: Save endpoint status and equality report
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: published-registry
+          name: published-endpoints
           path: docs/test-results/published-registry
+          retention-days: 7
+          if-no-files-found: error
+  installations:
+    needs: endpoints
+    name: Public installations (${{ matrix.shard }}/3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.EXPECTED_COMMIT }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: registry/package-lock.json
+      - run: npm ci --prefix registry
+      - name: Install source from the public registry into fresh applications
+        run: node registry/scripts/verify-independent-items.mjs --published --shard=${{ matrix.shard }}/3
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: public-installations-${{ matrix.shard }}
+          path: docs/test-results/independent-items
+          retention-days: 7
+          if-no-files-found: error
+  documentation:
+    needs: endpoints
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.EXPECTED_COMMIT }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - run: npm ci --prefix docs
+      - name: Install browser
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Exercise the deployed site without a local server or mocked responses
+        working-directory: docs
+        run: npx playwright test --config=playwright.published.config.ts
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: published-documentation
+          path: |
+            docs/test-results/published-browser
+            docs/test-results/published-browser-report.json
           retention-days: 7
           if-no-files-found: error

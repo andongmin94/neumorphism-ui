@@ -1,6 +1,6 @@
 export const REGISTRY_NAMESPACE = "@neumorphism-ui";
 
-export function getRegistryUrlTemplate(origin = "https://neumorphism-ui.dev") {
+export function getRegistryUrlTemplate(origin = "https://neumorphism-ui.andongmin.com") {
   return `${origin.replace(/\/+$/, "")}/r/{name}.json`;
 }
 

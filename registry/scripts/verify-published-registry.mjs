@@ -9,7 +9,7 @@ const local = name => JSON.parse(fs.readFileSync(path.join(root, "public/r", `${
 const registry = local("registry");
 const origin = new URL(registry.homepage).origin;
 const reportDirectory = path.join(root, "../docs/test-results/published-registry");
-const report = { origin, checkedAt: new Date().toISOString(), expectedItems: registry.items.length, endpoints: [], passed: false };
+const report = { origin, sourceCommit: process.env.EXPECTED_COMMIT ?? process.env.GITHUB_SHA ?? null, checkedAt: new Date().toISOString(), expectedItems: registry.items.length, endpoints: [], passed: false };
 
 async function inspect(name) {
   const url = `${origin}/r/${name}.json`;

@@ -86,6 +86,8 @@ test("home uses installable controls and saves or resets the same workspace", as
 
 test("directory slash and global search have one shortcut owner", async ({ page }, info) => {
   await page.goto("/en");
+  // Static HTML is not proof that client keyboard listeners are installed.
+  await expect(page.locator("[data-github-repository]")).toHaveAttribute("data-state", /^(ready|unavailable)$/, { timeout: 10000 });
   await page.keyboard.press("/");
   await expect(page.locator(".component-directory-search input")).toBeFocused();
   await expect(page.getByRole("dialog")).toHaveCount(0);

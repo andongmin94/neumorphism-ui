@@ -13,16 +13,17 @@ remaining release work.
 
 ## First installation
 
-**Public endpoint status:** the hosted check on 2026-09-28 could not resolve
-`neumorphism-ui.dev`. The commands below require the canonical domain to resolve.
-See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28) for the
-release blocker and re-verification procedure.
+The registry uses the repository's configured homepage,
+`https://neumorphism-ui.andongmin.com`. The `Published registry` workflow checks
+the deployed JSON, real public installs and documentation after Vercel reports
+a successful deployment. See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28)
+for the distinction between deployment and verified public installation.
 
 Use React 19, Tailwind CSS 4 and an initialized shadcn project. Select Base UI:
 
 ```bash
 npx shadcn@latest init
-npx shadcn@latest registry add @neumorphism-ui=https://neumorphism-ui.dev/r/{name}.json
+npx shadcn@latest registry add @neumorphism-ui=https://neumorphism-ui.andongmin.com/r/{name}.json
 npx shadcn@latest add @neumorphism-ui/neumorphism-ui
 npx shadcn@latest add @neumorphism-ui/button --overwrite
 ```
