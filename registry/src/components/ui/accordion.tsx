@@ -53,7 +53,7 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="accordion-indicator pointer-events-none size-4 shrink-0 text-[var(--neu-accent-ink)] transition-transform duration-[var(--neu-duration)] motion-reduce:transition-none group-aria-expanded/accordion-trigger:rotate-45"><path d="M5 12h14M12 5v14" /></svg>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="accordion-indicator pointer-events-none size-4 shrink-0 text-[var(--neu-accent-ink)]"><path d="M5 12h14" /><path data-slot="disclosure-stem" d="M12 5v14" className="origin-center transition-transform duration-[var(--neu-duration)] motion-reduce:transition-none group-aria-expanded/accordion-trigger:scale-y-0" /></svg>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

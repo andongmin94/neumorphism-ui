@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
-  testDir: "./tests/material", testMatch: ["material.spec.ts", "composition.spec.ts", "control-anatomy.spec.ts", "refinement.spec.ts"], workers: 1, retries: 0,
+  testDir: "./tests/material", testMatch: ["material.spec.ts", "composition.spec.ts", "control-anatomy.spec.ts", "refinement.spec.ts", "micro-finish.spec.ts"], workers: 1, retries: 0,
   outputDir: `test-results/docs-browser/material-${process.env.MATERIAL_PHASE ?? "after"}`,
   timeout: 30000,
   reporter: [["list"], ["json", { outputFile: "test-results/material-report.json" }]],

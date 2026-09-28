@@ -2,11 +2,22 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+// Local covers hide the stationary edge cues when no more columns exist there.
+// Native scrolling controls the effect; tables stay server-renderable.
+const scrollEdges: React.CSSProperties = {
+  backgroundImage: "linear-gradient(to right, var(--neu-surface) 30%, transparent), linear-gradient(to left, var(--neu-surface) 30%, transparent), linear-gradient(to right, var(--border), transparent), linear-gradient(to left, var(--border), transparent)",
+  backgroundPosition: "left center, right center, left center, right center",
+  backgroundSize: "40px 100%, 40px 100%, 12px 100%, 12px 100%",
+  backgroundRepeat: "no-repeat",
+  backgroundAttachment: "local, local, scroll, scroll",
+};
+
 function Table({ className, containerProps, ...props }: React.ComponentProps<"table"> & { containerProps?: React.ComponentProps<"div"> }) {
   return (
     <div
       {...containerProps}
       data-slot="table-container"
+      style={{ ...scrollEdges, ...containerProps?.style }}
       className={cn("relative w-full overflow-x-auto rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]", containerProps?.className)}
     >
       <table

@@ -197,7 +197,7 @@
     {
       "name": "breadcrumb",
       "title": "Breadcrumb",
-      "description": "A compact path navigation pattern with current-page semantics.",
+      "description": "Wrapping path navigation; place each separator inside its destination item to keep the pair together.",
       "type": "registry:ui",
       "registryDependencies": [
         "@neumorphism-ui/utils"
@@ -263,7 +263,7 @@
     {
       "name": "input-group",
       "title": "Input Group",
-      "description": "A composable inset field with addons, actions, and text or textarea controls.",
+      "description": "One inset input surface with inline addons; multiline controls span the surface above their actions.",
       "type": "registry:ui",
       "registryDependencies": [
         "@neumorphism-ui/utils"
@@ -293,7 +293,7 @@
     {
       "name": "pagination",
       "title": "Pagination",
-      "description": "Raised page controls with active-page and navigation semantics.",
+      "description": "Responsive pagination that preserves navigation targets and compacts labels at narrow container widths.",
       "type": "registry:ui",
       "registryDependencies": [
         "@neumorphism-ui/utils"
@@ -419,7 +419,7 @@
     {
       "name": "table",
       "title": "Table",
-      "description": "A responsive data table with headers, captions, and selected row states.",
+      "description": "Semantic table with native horizontal scrolling and boundary-aware edge cues.",
       "type": "registry:ui",
       "registryDependencies": [
         "@neumorphism-ui/utils"
@@ -1202,7 +1202,7 @@
     {
       "name": "resizable",
       "title": "Resizable",
-      "description": "Accessible split panels with pointer and keyboard resizing.",
+      "description": "Accessible split panels that fill an explicitly sized host, with orientation-aware SVG handles.",
       "type": "registry:ui",
       "categories": [
         "navigation-disclosure"
@@ -1270,7 +1270,7 @@
     {
       "name": "marquee",
       "title": "Marquee",
-      "description": "A pausable repeating information strip with reduced-motion support.",
+      "description": "Pausable content with an isolated control rail and complete, wrapping content under reduced motion.",
       "type": "registry:ui",
       "categories": [
         "data-feedback"

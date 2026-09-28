@@ -86,3 +86,22 @@ Table cells keep status badges on one line; the table scroll container owns narr
 Carousel examples leave an 8px flat gutter around each raised face inside the existing masked viewport. The viewport still hides adjacent slides; no global overflow override is used. Live previews and all four copied examples share this structure. The English compilation fixture is derived from the displayed source. Navigation and four-edge clearance are checked after real Embla snaps in all four screen/mode projects and locales.
 
 Published registry URLs use the homepage actually configured on the repository, not an unresolvable alternate domain. Complete public JSON equality, the public-origin independent installation matrix and live browser checks run separately from local Verify after a successful main deployment. Shortcut tests wait for an existing client-owned readiness state before asserting a keyboard effect; they do not replay a missed key or remove the focus assertion.
+
+## Micro-design case closure (MD-01–10)
+
+The baseline is `ddb5ff82`. Keep the ten collected cases distinct from an exhaustive design guarantee.
+
+| Case | Shipping responsibility | Completion criterion |
+| --- | --- | --- |
+| MD-01 | Pagination + docs | Both navigation targets remain visible and operable; narrow containers compact only the labels and decorative ellipsis. No docs-only hidden controls. |
+| MD-02 | Marquee | The clip viewport and the control occupy separate flex columns. Reduced motion reveals every original item in a wrapping layout and removes the unnecessary motion control. Duplicate content is inert. |
+| MD-03 | Resizable examples + handle | Group fills an explicitly sized parent as required by the upstream inline style contract. The measured baseline was 54px despite `h-40`; the new host owns 160px. Percentage panel sizes are explicit strings. Both handle orientations use SVG. |
+| MD-04 | Image preview asset | Full-bleed image; only ImageCard's figure clips the corners. No duplicated radius in the sample SVG. |
+| MD-05 | Breadcrumb + every example | BreadcrumbSeparator is a span inside the destination BreadcrumbItem, never a sibling list item. Separators wrap with their destinations; long current names remain readable. |
+| MD-06 | Input Group | Textareas occupy a full row; actions follow below on the same inset surface. The native resize affordance stays at the textarea's right edge. Single-line controls keep their existing height. |
+| MD-07 | Switch | Active off/on and disabled use the same track contour; disabled opacity and shadow removal reduce prominence rather than adding a stronger border. |
+| MD-08 | Controls + preview icons | Pin, Home, Settings, Grip, outward link and toast Close use fixed SVG geometry; accessible labels and control hit areas remain intact. |
+| MD-09 | Table / Data Table | Native CSS local/scroll layers disclose remaining columns and disappear at the relevant boundary. No JS observer or client-only Table wrapper. |
+| MD-10 | Accordion + Collapsible | One shared visual grammar: plus while collapsed, minus while expanded, driven by the primitive's `aria-expanded`. |
+
+Generation now refreshes the existing compiled examples from the English displayed snippets, in addition to the four live-source workflow examples. Registry metadata, both generated endpoint copies and consumer fixtures are verified together. No new catalog item, package, compatibility mode or alternate origin is introduced. Public verification compares all 80 items and installs from the deployed canonical origin; a local pass alone does not establish publication.

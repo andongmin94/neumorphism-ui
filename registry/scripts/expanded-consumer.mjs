@@ -162,10 +162,19 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
 
   const marquee = card("marquee");
   const marqueeToggle = marquee.locator('[data-slot="marquee-toggle"]');
+  const originalMotion = await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(marqueeToggle).toHaveAccessibleName("Pause animation");
   await marqueeToggle.click();
   await expect(marqueeToggle).toHaveAttribute("aria-pressed", "true");
   await expect(marqueeToggle).toHaveAccessibleName("Resume animation");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(marqueeToggle).toBeHidden();
+  await expect(marquee.locator('[data-slot="marquee-track"]')).toHaveCSS("animation-name", "none");
+  const visibleItems = marquee.locator('[data-slot="marquee-items"] [data-slot="marquee-item"]');
+  await expect(visibleItems).toHaveCount(4);
+  for (const item of await visibleItems.all()) await expect(item).toBeInViewport();
+  await page.emulateMedia({ reducedMotion: originalMotion ? "reduce" : "no-preference" });
 
   const number = card("number-field");
   await number.getByRole("button", { name: "Increase seats" }).click();

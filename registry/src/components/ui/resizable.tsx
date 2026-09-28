@@ -36,7 +36,7 @@ function ResizableHandle({
     <ResizablePrimitive.Separator
       data-slot="resizable-handle"
       className={cn(
-        "relative flex w-1 items-center justify-center bg-[var(--border)] outline-none after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2 focus-visible:ring-2 focus-visible:ring-[var(--ring)] aria-[orientation=horizontal]:h-1 aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:inset-x-0 aria-[orientation=horizontal]:after:top-1/2 aria-[orientation=horizontal]:after:h-4 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:-translate-y-1/2 aria-[orientation=horizontal]:after:translate-x-0",
+        "group/resizable relative flex w-1 items-center justify-center bg-[var(--border)] outline-none after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2 focus-visible:ring-2 focus-visible:ring-[var(--ring)] aria-[orientation=horizontal]:h-1 aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:inset-x-0 aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:top-1/2 aria-[orientation=horizontal]:after:h-4 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:-translate-y-1/2 aria-[orientation=horizontal]:after:translate-x-0",
         className,
       )}
       {...props}
@@ -44,9 +44,9 @@ function ResizableHandle({
       {withHandle ? (
         <span
           aria-hidden="true"
-          className="z-10 grid min-h-8 min-w-5 place-items-center rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-xs text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)]"
+          className="z-10 grid min-h-8 min-w-5 group-aria-[orientation=horizontal]/resizable:rotate-90 place-items-center rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-xs text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)]"
         >
-          ⋮
+          <svg aria-hidden="true" className="h-4 w-3" viewBox="0 0 12 16" fill="currentColor"><circle cx="4" cy="4" r="1" /><circle cx="8" cy="4" r="1" /><circle cx="4" cy="8" r="1" /><circle cx="8" cy="8" r="1" /><circle cx="4" cy="12" r="1" /><circle cx="8" cy="12" r="1" /></svg>
         </span>
       ) : null}
     </ResizablePrimitive.Separator>

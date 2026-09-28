@@ -89,7 +89,6 @@ import { Label } from "@neumorphism-ui/registry/ui/label";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -190,6 +189,7 @@ export function ComponentDetailPreview({
   locale,
   slug,
 }: ComponentDetailPreviewProps) {
+  const [paginationPage, setPaginationPage] = React.useState(2);
   const [mixed, setMixed] = React.useState<CheckedState>("indeterminate");
   const [showDepthGrid, setShowDepthGrid] = React.useState(true);
   const [sliderValue, setSliderValue] = React.useState([32, 72]);
@@ -302,18 +302,18 @@ export function ComponentDetailPreview({
                 Components
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
             <BreadcrumbItem>
+              <BreadcrumbSeparator />
               <BreadcrumbEllipsis />
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
             <BreadcrumbItem>
+              <BreadcrumbSeparator />
               <BreadcrumbLink href={localeHref(locale, "/components")}>
                 Navigation
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
             <BreadcrumbItem>
+              <BreadcrumbSeparator />
               <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -545,7 +545,7 @@ export function ComponentDetailPreview({
             htmlFor="docs-input-group-message"
             label={copy.inputGroup.message}
           >
-            <InputGroup className="items-end rounded-[var(--neu-radius-surface)]">
+            <InputGroup>
               <InputGroupTextarea
                 id="docs-input-group-message"
                 placeholder={copy.inputGroup.messagePlaceholder}
@@ -574,31 +574,24 @@ export function ComponentDetailPreview({
       return (
         <Pagination aria-label={copy.pagination.label}>
           <PaginationContent>
-            <PaginationItem className="component-preview-pagination-wide">
+            <PaginationItem>
               <PaginationPrevious
                 aria-label={copy.pagination.previousLabel}
+                aria-disabled={paginationPage === 1}
                 href="#pagination-example"
-              >
-                {copy.pagination.previous}
-              </PaginationPrevious>
+                onClick={event => { event.preventDefault(); setPaginationPage(value => Math.max(1, value - 1)); }}
+              >{copy.pagination.previous}</PaginationPrevious>
             </PaginationItem>
+            {[1, 2, 3].map(value => <PaginationItem key={value}>
+              <PaginationLink href="#pagination-example" isActive={paginationPage === value} onClick={event => { event.preventDefault(); setPaginationPage(value); }}>{value}</PaginationLink>
+            </PaginationItem>)}
             <PaginationItem>
-              <PaginationLink href="#pagination-example">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#pagination-example" isActive>2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#pagination-example">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem><PaginationEllipsis /></PaginationItem>
-            <PaginationItem className="component-preview-pagination-wide">
               <PaginationNext
                 aria-label={copy.pagination.nextLabel}
+                aria-disabled={paginationPage === 3}
                 href="#pagination-example"
-              >
-                {copy.pagination.next}
-              </PaginationNext>
+                onClick={event => { event.preventDefault(); setPaginationPage(value => Math.min(3, value + 1)); }}
+              >{copy.pagination.next}</PaginationNext>
             </PaginationItem>
           </PaginationContent>
         </Pagination>

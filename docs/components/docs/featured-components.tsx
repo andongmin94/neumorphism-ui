@@ -71,7 +71,7 @@ export function FeaturedComponents() {
                 <strong>{item.label}</strong>
               </div>
               <Link href={localeHref(locale, `/components/${item.slug}`)}>
-                {t.open} <span aria-hidden="true">↗</span>
+                {t.open} <svg aria-hidden="true" className="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M7 7h10v10" /></svg>
               </Link>
             </footer>
           </article>

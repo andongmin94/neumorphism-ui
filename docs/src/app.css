@@ -979,9 +979,6 @@ a {
     justify-items: start;
   }
 
-  .pagination-desktop-only {
-    display: none;
-  }
 
   .docs-page {
     gap: 2rem;
@@ -1885,9 +1882,6 @@ a {
     flex-wrap: wrap;
   }
 
-  .component-preview-pagination-wide {
-    display: none;
-  }
 
   .component-preview-separator-nav {
     flex-wrap: nowrap !important;

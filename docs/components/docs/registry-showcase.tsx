@@ -212,14 +212,14 @@ export function RegistryShowcase({ copy }: { copy: ShowcaseMessages }) {
                   {copy.navigation.registry}
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
               <BreadcrumbItem>
+                <BreadcrumbSeparator />
                 <BreadcrumbLink href="#component-index">
                   {copy.navigation.components}
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
               <BreadcrumbItem>
+                <BreadcrumbSeparator />
                 <BreadcrumbPage>{copy.navigation.tabs}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -250,7 +250,7 @@ export function RegistryShowcase({ copy }: { copy: ShowcaseMessages }) {
 
           <Pagination aria-label={copy.navigation.pagination}>
             <PaginationContent>
-              <PaginationItem className="pagination-desktop-only">
+              <PaginationItem>
                 <PaginationPrevious
                   aria-label={copy.navigation.previousPage}
                   href="#component-index"
@@ -267,7 +267,7 @@ export function RegistryShowcase({ copy }: { copy: ShowcaseMessages }) {
               <PaginationItem>
                 <PaginationEllipsis />
               </PaginationItem>
-              <PaginationItem className="pagination-desktop-only">
+              <PaginationItem>
                 <PaginationNext
                   aria-label={copy.navigation.nextPage}
                   href="#component-index"

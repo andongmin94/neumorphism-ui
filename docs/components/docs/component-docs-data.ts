@@ -296,12 +296,12 @@ export const componentDocs = [
     <BreadcrumbItem>
       <BreadcrumbLink href="/">Home</BreadcrumbLink>
     </BreadcrumbItem>
-    <BreadcrumbSeparator />
     <BreadcrumbItem>
+      <BreadcrumbSeparator />
       <BreadcrumbLink href="/components">Components</BreadcrumbLink>
     </BreadcrumbItem>
-    <BreadcrumbSeparator />
     <BreadcrumbItem>
+      <BreadcrumbSeparator />
       <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
     </BreadcrumbItem>
   </BreadcrumbList>
@@ -333,7 +333,7 @@ export const componentDocs = [
         name: "children",
         type: "React.ReactNode",
         defaultValue: '"/"',
-        description: "보조기술에서 숨겨지는 시각적 구분자입니다.",
+        description: "다음 BreadcrumbItem 안에 배치하는 시각적 구분자입니다. 항목과 함께 줄바꿈되며 보조기술에서는 숨겨집니다.",
       },
     ],
     accessibility: [
@@ -1738,7 +1738,7 @@ import {
   "summary": "링크의 목적지를 보조적으로 설명하는 미리보기 카드.",
   "description": "링크의 목적지를 보조적으로 설명하는 미리보기 카드. 필수 정보나 행동을 hover에만 두지 마세요. 원래 링크만으로도 목적지를 알 수 있어야 합니다.",
   "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { HoverCard, HoverCardTrigger, HoverCardContent } from \"@/components/ui/hover-card\";",
-  "usageCode": "export default function Example() {\n  const id = React.useId();\n  return (<HoverCard><HoverCardTrigger href=\"#profile-preview\" className=\"inline-flex items-center gap-3 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-4 py-3 font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]\">{\"프로필 미리보기\"} <span aria-hidden=\"true\">↗</span></HoverCardTrigger><HoverCardContent><strong id=\"profile-preview\">Alex Kim</strong><p>{\"제품 디자이너 · 서울\"}</p></HoverCardContent></HoverCard>);\n}",
+  "usageCode": "export default function Example() {\n  const id = React.useId();\n  return (<HoverCard><HoverCardTrigger href=\"#profile-preview\" className=\"inline-flex items-center gap-3 rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-4 py-3 font-semibold text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]\">{\"프로필 미리보기\"} <svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M7 17 17 7M7 7h10v10\" /></svg></HoverCardTrigger><HoverCardContent><strong id=\"profile-preview\">Alex Kim</strong><p>{\"제품 디자이너 · 서울\"}</p></HoverCardContent></HoverCard>);\n}",
   "props": [
     {
       "component": "HoverCard",
@@ -1804,7 +1804,7 @@ import {
   "summary": "추가 설정 한 묶음을 펼치거나 접는 컨테이너.",
   "description": "추가 설정 한 묶음을 펼치거나 접는 컨테이너. 트리거의 이름은 내용과 관계를 설명해야 합니다. Enter와 Space로 펼침을 확인하세요.",
   "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Collapsible, CollapsibleTrigger, CollapsibleContent } from \"@/components/ui/collapsible\";",
-  "usageCode": "export default function Example() {\n  const [expanded, setExpanded] = React.useState(false);\n  return (<Collapsible open={expanded} onOpenChange={setExpanded}><CollapsibleTrigger>{\"세부 설정\"}<span aria-hidden=\"true\">{expanded ? \"−\" : \"+\"}</span></CollapsibleTrigger><CollapsibleContent><div>{\"기본 동작은 그대로 두고 추가 설정만 펼칩니다.\"}</div></CollapsibleContent></Collapsible>);\n}",
+  "usageCode": "export default function Example() {\n  const [expanded, setExpanded] = React.useState(false);\n  return (<Collapsible open={expanded} onOpenChange={setExpanded}><CollapsibleTrigger>{\"세부 설정\"}</CollapsibleTrigger><CollapsibleContent><div>{\"기본 동작은 그대로 두고 추가 설정만 펼칩니다.\"}</div></CollapsibleContent></Collapsible>);\n}",
   "props": [
     {
       "component": "Collapsible",
@@ -1837,7 +1837,7 @@ import {
   "summary": "눌린 선택 상태가 유지되는 독립 토글 버튼.",
   "description": "눌린 선택 상태가 유지되는 독립 토글 버튼. 아이콘만 쓰면 aria-label을 제공하세요. 색뿐 아니라 inset과 테두리로 선택 상태를 표시합니다.",
   "importCode": "\"use client\";\n\nimport { Toggle } from \"@/components/ui/toggle\";",
-  "usageCode": "export default function Example() {\n\n  return (<div className=\"flex flex-wrap gap-3\"><Toggle aria-label={\"고정\"}><span aria-hidden=\"true\">◆</span>{\"고정\"}</Toggle><Toggle defaultPressed>{\"고정\"}</Toggle><Toggle disabled>{\"잠김\"}</Toggle></div>);\n}",
+  "usageCode": "export default function Example() {\n\n  return (<div className=\"flex flex-wrap gap-3\"><Toggle aria-label={\"고정\"}><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M16 3l5 5-4 1-4 4-1 4-5-5 4-1 4-4Z\" /><path d=\"m7 17-4 4\" /></svg>{\"고정\"}</Toggle><Toggle defaultPressed>{\"고정\"}</Toggle><Toggle disabled>{\"잠김\"}</Toggle></div>);\n}",
   "props": [
     {
       "component": "Toggle",
@@ -2533,7 +2533,7 @@ import {
     summary: "키보드와 포인터로 비율을 조절하는 분할 패널.",
     description: "react-resizable-panels의 크기 계산과 separator 접근성을 그대로 사용합니다. 뉴모피즘은 panel 경계와 handle의 표면만 담당하며 패널 상태 계산을 재구현하지 않습니다.",
     importCode: "\"use client\";\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from \"@/components/ui/resizable\";",
-    usageCode: "export default function Example() {\n  return <ResizablePanelGroup orientation=\"horizontal\" className=\"h-48 max-w-lg\">\n    <ResizablePanel defaultSize={40} minSize={25}><div className=\"grid h-full place-items-center p-4\">목록</div></ResizablePanel>\n    <ResizableHandle withHandle />\n    <ResizablePanel defaultSize={60} minSize={30}><div className=\"grid h-full place-items-center p-4\">세부 정보</div></ResizablePanel>\n  </ResizablePanelGroup>;\n}",
+    usageCode: "export default function Example() {\n  return <div className=\"h-48 max-w-lg\"><ResizablePanelGroup orientation=\"horizontal\">\n    <ResizablePanel defaultSize=\"40%\" minSize=\"25%\"><div className=\"grid h-full place-items-center p-4\">목록</div></ResizablePanel>\n    <ResizableHandle withHandle />\n    <ResizablePanel defaultSize=\"60%\" minSize=\"30%\"><div className=\"grid h-full place-items-center p-4\">세부 정보</div></ResizablePanel>\n  </ResizablePanelGroup></div>;\n}",
     props: [
       { component: "ResizablePanelGroup", name: "orientation", type: '"horizontal" | "vertical"', required: true, description: "패널 분할 방향을 지정합니다." },
       { component: "ResizablePanel", name: "defaultSize", type: "number | string", description: "초기 패널 크기를 지정합니다." },
@@ -2554,7 +2554,7 @@ import {
     summary: "데스크톱 축소와 모바일 Sheet를 함께 제공하는 애플리케이션 내비게이션.",
     description: "SidebarProvider가 desktop·mobile 상태와 Ctrl/Cmd+B 단축키를 관리합니다. 데스크톱에서는 offcanvas 또는 icon 크기로 접고, 모바일에서는 기존 Sheet를 재사용합니다. 메뉴·툴팁·포커스 상태는 기존 뉴모피즘 토큰을 그대로 사용합니다.",
     importCode: "\"use client\";\nimport {\n  Sidebar,\n  SidebarContent,\n  SidebarGroup,\n  SidebarGroupContent,\n  SidebarGroupLabel,\n  SidebarHeader,\n  SidebarInset,\n  SidebarMenu,\n  SidebarMenuItem,\n  SidebarMenuLink,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/sidebar\";",
-    usageCode: "export default function Example() {\n  return <SidebarProvider className=\"min-h-80\">\n    <Sidebar collapsible=\"icon\">\n      <SidebarHeader><strong>Workspace</strong></SidebarHeader>\n      <SidebarContent>\n        <SidebarGroup>\n          <SidebarGroupLabel>탐색</SidebarGroupLabel>\n          <SidebarGroupContent>\n            <SidebarMenu>\n              <SidebarMenuItem><SidebarMenuLink href=\"#overview\" isActive tooltip=\"개요\"><span aria-hidden=\"true\">⌂</span><span>개요</span></SidebarMenuLink></SidebarMenuItem>\n              <SidebarMenuItem><SidebarMenuLink href=\"#settings\" tooltip=\"설정\"><span aria-hidden=\"true\">⚙</span><span>설정</span></SidebarMenuLink></SidebarMenuItem>\n            </SidebarMenu>\n          </SidebarGroupContent>\n        </SidebarGroup>\n      </SidebarContent>\n    </Sidebar>\n    <SidebarInset><header className=\"p-3\"><SidebarTrigger label=\"사이드바 전환\" /></header><section id=\"overview\" className=\"p-4\">워크스페이스 개요</section></SidebarInset>\n  </SidebarProvider>;\n}",
+    usageCode: "export default function Example() {\n  return <SidebarProvider className=\"min-h-80\">\n    <Sidebar collapsible=\"icon\">\n      <SidebarHeader><strong>Workspace</strong></SidebarHeader>\n      <SidebarContent>\n        <SidebarGroup>\n          <SidebarGroupLabel>탐색</SidebarGroupLabel>\n          <SidebarGroupContent>\n            <SidebarMenu>\n              <SidebarMenuItem><SidebarMenuLink href=\"#overview\" isActive tooltip=\"개요\"><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m3 10 9-7 9 7v10H3Z\" /><path d=\"M9 20v-7h6v7\" /></svg><span>개요</span></SidebarMenuLink></SidebarMenuItem>\n              <SidebarMenuItem><SidebarMenuLink href=\"#settings\" tooltip=\"설정\"><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z\" /><circle cx=\"12\" cy=\"12\" r=\"3\" /></svg><span>설정</span></SidebarMenuLink></SidebarMenuItem>\n            </SidebarMenu>\n          </SidebarGroupContent>\n        </SidebarGroup>\n      </SidebarContent>\n    </Sidebar>\n    <SidebarInset><header className=\"p-3\"><SidebarTrigger label=\"사이드바 전환\" /></header><section id=\"overview\" className=\"p-4\">워크스페이스 개요</section></SidebarInset>\n  </SidebarProvider>;\n}",
     props: [
       { component: "SidebarProvider", name: "defaultOpen / open / onOpenChange", type: "boolean / controlled state", description: "데스크톱 사이드바의 초기 또는 controlled 열림 상태를 관리합니다." },
       { component: "Sidebar", name: "collapsible", type: '"offcanvas" | "icon" | "none"', defaultValue: '"offcanvas"', description: "접힌 상태에서 완전히 숨길지 icon 너비로 유지할지 지정합니다." },

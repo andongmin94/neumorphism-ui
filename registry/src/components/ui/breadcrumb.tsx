@@ -14,7 +14,7 @@ function BreadcrumbList({
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "flex flex-wrap items-center gap-2 text-sm text-[var(--muted-foreground)]",
+        "m-0 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 p-0 list-none text-sm text-[var(--muted-foreground)]",
         className,
       )}
       {...props}
@@ -29,7 +29,7 @@ function BreadcrumbItem({
   return (
     <li
       data-slot="breadcrumb-item"
-      className={cn("inline-flex items-center gap-2", className)}
+      className={cn("inline-flex min-w-0 max-w-full items-baseline gap-2 [overflow-wrap:anywhere]", className)}
       {...props}
     />
   );
@@ -43,7 +43,7 @@ function BreadcrumbLink({
     <a
       data-slot="breadcrumb-link"
       className={cn(
-        "rounded-[var(--neu-radius-small)] outline-none transition-colors hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+        "min-w-0 rounded-[var(--neu-radius-small)] outline-none transition-colors hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
         className,
       )}
       {...props}
@@ -59,27 +59,27 @@ function BreadcrumbPage({
     <span
       aria-current="page"
       data-slot="breadcrumb-page"
-      className={cn("font-semibold text-[var(--foreground)]", className)}
+      className={cn("min-w-0 font-semibold text-[var(--foreground)]", className)}
       {...props}
     />
   );
 }
 
+// Keep this inside the following BreadcrumbItem so the separator cannot orphan.
 function BreadcrumbSeparator({
   children,
   className,
   ...props
-}: React.ComponentProps<"li">) {
+}: React.ComponentProps<"span">) {
   return (
-    <li
+    <span
       aria-hidden="true"
-      role="presentation"
       data-slot="breadcrumb-separator"
-      className={cn("select-none text-[var(--muted-foreground)]/70", className)}
+      className={cn("shrink-0 select-none text-[var(--muted-foreground)]/70", className)}
       {...props}
     >
-      {children ?? <span aria-hidden="true">/</span>}
-    </li>
+      {children ?? "/"}
+    </span>
   );
 }
 
@@ -97,7 +97,7 @@ function BreadcrumbEllipsis({
       )}
       {...props}
     >
-      <span aria-hidden="true">•••</span>
+      <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
       <span className="sr-only">More</span>
     </span>
   );

@@ -134,3 +134,11 @@ workflow result and its HTTP, installation and browser evidence.
 
 Local generation, complete manifest/file equality, acyclic dependency checks,
 and fresh Next.js/Vite installation verification remain independent signals.
+
+## Micro-design synchronization
+
+`docs/visual-reference.md` maps MD-01–10 to shipping owners and acceptance criteria.
+The material micro-finish suite exercises installed-source geometry without docs CSS;
+the documentation suite checks all four localized previews. Generated example
+fixtures now follow the displayed English snippets automatically. Registry metadata,
+source contracts and public JSON equality must pass on the same final commit.
