@@ -1,0 +1,87 @@
+name: Docs finish review
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/docs-finish-review.yml]
+permissions:
+  contents: read
+concurrency:
+  group: docs-finish-review
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Install and collect the exact source and existing highlight APIs
+        run: |
+          npm ci --prefix docs
+          mkdir -p "$RUNNER_TEMP/docs-review/dependencies"
+          git archive --format=zip HEAD -o "$RUNNER_TEMP/docs-review/source.zip"
+          git rev-parse HEAD > "$RUNNER_TEMP/docs-review/commit.txt"
+          cp -R docs/node_modules/fumadocs-core/dist/highlight* "$RUNNER_TEMP/docs-review/dependencies/"
+          cp -R docs/node_modules/fumadocs-ui/dist/components/dynamic-codeblock* "$RUNNER_TEMP/docs-review/dependencies/"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: docs-review-source
+          path: ${{ runner.temp }}/docs-review
+          retention-days: 7
+          if-no-files-found: error
+      - name: Build the unchanged baseline
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run build --prefix docs
+      - name: Install browser
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Capture baseline directory and code surfaces
+        working-directory: docs
+        run: |
+          cat > .review-capture.mjs <<'JS'
+          import { chromium } from '@playwright/test';
+          import { spawn } from 'node:child_process';
+          import fs from 'node:fs';
+          const server = spawn('npm', ['run', 'start', '--', '--host', '127.0.0.1', '--port', '4178'], { stdio: 'inherit' });
+          const root = process.env.RUNNER_TEMP + '/docs-review-baseline';
+          fs.mkdirSync(root, { recursive: true });
+          try {
+            for (let i = 0; i < 120; i++) {
+              try { if ((await fetch('http://127.0.0.1:4178/en')).ok) break; } catch {}
+              await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            const browser = await chromium.launch();
+            try {
+              for (const width of [390, 1440]) for (const mode of ['light', 'dark']) {
+                const page = await browser.newPage({ viewport: { width, height: 1000 }, colorScheme: mode, reducedMotion: 'reduce' });
+                await page.goto('http://127.0.0.1:4178/en');
+                await page.evaluate(() => document.fonts.ready);
+                const filter = page.locator('.component-directory-categories button').filter({ hasText: 'Forms' });
+                await filter.click();
+                await page.locator('.component-directory-results').scrollIntoViewIfNeeded();
+                await page.screenshot({ path: `${root}/directory-${width}-${mode}.png` });
+                await page.goto('http://127.0.0.1:4178/en/components/button');
+                await page.getByRole('tab', { name: 'Code', exact: true }).click();
+                await page.evaluate(() => document.fonts.ready);
+                await page.locator('.component-example-code').scrollIntoViewIfNeeded();
+                await page.screenshot({ path: `${root}/code-${width}-${mode}.png` });
+                await page.close();
+              }
+            } finally { await browser.close(); }
+          } finally { server.kill('SIGTERM'); }
+          JS
+          node .review-capture.mjs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: docs-review-baseline
+          path: ${{ runner.temp }}/docs-review-baseline
+          retention-days: 7
+          if-no-files-found: warn
