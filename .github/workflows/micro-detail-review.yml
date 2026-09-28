@@ -20,53 +20,42 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Apply the reviewed source changes with exact preimage checks
+      - name: Restore the immutable source review scripts
+        run: |
+          mkdir -p /tmp/micro-detail
+          git fetch --depth=1 origin 3e67c06c79d10e00123ab6aa2c220afd5bf2ef3d
+          python - <<'PY'
+          import subprocess
+          from pathlib import Path
+          source=subprocess.check_output(['git','show','3e67c06c79d10e00123ab6aa2c220afd5bf2ef3d:.github/workflows/micro-detail-review.yml'],text=True)
+          for name,title in {'apply':'Apply the reviewed source changes with exact preimage checks','validate':'Generate registry endpoints and validate source and documentation','tree':'Prepare the tested product tree without moving main','evidence':'Retain actual screenshots, reports and changed source'}.items():
+            section=source.split('      - name: '+title+'\n',1)[1].split('\n      - ',1)[0]
+            lines=section.split('        run: |\n',1)[1].splitlines()
+            assert all(not line or line.startswith('          ') for line in lines)
+            Path('/tmp/micro-detail/'+name+'.sh').write_text('\n'.join(line[10:] for line in lines)+'\n')
+          PY
+      - name: Apply the source patch and correct the new test expectations
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/micro-detail
+          bash -e /tmp/micro-detail/apply.sh
           python - <<'PY'
-          import base64,hashlib,json,lzma,os,urllib.request
-          from pathlib import Path,PurePosixPath
-          parts=[]
-          for sha in ['09e63666df8942f075e2958460c034a302d9374e','3825d58150c4a55a89f41264b09d102b78dae1a6']:
-            req=urllib.request.Request('https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/git/blobs/'+sha,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
-            with urllib.request.urlopen(req,timeout=20) as response: blob=json.load(response)
-            part=base64.b64decode(blob['content'])
-            assert hashlib.sha1(b'blob '+str(len(part)).encode()+b'\0'+part).hexdigest()==sha
-            parts.append(part)
-          raw=lzma.decompress(base64.b64decode(b''.join(parts)))
-          assert hashlib.sha256(raw).hexdigest()=='60924551f02204029379b72208e6e81befe6038c9665cd550d7f2dc5c0eb2713'
-          changes=json.loads(raw)
-          for change in changes:
-            name=change['path'];p=Path(name)
-            assert not PurePosixPath(name).is_absolute() and '..' not in PurePosixPath(name).parts
-            assert not name.startswith(('.github/','.git/'))
-            if 'create' in change:
-              assert not p.exists(),name
-              p.parent.mkdir(parents=True,exist_ok=True);p.write_text(change['create'])
-            else:
-              before=p.read_bytes();assert hashlib.sha256(before).hexdigest()==change['sha256'],name
-              text=before.decode()
-              for start,end,replacement in reversed(change['edits']): text=text[:start]+replacement+text[end:]
-              p.write_text(text)
-          Path('/tmp/micro-detail/authored-files.json').write_text(json.dumps([c['path'] for c in changes],indent=2))
+          from pathlib import Path
+          p=Path('docs/tests/material/micro-finish.spec.ts');s=p.read_text()
+          a='toHaveCSS("resize", "y")';assert s.count(a)==1;s=s.replace(a,'toHaveCSS("resize", "vertical")')
+          a='      const close = page.getByRole("button", { name: "Dismiss notification" });';assert s.count(a)==1
+          b='''      const toast = page.locator('[data-slot="toast"]');
+                await expect(toast).toBeVisible();
+                // Base UI excludes dismiss controls from live announcements until toast focus enters.
+                await page.keyboard.press("F6");
+                await toast.screenshot({ path: info.outputPath("toast-close.png") });
+                const close = page.getByRole("button", { name: "Dismiss notification" });'''
+          p.write_text(s.replace(a,b))
           PY
-      - name: Generate registry endpoints and validate source and documentation
+      - name: Generate and validate synchronized product source
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          npm ci --prefix registry
-          npm ci --prefix docs
-          npm run lint --prefix registry
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          npm test --prefix registry
-          npm run check:generated --prefix registry
-          npm run lint --prefix docs
-          npm run typecheck --prefix docs
-          npm run build --prefix docs
-          git diff --check
+        run: bash -e /tmp/micro-detail/validate.sh
       - name: Install the review browser
         working-directory: docs
         run: npx playwright install --with-deps chromium
@@ -83,41 +72,10 @@ jobs:
       - name: Prepare the tested product tree without moving main
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          python - <<'PY'
-          import json,os,subprocess,urllib.request,urllib.error
-          from pathlib import Path
-          authored=set(json.loads(Path('/tmp/micro-detail/authored-files.json').read_text()))
-          untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines())
-          assert untracked<=authored,untracked-authored
-          subprocess.run(['git','add','--',*sorted(authored)],check=True)
-          changed=set(subprocess.check_output(['git','diff','HEAD','--name-only'],text=True).splitlines())
-          extra=changed-authored
-          assert all(name.startswith(('registry/public/r/','docs/public/r/','registry/tests/examples/')) or name=='registry/registry.json' for name in extra),extra
-          assert not any(name.startswith('.github/') for name in changed)
-          entries=[{'path':name,'mode':'100644','type':'blob','content':Path(name).read_text()} for name in sorted(changed)]
-          base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
-          request=urllib.request.Request('https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/git/trees',data=json.dumps({'base_tree':base,'tree':entries}).encode(),headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST')
-          try:
-            with urllib.request.urlopen(request,timeout=30) as response: created=json.load(response)
-          except urllib.error.HTTPError as error:
-            print(error.read().decode());raise
-          Path('/tmp/micro-detail/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':created['sha'],'files':sorted(changed),'removeWorkflow':'.github/workflows/micro-detail-review.yml'},indent=2))
-          PY
+        run: bash -e /tmp/micro-detail/tree.sh
       - name: Retain actual screenshots, reports and changed source
         if: always()
-        run: |
-          if [ -d docs/test-results ]; then cp -R docs/test-results /tmp/micro-detail/; fi
-          git diff HEAD > /tmp/micro-detail/changes.diff
-          python - <<'PY'
-          import json,tarfile
-          from pathlib import Path
-          names=Path('/tmp/micro-detail/authored-files.json')
-          if names.exists():
-            with tarfile.open('/tmp/micro-detail/authored-source.tar.gz','w:gz') as archive:
-              for name in json.loads(names.read_text()):
-                if Path(name).exists(): archive.add(name,arcname=name)
-          PY
+        run: bash -e /tmp/micro-detail/evidence.sh
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
