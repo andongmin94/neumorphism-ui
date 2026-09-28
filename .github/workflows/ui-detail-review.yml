@@ -39,20 +39,46 @@ jobs:
           bash /tmp/review2-recover.sh
       - name: Preserve the original component render
         run: bash /tmp/review2-before.sh
-      - name: Apply the reviewed source and finish compact calendar proportions
+      - name: Apply the reviewed source and finish calendar sizing
         run: |
           bash /tmp/review2-apply.sh
           python - <<'PY'
           from pathlib import Path
           p=Path('registry/src/components/ui/calendar.tsx');s=p.read_text()
-          old='<div data-slot="calendar" className="max-w-full">';assert old in s
-          s=s.replace(old,'<div data-slot="calendar" className="@container/calendar max-w-full">')
+          old='  return <div data-slot="calendar" className="max-w-full"><DayPicker';assert old in s
+          s=s.replace(old,'''  const columns = props.showWeekNumber ? 8 : 7;
+            const monthCount = props.numberOfMonths ?? 1;
+            // Size containment must retain a natural width inside flex/popover hosts.
+            const containerStyle = {
+              "--calendar-columns": columns,
+              containIntrinsicInlineSize: `calc(var(--cell-size) * ${columns * monthCount} + ${(monthCount - 1) * 1.5 + 2}rem + 2px)`,
+            } as React.CSSProperties;
+            return <div data-slot="calendar" className="@container/calendar max-w-full [--cell-size:clamp(1.75rem,7.5vw,2.25rem)]" style={containerStyle}><DayPicker''')
+          old=' [--cell-size:clamp(1.75rem,7.5vw,2.25rem)]", props.showWeekNumber ? "[--calendar-columns:8]" : "[--calendar-columns:7]", className)';assert old in s
+          s=s.replace(old,'", className)')
           old='months: "relative flex max-w-full flex-wrap justify-center gap-6"';assert old in s
-          s=s.replace(old,'months: "relative flex max-w-full flex-col flex-wrap gap-6 @min-[40rem]/calendar:flex-row"');p.write_text(s)
+          s=s.replace(old,'months: cn("relative flex max-w-full flex-col flex-wrap gap-6", props.showWeekNumber ? "@min-[calc(39.5rem+2px)]/calendar:flex-row" : "@min-[calc(35rem+2px)]/calendar:flex-row")')
+          p.write_text(s)
+          p=Path('docs/tests/material/refinement.tsx');s=p.read_text();needle='        </section>\n        <section className="grid min-w-0 content-start gap-4"><h2 className="font-semibold">Range and week numbers</h2>';assert needle in s
+          s=s.replace(needle,'''          <div data-testid="intrinsic-calendar" className="flex justify-start"><Calendar defaultMonth={new Date(2026, 8, 1)} today={new Date(2026, 8, 15)} /></div>
+          '''+needle)
+          p.write_text(s)
           p=Path('docs/tests/material/refinement.spec.ts');s=p.read_text();needle="        expect(outer.width).toBeLessThanOrEqual(parent.width + 1);";assert needle in s
           s=s.replace(needle,needle+"\n        if (id === 'range-calendar' && outer.width < 640) {\n          const plate = (await fixture.locator('[data-slot=\"calendar\"] > div').boundingBox())!;\n          const grid = (await fixture.locator('table').first().boundingBox())!;\n          expect(plate.width - grid.width).toBeLessThanOrEqual(34);\n        }")
+          needle='      const calendar = page.getByTestId("narrow-calendar");';assert needle in s
+          s=s.replace(needle,'''      const intrinsic = page.getByTestId('intrinsic-calendar');
+                const intrinsicGrid = (await intrinsic.getByRole('grid').boundingBox())!;
+                expect(intrinsicGrid.width).toBeGreaterThanOrEqual(190);
+                if (width === 1440) {
+                  const range = page.getByTestId('range-calendar');
+                  await range.locator('..').evaluate(e => { (e as HTMLElement).style.gridColumn = '1 / -1'; });
+                  const grids = await range.locator('table').evaluateAll(es => es.map(e => e.getBoundingClientRect().y));
+                  expect(Math.abs(grids[0] - grids[1])).toBeLessThanOrEqual(1);
+                  await range.locator('..').evaluate(e => { (e as HTMLElement).style.removeProperty('grid-column'); });
+                }
+          '''+needle)
           p.write_text(s)
-          p=Path('docs/visual-reference.md');p.write_text(p.read_text()+'\nCalendar month layout uses its containing width, not a viewport breakpoint: compact hosts keep a content-sized vertical plate rather than a wide empty tray. The source specimen checks plate-to-grid gutters in addition to overflow.\n')
+          p=Path('docs/visual-reference.md');p.write_text(p.read_text()+'\nCalendar month layout uses its containing width, not a viewport breakpoint. Size containment retains the natural month width in flex and popover hosts; compact hosts keep a content-sized vertical plate rather than a wide empty tray. The source specimen checks intrinsic size, plate-to-grid gutters and wide two-month rows in addition to overflow.\n')
           PY
       - name: Check source, complete endpoints and documentation
         run: bash /tmp/review2-verify.sh
