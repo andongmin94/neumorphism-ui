@@ -20,293 +20,86 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Verify the repository-configured homepage with real public requests
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Restore immutable review scripts without interpolating a nested workflow
         run: |
           mkdir -p /tmp/canonical-registry-review
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          const report={checkedAt:new Date().toISOString(),sourceCommit:process.env.GITHUB_SHA,requests:[],passed:false};
-          try {
-            const metadata=await fetch('https://api.github.com/repos/'+process.env.GITHUB_REPOSITORY,{headers:{Authorization:'Bearer '+process.env.GITHUB_TOKEN,Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(15000)});
-            assert.equal(metadata.status,200);
-            const repo=await metadata.json();
-            assert.equal(repo.homepage,'https://neumorphism-ui.andongmin.com');
-            report.origin=new URL(repo.homepage).origin;
-            for (const pathname of ['/en','/r/registry.json','/r/calendar.json','/r/table.json']) {
-              const url=report.origin+pathname;
-              const response=await fetch(url,{signal:AbortSignal.timeout(15000)});
-              const record={url,status:response.status,finalUrl:response.url,contentType:response.headers.get('content-type')};
-              report.requests.push(record);
-              assert.equal(response.status,200,JSON.stringify(record));
-              assert.equal(new URL(response.url).origin,report.origin);
-              if (pathname.endsWith('.json')) {
-                const body=await response.json();
-                record.name=body.name;
-                if (pathname==='/r/registry.json') {record.homepage=body.homepage;record.items=body.items.length;assert.equal(body.items.length,80);assert.equal(body.name,'neumorphism-ui');}
-              } else assert.match(await response.text(),/Neumorphism UI/);
-            }
-            report.passed=true;
-          } catch (error) {
-            report.error=String(error);report.cause=String(error.cause??'');process.exitCode=1;
-          } finally {
-            fs.writeFileSync('/tmp/canonical-registry-review/public-origin-before.json',JSON.stringify(report,null,2));
-            console.log(JSON.stringify(report,null,2));
-          }
-          JS
-      - name: Correct authored origins and make public verification an actual deployment gate
-        run: |
+          git fetch --depth=1 origin 50a9c65ced0185793c5d9fb678ac312ad1c9fb02
           python - <<'PY'
+          import subprocess
           from pathlib import Path
-          old='https://neumorphism-ui.dev';new='https://neumorphism-ui.andongmin.com'
-          authored=['docs/press.config.tsx','docs/components/docs/request-origin.ts','docs/components/docs/registry-config.ts','registry/catalog.json','registry/directory-entry.json','registry/tests/directory-entry.test.mjs']
-          for filename in authored:
-            p=Path(filename);s=p.read_text();assert old in s,filename;p.write_text(s.replace(old,new))
-          p=Path('README.md');s=p.read_text()
-          start=s.index('**Public endpoint status:**');end=s.index('Use React 19',start)
-          s=s[:start]+'The registry uses the repository\'s configured homepage,\n`https://neumorphism-ui.andongmin.com`. The `Published registry` workflow checks\nthe deployed JSON, real public installs and documentation after Vercel reports\na successful deployment. See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28)\nfor the distinction between deployment and verified public installation.\n\n'+s[end:]
-          s=s.replace(old,new);p.write_text(s)
-          p=Path('QUALITY.md');s=p.read_text();start=s.index('## Published registry observation')
-          s=s[:start]+'''## Published registry observation — 2026-09-28
-
-          The earlier public probe failed to resolve `neumorphism-ui.dev`. Repository
-          metadata identifies `https://neumorphism-ui.andongmin.com` as the deployed
-          homepage; the old origin in README, registry metadata and docs was a source
-          configuration defect, not evidence that the deployed homepage was offline.
-          A hosted probe verified HTTP 200 on the configured homepage and its registry
-          index, calendar and table endpoints before changing the authored origins.
-
-          Source configuration, generated indexes, installation instructions and page
-          metadata now use the configured homepage. The `Published registry` workflow
-          checks out the exact main commit reported successful by Vercel, compares the
-          index and all 80 complete item objects, runs the independent installation
-          matrix against the public origin, and exercises the live documentation.
-          A deployment status alone is not a passed public check: inspect the actual
-          workflow result and its HTTP, installation and browser evidence.
-
-          Local generation, complete manifest/file equality, acyclic dependency checks,
-          and fresh Next.js/Vite installation verification remain independent signals.
-          '''
-          p.write_text(s)
-          p=Path('registry/scripts/verify-independent-items.mjs');s=p.read_text()
-          a='options: { shard: { type: "string", default: "1/1" } },';assert s.count(a)==1
-          s=s.replace(a,'options: { shard: { type: "string", default: "1/1" }, published: { type: "boolean", default: false } },')
-          a='const record = await verifyItem(item, target, registryOrigin);';assert s.count(a)==1
-          s=s.replace(a,'const record = { ...await verifyItem(item, target, registryOrigin), registryOrigin, source: values.published ? "published" : "generated", sourceCommit: process.env.EXPECTED_COMMIT ?? process.env.GITHUB_SHA ?? null };')
-          a='const registryOrigin = "http://127.0.0.1:" + (await listen(registryServer));';assert s.count(a)==1
-          s=s.replace(a,'const registryOrigin = values.published\n    ? new URL(registry.homepage).origin\n    : "http://127.0.0.1:" + (await listen(registryServer));')
-          a='await new Promise((resolve) => registryServer.close(resolve));';assert s.count(a)==1
-          s=s.replace(a,'if (registryServer.listening) await new Promise((resolve) => registryServer.close(resolve));');p.write_text(s)
-          p=Path('registry/scripts/verify-published-registry.mjs');s=p.read_text();a='const report = { origin, checkedAt:';assert s.count(a)==1
-          s=s.replace(a,'const report = { origin, sourceCommit: process.env.EXPECTED_COMMIT ?? process.env.GITHUB_SHA ?? null, checkedAt:');p.write_text(s)
-          p=Path('docs/tests/browser/docs-polish.spec.ts');s=p.read_text()
-          marker='test("directory slash and global search have one shortcut owner"';assert s.count(marker)==1
-          before,body=s.split(marker,1);a='await page.goto("/en");';assert a in body
-          body=body.replace(a,a+'\n  // Static HTML is not proof that client keyboard listeners are installed.\n  await expect(page.locator("[data-github-repository]")).toHaveAttribute("data-state", /^(ready|unavailable)$/, { timeout: 10000 });',1)
-          p.write_text(before+marker+body)
-          p=Path('docs/visual-reference.md');p.write_text(p.read_text()+'''\nPublished registry URLs use the homepage actually configured on the repository, not an unresolvable alternate domain. Complete public JSON equality, the public-origin independent installation matrix and live browser checks run separately from local Verify after a successful main deployment. Shortcut tests wait for an existing client-owned readiness state before asserting a keyboard effect; they do not replay a missed key or remove the focus assertion.\n''')
-          PY
-          cat > registry/tests/canonical-origin.test.mjs <<'JS'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          import test from 'node:test';
-          import { getRegistryUrlTemplate } from '../../docs/components/docs/registry-config.ts';
-          import { getRequestOrigin } from '../../docs/components/docs/request-origin.ts';
-          const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
-          const catalog=JSON.parse(read('../catalog.json'));
-          const entry=JSON.parse(read('../directory-entry.json'));
-          test('public installation and documentation share the configured canonical origin',async()=>{
-            const origin='https://neumorphism-ui.andongmin.com';
-            assert.equal(catalog.homepage,origin);
-            assert.equal(entry.homepage,origin);
-            assert.equal(entry.url,getRegistryUrlTemplate());
-            assert.equal(getRegistryUrlTemplate(),origin+'/r/{name}.json');
-            const previous=process.env.NEUMORPHISM_UI_ORIGIN;
-            delete process.env.NEUMORPHISM_UI_ORIGIN;
-            try {assert.equal(await getRequestOrigin(),origin);} finally {if(previous!==undefined)process.env.NEUMORPHISM_UI_ORIGIN=previous;}
-            for(const filename of ['../../README.md','../../docs/press.config.tsx','../../docs/components/docs/registry-config.ts','../../docs/components/docs/request-origin.ts']){
-              const source=read(filename);assert.ok(source.includes(origin),filename);assert.ok(!source.includes('https://neumorphism-ui.dev'),filename);
-            }
-          });
-          JS
-          cat > docs/playwright.published.config.ts <<'TS'
-          import { readFileSync } from "node:fs";
-          import { defineConfig } from "@playwright/test";
-          import base from "./playwright.config";
-          const registry = JSON.parse(readFileSync(new URL("../registry/public/r/registry.json", import.meta.url), "utf8")) as { homepage: string };
-          export default defineConfig({
-            ...base,
-            testMatch: ["**/presentation.spec.ts", "**/registry-origin.spec.ts"],
-            use: { ...base.use, baseURL: new URL(registry.homepage).origin },
-            webServer: undefined,
-            outputDir: "test-results/published-browser",
-            reporter: [["list"], ["json", { outputFile: "test-results/published-browser-report.json" }]],
-          });
-          TS
-          cat > docs/tests/browser/registry-origin.spec.ts <<'TS'
-          import { expect, test } from "@playwright/test";
-          import { readFileSync } from "node:fs";
-          const registry = JSON.parse(readFileSync(new URL("../../../registry/public/r/registry.json", import.meta.url), "utf8")) as { homepage: string };
-          for (const locale of ["en", "ko", "ja", "zh"]) {
-            test(`canonical origin in rendered installation and metadata: ${locale}`, async ({ page, request }, info) => {
-              const url = `/${locale}/docs/installation`;
-              const response = await request.get(url);
-              expect(response.status()).toBe(200);
-              const html = await response.text();
-              expect(html).toContain(registry.homepage);
-              expect(html).not.toContain("https://neumorphism-ui.dev");
-              await page.goto(url);
-              await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", `${registry.homepage}/og.png`);
-              await expect(page.locator("[data-github-repository]")).toHaveAttribute("data-state", /^(ready|unavailable)$/, { timeout: 10000 });
-              expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
-              await page.screenshot({ path: info.outputPath(`installation-${locale}.png`), animations: "disabled" });
-            });
+          source=subprocess.check_output(['git','show','50a9c65ced0185793c5d9fb678ac312ad1c9fb02:.github/workflows/canonical-registry-review.yml'],text=True)
+          names={
+            'probe':'Verify the repository-configured homepage with real public requests',
+            'patch':'Correct authored origins and make public verification an actual deployment gate',
+            'build':'Regenerate from authored source and validate contracts',
+            'browser':'Verify canonical rendered output and repeated client-ready shortcut behavior',
           }
-          TS
-          cat > .github/workflows/verify-published-registry.yml <<'YAML'
-          name: Published registry
-          on:
-            workflow_dispatch:
-            status:
-          permissions:
-            contents: read
-          concurrency:
-            group: published-registry-${{ github.event.sha || github.sha }}
-            cancel-in-progress: false
-          env:
-            EXPECTED_COMMIT: ${{ github.event.sha || github.sha }}
-          jobs:
-            endpoints:
-              if: >-
-                github.ref == 'refs/heads/main' &&
-                (github.event_name == 'workflow_dispatch' ||
-                 (github.event.context == 'Vercel' && github.event.state == 'success' && github.event.sha == github.sha))
-              runs-on: ubuntu-latest
-              timeout-minutes: 5
-              steps:
-                - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-                  with:
-                    ref: ${{ env.EXPECTED_COMMIT }}
-                - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-                  with:
-                    node-version: 24
-                - name: Compare actual public HTTP responses with the exact deployed source
-                  run: node registry/scripts/verify-published-registry.mjs
-                - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-                  if: always()
-                  with:
-                    name: published-endpoints
-                    path: docs/test-results/published-registry
-                    retention-days: 7
-                    if-no-files-found: error
-            installations:
-              needs: endpoints
-              name: Public installations (${{ matrix.shard }}/3)
-              runs-on: ubuntu-latest
-              timeout-minutes: 45
-              strategy:
-                fail-fast: false
-                matrix:
-                  shard: [1, 2, 3]
-              steps:
-                - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-                  with:
-                    ref: ${{ env.EXPECTED_COMMIT }}
-                - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-                  with:
-                    node-version: 24
-                    cache: npm
-                    cache-dependency-path: registry/package-lock.json
-                - run: npm ci --prefix registry
-                - name: Install source from the public registry into fresh applications
-                  run: node registry/scripts/verify-independent-items.mjs --published --shard=${{ matrix.shard }}/3
-                - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-                  if: always()
-                  with:
-                    name: public-installations-${{ matrix.shard }}
-                    path: docs/test-results/independent-items
-                    retention-days: 7
-                    if-no-files-found: error
-            documentation:
-              needs: endpoints
-              runs-on: ubuntu-latest
-              timeout-minutes: 15
-              steps:
-                - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-                  with:
-                    ref: ${{ env.EXPECTED_COMMIT }}
-                - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-                  with:
-                    node-version: 24
-                    cache: npm
-                    cache-dependency-path: docs/package-lock.json
-                - run: npm ci --prefix docs
-                - name: Install browser
-                  working-directory: docs
-                  run: npx playwright install --with-deps chromium
-                - name: Exercise the deployed site without a local server or mocked responses
-                  working-directory: docs
-                  run: npx playwright test --config=playwright.published.config.ts
-                - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-                  if: always()
-                  with:
-                    name: published-documentation
-                    path: |
-                      docs/test-results/published-browser
-                      docs/test-results/published-browser-report.json
-                    retention-days: 7
-                    if-no-files-found: error
-          YAML
-      - name: Regenerate from authored source and validate contracts
+          for name,title in names.items():
+            marker='      - name: '+title+'\n';assert source.count(marker)==1
+            section=source.split(marker,1)[1].split('\n      - ',1)[0]
+            body=section.split('        run: |\n',1)[1]
+            lines=body.splitlines();assert all(not line or line.startswith('          ') for line in lines)
+            Path('/tmp/canonical-registry-review/'+name+'.sh').write_text('\n'.join(line[10:] for line in lines)+'\n')
+          PY
+      - name: Reconfirm the registered public origin and apply the reviewed source corrections
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          npm ci --prefix registry
-          npm ci --prefix docs
-          npm run lint --prefix registry
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          npm test --prefix registry
-          npm run check:generated --prefix registry
-          npm run lint --prefix docs
-          npm run typecheck --prefix docs
-          npm run build --prefix docs
-          cd docs
-          npx playwright install --with-deps chromium
-      - name: Verify canonical rendered output and repeated client-ready shortcut behavior
-        working-directory: docs
+          bash -e /tmp/canonical-registry-review/probe.sh
+          bash -e /tmp/canonical-registry-review/patch.sh
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('registry/scripts/verify-independent-items.mjs');s=p.read_text()
+          a='    await run(npm, ["install", "--no-audit", "--no-fund"], directory, log);';assert s.count(a)==1
+          s=s.replace(a,a+'''
+              // Match the documented initialization: install the shared base once first.
+              await run(process.execPath, [cli, "add", "--yes", "--cwd", directory, "@neumorphism-ui/neumorphism-ui"], root, log);
+              assert.ok(fs.readFileSync(path.join(directory, "src/globals.css"), "utf8").includes("--neu-surface"), "Shared base tokens must be installed");''')
+          a='import "../globals.css";';assert s.count(a)==1
+          s=s.replace(a,a+' import "pretendard/dist/web/variable/pretendardvariable.css";')
+          a='import "./globals.css";';assert s.count(a)==1
+          s=s.replace(a,a+' import "pretendard/dist/web/variable/pretendardvariable.css";');p.write_text(s)
+          public=Path('.github/workflows/verify-published-registry.yml').read_text()
+          expression=chr(36)+'{{'
+          assert public.count(expression)>=8
+          assert 'EXPECTED_COMMIT: '+expression+' github.event.sha || github.sha }}' in public
+          assert '--shard='+expression+' matrix.shard }}/3' in public
+          assert '50a9c65ced0185793c5d9fb678ac312ad1c9fb02' not in public
+          Path('/tmp/canonical-registry-review/published-workflow.yml').write_text(public)
+          PY
+      - name: Validate regenerated source, rendered docs and explicit shared-base installation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          npx playwright test tests/browser/registry-origin.spec.ts tests/browser/presentation.spec.ts --output=test-results/docs-browser/canonical-review
-          npx playwright test tests/browser/docs-polish.spec.ts --grep 'directory slash and global search' --repeat-each=12 --output=test-results/docs-browser/shortcut-readiness
-      - name: Prepare the exact reviewed tree without moving main
+          bash -e /tmp/canonical-registry-review/build.sh
+          node registry/scripts/verify-independent-items.mjs --shard=2/74
+          cd docs
+          bash -e /tmp/canonical-registry-review/browser.sh
+      - name: Prepare reviewed product objects and leave workflow writes to GitHub MCP
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import json,os,subprocess,urllib.request
+          import json,os,subprocess,tarfile,urllib.request,urllib.error
           from pathlib import Path
-          workflow='.github/workflows/canonical-registry-review.yml'
-          Path(workflow).unlink()
-          allowed={workflow,'.github/workflows/verify-published-registry.yml','README.md','QUALITY.md','docs/press.config.tsx','docs/components/docs/request-origin.ts','docs/components/docs/registry-config.ts','registry/catalog.json','registry/directory-entry.json','registry/tests/directory-entry.test.mjs','registry/tests/canonical-origin.test.mjs','registry/scripts/verify-independent-items.mjs','registry/scripts/verify-published-registry.mjs','docs/tests/browser/docs-polish.spec.ts','docs/visual-reference.md','docs/playwright.published.config.ts','docs/tests/browser/registry-origin.spec.ts','registry/registry.json','registry/public/r/registry.json','docs/public/r/registry.json'}
+          allowed={'.github/workflows/verify-published-registry.yml','README.md','QUALITY.md','docs/press.config.tsx','docs/components/docs/request-origin.ts','docs/components/docs/registry-config.ts','registry/catalog.json','registry/directory-entry.json','registry/tests/directory-entry.test.mjs','registry/tests/canonical-origin.test.mjs','registry/scripts/verify-independent-items.mjs','registry/scripts/verify-published-registry.mjs','docs/tests/browser/docs-polish.spec.ts','docs/visual-reference.md','docs/playwright.published.config.ts','docs/tests/browser/registry-origin.spec.ts','registry/registry.json','registry/public/r/registry.json','docs/public/r/registry.json'}
           subprocess.run(['git','add','--',*sorted(allowed)],check=True)
           changed=set(subprocess.check_output(['git','diff','HEAD','--name-only'],text=True).splitlines())
           assert changed==allowed,(changed,allowed)
           assert not subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).strip()
-          entries=[]
-          for filename in sorted(changed):
-            entry={'path':filename,'mode':'100644','type':'blob'}
-            if Path(filename).exists(): entry['content']=Path(filename).read_text()
-            else: entry['sha']=None
-            entries.append(entry)
+          entries=[{'path':p,'mode':'100644','type':'blob','content':Path(p).read_text()} for p in sorted(changed) if not p.startswith('.github/')]
           base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
           request=urllib.request.Request('https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/git/trees',data=json.dumps({'base_tree':base,'tree':entries}).encode(),headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST')
-          with urllib.request.urlopen(request) as response: created=json.load(response)
-          Path('/tmp/canonical-registry-review/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':created['sha'],'files':sorted(changed)},indent=2))
+          try:
+            with urllib.request.urlopen(request) as response: created=json.load(response)
+          except urllib.error.HTTPError as error:
+            print(error.read().decode());raise
+          Path('/tmp/canonical-registry-review/tested-tree.json').write_text(json.dumps({'parent':os.environ['GITHUB_SHA'],'tree':created['sha'],'files':sorted(changed),'workflowMustBeAppliedThroughMCP':'.github/workflows/verify-published-registry.yml','removeWorkflow':'.github/workflows/canonical-registry-review.yml'},indent=2))
           Path('/tmp/canonical-registry-review/changes.diff').write_bytes(subprocess.check_output(['git','diff','HEAD']))
+          with tarfile.open('/tmp/canonical-registry-review/reviewed-source.tar.gz','w:gz') as archive:
+            for p in sorted(changed): archive.add(p,arcname=p)
           PY
-      - name: Preserve actual HTTP evidence and source review
+      - name: Preserve actual HTTP, initialization and browser evidence
         if: always()
         run: |
           if [ -d docs/test-results ]; then cp -R docs/test-results /tmp/canonical-registry-review/; fi
