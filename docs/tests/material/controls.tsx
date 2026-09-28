@@ -5,6 +5,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarBadge } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Slider } from "@/components/ui/slider";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis } from "@/components/ui/pagination";
 import { buildThemeVariables, defaultThemeSettings, getThemePreset, type ThemePresetId } from "../../src/registry/theme";
@@ -43,6 +44,14 @@ function Controls() {
         <div className="flex flex-wrap items-center gap-2"><Badge>Default</Badge><Badge variant="primary">Selected</Badge><Badge variant="destructive">Action needed</Badge></div>
         <div className="w-44 max-w-full border-l border-[var(--border)] pl-3"><Badge data-testid="long-badge"><Symbol />WaitingForWorkspaceAdministratorApproval</Badge></div>
         <Badge className="max-w-52" variant="soft">관리자의 검토와 승인을 기다리고 있습니다</Badge>
+      </section>
+      <section data-testid="table-statuses" className="grid min-w-0 content-start gap-5"><h2 className="text-base font-semibold">Readable table statuses</h2>
+        <div data-testid="narrow-table-host" className="w-full max-w-80 min-w-0">
+          <Table containerProps={{ role: "region", "aria-label": "Status table", tabIndex: 0 }}>
+            <TableHeader><TableRow>{["Symbol", "Price", "Change", "Status"].map(label => <TableHead key={label}>{label}</TableHead>)}</TableRow></TableHeader>
+            <TableBody>{[["NVDA", "$181.92", "+2.41%", "Open"], ["005930", "₩72,400", "+1.08%", "Selected"], ["TSLA", "$318.27", "−0.64%", "Watch"]].map(row => <TableRow key={row[0]}><TableCell>{row[0]}</TableCell><TableCell>{row[1]}</TableCell><TableCell>{row[2]}</TableCell><TableCell><Badge variant="primary">{row[3]}</Badge></TableCell></TableRow>)}</TableBody>
+          </Table>
+        </div>
       </section>
     </div>
     <section data-testid="pagination" className="mt-8 border-t border-[var(--border)] pt-7"><h2 className="mb-5 text-base font-semibold">Aligned page controls</h2>

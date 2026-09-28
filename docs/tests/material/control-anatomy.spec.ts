@@ -58,6 +58,33 @@ for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) 
       await expect(thumb).toHaveCSS("outline-width", "2px");
       await thumb.screenshot({ path: info.outputPath("slider-focus.png") });
     });
+    test("table statuses stay atomic while standalone badges still wrap", async ({ page }, info) => {
+      const host = page.getByTestId("narrow-table-host");
+      const region = page.getByRole("region", { name: "Status table", exact: true });
+      const labels = region.locator('[data-slot="badge"]');
+      await expect(labels).toHaveCount(3);
+      for (const hostWidth of [320, 228]) {
+        await host.evaluate((e, size) => { (e as HTMLElement).style.width = `${size}px`; }, hostWidth);
+        for (const badge of await labels.all()) {
+          await expect(badge).toHaveCSS("white-space", "nowrap");
+          expect((await badge.boundingBox())!.height).toBeLessThanOrEqual(22);
+          expect(await badge.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
+        }
+        expect(await region.evaluate(e => e.scrollWidth)).toBeGreaterThan((await region.boundingBox())!.width);
+        await region.evaluate(e => { e.scrollLeft = e.scrollWidth; });
+        const bounds = (await region.boundingBox())!;
+        for (const badge of await labels.all()) {
+          const r = (await badge.boundingBox())!;
+          expect(r.x).toBeGreaterThanOrEqual(bounds.x);
+          expect(r.x + r.width).toBeLessThanOrEqual(bounds.x + bounds.width);
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width + 1);
+      }
+      const longBadge = page.getByTestId("long-badge");
+      expect((await longBadge.boundingBox())!.height).toBeGreaterThan(22);
+      expect(await longBadge.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
+      await host.screenshot({ path: info.outputPath("table-statuses.png"), animations: "disabled" });
+    });
     test("pagination preserves every target at 320px and reverses directional glyphs in RTL", async ({ page }) => {
       await page.setViewportSize({ width: 320, height: 1000 });
       const nav = page.locator('[data-slot="pagination"]');
