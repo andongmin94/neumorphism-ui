@@ -118,9 +118,12 @@ async function fetchRegistryItem(name: string, signal: AbortSignal) {
 
 export function ComponentInstallation({ slug, command }: { slug: string; command: React.ReactNode }) {
   const { messages } = useLocale();
+  const [ready, setReady] = React.useState(false);
   const [source, setSource] = React.useState<{ slug: string; bundle: ManualBundle | null; error: boolean } | null>(null);
   const bundle = source?.slug === slug ? source.bundle : null;
   const error = source?.slug === slug && source.error;
+
+  React.useEffect(() => setReady(true), []);
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -161,10 +164,10 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
   const packages = Array.from(new Set([...(bundle?.dependencies ?? []), ...(bundle ? [bundle.item] : [])].flatMap(item => item.dependencies ?? [])));
 
   return (
-    <Tabs className="component-installation" defaultValue="cli">
+    <Tabs className="component-installation" defaultValue="cli" aria-busy={!ready}>
       <TabsList aria-label={messages.installationPanel.methodsLabel}>
-        <TabsTrigger value="cli">CLI</TabsTrigger>
-        <TabsTrigger value="manual">
+        <TabsTrigger value="cli" disabled={!ready}>CLI</TabsTrigger>
+        <TabsTrigger value="manual" disabled={!ready}>
           {messages.installationPanel.componentSource}
         </TabsTrigger>
       </TabsList>

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ComponentDetailPreview } from "@/components/docs/component-detail-preview";
 import type { ComponentPreviewMessages } from "@/i18n/component-preview-messages";
 import { useLocale } from "@/i18n/locale-provider";
@@ -23,13 +23,17 @@ export function ComponentExample({
   slug,
 }: ComponentExampleProps) {
   const { locale, messages } = useLocale();
+  const [ready, setReady] = useState(false);
+
+  // Static tabs must not accept a click before their event handlers exist.
+  useEffect(() => setReady(true), []);
 
   return (
-    <Tabs className="component-example" defaultValue="preview">
+    <Tabs className="component-example" defaultValue="preview" aria-busy={!ready}>
       <div className="component-example-toolbar">
         <TabsList aria-label={messages.common.preview}>
-          <TabsTrigger value="preview">{messages.common.preview}</TabsTrigger>
-          <TabsTrigger value="code">{messages.common.code}</TabsTrigger>
+          <TabsTrigger value="preview" disabled={!ready}>{messages.common.preview}</TabsTrigger>
+          <TabsTrigger value="code" disabled={!ready}>{messages.common.code}</TabsTrigger>
         </TabsList>
       </div>
       <TabsContent className="component-example-panel" value="preview">
