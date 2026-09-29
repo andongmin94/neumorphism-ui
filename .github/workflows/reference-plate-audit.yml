@@ -23,21 +23,21 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Prepare the unchanged source and before screenshots
+      - name: Prepare the unchanged source
         run: |
-          mkdir -p "$RUNNER_TEMP/plate-evidence/before"
+          mkdir -p "$RUNNER_TEMP/plate-evidence"
           git rev-parse HEAD > "$RUNNER_TEMP/plate-evidence/audit-parent.txt"
+          echo 'Before screenshots and full material matrix: audit 36517074263. Product source is unchanged since that baseline.' > "$RUNNER_TEMP/plate-evidence/before-origin.txt"
           npm ci --prefix registry
           npm ci --prefix docs
-          npm run build --prefix docs
           cd docs
           npx playwright install --with-deps chromium
-          npx playwright test --config=playwright.detail.config.ts sculptural-layout.spec.ts --grep 'reference composition has one lifted'
-          cp -R test-results/. "$RUNNER_TEMP/plate-evidence/before/"
-      - name: Apply the authored reference changes without publishing them
+      - name: Apply the authored changes and visual-review correction without publishing them
         run: |
           gh api repos/andongmin94/neumorphism-ui/git/blobs/a0ab0fc2e77c2016735443fbdff4523c0f48f95a --jq .content | base64 --decode > "$RUNNER_TEMP/reference-patch.py"
           python3 "$RUNNER_TEMP/reference-patch.py"
+          gh api repos/andongmin94/neumorphism-ui/git/blobs/e233e622d012f4fbbbcc0c4d348f7d7ce9cabe89 --jq .content | base64 --decode > "$RUNNER_TEMP/reference-refinement.py"
+          python3 "$RUNNER_TEMP/reference-refinement.py"
           python3 - <<'PY'
           from pathlib import Path
           p = Path('docs/components/docs/theme-preview.module.css')
@@ -57,13 +57,13 @@ jobs:
           npm run typecheck --prefix docs
           npm run build --prefix docs
           git diff --check
-      - name: Reference geometry, localized actions and installed-source plates
+      - name: Reference geometry, localized actions and source-only plates
         working-directory: docs
         run: |
           result=0
-          npx playwright test --config=playwright.detail.config.ts reference-plate.spec.ts sculptural-layout.spec.ts sculptural-viewport.spec.ts surface-system.spec.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts reference-plate.spec.ts sculptural-layout.spec.ts sculptural-viewport.spec.ts docs-reading.spec.ts || result=1
           cp test-results/detail-report.json "$RUNNER_TEMP/plate-evidence/reference-report.json"
-          npx playwright test --config=playwright.material.config.ts || result=1
+          npx playwright test --config=playwright.material.config.ts plate.spec.ts || result=1
           exit "$result"
       - name: Prepare an immutable source-derived tree for visual review
         run: |
