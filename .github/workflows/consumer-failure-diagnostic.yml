@@ -56,18 +56,9 @@ jobs:
                         delayedScripts: target === "next", staticInertVerified: target === "next",
                       });''')
           replace('          try {\n            await exerciseExpanded', '            await exerciseExpanded')
-          before = '''          } catch (error) {
-                      fs.mkdirSync(evidenceRoot, { recursive: true });
-                      const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-failure`);
-                      await page.screenshot({ path: prefix + ".png", fullPage: false });
-                      const activeElement = await page.evaluate(() => document.activeElement?.outerHTML);
-                      fs.writeFileSync(prefix + ".json", JSON.stringify({ message: String(error), errors, activeElement }, null, 2));
-                      throw error;
-                    }
-          '''
-          # Dedent the authored template above to the source's ten-space catch.
-          before = '\n'.join(line[10:] if i > 0 else line for i, line in enumerate(before.split('\n')))
-          replace(before, '')
+          start = s.index('          } catch (error) {')
+          end = s.index('          assert.deepEqual(errors, []);', start)
+          s = s[:start] + s[end:]
           replace('          results.push({ target, scenario, engine: engineName, mode, metrics, errors }); await context.close();', '''          results.push({ target, scenario, engine: engineName, mode, metrics, errors });
                     } catch (error) {
                       releaseScripts();
