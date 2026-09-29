@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const docsRoot = path.resolve(root, "../docs");
 const requireDocs = createRequire(path.join(docsRoot, "package.json"));
-const { chromium, firefox, webkit } = requireDocs("@playwright/test");
+const { chromium, firefox, webkit, expect } = requireDocs("@playwright/test");
 const docsPackage = JSON.parse(fs.readFileSync(path.join(docsRoot, "package.json"), "utf8"));
 const versions = {
   ...docsPackage.dependencies,
@@ -41,11 +41,14 @@ const registryServer = http.createServer((request, response) => {
 });
 function application() {
   return `"use client";
+import * as React from "react";
 import { Button } from "@/design-system/ui/button";
 import { Input } from "@/design-system/ui/input";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger } from "@/design-system/ui/dialog";
 export default function Consumer() {
-  return <main style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
+  const [ready, setReady] = React.useState(false);
+  React.useEffect(() => setReady(true), []);
+  return <main data-consumer-ready={ready} aria-busy={!ready} inert={!ready} style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
     <h1>Installed Neumorphism UI</h1>
     <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
       <Button data-testid="primary" variant="primary">Save changes</Button>
@@ -113,7 +116,32 @@ async function browserChecks(directory, target, scenario) {
         for (const [mode, viewport] of [["light", { width: 1280, height: 900 }], ["dark", { width: 390, height: 844 }]]) {
           const context = await browser.newContext({ viewport, colorScheme: mode, reducedMotion: "reduce" }); const page = await context.newPage(); const errors = [];
           page.on("pageerror", (error) => errors.push(error.message));
-          await page.goto(origin, { waitUntil: "networkidle" });
+          const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}`);
+          console.log(`Checking consumer ${target}/${scenario}/${engineName}/${mode}`);
+          let releaseScripts = () => {};
+          try {
+            // Network idle is not React readiness. Delay real Next scripts until
+            // the server-rendered fixture is inspected, then use a real effect.
+            if (target === "next") {
+              const released = new Promise(resolve => { releaseScripts = resolve; });
+              await page.route(url => url.pathname.endsWith(".js"), async route => {
+                await released;
+                await route.continue();
+              });
+              await page.goto(origin, { waitUntil: "commit" });
+              await expect(page.locator("main")).toHaveAttribute("data-consumer-ready", "false");
+              await expect(page.locator("main")).toHaveAttribute("inert", "");
+              releaseScripts();
+            } else {
+              await page.goto(origin, { waitUntil: "domcontentloaded" });
+            }
+            await expect(page.locator("main")).toHaveAttribute("data-consumer-ready", "true");
+            await expect(page.locator("main")).not.toHaveAttribute("inert", "");
+            await page.unrouteAll({ behavior: "wait" });
+            writeJson(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-readiness.json`, {
+              target, scenario, engine: engineName, mode, hydrated: true,
+              delayedScripts: target === "next", staticInertVerified: target === "next",
+            });
           await page.evaluate((dark) => document.documentElement.classList.toggle("dark", dark), mode === "dark");
           await page.getByTestId("primary").waitFor();
           const metrics = await page.getByTestId("primary").evaluate((element) => { const style = getComputedStyle(element); const rootStyle = getComputedStyle(document.documentElement); return { radius: style.borderRadius, shadow: style.boxShadow, transition: style.transitionProperty, primary: rootStyle.getPropertyValue("--primary").trim(), rootRadius: rootStyle.getPropertyValue("--radius").trim() }; });
@@ -128,22 +156,25 @@ async function browserChecks(directory, target, scenario) {
           await page.keyboard.press("Escape"); await page.getByRole("dialog").waitFor({ state: "hidden" });
           assert.equal(await page.evaluate(() => document.activeElement?.textContent), "Open settings");
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "horizontal overflow"); assert.deepEqual(errors, []);
-          try {
             await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseWorkflow(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseWorkspaces(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseAnalytics(page, { target, scenario, engineName, mode, evidenceRoot });
-          } catch (error) {
-            fs.mkdirSync(evidenceRoot, { recursive: true });
-            const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-failure`);
-            await page.screenshot({ path: prefix + ".png", fullPage: false });
-            const activeElement = await page.evaluate(() => document.activeElement?.outerHTML);
-            fs.writeFileSync(prefix + ".json", JSON.stringify({ message: String(error), errors, activeElement }, null, 2));
-            throw error;
-          }
           assert.deepEqual(errors, []);
           const file = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}.png`); fs.mkdirSync(evidenceRoot, { recursive: true }); await page.screenshot({ path: file, fullPage: true });
-          results.push({ target, scenario, engine: engineName, mode, metrics, errors }); await context.close();
+          results.push({ target, scenario, engine: engineName, mode, metrics, errors });
+          } catch (error) {
+            releaseScripts();
+            fs.mkdirSync(evidenceRoot, { recursive: true });
+            // Diagnostics include initial navigation and the first dialog too.
+            const activeElement = await page.evaluate(() => document.activeElement?.outerHTML).catch(() => null);
+            fs.writeFileSync(prefix + "-failure.json", JSON.stringify({ message: String(error), stack: error.stack, errors, activeElement, url: page.url() }, null, 2));
+            await page.screenshot({ path: prefix + "-failure.png", fullPage: false }).catch(() => {});
+            throw error;
+          } finally {
+            releaseScripts();
+            await context.close();
+          }
         }
       } finally { await browser.close(); }
     }
