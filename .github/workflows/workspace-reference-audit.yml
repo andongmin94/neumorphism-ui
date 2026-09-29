@@ -38,7 +38,7 @@ jobs:
           p = Path('registry/src/components/blocks/analytics-dashboard.tsx')
           s = p.read_text()
           s = s.replace('max-w-full text-[clamp(1.375rem,24cqi,2.25rem)] font-extrabold', 'max-w-full font-extrabold', 1)
-          s = s.replace('? "text-[clamp(1rem,16cqi,2.25rem)]" : ""', '? "text-[clamp(1rem,16cqi,2.25rem)]" : "text-[clamp(1.375rem,24cqi,2.25rem)]"', 1)
+          s = s.replace('? "text-[clamp(1rem,16cqi,2.25rem)]" : ""', '? "text-[clamp(1rem,14cqi,2.25rem)]" : "text-[clamp(1.375rem,24cqi,2.25rem)]"', 1)
           p.write_text(s)
           p = Path('docs/tests/detail/workspace-plates.spec.ts')
           lines = p.read_text().splitlines()
