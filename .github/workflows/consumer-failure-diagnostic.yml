@@ -4,8 +4,7 @@ on:
     branches: [main]
     paths: [.github/workflows/consumer-failure-diagnostic.yml]
 permissions:
-  contents: read
-  actions: read
+  contents: write
 jobs:
   diagnose:
     runs-on: ubuntu-latest
@@ -13,26 +12,109 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Read the exact failed job log and preserve sanitized error excerpts
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Make fixture hydration observable and capture startup failures
         run: |
           mkdir -p "$RUNNER_TEMP/consumer-diagnostic"
-          gh api --allow-escape-sequences repos/andongmin94/neumorphism-ui/actions/jobs/109265900695/logs > "$RUNNER_TEMP/consumer-job.log"
           python3 - <<'PY'
-          import os, re
           from pathlib import Path
-          root = Path(os.environ['RUNNER_TEMP'])
-          raw = (root / 'consumer-job.log').read_text(encoding='utf-8-sig')
-          lines = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', raw).splitlines()
-          error = [i for i, line in enumerate(lines) if any(key in line for key in ['AssertionError', 'TimeoutError', 'Error:', '##[error]', 'locator.', 'Call log:'])]
-          indices = sorted(set(i for hit in error[-12:] for i in range(max(0, hit - 5), min(len(lines), hit + 32))))
-          text = '\n'.join(lines[i] for i in indices)
-          (root / 'consumer-diagnostic' / 'failure-excerpts.txt').write_text(text)
-          print(text)
+          p = Path('registry/scripts/verify-consumer.mjs')
+          s = p.read_text()
+          def replace(before, after):
+              global s
+              assert s.count(before) == 1, (before[:100], s.count(before))
+              s = s.replace(before, after, 1)
+          replace('const { chromium, firefox, webkit } = requireDocs("@playwright/test");', 'const { chromium, firefox, webkit, expect } = requireDocs("@playwright/test");')
+          replace('return `"use client";\nimport { Button }', 'return `"use client";\nimport * as React from "react";\nimport { Button }')
+          replace('export default function Consumer() {\n  return <main style=', 'export default function Consumer() {\n  const [ready, setReady] = React.useState(false);\n  React.useEffect(() => setReady(true), []);\n  return <main data-consumer-ready={ready} aria-busy={!ready} inert={!ready} style=')
+          replace('          await page.goto(origin, { waitUntil: "networkidle" });', '''          const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}`);
+                    console.log(`Checking consumer ${target}/${scenario}/${engineName}/${mode}`);
+                    let releaseScripts = () => {};
+                    try {
+                      // Network idle is not React readiness. Delay real Next scripts until
+                      // the server-rendered fixture is inspected, then use a real effect.
+                      if (target === "next") {
+                        const released = new Promise(resolve => { releaseScripts = resolve; });
+                        await page.route(url => url.pathname.endsWith(".js"), async route => {
+                          await released;
+                          await route.continue();
+                        });
+                        await page.goto(origin, { waitUntil: "commit" });
+                        await expect(page.locator("main")).toHaveAttribute("data-consumer-ready", "false");
+                        await expect(page.locator("main")).toHaveAttribute("inert", "");
+                        releaseScripts();
+                      } else {
+                        await page.goto(origin, { waitUntil: "domcontentloaded" });
+                      }
+                      await expect(page.locator("main")).toHaveAttribute("data-consumer-ready", "true");
+                      await expect(page.locator("main")).not.toHaveAttribute("inert", "");
+                      await page.unrouteAll({ behavior: "wait" });
+                      writeJson(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-readiness.json`, {
+                        target, scenario, engine: engineName, mode, hydrated: true,
+                        delayedScripts: target === "next", staticInertVerified: target === "next",
+                      });''')
+          replace('          try {\n            await exerciseExpanded', '            await exerciseExpanded')
+          before = '''          } catch (error) {
+                      fs.mkdirSync(evidenceRoot, { recursive: true });
+                      const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-failure`);
+                      await page.screenshot({ path: prefix + ".png", fullPage: false });
+                      const activeElement = await page.evaluate(() => document.activeElement?.outerHTML);
+                      fs.writeFileSync(prefix + ".json", JSON.stringify({ message: String(error), errors, activeElement }, null, 2));
+                      throw error;
+                    }
+          '''
+          # Dedent the authored template above to the source's ten-space catch.
+          before = '\n'.join(line[10:] if i > 0 else line for i, line in enumerate(before.split('\n')))
+          replace(before, '')
+          replace('          results.push({ target, scenario, engine: engineName, mode, metrics, errors }); await context.close();', '''          results.push({ target, scenario, engine: engineName, mode, metrics, errors });
+                    } catch (error) {
+                      releaseScripts();
+                      fs.mkdirSync(evidenceRoot, { recursive: true });
+                      // Diagnostics include initial navigation and the first dialog too.
+                      const activeElement = await page.evaluate(() => document.activeElement?.outerHTML).catch(() => null);
+                      fs.writeFileSync(prefix + "-failure.json", JSON.stringify({ message: String(error), stack: error.stack, errors, activeElement, url: page.url() }, null, 2));
+                      await page.screenshot({ path: prefix + "-failure.png", fullPage: false }).catch(() => {});
+                      throw error;
+                    } finally {
+                      releaseScripts();
+                      await context.close();
+                    }''')
+          p.write_text(s)
+          PY
+          node --check registry/scripts/verify-consumer.mjs
+          git diff --check
+      - name: Prepare the source-only verified change and remove this workflow
+        run: |
+          rm .github/workflows/consumer-failure-diagnostic.yml
+          git add -A
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'consumer-diagnostic'
+          changes = subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          entries=[]
+          for name in changes:
+              p=Path(name)
+              entry={'path':name,'mode':'100644','type':'blob'}
+              if p.exists():
+                  entry['content']=p.read_text()
+                  (root / 'verify-consumer.mjs').write_text(p.read_text())
+              else: entry['sha']=None
+              entries.append(entry)
+          request={'base_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),'tree':entries}
+          payload=root/'tree.json'
+          payload.write_text(json.dumps(request))
+          result=json.loads(subprocess.check_output(['gh','api','--method','POST','repos/andongmin94/neumorphism-ui/git/trees','--input',str(payload)],text=True))
+          (root/'candidate.json').write_text(json.dumps({'tree':result['sha'],'parent':os.environ['GITHUB_SHA'],'run':os.environ['GITHUB_RUN_ID'],'changes':changes},indent=2))
+          (root/'source.patch').write_text(subprocess.check_output(['git','diff','--cached'],text=True))
+          payload.unlink()
           PY
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
-          name: consumer-failure-diagnostic
+          name: consumer-readiness-source
           path: ${{ runner.temp }}/consumer-diagnostic
           retention-days: 7
           if-no-files-found: error
