@@ -959,7 +959,8 @@
         "@neumorphism-ui/alert",
         "@neumorphism-ui/menubar",
         "@neumorphism-ui/navigation-menu",
-        "@neumorphism-ui/toast"
+        "@neumorphism-ui/toast",
+        "@neumorphism-ui/card"
       ],
       "files": [
         {
@@ -1077,7 +1078,8 @@
         "@neumorphism-ui/button",
         "@neumorphism-ui/select",
         "@neumorphism-ui/checkbox",
-        "@neumorphism-ui/alert"
+        "@neumorphism-ui/alert",
+        "@neumorphism-ui/card"
       ],
       "files": [
         {
@@ -1361,7 +1363,8 @@
         "@neumorphism-ui/input",
         "@neumorphism-ui/switch",
         "@neumorphism-ui/textarea",
-        "@neumorphism-ui/utils"
+        "@neumorphism-ui/utils",
+        "@neumorphism-ui/card"
       ],
       "files": [
         {

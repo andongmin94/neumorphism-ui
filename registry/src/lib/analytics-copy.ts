@@ -69,6 +69,7 @@ export function analyticsFormats(locale: AnalyticsLocale, currency = "USD") {
   return {
     compactMoney: (cents: number) => compactMoney.format(cents / 100),
     money: (cents: number | null) => cents === null ? "—" : money.format(cents / 100),
+    moneyParts: (cents: number) => money.formatToParts(cents / 100),
     number: (value: number | null) => value === null ? "—" : number.format(value),
     percent: (value: number | null) => value === null ? "—" : percent.format(value),
   };

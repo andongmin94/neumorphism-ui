@@ -2,10 +2,10 @@
 .card {
   display: flex;
   min-width: 0;
-  min-height: 176px;
+  min-height: 208px;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
+  gap: 18px;
+  padding: 24px;
   border: 1px solid var(--neu-edge);
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
@@ -17,7 +17,7 @@
 }
 
 @media (hover: hover) {
-  .card:hover { box-shadow: var(--neu-shadow-hover); }
+  .card:hover h3 { color: var(--neu-accent-ink); }
 }
 
 .card:active {
@@ -48,10 +48,9 @@
 
 .top code {
   flex: none;
-  padding: 4px 7px;
-  border-radius: var(--neu-radius-small);
-  background: var(--neu-surface);
-  box-shadow: var(--neu-shadow-inset-sm);
+  /* Metadata is not an inset control inside the destination plate. */
+  padding: 0;
+  background: transparent;
   color: var(--foreground-soft);
   font-family: var(--neu-font-mono);
   font-size: 0.625rem;
@@ -62,7 +61,7 @@
 .body { flex: 1; min-width: 0; }
 .card h3 {
   margin: 0 0 8px;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: -0.025em;
@@ -76,23 +75,21 @@
 }
 .footer {
   margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid var(--docs-line-soft);
+  padding-top: 4px;
   color: var(--foreground-soft);
 }
 .footer code {
   min-width: 0;
-  overflow: hidden;
   font-family: var(--neu-font-mono);
   font-size: 0.6875rem;
   font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 .footer svg { flex: none; }
 
 @media (max-width: 560px) {
-  .card { padding: 18px; }
+  .card { padding: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card { transition: none; }

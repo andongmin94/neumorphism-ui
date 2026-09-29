@@ -5,6 +5,7 @@ import * as React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -264,25 +265,25 @@ export function CmsWorkspace({
   const unsavedCount = posts.filter((post) => post.dirty).length;
 
   return (
-    <section data-slot="cms-workspace" className={cn("grid min-w-0 gap-5 text-[var(--foreground)]", className)}>
+    <section data-slot="cms-workspace" className={cn("@container/workspace grid min-w-0 gap-7 text-[var(--foreground)]", className)}>
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
         <div>
-          <h2 className="text-2xl font-semibold">{t.title}</h2>
+          <h2 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">{t.title}</h2>
           <p className="mt-1 text-xs text-[var(--muted-foreground)]">{t.local}</p>
         </div>
-        <Button type="button" onClick={createPost}>＋ {t.newPost}</Button>
+        <Button type="button" onClick={createPost}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="size-4 shrink-0"><path d="M12 5v14M5 12h14" /></svg>{t.newPost}</Button>
       </header>
 
-      <dl className="grid grid-cols-3 gap-3">
-        {[
-          [t.total, posts.length],
-          [t.published, publishedCount],
-          [t.unsaved, unsavedCount],
-        ].map(([label, value]) => (
-          <div key={String(label)} className="rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 text-center [box-shadow:var(--neu-shadow-inset)] first:[box-shadow:var(--neu-shadow-raised-sm)] first:text-[var(--neu-accent-ink)]">
-            <dt className="text-xs text-[var(--muted-foreground)]">{label}</dt>
-            <dd className="mt-2 text-2xl font-semibold tabular-nums">{value}</dd>
-          </div>
+      <dl data-slot="workspace-metrics" className="grid min-w-0 grid-cols-3 gap-3 @min-[36rem]/workspace:gap-5">
+        {([
+          ["total", t.total, posts.length],
+          ["published", t.published, publishedCount],
+          ["unsaved", t.unsaved, unsavedCount],
+        ] as const).map(([key, text, count]) => (
+          <Card key={key} variant={key === "published" ? "accent" : "raised"} className="@container/metric grid grid-rows-[minmax(2.5rem,auto)_auto] min-h-32 min-w-0 content-center justify-items-center gap-2 rounded-[calc(var(--neu-radius-surface)*0.5)] px-3 py-5 text-center @min-[36rem]/workspace:px-5">
+            <dt className={`row-start-2 min-h-[3em] max-w-full text-balance text-xs font-medium leading-normal [overflow-wrap:anywhere] ${key === "published" ? "text-[var(--primary-foreground)]" : "text-[var(--muted-foreground)]"}`}>{text}</dt>
+            <dd data-metric={key} className="row-start-1 m-0 max-w-full self-end text-[clamp(1.375rem,24cqi,2.25rem)] font-extrabold leading-[1.1] tracking-tight tabular-nums [overflow-wrap:anywhere]">{count}</dd>
+          </Card>
         ))}
       </dl>
 
@@ -294,7 +295,7 @@ export function CmsWorkspace({
         </Alert>
       ) : null}
 
-      <div className="grid min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] lg:grid-cols-[minmax(17rem,2fr)_minmax(22rem,3fr)]">
+      <div className="grid min-w-0 overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] shadow-none lg:grid-cols-[minmax(17rem,2fr)_minmax(22rem,3fr)]">
         <aside className="min-w-0 border-b border-[var(--border)] lg:border-r lg:border-b-0">
           <div className="grid gap-3 border-b border-[var(--border)] bg-[var(--neu-surface-soft)] p-3">
             <Input

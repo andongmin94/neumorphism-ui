@@ -2,7 +2,7 @@
 
 Reference: [Paran Penguin / Mr. PPT template 04](https://paranpenguin.co.kr/content_shop/item/1379), specifically the [public KPI slide](https://paranpenguin.co.kr/files/thumbnails/663/225/1200x675.ratio.jpg?t=1782089013), not the store UI or a licensed source deck. The picture is a visual source, not a source of exact CSS values or interactive behavior.
 
-The representative screen is the existing Theme Studio price alert. This pass establishes its plate material, accent face and proportions before extending the composition to other workspaces. It does not certify the whole collection as reference-matched.
+The representative screen is the existing Theme Studio price alert. Its plate material, accent face and proportions now also guide the Analytics dashboard, Data Manager, CMS summaries and directory destinations. It does not certify the whole collection as reference-matched.
 
 ## Decisions implemented
 
@@ -53,7 +53,7 @@ The source contract now applies beyond Card and the Theme Studio example:
 | Disclosure/navigation | Flat closed rows and quiet navigation trays; selected/expanded state owns depth. No raised decorative button surrounding a disclosure icon. |
 | Overlays | A single floating plate; typography and corners match the main material. Popup state/focus behavior remains with the existing primitive. |
 | Data/media | Planar table rows; image captions share the face material; avatar status markers are not clipped by the photo. |
-| Templates | Dashboard/data-manager/CMS retain their earlier one-raised/supporting-inset compositions; these are not yet reference-matched and are intentionally not re-composed in this representative-screen pass. Filter fields no longer sit inside another inset box. |
+| Templates | Dashboard, Data Manager and CMS summaries use the installed Card: neutral raised readouts and one stable accent face (revenue, active records, published posts respectively). Values precede their labels visually; all values remain exact. Filters stay inset and the CMS editor shell stays flat. Other workspace layouts are preserved. |
 | Documentation | Same sibling shell. Open preview canvases, flat choice/progress wrappers, directory cards raised at rest with inset press and a separate focus outline. No docs-specific large radius overriding the registry geometry. |
 
 `--neu-radius-small`, `--neu-radius-control`, and `--neu-radius-surface` describe distinct sizes. Default Air uses 4px / 8px / 12px. The installed base and docs resolve the same Tailwind radius tokens. Round avatar/radio/slider parts remain round intentionally. Accent lettering is contrast-adjusted against the actual preset surface, including custom accents; data fills keep their original accent.
@@ -178,3 +178,35 @@ as content into the client tab and clipboard frame. Only client-edited output an
 fetched registry source use the live renderer. Both renderers share the same Dark+
 options, pre geometry and clipboard surface. No-JavaScript checks verify that
 static usage snippets already contain the actual colored token markup.
+
+
+## Workspace and directory extension — 2026-09-29
+
+The approved representative composition is extended, not used to add features.
+All three summary groups compose the installed Card. Revenue, active-record count
+and published-post count are deliberate stable accents, not hover/selection states.
+Their labels retain the corresponding preset foreground. Summary type responds to
+the individual plate width and exact data is never abbreviated to fit. Long values
+may reflow; normal fixture values are checked at 320/390 and desktop widths.
+
+Directory destinations keep their idle plate and pressed inset state, but metadata
+no longer appears as a nested control. A larger title, quieter SOURCE metadata,
+removed repeated footer rule and wrapping installation identifier separate the
+reading hierarchy without dropping information or changing the directory skeleton.
+Hover changes the title ink instead of making the plate sink to a weaker shadow.
+
+The two create actions use fixed SVG plus geometry rather than font glyphs.
+`workspace-plates.spec.ts` captures four locales in four viewport/mode projects,
+checks 320px labels/value bounds and exact number strings, and is included in public
+browser verification. Existing analytics CSV, data-manager save/delete recovery and
+CMS draft/save/discard tests remain authoritative for behavior. No new registry item,
+new dependency, compatibility path, global overflow concealment or fake metric data
+is introduced. Other component layouts are not claimed to be re-designed by this pass.
+
+Visual review caught two issues before publication: the longer ko/zh USD marker
+wrapped the default revenue value, and a two-line Japanese label shifted its number
+relative to its siblings. Currency spans now come from the existing analytics Intl
+formatter's formatToParts result, not a duplicate formatter or string replacement.
+A shared readout row and two-line balanced-label allowance align same-row numbers.
+Tests retain the single-line default-value check, add same-row baseline checks and
+verify exact currency text across four locales and four currencies.

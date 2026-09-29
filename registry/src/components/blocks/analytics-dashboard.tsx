@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Select, SelectItem } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -53,15 +54,22 @@ export function AnalyticsDashboard({ records, locale = "en", currency = "USD" }:
     // The download needs a task to consume the URL before it is released.
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  return <section data-slot="analytics-dashboard" className="grid min-w-0 gap-6 text-[var(--foreground)]">
-    <header className="flex flex-wrap items-start justify-between gap-4"><div className="grid gap-2"><h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t.title}</h2><p className="text-sm text-[var(--muted-foreground)]">{t.intro}</p></div><Button onClick={exportCsv} disabled={!data.observedDays}>{t.export}</Button></header>
+  return <section data-slot="analytics-dashboard" className="@container/workspace grid min-w-0 gap-7 text-[var(--foreground)]">
+    <header className="flex flex-wrap items-start justify-between gap-4"><div className="grid gap-2"><h2 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">{t.title}</h2><p className="text-sm text-[var(--muted-foreground)]">{t.intro}</p></div><Button onClick={exportCsv} disabled={!data.observedDays}>{t.export}</Button></header>
     <div className="flex flex-wrap items-end gap-4 rounded-[var(--neu-radius-surface)] bg-transparent py-4 shadow-none">
       <label className="grid min-w-36 flex-1 gap-2 text-xs font-medium">{t.period}<Select value={days} onChange={event => setDays(Number(event.target.value))}>{[7, 14, 30].map(value => <SelectItem key={value} value={value}>{value} {t.days}</SelectItem>)}</Select></label>
       <label className="grid min-w-44 flex-1 gap-2 text-xs font-medium">{t.channel}<Select value={channel === undefined ? "all" : `channel:${channel}`} onChange={event => setChannel(event.target.value === "all" ? undefined : event.target.value.slice(8))}><SelectItem value="all">{t.all}</SelectItem>{channel !== undefined && !channels.includes(channel) && <SelectItem value={`channel:${channel}`}>{channel}</SelectItem>}{channels.map(value => <SelectItem key={value} value={`channel:${value}`}>{value}</SelectItem>)}</Select></label>
       <Button variant="ghost" onClick={() => { setDays(14); setChannel(undefined); }} disabled={days === 14 && channel === undefined}>{t.reset}</Button>
     </div>
     <p role="status" data-slot="analytics-window" className="text-xs leading-relaxed text-[var(--muted-foreground)]">{data.start && `${data.start} – ${data.end} · `}{t.window}: {data.observedDays} / {days}</p>
-    <dl className="grid min-w-0 grid-cols-2 gap-4 xl:grid-cols-4">{metrics.map(metric => <div key={metric.key} className="grid min-w-0 gap-3 rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] p-4 text-center [box-shadow:var(--neu-shadow-inset)] first:[box-shadow:var(--neu-shadow-raised-sm)] first:text-[var(--neu-accent-ink)] sm:p-5"><dt className="text-xs text-[var(--muted-foreground)]">{metric.label}</dt><dd data-metric={metric.key} className="break-words text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">{metric.value}</dd></div>)}</dl>
+    <dl data-slot="workspace-metrics" className="grid min-w-0 grid-cols-2 gap-4 @min-[56rem]/workspace:grid-cols-4">
+      {metrics.map(metric => (
+        <Card key={metric.key} variant={metric.key === "revenue" ? "accent" : "raised"} className="@container/metric grid grid-rows-[minmax(2.5rem,auto)_auto] min-h-32 min-w-0 content-center justify-items-center gap-2 rounded-[calc(var(--neu-radius-surface)*0.5)] px-3 py-5 text-center @min-[36rem]/workspace:px-5">
+          <dt className={`row-start-2 min-h-[3em] max-w-full text-balance text-xs font-medium leading-normal [overflow-wrap:anywhere] ${metric.key === "revenue" ? "text-[var(--primary-foreground)]" : "text-[var(--muted-foreground)]"}`}>{metric.label}</dt>
+          <dd data-metric={metric.key} className={`row-start-1 m-0 max-w-full self-end font-extrabold leading-[1.1] tracking-tight tabular-nums [overflow-wrap:anywhere] ${metric.key === "revenue" ? "text-[clamp(1rem,14cqi,2.25rem)]" : "text-[clamp(1.375rem,24cqi,2.25rem)]"}`}>{metric.key === "revenue" && data.observedDays ? f.moneyParts(data.totals.revenueCents).map((part, index) => <span key={index} className={part.type === "currency" ? "text-[0.55em] tracking-normal" : undefined}>{part.value}</span>) : metric.value}</dd>
+        </Card>
+      ))}
+    </dl>
     <RevenueChart data={data} locale={locale} currency={currency} />
     <div className="grid min-w-0 gap-6 xl:grid-cols-2"><ChannelChart data={data} locale={locale} /><ConversionChart data={data} locale={locale} /></div>
     <footer className="grid gap-2 text-xs leading-relaxed text-[var(--muted-foreground)]"><p>{t.missing}</p><p>{t.coverage}</p></footer>
