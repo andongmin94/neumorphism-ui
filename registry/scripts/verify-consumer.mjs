@@ -117,6 +117,9 @@ async function browserChecks(directory, target, scenario) {
           const context = await browser.newContext({ viewport, colorScheme: mode, reducedMotion: "reduce" }); const page = await context.newPage(); const errors = [];
           page.on("pageerror", (error) => errors.push(error.message));
           const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}`);
+          // Composed examples may contain another main (SidebarInset).
+          // Readiness belongs only to the explicitly marked fixture host.
+          const host = page.locator("main[data-consumer-ready]");
           console.log(`Checking consumer ${target}/${scenario}/${engineName}/${mode}`);
           let releaseScripts = () => {};
           try {
@@ -129,40 +132,40 @@ async function browserChecks(directory, target, scenario) {
                 await route.continue();
               });
               await page.goto(origin, { waitUntil: "commit" });
-              await expect(page.locator("main")).toHaveAttribute("data-consumer-ready", "false");
-              await expect(page.locator("main")).toHaveAttribute("inert", "");
+              await expect(host).toHaveAttribute("data-consumer-ready", "false");
+              await expect(host).toHaveAttribute("inert", "");
               releaseScripts();
             } else {
               await page.goto(origin, { waitUntil: "domcontentloaded" });
             }
-            await expect(page.locator("main")).toHaveAttribute("data-consumer-ready", "true");
-            await expect(page.locator("main")).not.toHaveAttribute("inert", "");
+            await expect(host).toHaveAttribute("data-consumer-ready", "true");
+            await expect(host).not.toHaveAttribute("inert", "");
             await page.unrouteAll({ behavior: "wait" });
             writeJson(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}-readiness.json`, {
               target, scenario, engine: engineName, mode, hydrated: true,
               delayedScripts: target === "next", staticInertVerified: target === "next",
             });
-          await page.evaluate((dark) => document.documentElement.classList.toggle("dark", dark), mode === "dark");
-          await page.getByTestId("primary").waitFor();
-          const metrics = await page.getByTestId("primary").evaluate((element) => { const style = getComputedStyle(element); const rootStyle = getComputedStyle(document.documentElement); return { radius: style.borderRadius, shadow: style.boxShadow, transition: style.transitionProperty, primary: rootStyle.getPropertyValue("--primary").trim(), rootRadius: rootStyle.getPropertyValue("--radius").trim() }; });
-          assert.equal(metrics.primary.toLowerCase(), expectedTheme.cssVars[mode].primary.toLowerCase()); assert.equal(metrics.radius, expectedTheme.cssVars[mode]["neu-radius-control"]); assert.notEqual(metrics.shadow, "none"); assert.equal(metrics.transition, "none", "reduced motion must affect the installed Button");
-          if (scenario === "existing") assert.equal(metrics.rootRadius, "23px");
-          const foreground = await page.getByTestId("destructive").evaluate((element) => getComputedStyle(element).color);
-          if (mode === "dark") assert.notEqual(foreground, "rgb(255, 255, 255)", "the dark destructive foreground must not remain fixed white");
-          await page.locator("#name").fill("설치 검증"); assert.equal(await page.locator("#name").inputValue(), "설치 검증");
-          await page.getByRole("button", { name: "Open settings", exact: true }).click(); await page.getByRole("dialog").waitFor();
-          const bounds = await page.getByRole("dialog").boundingBox(); assert.ok(bounds && bounds.y >= 0 && bounds.y + bounds.height <= viewport.height + 1);
-          await page.getByTestId("dialog-last").scrollIntoViewIfNeeded(); assert.ok(await page.getByTestId("dialog-last").isVisible());
-          await page.keyboard.press("Escape"); await page.getByRole("dialog").waitFor({ state: "hidden" });
-          assert.equal(await page.evaluate(() => document.activeElement?.textContent), "Open settings");
-          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "horizontal overflow"); assert.deepEqual(errors, []);
+            await page.evaluate((dark) => document.documentElement.classList.toggle("dark", dark), mode === "dark");
+            await page.getByTestId("primary").waitFor();
+            const metrics = await page.getByTestId("primary").evaluate((element) => { const style = getComputedStyle(element); const rootStyle = getComputedStyle(document.documentElement); return { radius: style.borderRadius, shadow: style.boxShadow, transition: style.transitionProperty, primary: rootStyle.getPropertyValue("--primary").trim(), rootRadius: rootStyle.getPropertyValue("--radius").trim() }; });
+            assert.equal(metrics.primary.toLowerCase(), expectedTheme.cssVars[mode].primary.toLowerCase()); assert.equal(metrics.radius, expectedTheme.cssVars[mode]["neu-radius-control"]); assert.notEqual(metrics.shadow, "none"); assert.equal(metrics.transition, "none", "reduced motion must affect the installed Button");
+            if (scenario === "existing") assert.equal(metrics.rootRadius, "23px");
+            const foreground = await page.getByTestId("destructive").evaluate((element) => getComputedStyle(element).color);
+            if (mode === "dark") assert.notEqual(foreground, "rgb(255, 255, 255)", "the dark destructive foreground must not remain fixed white");
+            await page.locator("#name").fill("설치 검증"); assert.equal(await page.locator("#name").inputValue(), "설치 검증");
+            await page.getByRole("button", { name: "Open settings", exact: true }).click(); await page.getByRole("dialog").waitFor();
+            const bounds = await page.getByRole("dialog").boundingBox(); assert.ok(bounds && bounds.y >= 0 && bounds.y + bounds.height <= viewport.height + 1);
+            await page.getByTestId("dialog-last").scrollIntoViewIfNeeded(); assert.ok(await page.getByTestId("dialog-last").isVisible());
+            await page.keyboard.press("Escape"); await page.getByRole("dialog").waitFor({ state: "hidden" });
+            assert.equal(await page.evaluate(() => document.activeElement?.textContent), "Open settings");
+            assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "horizontal overflow"); assert.deepEqual(errors, []);
             await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseWorkflow(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseWorkspaces(page, { target, scenario, engineName, mode, evidenceRoot });
             await exerciseAnalytics(page, { target, scenario, engineName, mode, evidenceRoot });
-          assert.deepEqual(errors, []);
-          const file = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}.png`); fs.mkdirSync(evidenceRoot, { recursive: true }); await page.screenshot({ path: file, fullPage: true });
-          results.push({ target, scenario, engine: engineName, mode, metrics, errors });
+            assert.deepEqual(errors, []);
+            const file = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}.png`); fs.mkdirSync(evidenceRoot, { recursive: true }); await page.screenshot({ path: file, fullPage: true });
+            results.push({ target, scenario, engine: engineName, mode, metrics, errors });
           } catch (error) {
             releaseScripts();
             fs.mkdirSync(evidenceRoot, { recursive: true });
