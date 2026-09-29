@@ -1,0 +1,37 @@
+name: Consumer failure diagnostic
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/consumer-failure-diagnostic.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Read the exact failed job log and preserve the error tail
+        run: |
+          mkdir -p "$RUNNER_TEMP/consumer-diagnostic"
+          gh api repos/andongmin94/neumorphism-ui/actions/jobs/109265900695/logs > "$RUNNER_TEMP/consumer-job.log"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          lines = (root / 'consumer-job.log').read_text(encoding='utf-8-sig').splitlines()
+          error = [i for i, line in enumerate(lines) if any(key in line for key in ['AssertionError', 'TimeoutError', 'Error:', '##[error]', 'locator.', 'Call log:'])]
+          indices = sorted(set(i for hit in error[-12:] for i in range(max(0, hit - 5), min(len(lines), hit + 32))))
+          text = '\n'.join(lines[i] for i in indices)
+          (root / 'consumer-diagnostic' / 'failure-excerpts.txt').write_text(text)
+          print(text)
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: consumer-failure-diagnostic
+          path: ${{ runner.temp }}/consumer-diagnostic
+          retention-days: 7
+          if-no-files-found: error
