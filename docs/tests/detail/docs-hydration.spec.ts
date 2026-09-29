@@ -43,12 +43,20 @@ for (const locale of ["en", "ko", "ja", "zh"]) {
       expect(await shell.locator("pre.shiki span[style]").count()).toBeGreaterThan(1);
       await shell.screenshot({ path: info.outputPath("first-click-dark-plus.png") });
 
+      // Tabs.List uses manual activation by default: focus movement is not selection.
+      const previewTab = preview.getByRole("tab").nth(0);
       await codeTab.press("Home");
-      await expect(preview.getByRole("tab").nth(0)).toBeFocused();
-      await expect(preview.getByRole("tab").nth(0)).toHaveAttribute("aria-selected", "true");
-      await preview.getByRole("tab").nth(0).press("End");
-      await expect(codeTab).toBeFocused();
+      await expect(previewTab).toBeFocused();
       await expect(codeTab).toHaveAttribute("aria-selected", "true");
+      await previewTab.press("Enter");
+      await expect(previewTab).toHaveAttribute("aria-selected", "true");
+      await expect(preview.locator(".component-example-panel")).toBeVisible();
+      await previewTab.press("End");
+      await expect(codeTab).toBeFocused();
+      await expect(previewTab).toHaveAttribute("aria-selected", "true");
+      await codeTab.press("Space");
+      await expect(codeTab).toHaveAttribute("aria-selected", "true");
+      await expect(shell.locator("pre.shiki")).toBeVisible();
 
       const sourceTab = installation.getByRole("tab").nth(1);
       await sourceTab.click();
