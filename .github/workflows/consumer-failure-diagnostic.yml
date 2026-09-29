@@ -13,15 +13,16 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Read the exact failed job log and preserve the error tail
+      - name: Read the exact failed job log and preserve sanitized error excerpts
         run: |
           mkdir -p "$RUNNER_TEMP/consumer-diagnostic"
-          gh api repos/andongmin94/neumorphism-ui/actions/jobs/109265900695/logs > "$RUNNER_TEMP/consumer-job.log"
+          gh api --allow-escape-sequences repos/andongmin94/neumorphism-ui/actions/jobs/109265900695/logs > "$RUNNER_TEMP/consumer-job.log"
           python3 - <<'PY'
-          import os
+          import os, re
           from pathlib import Path
           root = Path(os.environ['RUNNER_TEMP'])
-          lines = (root / 'consumer-job.log').read_text(encoding='utf-8-sig').splitlines()
+          raw = (root / 'consumer-job.log').read_text(encoding='utf-8-sig')
+          lines = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', raw).splitlines()
           error = [i for i, line in enumerate(lines) if any(key in line for key in ['AssertionError', 'TimeoutError', 'Error:', '##[error]', 'locator.', 'Call log:'])]
           indices = sorted(set(i for hit in error[-12:] for i in range(max(0, hit - 5), min(len(lines), hit + 32))))
           text = '\n'.join(lines[i] for i in indices)
