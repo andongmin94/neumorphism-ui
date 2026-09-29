@@ -253,7 +253,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
   },
   card: {
     summary:
-      "コンテンツを raised、soft、inset、flat の深度でまとめるサーフェス。",
+      "コンテンツを raised、soft、inset、flat の面にまとめ、accent の面で強調するサーフェス。",
     description:
       "Header、Title、Description、Action、Content、Footer から構成する layout コンポーネントです。root は既定で div のため、コンテンツの semantics に合った見出しやインタラクティブ要素を選択してください。",
     props: [

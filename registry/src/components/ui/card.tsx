@@ -3,7 +3,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const cardVariants = {
-  raised: "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] shadow-[var(--neu-shadow-raised-sm)]",
+  raised: "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] shadow-[var(--neu-shadow-plate)]",
+  accent: "border-[color:var(--neu-edge)] bg-[var(--primary)] [background-image:var(--neu-fill-primary)] shadow-[var(--neu-shadow-plate)] [--card-foreground:var(--primary-foreground)] [&_[data-slot=card-description]]:text-[var(--primary-foreground)]",
   soft: "bg-[var(--neu-surface-soft)] shadow-none",
   inset: "bg-[var(--neu-surface)] [background-image:var(--neu-fill-inset)] shadow-[var(--neu-shadow-inset)]",
   flat: "border border-[color:var(--border)] bg-[var(--neu-surface)]",

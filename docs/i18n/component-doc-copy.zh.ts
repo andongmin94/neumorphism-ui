@@ -246,7 +246,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     ],
   },
   card: {
-    summary: "以 raised、soft、inset 或 flat 层次组织内容的表面。",
+    summary: "以 raised、soft、inset 或 flat 表面组织内容，并用 accent 色面突出重点。",
     description:
       "由 Header、Title、Description、Action、Content 和 Footer 组合而成的布局组件。根元素默认为 div，应根据内容语义安排标题和交互元素。",
     props: [

@@ -469,6 +469,7 @@ export function buildThemeVariables(
         ? "8px"
         : "6px";
   const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 84%, transparent)`;
+  const plateShadow = `${x}px ${y * 2}px 3px -1px ${tokens.shadowDark}, ${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedSmallLight}`;
   const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 86%, transparent)`;
   const primaryShadow = `${x * profile.smallOffset}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 1}px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`;
   const primaryInsetShadow = shadowValue(
@@ -546,6 +547,7 @@ export function buildThemeVariables(
       tokens.shadowLight,
       true,
     ),
+    "--neu-shadow-plate": plateShadow,
     "--neu-shadow-primary": primaryShadow,
     "--neu-shadow-primary-hover": shadowValue(x, y, profile.smallOffset + 1, profile.smallBlur + 3, tokens.shadowDark, raisedSmallLight) + `, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`,
     "--neu-fill-inset": `linear-gradient(${x === y ? (x > 0 ? 135 : 315) : (x > 0 ? 45 : 225)}deg, color-mix(in srgb, ${tokens.surfaceLow} 35%, ${tokens.surface}), color-mix(in srgb, ${tokens.surfaceSoft} 30%, ${tokens.surface}))`,

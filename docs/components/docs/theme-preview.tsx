@@ -40,6 +40,12 @@ export function ThemePreview({ copy, locale, previewMode, style }: Props) {
   const progress = saved === null ? 0 : Math.min(100, currentPrice / saved * 100);
   const money = new Intl.NumberFormat(locale, { style: "currency", currency: "USD" });
 
+  function price(value: number) {
+    return money.formatToParts(value).map((part, index) => (
+      <span key={index} data-price-part={part.type}>{part.value}</span>
+    ));
+  }
+
   function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const price = Number(draft);
@@ -67,16 +73,16 @@ export function ThemePreview({ copy, locale, previewMode, style }: Props) {
       </header>
 
       <dl className={styles.metrics} data-price-metrics>
-        <Card className={`${styles.metric} ${styles.featured}`} variant="raised">
-          <dt>{t.current}</dt><dd>{money.format(currentPrice)}</dd>
+        <Card className={styles.metric} variant="raised">
+          <dt>{t.current}</dt><dd>{price(currentPrice)}</dd>
         </Card>
-        <Card className={styles.metric} variant="inset">
-          <dt>{t.saved}</dt><dd>{saved === null ? "—" : money.format(saved)}</dd>
+        <Card className={styles.metric} variant="accent">
+          <dt>{t.saved}</dt><dd>{saved === null ? "—" : price(saved)}</dd>
         </Card>
-        <Card className={styles.metric} variant="inset">
+        <Card className={styles.metric} variant="raised">
           <dt>{copy.changeToday}</dt><dd>+2.14%</dd>
         </Card>
-        <Card className={styles.metric} variant="inset">
+        <Card className={styles.metric} variant="raised">
           <dt>{t.progress}</dt><dd>{saved === null ? "—" : `${Math.round(progress)}%`}</dd>
         </Card>
       </dl>

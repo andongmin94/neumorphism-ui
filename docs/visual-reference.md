@@ -1,15 +1,36 @@
 # Sculptural reference review
 
-Reference: the public example image in Paran Penguin item 1379, not the store UI or a licensed source deck.
+Reference: [Paran Penguin / Mr. PPT template 04](https://paranpenguin.co.kr/content_shop/item/1379), specifically the [public KPI slide](https://paranpenguin.co.kr/files/thumbnails/663/225/1200x675.ratio.jpg?t=1782089013), not the store UI or a licensed source deck. The picture is a visual source, not a source of exact CSS values or interactive behavior.
+
+The representative screen is the existing Theme Studio price alert. This pass establishes its plate material, accent face and proportions before extending the composition to other workspaces. It does not certify the whole collection as reference-matched.
 
 ## Decisions implemented
 
-- The central statistic row is the composition reference: one raised accent tile and three recessed, neutral tiles. Values and labels share a centreline, equal tile dimensions and a common gap.
+- The central statistic row is the composition reference: four raised tiles: three neutral faces and one accent-colored target face. Values and labels share a centreline, equal tile dimensions and a common gap.
 - The surrounding preview is an open, same-material canvas. It does not put a raised card inside an inset card. Form and conditions use spacing and a separator instead of additional shells.
-- Air's default surface corner is 12px. Small statistic tiles use 60% of the selected surface radius so small faces do not look inflated. Other presets remain distinct.
-- Installable Card uses the small contact shadow, 20px gutters, 16px section gaps, a wrapping title with 24px line height and a wrapping footer. Soft structural cards no longer claim the same raised level.
+- Air's default surface corner is 12px. Small statistic tiles use 50% of the selected surface radius so small faces do not look inflated. Other presets remain distinct.
+- Installable Card uses a dedicated contact/projection plate shadow, 20px gutters, 16px section gaps, a wrapping title with 24px line height and a wrapping footer. Soft structural cards no longer claim the same raised level.
 - Geometry responds to the preview's own width, not just the browser width. Values and labels remain in their cells at 390px and all four document locales.
 - Saved numeric readouts are derived from the same local state as the form and progress bar. Drafts do not silently change saved values. Delete, validation and recovery are preserved.
+
+## Reference-derived rules and web decisions
+
+The public KPI slide shows neutral raised tiles as well as one colored raised tile.
+An earlier interpretation (one raised plus three recessed) was incorrect and is
+removed from the representative screen and its test. Depth is not an importance scale.
+The price target now uses the installed `Card variant="accent"`; the other readouts
+use `raised`. The small currency part retains the original Intl-formatted text while
+giving the numerical value a stronger optical center. No numeric information is hidden.
+
+Web-specific decisions: inputs stay inset, controls retain focus/disabled/validation,
+small-screen reflow uses the available container, and dark/preset colors use their
+own readable foregrounds. The public slide does not supply those behaviors. Pretendard
+and the independent Dark+ code surface remain unchanged. Radius, shadow measurements
+and type sizes are authored web adaptations, not values claimed to be sampled from PPT.
+
+`reference-plate.spec.ts`, `sculptural-layout.spec.ts` and the source-only `plate.spec.ts`
+separate appearance/state checks from visual approval. Theme tokens and generated
+registry items stay synchronized; no new registry item or dependency is added.
 
 ## Deliberate boundaries
 
@@ -32,8 +53,8 @@ The source contract now applies beyond Card and the Theme Studio example:
 | Disclosure/navigation | Flat closed rows and quiet navigation trays; selected/expanded state owns depth. No raised decorative button surrounding a disclosure icon. |
 | Overlays | A single floating plate; typography and corners match the main material. Popup state/focus behavior remains with the existing primitive. |
 | Data/media | Planar table rows; image captions share the face material; avatar status markers are not clipped by the photo. |
-| Templates | Dashboard/data-manager/CMS summaries use one raised readout and supporting recessed readouts. Filter fields no longer sit inside another inset box. |
-| Documentation | Same sibling shell. Open preview canvases, flat choice/progress wrappers, quiet directory cards that raise on interaction. No docs-specific large radius overriding the registry geometry. |
+| Templates | Dashboard/data-manager/CMS retain their earlier one-raised/supporting-inset compositions; these are not yet reference-matched and are intentionally not re-composed in this representative-screen pass. Filter fields no longer sit inside another inset box. |
+| Documentation | Same sibling shell. Open preview canvases, flat choice/progress wrappers, directory cards raised at rest with inset press and a separate focus outline. No docs-specific large radius overriding the registry geometry. |
 
 `--neu-radius-small`, `--neu-radius-control`, and `--neu-radius-surface` describe distinct sizes. Default Air uses 4px / 8px / 12px. The installed base and docs resolve the same Tailwind radius tokens. Round avatar/radio/slider parts remain round intentionally. Accent lettering is contrast-adjusted against the actual preset surface, including custom accents; data fills keep their original accent.
 
@@ -131,8 +152,9 @@ certification. Generated registry and displayed examples remain source-derived.
 
 ## Directory material and readable code
 
-Directory cards use the same raised material tokens at rest as the installed Card,
-with pressed inset and a separate keyboard outline. Mobile spacing does not remove
+Directory cards remain raised at rest with their compact shadow recipe, pressed
+inset and a separate keyboard outline. Their typography and composition are unchanged
+by the representative Theme Studio pass; do not describe them as reference-approved. Mobile spacing does not remove
 the material. Obsolete global card rules are removed; the component stylesheet is
 the only owner. The results link keeps its SVG inline with its label.
 Directory, template and chart-reference titles use 700 weight; directory descriptions

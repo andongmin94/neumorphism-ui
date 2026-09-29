@@ -253,7 +253,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
   },
   card: {
     summary:
-      "A surface that groups content at raised, soft, inset, or flat depth.",
+      "A raised, soft, inset, or flat content surface with an accent face for emphasis.",
     description:
       "A layout component composed from Header, Title, Description, Action, Content, and Footer. The root is a div by default, so choose headings and interactive elements that match the content semantics.",
     props: [

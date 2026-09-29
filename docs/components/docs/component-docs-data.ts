@@ -396,7 +396,7 @@ export const componentDocs = [
     slug: "card",
     title: "Card",
     category: "data-feedback",
-    summary: "콘텐츠를 raised, soft, inset 또는 flat 깊이로 묶는 표면.",
+    summary: "콘텐츠를 raised, soft, inset 또는 flat 표면으로 묶고 accent 면으로 강조합니다.",
     description:
       "Header, Title, Description, Action, Content, Footer를 조합하는 레이아웃 컴포넌트입니다. 기본 root는 div이므로 콘텐츠의 의미에 맞춰 제목과 상호작용 요소를 구성합니다.",
     importCode: `import { Button } from "@/components/ui/button"
@@ -424,7 +424,7 @@ import {
       {
         component: "Card",
         name: "variant",
-        type: '"raised" | "soft" | "inset" | "flat"',
+        type: '"raised" | "accent" | "soft" | "inset" | "flat"',
         defaultValue: '"raised"',
         description: "표면의 깊이와 테두리 표현을 선택합니다.",
       },

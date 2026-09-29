@@ -49,6 +49,14 @@ function Specimen() {
       <div className="grid min-w-0 content-start gap-7"><Card className="min-w-0"><CardHeader><CardTitle>Navigation</CardTitle><CardDescription>Selected, hovered and focused are different states.</CardDescription></CardHeader><CardContent><Tabs defaultValue="profile"><TabsList aria-label="Workspace sections"><TabsTrigger value="profile">Profile</TabsTrigger><TabsTrigger value="access" disabled>Access</TabsTrigger><TabsTrigger value="activity">Activity</TabsTrigger></TabsList><TabsContent value="profile"><p className="py-4 text-sm leading-relaxed text-[var(--muted-foreground)]">Profile settings for your workspace.</p></TabsContent><TabsContent value="activity"><p className="py-4 text-sm leading-relaxed text-[var(--muted-foreground)]">Your recent workspace activity.</p></TabsContent></Tabs></CardContent></Card>
       <Card variant="flat" className="min-w-0"><CardHeader><CardTitle>Task surface</CardTitle><CardDescription>Only an overlay needs a floating shadow.</CardDescription></CardHeader><CardFooter><Dialog><DialogTrigger render={<Button />}>Open preferences</DialogTrigger><DialogContent><DialogHeader><DialogTitle>A longer preferences title stays clear of the close control</DialogTitle><DialogDescription>All settings remain reachable on a short mobile screen.</DialogDescription></DialogHeader><label className="grid gap-2 text-sm">Project name<Input defaultValue="Side project" /></label>{Array.from({ length: 10 }, (_, i) => <p key={i} className="text-sm leading-relaxed text-[var(--muted-foreground)]">Setting {i + 1}. Keep a clear hierarchy without stacking raised panels inside this task.</p>)}<DialogFooter><DialogClose render={<Button variant="primary" />}>Done</DialogClose></DialogFooter></DialogContent></Dialog></CardFooter></Card></div>
     </div>
+    <section id="reference-plates" className="mt-10 grid gap-6">
+      <h2 className="text-xl font-bold">Raised information, recessed entry</h2>
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
+        {(["raised", "accent", "raised", "raised"] as const).map((variant, index) => <Card key={index} variant={variant} className="min-h-36 justify-center">
+          <CardHeader><CardTitle>{["Current", "Target", "Change", "Progress"][index]}</CardTitle><CardDescription>{["$188.32", "$240.00", "+2.14%", "78%"][index]}</CardDescription></CardHeader>
+        </Card>)}
+      </div>
+    </section>
     <section id="family-anatomy" className="mt-10 border-t border-[var(--border)] pt-8">
       <h2 className="mb-6 text-xl font-semibold">One material across the collection</h2>
       <div className="grid gap-8 md:grid-cols-2">

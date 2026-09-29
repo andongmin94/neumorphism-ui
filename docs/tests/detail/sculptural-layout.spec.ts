@@ -12,15 +12,20 @@ async function openStudio(page: Page, locale: string, dark: boolean) {
   await page.evaluate(() => document.fonts.ready);
 }
 
-test("reference composition has one lifted value and no nested card frame", async ({ page }, info) => {
+test("reference composition has four lifted plates and one accent target", async ({ page }, info) => {
   await openStudio(page, "en", info.project.name.endsWith("dark"));
   const canvas = page.locator("[data-theme-price-preview]");
   await expect(canvas).toBeVisible();
   const metrics = canvas.locator("[data-price-metrics]");
   const cards = metrics.locator('[data-slot="card"]');
   await expect(cards).toHaveCount(4);
-  await expect(metrics.locator('[data-variant="raised"]')).toHaveCount(1);
-  await expect(metrics.locator('[data-variant="inset"]')).toHaveCount(3);
+  await expect(metrics.locator('[data-variant="raised"]')).toHaveCount(3);
+  await expect(metrics.locator('[data-variant="accent"]')).toHaveCount(1);
+  await expect(metrics.locator('[data-variant="inset"]')).toHaveCount(0);
+  for (const card of await cards.all()) {
+    await expect(card).not.toHaveCSS("box-shadow", "none");
+    expect(await card.evaluate(element => getComputedStyle(element).boxShadow)).not.toContain("inset");
+  }
   await expect(canvas.locator('[data-slot="card"] [data-slot="card"]')).toHaveCount(0);
   await expect(canvas).toHaveCSS("box-shadow", "none");
   for (const card of await cards.all()) {
