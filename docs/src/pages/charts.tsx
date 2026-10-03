@@ -17,9 +17,8 @@ import { analyticsCopy } from "@neumorphism-ui/registry/analytics-copy";
 
 const pageCopy = {
   ko: {
-    kicker: "EXACT DATA · VISUAL ENCODING",
-    title: "데이터를 숨기지 않는 차트.",
-    body: "제품 분석과 운영 신호를 시각화하되, 모든 recipe는 정확한 원본 표를 함께 제공합니다.",
+    title: "차트",
+    body: "매출, 전환율, 빌드 시간과 서비스 지연 시간을 비교하세요. 각 차트에서 원본 데이터 표도 확인할 수 있습니다.",
     recipes: "Recipes",
     families: "Families",
     table: "Exact-data table",
@@ -33,9 +32,8 @@ const pageCopy = {
     source: "Source",
   },
   en: {
-    kicker: "EXACT DATA · VISUAL ENCODING",
-    title: "Charts that do not hide the data.",
-    body: "Visualize product analytics and operational signals while every recipe keeps an exact-data table beside the marks.",
+    title: "Charts",
+    body: "Compare revenue, conversion, build times and service latency. Each chart includes its underlying data table.",
     recipes: "Recipes",
     families: "Families",
     table: "Exact-data table",
@@ -49,9 +47,8 @@ const pageCopy = {
     source: "Source",
   },
   ja: {
-    kicker: "EXACT DATA · VISUAL ENCODING",
-    title: "データを隠さないチャート。",
-    body: "プロダクト分析と運用シグナルを可視化しながら、すべての recipe が正確なデータ表を併記します。",
+    title: "チャート",
+    body: "売上、転換率、ビルド時間、サービスの応答時間を比較できます。各チャートには元データの表も付いています。",
     recipes: "Recipes",
     families: "Families",
     table: "Exact-data table",
@@ -65,9 +62,8 @@ const pageCopy = {
     source: "Source",
   },
   zh: {
-    kicker: "EXACT DATA · VISUAL ENCODING",
-    title: "不隐藏数据的图表。",
-    body: "展示产品分析与运维信号，同时每个 recipe 都保留精确数据表。",
+    title: "图表",
+    body: "比较收入、转化率、构建时间和服务延迟。每个图表均附有原始数据表。",
     recipes: "Recipes",
     families: "Families",
     table: "Exact-data table",
@@ -211,7 +207,6 @@ export function Example() {
   return (
     <div className="charts-gallery-page">
       <header className="charts-gallery-hero">
-        <span>{page.kicker}</span>
         <h1>{page.title}</h1>
         <p>{page.body}</p>
 
@@ -219,7 +214,6 @@ export function Example() {
 
       <section className="charts-product-section">
         <header className="charts-section-heading">
-          <span>PRODUCT ANALYTICS</span>
           <h2>{page.product}</h2>
           <p>{page.productBody}</p>
         </header>
@@ -234,7 +228,6 @@ export function Example() {
 
       <section className="charts-reference-section" id="chart-installation">
         <header className="charts-section-heading">
-          <span>REGISTRY SOURCE</span>
           <h2>{page.reference}</h2>
           <p>{page.referenceBody}</p>
         </header>

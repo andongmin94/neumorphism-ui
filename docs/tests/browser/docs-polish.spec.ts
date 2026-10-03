@@ -54,7 +54,7 @@ test("home uses installable controls and saves or resets the same workspace", as
   await expect(showcase.locator('[data-slot="card"]')).toHaveCount(1);
   await expect(showcase.locator('[data-slot="switch"]')).toHaveCount(1);
   const input = showcase.getByRole("textbox", { name: "Workspace name" });
-  const toggle = showcase.getByRole("switch", { name: "Keep me in the loop" });
+  const toggle = showcase.getByRole("switch", { name: "Email notifications" });
   const reset = showcase.getByRole("button", { name: "Reset", exact: true });
   await expect(reset).toBeDisabled();
   await input.fill("New studio");

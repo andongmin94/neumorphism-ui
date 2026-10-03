@@ -35,12 +35,14 @@ type StatusFilter = "all" | CmsPostStatus;
 
 const copy = {
   ko: {
-    title: "콘텐츠 작업실",
+    title: "글 관리",
+    intro: "초안을 편집하고 미리보기로 확인한 뒤 저장하세요.",
+    fail: "다음 저장 실패 재현",
     newPost: "새 글",
     total: "전체 글",
     published: "게시됨",
     unsaved: "저장 안 됨",
-    local: "로컬 UI 예제입니다. 실제 저장은 onSave에 연결하세요.",
+    local: "데모는 새로고침하면 초기화됩니다. 실제 저장은 onSave에 연결하세요.",
     search: "글 검색",
     all: "전체",
     draft: "초안",
@@ -64,12 +66,14 @@ const copy = {
     untitled: "제목 없는 글",
   },
   en: {
-    title: "Content workspace",
+    title: "Posts",
+    intro: "Edit drafts, preview posts and save your changes.",
+    fail: "Fail the next save",
     newPost: "New post",
     total: "Total posts",
     published: "Published",
     unsaved: "Unsaved",
-    local: "Local UI example. Connect onSave to your authenticated persistence layer.",
+    local: "Demo changes reset on reload. Connect onSave to store changes in your application.",
     search: "Search posts",
     all: "All",
     draft: "Draft",
@@ -93,7 +97,9 @@ const copy = {
     untitled: "Untitled post",
   },
   ja: {
-    title: "コンテンツワークスペース",
+    title: "記事管理",
+    intro: "下書きを編集し、プレビューで確認して保存します。",
+    fail: "次の保存を失敗させる",
     newPost: "新規記事",
     total: "全記事",
     published: "公開済み",
@@ -122,7 +128,9 @@ const copy = {
     untitled: "無題の記事",
   },
   zh: {
-    title: "内容工作区",
+    title: "文章管理",
+    intro: "编辑草稿，预览文章并保存更改。",
+    fail: "模拟下次保存失败",
     newPost: "新建文章",
     total: "全部文章",
     published: "已发布",
@@ -268,8 +276,8 @@ export function CmsWorkspace({
     <section data-slot="cms-workspace" className={cn("@container/workspace grid min-w-0 gap-7 text-[var(--foreground)]", className)}>
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
         <div>
-          <h2 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">{t.title}</h2>
-          <p className="mt-1 text-xs text-[var(--muted-foreground)]">{t.local}</p>
+          <h2 className="text-2xl font-bold leading-tight tracking-tight">{t.title}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--muted-foreground)]">{t.intro}</p>
         </div>
         <Button type="button" onClick={createPost}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="size-4 shrink-0"><path d="M12 5v14M5 12h14" /></svg>{t.newPost}</Button>
       </header>
@@ -453,12 +461,9 @@ const examplePosts: CmsPost[] = [
 
 export function CmsExample({ locale = "en" }: { locale?: CmsLocale }) {
   const [failNext, setFailNext] = React.useState(false);
+  const t = copy[locale];
   return (
     <div className="grid gap-4">
-      <label className="flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
-        <input type="checkbox" checked={failNext} onChange={(event) => setFailNext(event.target.checked)} />
-        Fail the next save
-      </label>
       <CmsWorkspace
         initialPosts={examplePosts}
         locale={locale}
@@ -470,6 +475,13 @@ export function CmsExample({ locale = "en" }: { locale?: CmsLocale }) {
           }
         }}
       />
+      <div data-demo-controls className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-4 text-xs leading-relaxed text-[var(--muted-foreground)]">
+        <p className="max-w-xl">{t.local}</p>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" checked={failNext} onChange={(event) => setFailNext(event.target.checked)} />
+          {t.fail}
+        </label>
+      </div>
     </div>
   );
 }

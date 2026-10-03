@@ -46,18 +46,6 @@
   line-height: 1.5;
 }
 
-.top code {
-  flex: none;
-  /* Metadata is not an inset control inside the destination plate. */
-  padding: 0;
-  background: transparent;
-  color: var(--foreground-soft);
-  font-family: var(--neu-font-mono);
-  font-size: 0.625rem;
-  font-weight: 400;
-  text-transform: uppercase;
-}
-
 .body { flex: 1; min-width: 0; }
 .card h3 {
   margin: 0 0 8px;

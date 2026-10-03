@@ -210,3 +210,31 @@ formatter's formatToParts result, not a duplicate formatter or string replacemen
 A shared readout row and two-line balanced-label allowance align same-row numbers.
 Tests retain the single-line default-value check, add same-row baseline checks and
 verify exact currency text across four locales and four currencies.
+
+
+## Task copy and composition review — 2026-10-03
+
+The landing page identifies the React collection directly. Components, Charts and
+Theme Studio use destination names rather than promotional sentences or comparisons. The workspace example
+uses task labels instead of marketing slogans; the duplicated caption and brand
+badge are removed, not hidden. The home form retains its real draft/save/reset,
+validation and local-only feedback.
+
+Settings, Data Manager and CMS use task headings. Example-only save-failure
+controls follow their respective workspaces and remain visible, labeled and
+operable. The installed CMS no longer displays an integration warning inside its
+product header; its example owns that notice. Template documentation headers are
+compact, scoped to template pages, and retain navigation, descriptions, usage
+code and the original source panels. The directory no longer repeats a decorative
+SOURCE tag; every install identifier and actual source link remains available.
+
+This pass does not change the Card shadow, KPI accent assignments, quantitative
+values or the MD-01–10 control implementations. Text and layout checks distinguish
+usable task names, visible controls and overflow from subjective visual quality.
+`task-composition.spec.ts` exercises four locales and captures home, template and
+narrow-screen states; existing save-failure/retry tests still run without replay
+or removed assertions. No dependency or registry item is added.
+
+Remaining visual work is not certified by these tests: example articles and
+portfolio content, the chart gallery beyond its heading, and native device/assistive
+technology review require their own assessment.

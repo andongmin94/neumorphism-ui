@@ -15,6 +15,7 @@ import recordsSource from "@/public/r/template-data-manager.json";
 import linksSource from "@/public/r/template-link-hub.json";
 import portfolioSource from "@/public/r/template-portfolio.json";
 import settingsSource from "@/public/r/template-settings.json";
+import styles from "@/components/docs/template-page.module.css";
 
 const templateSlugs = [
   "settings",
@@ -214,9 +215,9 @@ export default function TemplatePage({
   const usage = templateUsage(slug, locale);
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 pt-8 pb-16 sm:px-8 sm:pt-12">
+    <div className={`${styles.page} mx-auto w-full max-w-7xl px-5 pt-8 pb-16 sm:px-8`}>
       <article className="docs-content docs-article">
-        <header className="docs-page-header">
+        <header className={`docs-page-header ${styles.header}`}>
           <Link href={localeHref(locale, "/templates")} className="text-sm">
             ← {t.back}
           </Link>

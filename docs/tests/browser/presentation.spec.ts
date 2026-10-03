@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
 
 const pages = [
-  { name: "home", path: "/en", heading: "Soft by design. Clear in use.", sidebar: false },
+  { name: "home", path: "/en", heading: "Neumorphic UI for React", sidebar: false },
   { name: "docs", path: "/en/docs", heading: "Documentation", sidebar: true },
-  { name: "components", path: "/en/components", heading: "Install only the interface parts you need.", sidebar: false },
+  { name: "components", path: "/en/components", heading: "Components", sidebar: false },
   { name: "templates", path: "/en/templates", heading: "Templates", sidebar: false },
-  { name: "charts", path: "/en/charts", heading: "Charts that do not hide the data.", sidebar: false },
-  { name: "theme-studio", path: "/en/customize", heading: "Tune tokens in a real interface, not in a spreadsheet.", sidebar: false },
+  { name: "charts", path: "/en/charts", heading: "Charts", sidebar: false },
+  { name: "theme-studio", path: "/en/customize", heading: "Theme Studio", sidebar: false },
   { name: "button-detail", path: "/en/components/button", heading: "Button", sidebar: true },
   { name: "verification", path: "/en/docs/verification", heading: "Verification & release", sidebar: true },
 ] as const;
@@ -49,7 +49,7 @@ for (const entry of pages) {
 test("presentation: default locale is English", async ({ page }) => {
   const response = await page.goto("/");
   expect(response?.status()).toBe(200);
-  await expect(page.getByRole("heading", { level: 1, name: "Soft by design. Clear in use.", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Neumorphic UI for React", exact: true })).toBeVisible();
 });
 
 test("presentation: tablet shell and drawer", async ({ page }, info) => {

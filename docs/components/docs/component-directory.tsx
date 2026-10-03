@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import styles from "./component-directory.module.css";
+import { templateCopy } from "./template-copy";
 import { Link } from "fumapress/client";
 
 import type { ComponentDocCategory } from "@/components/docs/component-docs-data";
@@ -124,7 +125,7 @@ export function ComponentDirectory() {
               {formatMessage(messages.directory.resultCount, { count: visibleItems.length })}
             </p>
             <Link href={localeHref(locale, "/templates")}>
-              Templates <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h16m-6-6 6 6-6 6" /></svg>
+              {templateCopy[locale].title} <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h16m-6-6 6 6-6 6" /></svg>
             </Link>
           </div>
 
@@ -138,7 +139,6 @@ export function ComponentDirectory() {
                 >
                   <div className={styles.top}>
                     <span>{component.categoryLabel}</span>
-                    <code>source</code>
                   </div>
                   <div className={styles.body}>
                     <h3>{component.title}</h3>

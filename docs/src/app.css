@@ -6218,7 +6218,7 @@ body {
   display: grid;
   width: min(100%, 1500px);
   margin-inline: auto;
-  padding: 64px 40px;
+  padding: 48px 40px;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
   align-items: center;
   gap: 64px;
@@ -6233,7 +6233,16 @@ body {
   letter-spacing: 0.06em;
 }
 
-.directory-hero h1,
+.directory-hero h1 {
+  margin: 0;
+  max-width: 640px;
+  font-size: clamp(2.5rem, 4.2vw, 3.75rem);
+  font-weight: 760;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
 .special-page-header h1 {
   margin: 0;
   max-width: 780px;
@@ -6316,21 +6325,6 @@ body {
 
 .home-showcase {
   min-width: 0;
-}
-
-.home-showcase-caption {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-  color: var(--foreground-soft);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-}
-
-.home-showcase-caption span:first-child {
-  color: var(--foreground);
-  font-weight: 750;
 }
 
 .home-preview-card {
@@ -7261,7 +7255,6 @@ body {
     justify-content: center;
   }
 
-  .directory-hero h1,
   .special-page-header h1,
   .template-gallery-header h1,
   .charts-gallery-hero h1,
