@@ -324,3 +324,31 @@ Sans SC at weight 500, scoped to this menu. Latin/Hangul UI remains Pretendard.
 The Chromium regression verifies actual custom glyph fonts, not just CSS family
 names. Font packages are exact locked, bundled by Vite and credited; no remote
 font service or artificial bold is used. Installed registry source is unchanged.
+
+
+## Compact tab states and template boundaries
+
+Installed Tabs retain their 44px rail and 14px labels. A low-contrast inset
+rail and short contact shadow replace the wide blurred shadow. The selected
+segment uses primary/on-primary tokens, including on hover. Keyboard focus
+stays distinct on active and inactive segments. Base UI owns orientation,
+disabled tabs, manual activation and controlled/uncontrolled state.
+Obsolete installation-tab size, shadow and selected-color overrides are
+removed so Preview/Code and CLI/source use the same installed Tabs.
+
+All eight template detail pages use one documentation-owned frame with a
+localized preview heading, literal installation identifier and Install/Source
+anchors. Its single border and muted toolbar show where the example begins
+and ends; the canvas has no added elevation or clipping. The old page-header
+rule is removed rather than doubled above the frame. Installation and source
+documentation remain outside. Mobile gutters preserve workspace width.
+Real examples and state are not replaced by images or iframes. Catalog
+thumbnails stay unframed. Prior sidebar, metadata, language-menu and Dark+
+fixes remain. No new API, token or dependency is introduced.
+
+Source-only tabs-clarity tests cover both orientations, four locales, disabled
+and selected states, active-hover contrast, keyboard activation, long labels
+and 320/390/1440px in both themes. They distinguish live panels from inert
+exit panels. template-boundary checks every template and separation from
+documentation, including the published site. MD-01–10 remain in their
+existing suites. Actual runs and visual review are reported separately.

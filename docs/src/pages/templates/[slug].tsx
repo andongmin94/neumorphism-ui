@@ -5,6 +5,7 @@ import { notFound } from "fumapress/router";
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { InstallCommand } from "@/components/docs/install-command";
 import { templateCopy } from "@/components/docs/template-copy";
+import { TemplateFrame } from "@/components/docs/template-frame";
 import { TemplatePreview, type TemplateSlug } from "@/components/docs/template-preview";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import analyticsSource from "@/public/r/template-analytics.json";
@@ -225,7 +226,9 @@ export default function TemplatePage({
           <p>{templateDescription(slug, locale)}</p>
         </header>
 
-        <TemplatePreview slug={slug} locale={locale} />
+        <TemplateFrame locale={locale} name={source.name}>
+          <TemplatePreview slug={slug} locale={locale} />
+        </TemplateFrame>
 
         <section className="docs-content-section mt-10" id="installation">
           <h2>{t.install}</h2>

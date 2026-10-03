@@ -5,7 +5,7 @@ const registry = JSON.parse(readFileSync(new URL("../registry/public/r/registry.
 export default defineConfig({
   ...base,
   testDir: "./tests",
-  testMatch: ["**/browser/presentation.spec.ts", "**/browser/registry-origin.spec.ts", "**/detail/docs-reading.spec.ts", "**/detail/reference-plate.spec.ts", "**/detail/workspace-plates.spec.ts", "**/detail/task-composition.spec.ts", "**/detail/language-label.spec.ts", "**/detail/content-review.spec.ts", "**/detail/resource-copy.spec.ts", "**/detail/chrome-finish.spec.ts"],
+  testMatch: ["**/detail/template-boundary.spec.ts", "**/browser/presentation.spec.ts", "**/browser/registry-origin.spec.ts", "**/detail/docs-reading.spec.ts", "**/detail/reference-plate.spec.ts", "**/detail/workspace-plates.spec.ts", "**/detail/task-composition.spec.ts", "**/detail/language-label.spec.ts", "**/detail/content-review.spec.ts", "**/detail/resource-copy.spec.ts", "**/detail/chrome-finish.spec.ts"],
   use: { ...base.use, baseURL: new URL(registry.homepage).origin },
   webServer: undefined,
   outputDir: "test-results/published-browser",

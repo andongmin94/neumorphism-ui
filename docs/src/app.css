@@ -1381,14 +1381,7 @@ a {
   gap: 1rem;
 }
 
-.component-installation [data-slot="tabs-list"] {
-  height: 40px;
-}
 
-.component-installation [data-slot="tabs-trigger"] {
-  height: 31px;
-  font-size: 0.7rem;
-}
 
 .component-installation-panel {
   display: grid;
@@ -4867,17 +4860,7 @@ html {
 }
 
 
-.component-installation [data-slot="tabs-list"] {
-  border: 1px solid var(--line-light);
-  background: var(--surface-low);
-  box-shadow: var(--docs-inset);
-}
 
-.component-installation [data-slot="tabs-trigger"][data-active] {
-  background: var(--surface);
-  box-shadow: var(--docs-raised);
-  color: var(--docs-accent);
-}
 
 
 .component-api-table-wrap {

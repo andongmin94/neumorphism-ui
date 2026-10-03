@@ -10,6 +10,18 @@ for (const [locale, label] of Object.entries(labels)) {
     await page.evaluate(() => document.fonts.ready);
     const example = page.locator(".component-example");
     await expect(example).toHaveAttribute("aria-busy", "false");
+    const installation = page.locator(".component-installation");
+    await expect(installation).toHaveAttribute("aria-busy", "false");
+    const previewTab = example.getByRole("tab").first();
+    const installTab = installation.getByRole("tab").first();
+    const tabStyle = await previewTab.evaluate(e => {
+      const s = getComputedStyle(e); return { background: s.backgroundColor, color: s.color, shadow: s.boxShadow };
+    });
+    await expect(installTab).toHaveCSS("background-color", tabStyle.background);
+    await expect(installTab).toHaveCSS("color", tabStyle.color);
+    await expect(installTab).toHaveCSS("box-shadow", tabStyle.shadow);
+    await expect(installTab).toHaveCSS("font-size", "14px");
+    await expect(installation.getByRole("tablist")).toHaveCSS("height", "44px");
     const meta = page.locator(".component-doc-meta");
     await expect(meta.locator("code")).toHaveText("@neumorphism-ui/hover-card");
     await expect(meta.locator("code")).toHaveCSS("text-transform", "none");
