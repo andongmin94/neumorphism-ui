@@ -1,6 +1,6 @@
 export const analyticsCopy = {
   en: {
-    title: "Performance overview", intro: "One window. One source of truth.",
+    title: "Performance overview", intro: "Review revenue, visits and conversion for the selected period and channel.",
     sample: "Illustrative data · September 2026 · USD. No live service is connected.",
     period: "Reporting period", days: "days", channel: "Acquisition channel", all: "All channels",
     revenue: "Revenue", target: "Target", visits: "Visits", conversions: "Converted visits", conversion: "Conversion rate",
@@ -15,7 +15,7 @@ export const analyticsCopy = {
     chartTitle: "Visits over time", chartBody: "Use the original data table for exact values.", raw: "Raw daily data",
   },
   ko: {
-    title: "성과 대시보드", intro: "같은 기간, 같은 원본으로 보는 성과.",
+    title: "성과 대시보드", intro: "선택한 기간과 유입 경로의 매출, 방문 수, 전환율을 확인합니다.",
     sample: "예시 데이터 · 2026년 9월 · USD. 실제 서비스와 연결되지 않았습니다.",
     period: "조회 기간", days: "일", channel: "유입 경로", all: "모든 경로",
     revenue: "매출", target: "목표", visits: "방문", conversions: "전환 방문", conversion: "전환율",
@@ -30,7 +30,7 @@ export const analyticsCopy = {
     chartTitle: "일별 방문", chartBody: "정확한 값은 원본 표에서 확인하세요.", raw: "일별 원본 데이터",
   },
   ja: {
-    title: "成果ダッシュボード", intro: "同じ期間と元データで成果を確認。",
+    title: "成果ダッシュボード", intro: "選択した期間と流入経路の売上、訪問数、転換率を確認します。",
     sample: "サンプルデータ · 2026年9月 · USD。実際のサービスには接続されていません。",
     period: "表示期間", days: "日", channel: "流入経路", all: "すべての経路",
     revenue: "売上", target: "目標", visits: "訪問", conversions: "コンバージョン訪問", conversion: "転換率",
@@ -45,7 +45,7 @@ export const analyticsCopy = {
     chartTitle: "日別訪問数", chartBody: "正確な値は元データの表で確認してください。", raw: "日別の元データ",
   },
   zh: {
-    title: "成效仪表盘", intro: "在同一时间范围内查看同一数据源。",
+    title: "成效仪表盘", intro: "查看所选期间和渠道的收入、访问量与转化率。",
     sample: "示例数据 · 2026年9月 · USD。未连接实际服务。",
     period: "报告期间", days: "天", channel: "流量渠道", all: "所有渠道",
     revenue: "收入", target: "目标", visits: "访问", conversions: "转化访问", conversion: "转化率",

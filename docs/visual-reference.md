@@ -279,3 +279,22 @@ At 320px, the default Korean Blog Post split short words across lines, including
 anywhere wrapping for a single token wider than its container. Other locales and
 caller-owned classes remain unchanged. Source-only heading ranges verify complete
 words at 320/390/1440px in both modes; the published check verifies the same CSS.
+
+
+## Resource links and dashboard copy
+
+Dashboard introductions name the metrics and active filters in each locale rather
+than a two-part slogan. The analytics model, data, CSV and quantitative styling
+are unchanged. Link Hub examples use actual documentation and repository links;
+only the demonstration email is fictional and is labeled outside the block.
+
+The installed Link Hub removes the bordered filter shell and decorative repeated
+initials on destination tiles. Full caller-owned titles, URLs and handles wrap
+within a narrow host, rather than hiding the detail behind an ellipsis. Destination
+tiles retain their depth, directional SVG, focus/press state and an 80px minimum
+height. The profile monogram remains caller-owned. No prop or dependency is added.
+
+Source-only link-hub tests exercise 320/390/1440px in both modes and four locales,
+long unbroken strings, keyboard filtering/navigation and clipboard success/denial.
+The matching documentation checks also run on the public origin. Existing exact
+analytics table/CSV and MD-01–10 checks stay in the full verification suites.

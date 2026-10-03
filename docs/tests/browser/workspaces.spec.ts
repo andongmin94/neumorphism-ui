@@ -75,7 +75,7 @@ test('link hub documentation filters destinations', async ({ page }) => {
   await page.goto('/en/templates/link-hub');
   const preview = page.locator('[data-template="link-hub"]');
   await expect(preview.getByRole('link')).toHaveCount(5);
-  await preview.getByRole('button', { name: 'Work', exact: true }).click();
+  await preview.getByRole('button', { name: 'Guides', exact: true }).click();
   await expect(preview.getByRole('link')).toHaveCount(2);
   await expect(preview.getByRole('status').first()).toContainText('2 links');
 });

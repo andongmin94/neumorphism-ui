@@ -96,6 +96,15 @@ Aggregate installation remains a separate signal from the independent-item matri
 
 ## Remaining release work
 
+As of 2026-10-03, the full registry dependency audit has six high findings along
+`shadcn → fast-glob/ts-morph → micromatch → braces`. The root advisory is
+[GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm);
+it lists `braces <=3.0.3` with no patched release. These are related package
+findings, not six independent vulnerabilities. The release gate remains blocking,
+including development tools. The historical clean result below is not a current
+full-audit result. Do not remove the CLI, suppress the audit or downgrade to an
+obsolete shadcn version merely to make that gate pass.
+
 The installable registry production audit is clean in the analytics materialization
 run. The documentation runtime now uses Fumapress and Vite; the obsolete Vinext, Next.js routing, Cloudflare Vite plugin and Wrangler development chain are removed. Verify the static Fumapress output and deployed registry endpoints before release.
 
