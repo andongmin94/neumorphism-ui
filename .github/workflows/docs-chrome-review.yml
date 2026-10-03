@@ -25,43 +25,13 @@ jobs:
         run: |
           npm ci --prefix registry
           npm ci --prefix docs
+          npm install --prefix docs --save-exact pretendard-jp@1.3.9 @fontsource/noto-sans-sc
           cd docs && npx playwright install --with-deps chromium
-      - name: Capture the unchanged public baseline
-        run: |
-          mkdir -p "$RUNNER_TEMP/chrome-review"
-          cat > docs/chrome-before.mjs <<'JS'
-          import { chromium } from '@playwright/test';
-          import { mkdirSync, writeFileSync } from 'node:fs';
-          const out = process.env.RUNNER_TEMP + '/chrome-review/before';
-          mkdirSync(out, {recursive: true});
-          const browser = await chromium.launch();
-          for (const colorScheme of ['light', 'dark']) {
-            for (const width of [1440, 390]) {
-              const context = await browser.newContext({viewport: {width,height:1000}, colorScheme, reducedMotion:'reduce'});
-              const page = await context.newPage();
-              for (const locale of ['en', 'ko']) {
-                const response = await page.goto(`https://neumorphism-ui.andongmin.com/${locale}/components/hover-card`);
-                if (response.status() !== 200) throw new Error('Baseline HTTP ' + response.status());
-                await page.locator('.component-example[aria-busy="false"]').waitFor();
-                await page.evaluate(() => document.fonts.ready);
-                if (width > 1024) await page.locator('.docs-site-sidebar a[aria-current="page"]').scrollIntoViewIfNeeded();
-                await page.evaluate(() => scrollTo(0,0));
-                await page.screenshot({path:`${out}/${locale}-${width}-${colorScheme}.png`});
-                await page.locator('.language-switcher summary').click();
-                await page.locator('.language-switcher nav').screenshot({path:`${out}/menu-${locale}-${width}-${colorScheme}.png`});
-              }
-              await context.close();
-            }
-          }
-          await browser.close();
-          writeFileSync(out+'/provenance.json', JSON.stringify({source:'3703a0809c26022a3d90e2e5c695a52b02ffa35b',origin:'https://neumorphism-ui.andongmin.com',capturedAt:new Date().toISOString()},null,2));
-          JS
-          node docs/chrome-before.mjs
-          rm docs/chrome-before.mjs
-      - name: Apply authored candidate and remove temporary workflow from its tree
+      - name: Apply reviewed geometry and actual language fonts
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          mkdir -p "$RUNNER_TEMP/chrome-review"
           python3 - <<'PY'
           import base64, hashlib, json, lzma, os, pathlib, subprocess
           blob=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/git/blobs/c1d0aea549c504475a207bfeaef70d5aa123669d']))
@@ -69,6 +39,22 @@ jobs:
           assert hashlib.sha256(patch).hexdigest()=='f0087a50c52d086fecfaf64000ff904c8d5c3c7e04213ff06a118abaae0c2fd3'
           subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
           subprocess.run(['git','apply','--index','-'],input=patch,check=True)
+          p=pathlib.Path('docs/components/docs/language-switcher.tsx')
+          t=p.read_text().replace('import styles from "./language-switcher.module.css";', 'import "pretendard-jp/dist/web/variable/pretendardvariable-jp-dynamic-subset.css";\nimport "@fontsource/noto-sans-sc/500.css";\nimport styles from "./language-switcher.module.css";')
+          p.write_text(t)
+          p=pathlib.Path('docs/components/docs/language-switcher.module.css')
+          t=p.read_text().replace('.item:hover {', '/* Keep the primary UI face; provide real 500-weight glyphs for each native label. */\n.item[lang="ja"] {\n  font-family: "Pretendard JP Variable", var(--font-sans);\n}\n\n.item[lang="zh-CN"] {\n  font-family: "Noto Sans SC", var(--font-sans);\n}\n\n.item:hover {')
+          p.write_text(t)
+          p=pathlib.Path('docs/tests/detail/chrome-finish.spec.ts')
+          t=p.read_text().replace('    const cdp = await page.context().newCDPSession(page);', '    await page.evaluate(() => document.fonts.ready);\n    const cdp = await page.context().newCDPSession(page);')
+          t=t.replace('    await cdp.detach();', '    for (const labelFonts of fonts) {\n      expect(labelFonts.fonts.length).toBeGreaterThan(0);\n      expect(labelFonts.fonts.every(font => font.isCustomFont)).toBe(true);\n    }\n    await cdp.detach();')
+          p.write_text(t)
+          p=pathlib.Path('docs/src/pages/docs/credits.tsx')
+          t=p.read_text().replace('  ["Pretendard", "Bundled UI font dependency"],', '  ["Pretendard", "Bundled UI font dependency"],\n  ["Pretendard JP", "Self-hosted Japanese language-menu labels (OFL-1.1)"],\n  ["Noto Sans SC / Fontsource", "Self-hosted Chinese language-menu labels, weight 500 (OFL-1.1)"],')
+          p.write_text(t)
+          p=pathlib.Path('docs/visual-reference.md')
+          t=p.read_text().replace('Platform font diagnostics accompany screenshots; matching CSS weights alone is\nnot proof of identical script rendering. Installed registry source is unchanged.', 'The first capture exposed system CJK fonts despite equal CSS weights. Japanese\nmenu labels now use self-hosted Pretendard JP and Chinese labels self-hosted Noto\nSans SC at weight 500, scoped to this menu. Latin/Hangul UI remains Pretendard.\nThe Chromium regression verifies actual custom glyph fonts, not just CSS family\nnames. Font packages are exact locked, bundled by Vite and credited; no remote\nfont service or artificial bold is used. Installed registry source is unchanged.')
+          p.write_text(t)
           pathlib.Path('.github/workflows/docs-chrome-review.yml').unlink()
           PY
       - name: Source contracts and documentation build
