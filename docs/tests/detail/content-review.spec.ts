@@ -60,6 +60,10 @@ for (const locale of ["en", "ko", "ja", "zh"] as const) {
     await page.screenshot({ path: info.outputPath("article-top.png") });
     await page.setViewportSize({ width: 320, height: 1000 });
     await fits(page);
+    if (locale === "ko") {
+      await expect(article).toHaveCSS("word-break", "keep-all");
+      await expect(article).toHaveCSS("overflow-wrap", "anywhere");
+    }
     await article.screenshot({ path: info.outputPath("article-320.png") });
     expect(errors).toEqual([]);
   });

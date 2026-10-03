@@ -46,7 +46,11 @@ export function BlogPost({
     <article
       id="blog-post-top"
       data-slot="blog-post"
-      className={cn("mx-auto w-full max-w-3xl text-[var(--foreground)]", className)}
+      className={cn(
+        "mx-auto w-full max-w-3xl text-[var(--foreground)]",
+        locale === "ko" && "break-keep [overflow-wrap:anywhere]",
+        className,
+      )}
     >
       <header className="grid gap-5 border-b border-[var(--border)] pb-7">
         <a

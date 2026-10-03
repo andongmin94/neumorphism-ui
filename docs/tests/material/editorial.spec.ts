@@ -31,7 +31,25 @@ for (const width of [320, 390, 1440]) for (const mode of ["light", "dark"]) {
       await expect(lead).toHaveCSS("box-shadow", "none");
       await expect(lead).toHaveCSS("padding-left", "0px");
       await expect(lead).toHaveCSS("border-top-width", "0px");
-      await page.locator('[data-slot="blog-post"]').screenshot({ path: info.outputPath(`article-${locale}.png`) });
+      const article = page.locator('[data-slot="blog-post"]');
+      if (locale === "ko") {
+        await expect(article).toHaveCSS("word-break", "keep-all");
+        await expect(article).toHaveCSS("overflow-wrap", "anywhere");
+        for (const heading of await article.locator("h1, h2").all()) {
+          const words = await heading.evaluate(element => {
+            const node = element.firstChild!;
+            const text = node.textContent!;
+            return Array.from(text.matchAll(/\S+/g), match => {
+              const range = document.createRange();
+              range.setStart(node, match.index!);
+              range.setEnd(node, match.index! + match[0].length);
+              return { word: match[0], lines: range.getClientRects().length };
+            });
+          });
+          expect(words).toEqual(words.map(({ word }) => ({ word, lines: 1 })));
+        }
+      }
+      await article.screenshot({ path: info.outputPath(`article-${locale}.png`) });
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     }
     expect(errors).toEqual([]);

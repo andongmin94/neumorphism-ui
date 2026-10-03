@@ -270,3 +270,12 @@ shipping source without documentation CSS at 320/390/1440px, in both modes and f
 locales. Existing MD-01–10 tests remain. These assertions do not certify subjective
 visual quality or native-device/assistive-technology behavior; inspect the captures
 and report actual run results separately. The blocking dependency audit is unchanged.
+
+
+## Korean article wrapping
+
+At 320px, the default Korean Blog Post split short words across lines, including
+"초안" in the title. The installed article uses keep-all only for Korean, with
+anywhere wrapping for a single token wider than its container. Other locales and
+caller-owned classes remain unchanged. Source-only heading ranges verify complete
+words at 320/390/1440px in both modes; the published check verifies the same CSS.
