@@ -38,6 +38,22 @@ jobs:
           patch = lzma.decompress(data)
           assert hashlib.sha256(patch).hexdigest() == 'bfe238bb72a9046434afe414b48534f8ed0fec98df82eb465ccebb5f0f01dbfc'
           subprocess.run(['git', 'apply', '--index', '-'], input=patch, check=True)
+          # Tailwind 4 uses the independent scale property, not a transform matrix.
+          # Assert the rendered stroke disappears and returns across native toggles.
+          for name in ['docs/tests/detail/content-review.spec.ts', 'docs/tests/material/editorial.spec.ts']:
+              path = pathlib.Path(name)
+              text = path.read_text()
+              needle = 'await expect(summary.locator("svg path").last()).toHaveCSS("transform", "matrix(1, 0, 0, 0, 0, 0)");'
+              assert text.count(needle) == 1
+              text = text.replace(needle, 'await expect.poll(() => summary.locator("svg path").last().evaluate(e => e.getBoundingClientRect().height)).toBe(0);')
+              indent = '    ' if 'detail' in name else '      '
+              needle = 'await summary.press("Enter");'
+              assert text.count(needle) == 1
+              text = text.replace(needle, 'expect(await summary.locator("svg path").last().evaluate(e => e.getBoundingClientRect().height)).toBeGreaterThan(0);\n' + indent + needle)
+              needle = 'await expect(project).not.toHaveAttribute("open");'
+              assert text.count(needle) == 1
+              text = text.replace(needle, needle + '\n' + indent + 'await expect.poll(() => summary.locator("svg path").last().evaluate(e => e.getBoundingClientRect().height)).toBeGreaterThan(0);')
+              path.write_text(text)
           pathlib.Path('.github/workflows/content-finish-review.yml').unlink()
           PY
       - name: Build and synchronize the actual registry generator
