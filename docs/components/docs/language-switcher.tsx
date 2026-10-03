@@ -1,5 +1,9 @@
 "use client";
 
+import "pretendard-jp/dist/web/variable/pretendardvariable-jp-dynamic-subset.css";
+import "@fontsource/noto-sans-sc/500.css";
+import styles from "./language-switcher.module.css";
+
 import { useRouter } from "fumapress/client";
 
 import {
@@ -16,16 +20,17 @@ export function LanguageSwitcher() {
   const query = routerQuery ?? "";
 
   return (
-    <details className="language-switcher">
-      <summary aria-label={messages.site.languageMenu}>
+    <details className={`language-switcher ${styles.switcher}`}>
+      <summary className={styles.trigger} aria-label={messages.site.languageMenu}>
         <span aria-hidden="true">{currentLocale.shortLabel}</span>
       </summary>
-      <nav aria-label={messages.site.languageMenu}>
+      <nav className={styles.menu} aria-label={messages.site.languageMenu}>
         {locales.map((nextLocale) => {
           const details = localeDetails[nextLocale];
 
           return (
             <a
+              className={styles.item}
               aria-current={nextLocale === locale ? "page" : undefined}
               href={`${switchLocaleHref(pathname, nextLocale)}${
                 query ? `?${query}` : ""
@@ -34,7 +39,10 @@ export function LanguageSwitcher() {
               key={nextLocale}
               lang={details.htmlLang}
             >
-              {details.label}
+              <span>{details.label}</span>
+              <svg aria-hidden="true" className={styles.check} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m5 12 4 4L19 6" />
+              </svg>
             </a>
           );
         })}

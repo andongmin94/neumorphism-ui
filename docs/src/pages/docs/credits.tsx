@@ -21,6 +21,8 @@ const dependencies = [
   ["embla-carousel-react", "Carousel scrolling and drag state"],
   ["react-resizable-panels", "Resizable panel sizing and separator semantics"],
   ["Pretendard", "Bundled UI font dependency"],
+  ["Pretendard JP", "Self-hosted Japanese language-menu labels (OFL-1.1)"],
+  ["Noto Sans SC / Fontsource", "Self-hosted Chinese language-menu labels, weight 500 (OFL-1.1)"],
 ] as const;
 
 export default function CreditsPage({ lang }: { lang: string }) {

@@ -298,3 +298,29 @@ Source-only link-hub tests exercise 320/390/1440px in both modes and four locale
 long unbroken strings, keyboard filtering/navigation and clipboard success/denial.
 The matching documentation checks also run on the public origin. Existing exact
 analytics table/CSV and MD-01–10 checks stay in the full verification suites.
+
+
+## Documentation chrome ownership
+
+Remove the left accent pseudo-element from documentation navigation. Current pages
+use one selected surface with symmetric gutters; keyboard focus remains separate.
+The preview has no outer frame, toolbar rule or clipped shell. Its toolbar reuses
+installed Tabs without docs-specific shadows or sizing overrides. The neutral,
+open preview canvas matches the controls' material; the Dark+ code surface is separate.
+Superseded global preview and language-menu rules are removed, not overridden.
+
+Category and identifier share a 24px row and 20px line height. The category uses
+Pretendard; the literal identifier stays case-sensitive Consolas. Language links
+use the same 500 weight, 14px size and 40px row; selection uses fill and a fixed SVG
+check, never a weight change or per-item divider. The trigger matches the 40px
+header controls. Native language names and navigation remain unchanged.
+
+chrome-finish.spec.ts verifies all four document locales in light/dark and narrow
+layouts, metadata geometry, the absence of the old marker/borders, real Hover Card
+and tab behavior, Dark+ rendering, language menu metrics and keyboard navigation.
+The first capture exposed system CJK fonts despite equal CSS weights. Japanese
+menu labels now use self-hosted Pretendard JP and Chinese labels self-hosted Noto
+Sans SC at weight 500, scoped to this menu. Latin/Hangul UI remains Pretendard.
+The Chromium regression verifies actual custom glyph fonts, not just CSS family
+names. Font packages are exact locked, bundled by Vite and credited; no remote
+font service or artificial bold is used. Installed registry source is unchanged.

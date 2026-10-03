@@ -1,0 +1,116 @@
+.switcher {
+  position: relative;
+  color: var(--foreground);
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--neu-edge);
+  border-radius: var(--neu-radius-control);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-raised-sm);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.trigger::-webkit-details-marker {
+  display: none;
+}
+
+.trigger:hover,
+.switcher[open] > .trigger {
+  box-shadow: var(--neu-shadow-inset-sm);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.menu {
+  position: absolute;
+  z-index: 90;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  width: 168px;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid var(--neu-edge);
+  border-radius: var(--neu-radius-surface);
+  background: var(--neu-surface);
+  box-shadow: var(--neu-shadow-floating);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 10px;
+  border: 0;
+  border-radius: var(--neu-radius-control);
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  font-synthesis: none;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Keep the primary UI face; provide real 500-weight glyphs for each native label. */
+.item[lang="ja"] {
+  font-family: "Pretendard JP Variable", var(--font-sans);
+}
+
+.item[lang="zh-CN"] {
+  font-family: "Noto Sans SC", var(--font-sans);
+}
+
+.item:hover {
+  background: var(--neu-surface-soft);
+}
+
+.item[aria-current="page"] {
+  background: var(--neu-selected);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.check {
+  width: 16px;
+  height: 16px;
+  visibility: hidden;
+}
+
+.item[aria-current="page"] .check {
+  visibility: visible;
+}
+
+@media (max-width: 560px) {
+  .menu {
+    position: fixed;
+    top: calc(var(--docs-header-height) + 8px);
+    right: 12px;
+  }
+}

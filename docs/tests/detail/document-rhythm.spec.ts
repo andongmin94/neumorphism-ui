@@ -89,9 +89,10 @@ for (const entry of [
     }
   });
 }
-test("drawer and preview retain single internal boundaries", async ({ page }, info) => {
+test("drawer keeps its boundary while preview uses open spacing", async ({ page }, info) => {
   await page.goto("/en/components/button");
-  await expect(page.locator(".component-example-toolbar").first()).toHaveCSS("border-bottom-width", "1px");
+  await expect(page.locator(".component-example-toolbar").first()).toHaveCSS("border-bottom-width", "0px");
+  await expect(page.locator(".component-example").first()).toHaveCSS("border-width", "0px");
   await expect(page.locator(".component-example-panel").first()).toHaveCSS("border-top-width", "0px");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open docs menu" }).click();
