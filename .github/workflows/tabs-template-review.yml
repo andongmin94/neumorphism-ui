@@ -40,15 +40,19 @@ jobs:
           text = p.read_text(); marker='      await expect(frame).toHaveCount(1);'
           assert text.count(marker) == 1
           p.write_text(text.replace(marker, marker + '\n      await expect(page.locator(".docs-page-header")).toHaveCSS("border-bottom-width", "0px");'))
-          # Base UI retains the exiting, inert panel until its transition ends.
-          # Check the live panel and the selected tab, not an arbitrary first match.
+          p = pathlib.Path('registry/src/components/ui/tabs.tsx'); text = p.read_text()
+          marker = 'hover:not-data-disabled:text-[var(--foreground)]'; assert text.count(marker) == 1
+          p.write_text(text.replace(marker, 'hover:not-data-disabled:not-data-active:text-[var(--foreground)]'))
+          # Check live panels, not the temporarily retained inert exit panel.
           p = pathlib.Path('docs/tests/material/tabs-clarity.spec.ts')
           text = p.read_text(); assert text.count('getByRole("tabpanel")') == 4
           text = text.replace('getByRole("tabpanel")', 'locator(\'[role="tabpanel"]:not([inert])\')')
           marker = '      await tabs.first().click();'; assert text.count(marker) == 1
           text = text.replace(marker, marker + '\n      await expect(tabs.first()).toHaveAttribute("aria-selected", "true");')
+          marker = '      expect(style.height).toBe("44px");'; assert text.count(marker) == 1
+          text = text.replace(marker, marker + '\n      await tabs.first().hover();\n      await expect(tabs.first()).toHaveCSS("color", style.onPrimary);\n      await tabs.last().hover();\n      await expect(tabs.first()).toHaveAttribute("aria-selected", "true");\n      await page.mouse.move(0, 0);')
           p.write_text(text)
-          # The first actual capture exposed obsolete installation-only tab skins.
+          # Actual capture exposed stale installation-only size and material rules.
           p = pathlib.Path('docs/src/app.css'); text = p.read_text()
           pattern = r'\.component-installation \[data-slot="tabs-(?:list|trigger)"\](?:\[data-active\])? \{[^{}]*\}\n'
           text, count = re.subn(pattern, '', text); assert count == 4, count
@@ -79,10 +83,9 @@ jobs:
 
           Installed Tabs retain their 44px rail and 14px labels. A low-contrast inset
           rail and short contact shadow replace the wide blurred shadow. The selected
-          segment uses primary/on-primary tokens, not blue text on a near-identical
-          gray surface. Keyboard focus is independent of selection and visible on both
-          active and inactive segments. Base UI still owns orientation, disabled tabs,
-          manual activation and controlled/uncontrolled state. No new API or package.
+          segment uses primary/on-primary tokens, including on hover. Keyboard focus
+          stays distinct on active and inactive segments. Base UI owns orientation,
+          disabled tabs, manual activation and controlled/uncontrolled state.
           Obsolete installation-tab size, shadow and selected-color overrides are
           removed so Preview/Code and CLI/source use the same installed Tabs.
 
@@ -92,14 +95,14 @@ jobs:
           and ends; the canvas has no added elevation or clipping. The old page-header
           rule is removed rather than doubled above the frame. Installation and source
           documentation remain outside. Mobile gutters preserve workspace width.
-          The real examples and their state are not replaced with images or iframes.
-          Catalog thumbnails stay unframed. Previous sidebar, metadata and language-menu
-          fixes and Dark+ rendering remain; do not restore removed preview chrome.
+          Real examples and state are not replaced by images or iframes. Catalog
+          thumbnails stay unframed. Prior sidebar, metadata, language-menu and Dark+
+          fixes remain. No new API, token or dependency is introduced.
 
           Source-only tabs-clarity tests cover both orientations, four locales, disabled
-          and selected states, keyboard activation, long labels and 320/390/1440px in
-          both themes. They distinguish live panels from Base UI's inert exit panels.
-          template-boundary tests check every template and its separation from
+          and selected states, active-hover contrast, keyboard activation, long labels
+          and 320/390/1440px in both themes. They distinguish live panels from inert
+          exit panels. template-boundary checks every template and separation from
           documentation, including the published site. MD-01–10 remain in their
           existing suites. Actual runs and visual review are reported separately.
           ''')
