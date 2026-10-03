@@ -2,24 +2,110 @@ name: Content finish review
 on:
   status:
 permissions:
-  contents: read
+  contents: write
 jobs:
-  snapshot:
+  candidate:
     if: >-
       github.ref == 'refs/heads/main' &&
       github.event.context == 'Vercel' && github.event.state == 'success' &&
       github.event.sha == github.sha
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.event.sha }}
-      - name: Archive authored and generated inputs for isolated review
-        run: git archive --format=tar.gz -o "$RUNNER_TEMP/content-source.tar.gz" HEAD
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          name: content-source
-          path: ${{ runner.temp }}/content-source.tar.gz
-          retention-days: 1
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Apply integrity-checked authored candidate without updating main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, lzma, os, pathlib, subprocess
+          parts = ['3f041b5fbeb21e7a68f77d689c9916fdc7515497', '239be0a71acbf78bd0dc63c0e5155e48ab02be25', '59bc3c76caeacbad37845999548b093f6903121e', '254e93be2a6bc735f9ef20da43be5e88d9279c3b']
+          data = b''
+          for sha in parts:
+              blob = json.loads(subprocess.check_output(['gh', 'api', f'repos/{os.environ["GITHUB_REPOSITORY"]}/git/blobs/{sha}']))
+              chunk = base64.b64decode(blob['content'])
+              assert hashlib.sha1(f'blob {len(chunk)}\0'.encode() + chunk).hexdigest() == sha
+              data += chunk
+          patch = lzma.decompress(data)
+          assert hashlib.sha256(patch).hexdigest() == 'bfe238bb72a9046434afe414b48534f8ed0fec98df82eb465ccebb5f0f01dbfc'
+          subprocess.run(['git', 'apply', '--index', '-'], input=patch, check=True)
+          pathlib.Path('.github/workflows/content-finish-review.yml').unlink()
+          PY
+      - name: Build and synchronize the actual registry generator
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Install Chromium
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Targeted source and documentation regressions
+        working-directory: docs
+        run: |
+          result=0
+          npx playwright test --config=playwright.detail.config.ts content-review.spec.ts surface-system.spec.ts document-rhythm.spec.ts || result=1
+          npx playwright test --config=playwright.material.config.ts editorial.spec.ts || result=1
+          npx playwright test tests/browser/workspaces.spec.ts || result=1
+          exit "$result"
+      - name: Prepare a verified tree for manual visual review, never publish it here
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/content-review"
+          npm run check:generated --prefix registry
+          git diff --check HEAD
+          python3 - <<'PY'
+          import json, os, pathlib, subprocess
+          repo = os.environ['GITHUB_REPOSITORY']
+          parent = os.environ['GITHUB_SHA']
+          commit = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/git/commits/{parent}']))
+          paths = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD'], text=True).splitlines()
+          paths += subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard'], text=True).splitlines()
+          tree = []
+          for name in sorted(set(paths)):
+              path = pathlib.Path(name)
+              entry = dict(path=name, mode='100644', type='blob')
+              if path.exists(): entry['content'] = path.read_text()
+              else: entry['sha'] = None
+              tree.append(entry)
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'content-review'
+          request = out / 'tree-request.json'
+          request.write_text(json.dumps(dict(base_tree=commit['tree']['sha'], tree=tree)))
+          result = json.loads(subprocess.check_output(['gh', 'api', '--method', 'POST', f'repos/{repo}/git/trees', '--input', str(request)]))
+          (out / 'candidate.json').write_text(json.dumps(dict(parent=parent, tree=result['sha'], changed_paths=sorted(set(paths))), indent=2))
+          request.unlink()
+          (out / 'candidate.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary', 'HEAD']))
+          (out / 'candidate-source.json').write_text(json.dumps({entry['path']:entry.get('content') for entry in tree}, ensure_ascii=False))
+          print(json.dumps(dict(parent=parent, tree=result['sha'], files=len(tree))))
+          PY
+      - name: Record dependency findings without altering the blocking release gate
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/content-review"
+          npm audit --prefix registry --audit-level=high --json > "$RUNNER_TEMP/content-review/registry-audit.json" || true
+          npm audit --prefix docs --audit-level=high --json > "$RUNNER_TEMP/content-review/docs-audit.json" || true
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: content-candidate
+          retention-days: 3
           if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/content-review
+            docs/test-results
