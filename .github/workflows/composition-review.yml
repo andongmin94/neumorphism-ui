@@ -4,23 +4,102 @@ on:
     branches: [main]
     paths: [.github/workflows/composition-review.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  snapshot:
+  review:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - name: Preserve the exact source for offline editing
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Apply the reviewed authored edits with exact source checks
+        env:
+          EDITS: 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
         run: |
           mkdir -p "$RUNNER_TEMP/composition-review"
-          git archive HEAD --format=tar -o "$RUNNER_TEMP/composition-review/source.tar"
-          git rev-parse HEAD > "$RUNNER_TEMP/composition-review/commit.txt"
+          python3 - <<'PY'
+          import base64, gzip, hashlib, json, os
+          from pathlib import Path
+          edits = json.loads(gzip.decompress(base64.b64decode(os.environ['EDITS'])))
+          for item in edits:
+              p = Path(item['path'])
+              assert p.parts[0] in ('docs', 'registry') and '..' not in p.parts
+              assert '/public/r/' not in str(p) and p.name not in ('theme.css', 'registry.json')
+              s = p.read_text() if p.exists() else ''
+              assert hashlib.sha256(s.encode()).hexdigest() == item['sha256'], str(p)
+              for start, end, content in reversed(item['edits']):
+                  s = s[:start] + content + s[end:]
+              p.parent.mkdir(parents=True, exist_ok=True)
+              p.write_text(s)
+          PY
+          git diff --check
+          git diff > "$RUNNER_TEMP/composition-review/authored.patch"
+      - name: Generate installable output and check source
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+          npm run check:generated --prefix registry
+      - name: Targeted task, source and interaction regression
+        working-directory: docs
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test --config=playwright.detail.config.ts task-composition.spec.ts workspace-plates.spec.ts docs-reading.spec.ts reference-plate.spec.ts
+          cp test-results/detail-report.json "$RUNNER_TEMP/composition-review/targeted-report.json"
+          npx playwright test tests/browser/docs-polish.spec.ts tests/browser/workspaces.spec.ts
+          cp test-results/docs-report.json "$RUNNER_TEMP/composition-review/interaction-report.json"
+      - name: Capture the unchanged component collection and composed templates
+        working-directory: docs
+        run: |
+          npx playwright test --config=playwright.detail.config.ts catalog.spec.ts surface-system.spec.ts
+          cp test-results/detail-report.json "$RUNNER_TEMP/composition-review/catalog-report.json"
+      - name: Prepare a source-derived candidate without moving main
+        run: |
+          rm .github/workflows/composition-review.yml
+          git add -A
+          git diff --cached --check
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'composition-review'
+          changes = subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          entries = []
+          for name in changes:
+              p = Path(name)
+              entry = {'path': name, 'mode': '100644', 'type': 'blob'}
+              if p.exists(): entry['content'] = p.read_text()
+              else: entry['sha'] = None
+              entries.append(entry)
+          request = {'base_tree': subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(), 'tree': entries}
+          payload = root / 'tree-request.json'
+          payload.write_text(json.dumps(request))
+          result = json.loads(subprocess.check_output(['gh','api','--method','POST','repos/andongmin94/neumorphism-ui/git/trees','--input',str(payload)],text=True))
+          (root/'candidate.json').write_text(json.dumps({'tree': result['sha'], 'parent': os.environ['GITHUB_SHA'], 'run': os.environ['GITHUB_RUN_ID'], 'changes': changes},indent=2))
+          (root/'source.patch').write_text(subprocess.check_output(['git','diff','--cached'],text=True))
+          payload.unlink()
+          PY
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
         with:
-          name: composition-review-source
-          path: ${{ runner.temp }}/composition-review
+          name: composition-review-evidence
+          path: |
+            ${{ runner.temp }}/composition-review
+            docs/test-results
           retention-days: 7
           if-no-files-found: error
