@@ -33,6 +33,13 @@ jobs:
           assert hashlib.sha256(patch).hexdigest() == 'b5ff29da5845f15574122aec07c4cb5e7ce852c770ee3dc8d3132e0c9d747979'
           subprocess.run(['git','apply','--check','--index','-'], input=patch, check=True)
           subprocess.run(['git','apply','--index','-'], input=patch, check=True)
+          p = pathlib.Path('docs/components/docs/template-page.module.css')
+          text = p.read_text(); assert text.count('padding-bottom: 20px;') == 1
+          p.write_text(text.replace('padding-bottom: 20px;', 'padding-bottom: 0;\n  border-bottom: 0;'))
+          p = pathlib.Path('docs/tests/detail/template-boundary.spec.ts')
+          text = p.read_text(); marker='      await expect(frame).toHaveCount(1);'
+          assert text.count(marker) == 1
+          p.write_text(text.replace(marker, marker + '\n      await expect(page.locator(".docs-page-header")).toHaveCSS("border-bottom-width", "0px");'))
           p = pathlib.Path('docs/playwright.published.config.ts')
           text = p.read_text(); assert text.count('testMatch: [') == 1
           p.write_text(text.replace('testMatch: [', 'testMatch: ["**/detail/template-boundary.spec.ts", '))
@@ -51,8 +58,9 @@ jobs:
           All eight template detail pages use one documentation-owned frame with a
           localized preview heading, literal installation identifier and Install/Source
           anchors. Its single border and muted toolbar show where the example begins
-          and ends; the canvas has no added elevation or clipping. Installation and
-          source documentation remain outside. Mobile gutters preserve workspace width.
+          and ends; the canvas has no added elevation or clipping. The old page-header
+          rule is removed rather than doubled above the frame. Installation and source
+          documentation remain outside. Mobile gutters preserve workspace width.
           The real examples and their state are not replaced with images or iframes.
           Catalog thumbnails stay unframed. Previous sidebar, metadata and language-menu
           fixes and Dark+ rendering remain; do not restore removed preview chrome.
@@ -77,13 +85,13 @@ jobs:
           npm run lint --prefix docs
           npm run typecheck --prefix docs
           npm run build --prefix docs
-      - name: Focused browser checks and actual captures
+      - name: Focused browser checks and full catalog captures
         working-directory: docs
         run: |
           npx playwright install --with-deps chromium
           result=0
           npx playwright test --config=playwright.material.config.ts tabs-clarity.spec.ts composition.spec.ts || result=1
-          npx playwright test --config=playwright.detail.config.ts template-boundary.spec.ts chrome-finish.spec.ts docs-reading.spec.ts docs-hydration.spec.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts template-boundary.spec.ts chrome-finish.spec.ts docs-reading.spec.ts docs-hydration.spec.ts catalog.spec.ts surface-system.spec.ts || result=1
           exit "$result"
       - name: Save source-derived tree for visual review without updating main
         env:
