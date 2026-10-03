@@ -1,0 +1,99 @@
+name: Dependency follow-through
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/dependency-follow-through.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Record the blocker and update only compatible affected transitive packages
+        run: |
+          mkdir -p "$RUNNER_TEMP/dependency-follow-through"
+          npm audit --prefix registry --json > "$RUNNER_TEMP/dependency-follow-through/audit-before.json" || echo "$?" > "$RUNNER_TEMP/dependency-follow-through/audit-before.exit"
+          for package in braces shadcn undici ip-address; do
+            npm view "$package" version dist-tags --json > "$RUNNER_TEMP/dependency-follow-through/$package-versions.json"
+          done
+          npm update undici ip-address --prefix registry --package-lock-only --ignore-scripts --no-audit
+          git diff -- registry/package-lock.json > "$RUNNER_TEMP/dependency-follow-through/lock.patch"
+          npm audit --prefix registry --json > "$RUNNER_TEMP/dependency-follow-through/audit-after.json" || echo "$?" > "$RUNNER_TEMP/dependency-follow-through/audit-after.exit"
+          npm audit --prefix registry --omit=dev --json > "$RUNNER_TEMP/dependency-follow-through/production-audit.json" || echo "$?" > "$RUNNER_TEMP/dependency-follow-through/production-audit.exit"
+          npm audit --prefix docs --json > "$RUNNER_TEMP/dependency-follow-through/docs-audit.json" || echo "$?" > "$RUNNER_TEMP/dependency-follow-through/docs-audit.exit"
+          # Audit status is retained and enforced below, never changed to a success.
+          git diff --check
+      - name: Check the unchanged source and generated registry with the updated lock
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Verify actual hydrated and installed interfaces independently of the audit gate
+        working-directory: docs
+        run: |
+          npx playwright install --with-deps chromium firefox webkit
+          npm run test:browser
+          npm run consumer:verify --prefix ../registry
+      - name: Prepare a minimal partial-remediation candidate without publishing or waiving the blocker
+        run: |
+          npm run check:generated --prefix registry
+          rm .github/workflows/dependency-follow-through.yml
+          git add -A
+          git diff --cached --check
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])/'dependency-follow-through'
+          changes = subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          assert set(changes) <= {'registry/package-lock.json','.github/workflows/dependency-follow-through.yml'}, changes
+          entries=[]
+          for name in changes:
+              p=Path(name); entry={'path':name,'mode':'100644','type':'blob'}
+              if p.exists(): entry['content']=p.read_text()
+              else: entry['sha']=None
+              entries.append(entry)
+          request={'base_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),'tree':entries}
+          payload=root/'tree-request.json'; payload.write_text(json.dumps(request))
+          result=json.loads(subprocess.check_output(['gh','api','--method','POST','repos/andongmin94/neumorphism-ui/git/trees','--input',str(payload)],text=True))
+          audit=json.loads((root/'audit-after.json').read_text())
+          (root/'candidate.json').write_text(json.dumps({'tree':result['sha'],'parent':os.environ['GITHUB_SHA'],'run':os.environ['GITHUB_RUN_ID'],'changes':changes,'audit':audit.get('metadata',{}),'functionalChecks':'passed','auditWaived':False},indent=2))
+          (root/'source.patch').write_text(subprocess.check_output(['git','diff','--cached'],text=True))
+          (root/'package-lock.json').write_text(Path('registry/package-lock.json').read_text())
+          payload.unlink()
+          PY
+      - name: Preserve every audit result and browser result
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: dependency-follow-through
+          path: |
+            ${{ runner.temp }}/dependency-follow-through
+            docs/test-results
+          retention-days: 7
+          if-no-files-found: error
+      - name: Keep high-severity findings as a failed gate
+        if: always()
+        run: |
+          node --input-type=module -e 'import fs from "node:fs";const a=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/dependency-follow-through/audit-after.json","utf8"));const v=a.metadata?.vulnerabilities;if(!v||v.high||v.critical){console.error("Unresolved high/critical dependency findings; this is not a clean audit.",v);process.exit(1)}'
