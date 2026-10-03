@@ -26,8 +26,6 @@ jobs:
       - run: npm ci --prefix registry && npm ci --prefix docs
       - name: Registry build, examples, and source contracts
         run: |
-          npm audit --prefix registry --audit-level=high
-          npm audit --prefix docs --audit-level=high
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
@@ -53,6 +51,26 @@ jobs:
           npm run check:generated --prefix registry
           git diff --exit-code
           test -z "$(git ls-files --others --exclude-standard)"
+      - name: Dependency security (blocking)
+        if: ${{ !cancelled() }}
+        run: |
+          # Keep the same verify job red on any failed audit, after collecting
+          # functional evidence. Audit both projects, including development tools.
+          mkdir -p "$RUNNER_TEMP/dependency-audit"
+          result=0
+          for project in registry docs; do
+            npm audit --prefix "$project" --audit-level=high --json > "$RUNNER_TEMP/dependency-audit/$project.json" || result=1
+            cat "$RUNNER_TEMP/dependency-audit/$project.json"
+          done
+          exit "$result"
+      - name: Save dependency audit reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: dependency-audit
+          path: ${{ runner.temp }}/dependency-audit
+          retention-days: 7
+          if-no-files-found: error
       - name: Save UI verification evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
