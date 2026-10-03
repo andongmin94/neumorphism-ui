@@ -20,7 +20,11 @@ const headings = {
 };
 
 async function fits(page: Page) {
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  // setViewportSize resolves before the next rendered reflow on some browser runs.
+  // Keep the same one-pixel overflow limit and report the measured excess.
+  await expect.poll(() => page.evaluate(() =>
+    document.documentElement.scrollWidth - innerWidth),
+  { message: "Rendered page must fit the current viewport" }).toBeLessThanOrEqual(1);
 }
 
 for (const [locale, copy] of Object.entries(locales)) {

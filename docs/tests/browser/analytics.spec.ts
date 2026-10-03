@@ -3,8 +3,9 @@ import { test, expect } from "@playwright/test";
 import { demoAnalytics } from "../../../registry/src/components/blocks/analytics-demo";
 import { analyticsCsv, summarizeAnalytics } from "../../../registry/src/lib/analytics-model";
 import { analyticsFormats } from "../../../registry/src/lib/analytics-copy";
+import { chartGalleryCopy } from "../../i18n/chart-gallery-copy";
 
-for (const locale of ["ko", "en", "ja", "zh"]) {
+for (const locale of ["ko", "en", "ja", "zh"] as const) {
   test(`${locale}: chart workbench and dashboard source`, async ({ page }, info) => {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
@@ -13,7 +14,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     await expect(page.locator('h1')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const revenueCard = page.locator('#chart-installation .chart-reference-card').first();
-    await revenueCard.getByText('Source', { exact: true }).click();
+    await revenueCard.getByText(chartGalleryCopy[locale].source, { exact: true }).click();
     await expect(revenueCard.locator('details').nth(1).locator('pre')).toContainText('export function RevenueChart');
     await page.goto(`/${locale}/templates/dashboard`);
     await page.evaluate(() => document.fonts.ready);
