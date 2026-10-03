@@ -1,0 +1,121 @@
+name: Docs chrome review
+on:
+  status:
+permissions:
+  contents: write
+jobs:
+  candidate:
+    if: >-
+      github.ref == 'refs/heads/main' && github.event.context == 'Vercel' &&
+      github.event.state == 'success' && github.event.sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Dependencies and browser
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          cd docs && npx playwright install --with-deps chromium
+      - name: Capture the unchanged public baseline
+        run: |
+          mkdir -p "$RUNNER_TEMP/chrome-review"
+          cat > docs/chrome-before.mjs <<'JS'
+          import { chromium } from '@playwright/test';
+          import { mkdirSync, writeFileSync } from 'node:fs';
+          const out = process.env.RUNNER_TEMP + '/chrome-review/before';
+          mkdirSync(out, {recursive: true});
+          const browser = await chromium.launch();
+          for (const colorScheme of ['light', 'dark']) {
+            for (const width of [1440, 390]) {
+              const context = await browser.newContext({viewport: {width,height:1000}, colorScheme, reducedMotion:'reduce'});
+              const page = await context.newPage();
+              for (const locale of ['en', 'ko']) {
+                const response = await page.goto(`https://neumorphism-ui.andongmin.com/${locale}/components/hover-card`);
+                if (response.status() !== 200) throw new Error('Baseline HTTP ' + response.status());
+                await page.locator('.component-example[aria-busy="false"]').waitFor();
+                await page.evaluate(() => document.fonts.ready);
+                if (width > 1024) await page.locator('.docs-site-sidebar a[aria-current="page"]').scrollIntoViewIfNeeded();
+                await page.evaluate(() => scrollTo(0,0));
+                await page.screenshot({path:`${out}/${locale}-${width}-${colorScheme}.png`});
+                await page.locator('.language-switcher summary').click();
+                await page.locator('.language-switcher nav').screenshot({path:`${out}/menu-${locale}-${width}-${colorScheme}.png`});
+              }
+              await context.close();
+            }
+          }
+          await browser.close();
+          writeFileSync(out+'/provenance.json', JSON.stringify({source:'3703a0809c26022a3d90e2e5c695a52b02ffa35b',origin:'https://neumorphism-ui.andongmin.com',capturedAt:new Date().toISOString()},null,2));
+          JS
+          node docs/chrome-before.mjs
+          rm docs/chrome-before.mjs
+      - name: Apply authored candidate and remove temporary workflow from its tree
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, lzma, os, pathlib, subprocess
+          blob=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/git/blobs/c1d0aea549c504475a207bfeaef70d5aa123669d']))
+          patch=lzma.decompress(base64.b64decode(blob['content']))
+          assert hashlib.sha256(patch).hexdigest()=='f0087a50c52d086fecfaf64000ff904c8d5c3c7e04213ff06a118abaae0c2fd3'
+          subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
+          subprocess.run(['git','apply','--index','-'],input=patch,check=True)
+          pathlib.Path('.github/workflows/docs-chrome-review.yml').unlink()
+          PY
+      - name: Source contracts and documentation build
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Check the reported defects and adjacent behavior
+        working-directory: docs
+        run: npx playwright test --config=playwright.detail.config.ts chrome-finish.spec.ts document-rhythm.spec.ts language-label.spec.ts docs-reading.spec.ts surface-system.spec.ts
+      - name: Prepare tested tree for visual review without publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git diff --check HEAD
+          npm run check:generated --prefix registry
+          python3 - <<'PY'
+          import json,os,pathlib,subprocess
+          repo=os.environ['GITHUB_REPOSITORY'];parent=os.environ['GITHUB_SHA']
+          base=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/commits/{parent}']))
+          paths=subprocess.check_output(['git','diff','--name-only','HEAD'],text=True).splitlines()
+          paths+=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
+          entries=[]
+          for name in sorted(set(paths)):
+              p=pathlib.Path(name);entry=dict(path=name,mode='100644',type='blob')
+              if p.exists():entry['content']=p.read_text()
+              else:entry['sha']=None
+              entries.append(entry)
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'chrome-review'
+          request=out/'request.json';request.write_text(json.dumps(dict(base_tree=base['tree']['sha'],tree=entries)))
+          result=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input',str(request)]));request.unlink()
+          (out/'candidate.json').write_text(json.dumps(dict(parent=parent,tree=result['sha'],paths=sorted(set(paths))),indent=2))
+          (out/'candidate-source.json').write_text(json.dumps({e['path']:e.get('content') for e in entries},ensure_ascii=False))
+          (out/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
+          print(json.dumps(dict(parent=parent,tree=result['sha'],files=len(entries))))
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: docs-chrome-candidate
+          retention-days: 3
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/chrome-review
+            docs/test-results
