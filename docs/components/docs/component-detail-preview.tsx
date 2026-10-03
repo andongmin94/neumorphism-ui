@@ -748,8 +748,8 @@ export function ComponentDetailPreview({
       return (
         <PreviewStack>
           <div className="component-preview-separator-copy">
-            <strong>Neumorphism UI</strong>
-            <span>{copy.separator.tagline}</span>
+            <strong>{copy.separator.title}</strong>
+            <span>{copy.separator.description}</span>
           </div>
           <Separator />
           <div className="component-preview-row component-preview-separator-nav">

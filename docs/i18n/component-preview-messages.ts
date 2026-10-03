@@ -143,7 +143,8 @@ const ko = {
     selectedByAdmin: "관리자가 선택함",
   },
   separator: {
-    tagline: "소스를 복사하고, 표면을 직접 만드세요.",
+    title: "컴포넌트 문서",
+      description: "예제, 설치 방법, 속성 정보를 확인하세요.",
     preview: "미리보기",
     installation: "설치",
   },
@@ -358,7 +359,8 @@ const en: ComponentPreviewMessages = {
     selectedByAdmin: "Selected by an administrator",
   },
   separator: {
-    tagline: "Copy the source. Own the surface.",
+    title: "Component documentation",
+      description: "Examples, installation steps and component properties.",
     preview: "Preview",
     installation: "Installation",
   },
@@ -562,7 +564,8 @@ const zh: ComponentPreviewMessages = {
     selectedByAdmin: "由管理员选择",
   },
   separator: {
-    tagline: "复制源码，掌控表面。",
+    title: "组件文档",
+      description: "查看示例、安装步骤和组件属性。",
     preview: "预览",
     installation: "安装",
   },
@@ -767,7 +770,8 @@ const ja: ComponentPreviewMessages = {
     selectedByAdmin: "管理者が選択",
   },
   separator: {
-    tagline: "ソースをコピーし、サーフェスを自分のものに。",
+    title: "コンポーネントの説明",
+      description: "使用例、インストール手順、プロパティを確認できます。",
     preview: "プレビュー",
     installation: "インストール",
   },

@@ -28,7 +28,6 @@ export interface BlogProps {
 
 const copy = {
   ko: {
-    kicker: "FIELD NOTES / DESIGN & ENGINEERING",
     title: "최근 글",
     intro: "실제 작업에서 얻은 제품·디자인·프런트엔드 메모를 모아봅니다.",
     search: "글 검색",
@@ -47,7 +46,6 @@ const copy = {
     read: "분",
   },
   en: {
-    kicker: "FIELD NOTES / DESIGN & ENGINEERING",
     title: "Latest posts",
     intro: "Practical notes from product, design and front-end work.",
     search: "Search posts",
@@ -66,7 +64,6 @@ const copy = {
     read: "min read",
   },
   ja: {
-    kicker: "FIELD NOTES / DESIGN & ENGINEERING",
     title: "最新の記事",
     intro: "プロダクト、デザイン、フロントエンドの実務から得たメモです。",
     search: "記事を検索",
@@ -85,7 +82,6 @@ const copy = {
     read: "分で読めます",
   },
   zh: {
-    kicker: "FIELD NOTES / DESIGN & ENGINEERING",
     title: "最新文章",
     intro: "来自产品、设计与前端工作的实用笔记。",
     search: "搜索文章",
@@ -162,9 +158,6 @@ export function Blog({
       className={cn("mx-auto grid w-full max-w-3xl gap-7 text-[var(--foreground)]", className)}
     >
       <header className="grid gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
-          {t.kicker}
-        </p>
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t.title}</h2>
         <p className="max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)]">
           {t.intro}
@@ -257,36 +250,113 @@ export function Blog({
   );
 }
 
-const examplePosts: BlogPost[] = [
-  {
-    slug: "useful-empty-states",
-    title: "Useful empty states are part of the workflow",
-    summary: "Treat an empty result as a next-action surface instead of a dead end.",
-    topic: "Product",
-    publishedAt: "2026-09-18",
-    publishedLabel: "Sep 18, 2026",
-    readTimeMinutes: 4,
-  },
-  {
-    slug: "keyboard-first-overlays",
-    title: "Keyboard-first overlays without separate logic",
-    summary: "Use the primitive state model and style its visible states rather than rebuilding interaction.",
-    topic: "Engineering",
-    publishedAt: "2026-09-10",
-    publishedLabel: "Sep 10, 2026",
-    readTimeMinutes: 6,
-  },
-  {
-    slug: "depth-without-noise",
-    title: "Depth without visual noise",
-    summary: "Reserve raised and inset surfaces for state and hierarchy instead of decorating every region.",
-    topic: "Design",
-    publishedAt: "2026-08-29",
-    publishedLabel: "Aug 29, 2026",
-    readTimeMinutes: 5,
-  },
-];
+const examplePosts = {
+  "en": [
+    {
+      "slug": "draft-after-failed-save",
+      "title": "Recover a draft after a failed save",
+      "summary": "Retain the edited title and body, report the error, and retry the save.",
+      "topic": "Product",
+      "publishedAt": "2026-09-18",
+      "readTimeMinutes": 4
+    },
+    {
+      "slug": "dialog-keyboard-focus",
+      "title": "Return keyboard focus after closing a dialog",
+      "summary": "Check Escape, the close action and focus returning to the button that opened the dialog.",
+      "topic": "Engineering",
+      "publishedAt": "2026-09-10",
+      "readTimeMinutes": 6
+    },
+    {
+      "slug": "compact-control-icons",
+      "title": "Align icons in compact controls",
+      "summary": "Use the same icon box for small buttons, menu indicators and disclosure controls.",
+      "topic": "Design",
+      "publishedAt": "2026-08-29",
+      "readTimeMinutes": 5
+    }
+  ],
+  "ko": [
+    {
+      "slug": "draft-after-failed-save",
+      "title": "저장 실패 후 초안 복구하기",
+      "summary": "수정한 제목과 본문을 유지하고 오류를 표시한 뒤 저장을 다시 시도합니다.",
+      "topic": "제품",
+      "publishedAt": "2026-09-18",
+      "readTimeMinutes": 4
+    },
+    {
+      "slug": "dialog-keyboard-focus",
+      "title": "대화상자를 닫은 뒤 키보드 포커스 돌려주기",
+      "summary": "Escape와 닫기 동작을 확인하고 대화상자를 연 버튼으로 포커스를 돌려줍니다.",
+      "topic": "개발",
+      "publishedAt": "2026-09-10",
+      "readTimeMinutes": 6
+    },
+    {
+      "slug": "compact-control-icons",
+      "title": "작은 컨트롤의 아이콘 정렬하기",
+      "summary": "작은 버튼, 메뉴 표시, 펼침 컨트롤에 같은 크기의 아이콘 영역을 사용합니다.",
+      "topic": "디자인",
+      "publishedAt": "2026-08-29",
+      "readTimeMinutes": 5
+    }
+  ],
+  "ja": [
+    {
+      "slug": "draft-after-failed-save",
+      "title": "保存失敗後の下書きを復元する",
+      "summary": "編集したタイトルと本文を保持し、エラーを表示して保存を再試行します。",
+      "topic": "プロダクト",
+      "publishedAt": "2026-09-18",
+      "readTimeMinutes": 4
+    },
+    {
+      "slug": "dialog-keyboard-focus",
+      "title": "ダイアログを閉じた後にフォーカスを戻す",
+      "summary": "Escape、閉じる操作、開いたボタンへのフォーカス復帰を確認します。",
+      "topic": "開発",
+      "publishedAt": "2026-09-10",
+      "readTimeMinutes": 6
+    },
+    {
+      "slug": "compact-control-icons",
+      "title": "小さなコントロールのアイコンを揃える",
+      "summary": "小さなボタン、メニューの印、開閉コントロールで同じアイコン領域を使います。",
+      "topic": "デザイン",
+      "publishedAt": "2026-08-29",
+      "readTimeMinutes": 5
+    }
+  ],
+  "zh": [
+    {
+      "slug": "draft-after-failed-save",
+      "title": "保存失败后恢复草稿",
+      "summary": "保留编辑过的标题和正文，显示错误，然后重新保存。",
+      "topic": "产品",
+      "publishedAt": "2026-09-18",
+      "readTimeMinutes": 4
+    },
+    {
+      "slug": "dialog-keyboard-focus",
+      "title": "关闭对话框后恢复键盘焦点",
+      "summary": "检查 Escape、关闭操作以及焦点是否返回打开对话框的按钮。",
+      "topic": "开发",
+      "publishedAt": "2026-09-10",
+      "readTimeMinutes": 6
+    },
+    {
+      "slug": "compact-control-icons",
+      "title": "对齐小型控件中的图标",
+      "summary": "为小按钮、菜单标记和展开控件使用相同尺寸的图标区域。",
+      "topic": "设计",
+      "publishedAt": "2026-08-29",
+      "readTimeMinutes": 5
+    }
+  ]
+} satisfies Record<BlogLocale, BlogPost[]>;
 
 export function BlogExample({ locale = "en" }: { locale?: BlogLocale }) {
-  return <Blog posts={examplePosts} locale={locale} basePath="#post" />;
+  return <Blog posts={examplePosts[locale]} locale={locale} basePath="#post" />;
 }

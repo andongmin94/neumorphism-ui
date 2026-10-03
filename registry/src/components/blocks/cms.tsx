@@ -432,32 +432,112 @@ export function CmsWorkspace({
   );
 }
 
-const examplePosts: CmsPost[] = [
-  {
-    id: "post-1",
-    title: "September product update",
-    summary: "Highlights from the latest workspace release.",
-    body: "This release brings clearer ownership, faster search, and a simpler review queue.",
-    status: "published",
-    updatedLabel: "12 min",
-  },
-  {
-    id: "post-2",
-    title: "Organize your first team space",
-    summary: "A practical structure for growing teams.",
-    body: "Start with one shared space. Assign an owner to each area and write down the naming rules.",
-    status: "draft",
-    updatedLabel: "38 min",
-  },
-  {
-    id: "post-3",
-    title: "A faster review process",
-    summary: "How one team simplified editorial review.",
-    body: "The team replaced scattered feedback with a single review queue.",
-    status: "published",
-    updatedLabel: "2 hr",
-  },
-];
+const examplePosts = {
+  "en": [
+    {
+      "id": "post-1",
+      "title": "September editor update",
+      "summary": "Draft recovery and the post review checklist.",
+      "body": "The editor keeps the current draft when a save fails. Retry the request without re-entering the title or body.",
+      "status": "published",
+      "updatedLabel": "2026-09-18"
+    },
+    {
+      "id": "post-2",
+      "title": "Prepare a post for review",
+      "summary": "Check the title, summary and publication status.",
+      "body": "Confirm the title matches the article. Write a summary that names its topic. Keep the status as Draft until the reviewer approves publication.",
+      "status": "draft",
+      "updatedLabel": "2026-09-17"
+    },
+    {
+      "id": "post-3",
+      "title": "Assign a reviewer to each draft",
+      "summary": "Record the reviewer and the outstanding changes.",
+      "body": "Choose one reviewer for the draft. Collect requested changes in the article notes and confirm them before publishing.",
+      "status": "published",
+      "updatedLabel": "2026-09-16"
+    }
+  ],
+  "ko": [
+    {
+      "id": "post-1",
+      "title": "9월 편집기 업데이트",
+      "summary": "초안 복구와 글 검토 체크리스트.",
+      "body": "저장에 실패해도 현재 초안을 유지합니다. 제목과 본문을 다시 입력하지 않고 요청을 재시도할 수 있습니다.",
+      "status": "published",
+      "updatedLabel": "2026-09-18"
+    },
+    {
+      "id": "post-2",
+      "title": "검토할 글 준비하기",
+      "summary": "제목, 요약, 게시 상태를 확인합니다.",
+      "body": "제목이 본문 내용과 일치하는지 확인합니다. 주제가 드러나도록 요약을 작성합니다. 검토자가 게시를 승인하기 전까지 초안 상태를 유지합니다.",
+      "status": "draft",
+      "updatedLabel": "2026-09-17"
+    },
+    {
+      "id": "post-3",
+      "title": "초안마다 검토자 지정하기",
+      "summary": "담당 검토자와 남은 수정 사항을 기록합니다.",
+      "body": "초안의 검토자를 한 명 지정합니다. 요청된 변경 사항을 글 메모에 모으고 게시 전에 반영 여부를 확인합니다.",
+      "status": "published",
+      "updatedLabel": "2026-09-16"
+    }
+  ],
+  "ja": [
+    {
+      "id": "post-1",
+      "title": "9月の編集機能アップデート",
+      "summary": "下書きの復元と記事の確認リスト。",
+      "body": "保存に失敗しても現在の下書きを保持します。タイトルや本文を再入力せずに再試行できます。",
+      "status": "published",
+      "updatedLabel": "2026-09-18"
+    },
+    {
+      "id": "post-2",
+      "title": "記事をレビューに出す準備",
+      "summary": "タイトル、概要、公開状態を確認します。",
+      "body": "タイトルと本文が一致しているか確認します。概要には記事の話題を明記します。レビュー担当者が公開を承認するまでは下書きの状態にします。",
+      "status": "draft",
+      "updatedLabel": "2026-09-17"
+    },
+    {
+      "id": "post-3",
+      "title": "下書きにレビュー担当者を割り当てる",
+      "summary": "担当者と未対応の修正内容を記録します。",
+      "body": "下書きのレビュー担当者を一人決めます。修正依頼を記事のメモにまとめ、公開前に対応を確認します。",
+      "status": "published",
+      "updatedLabel": "2026-09-16"
+    }
+  ],
+  "zh": [
+    {
+      "id": "post-1",
+      "title": "九月编辑器更新",
+      "summary": "草稿恢复与文章审核清单。",
+      "body": "保存失败时保留当前草稿。无需重新输入标题或正文，即可重试请求。",
+      "status": "published",
+      "updatedLabel": "2026-09-18"
+    },
+    {
+      "id": "post-2",
+      "title": "准备待审核的文章",
+      "summary": "检查标题、摘要与发布状态。",
+      "body": "确认标题与正文相符。在摘要中明确文章主题。审核人员批准发布前，保持草稿状态。",
+      "status": "draft",
+      "updatedLabel": "2026-09-17"
+    },
+    {
+      "id": "post-3",
+      "title": "为每份草稿指定审核人",
+      "summary": "记录审核人和待完成的修改。",
+      "body": "为草稿指定一名审核人。将修改要求汇总到文章备注中，并在发布前确认完成情况。",
+      "status": "published",
+      "updatedLabel": "2026-09-16"
+    }
+  ]
+} satisfies Record<CmsLocale, CmsPost[]>;
 
 export function CmsExample({ locale = "en" }: { locale?: CmsLocale }) {
   const [failNext, setFailNext] = React.useState(false);
@@ -465,7 +545,7 @@ export function CmsExample({ locale = "en" }: { locale?: CmsLocale }) {
   return (
     <div className="grid gap-4">
       <CmsWorkspace
-        initialPosts={examplePosts}
+        initialPosts={examplePosts[locale]}
         locale={locale}
         onSave={async () => {
           await new Promise((resolve) => setTimeout(resolve, 250));

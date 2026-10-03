@@ -44,8 +44,6 @@ const copy = {
     email: "이메일",
     back: "맨 위로",
     newTab: "새 탭에서 열림",
-    cta: "복잡한 흐름을 더 단순하게 만들고 싶나요?",
-    ctaBody: "누가 사용하고 무엇이 불편한지, 첫 번째 유용한 릴리스가 무엇을 해야 하는지 알려주세요.",
   },
   en: {
     practice: "Independent practice",
@@ -58,8 +56,6 @@ const copy = {
     email: "Email",
     back: "Back to top",
     newTab: "Opens in a new tab",
-    cta: "Have a complex workflow to simplify?",
-    ctaBody: "Share who uses it, where the friction is, and what a useful first release should accomplish.",
   },
   ja: {
     practice: "独立した仕事",
@@ -72,8 +68,6 @@ const copy = {
     email: "メール",
     back: "先頭へ",
     newTab: "新しいタブで開きます",
-    cta: "複雑なワークフローをシンプルにしませんか？",
-    ctaBody: "誰が使い、どこに摩擦があり、最初の有用なリリースが何をすべきか教えてください。",
   },
   zh: {
     practice: "独立实践",
@@ -86,8 +80,6 @@ const copy = {
     email: "邮箱",
     back: "返回顶部",
     newTab: "在新标签页打开",
-    cta: "想简化一个复杂流程吗？",
-    ctaBody: "告诉我谁在使用、当前阻力在哪里，以及第一个有价值的版本应该完成什么。",
   },
 } as const;
 
@@ -105,7 +97,7 @@ export function Portfolio({
       data-slot="portfolio"
       className={cn("mx-auto w-full max-w-4xl text-[var(--foreground)]", className)}
     >
-      <header className="flex items-center justify-between gap-4 border-b border-[var(--border)] py-4">
+      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border)] py-4">
         <a href="#portfolio-top" className="rounded-md text-sm font-semibold no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]">
           {profile.name}
         </a>
@@ -135,14 +127,17 @@ export function Portfolio({
                 key={project.title + ":" + project.year}
                 className="group overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] [&::-webkit-details-marker]:hidden">
-                  <span className="min-w-0">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] [&::-webkit-details-marker]:hidden">
+                  <span className="min-w-0 break-words">
                     <span className="block font-semibold">{project.title}</span>
                     <span className="mt-1 block text-sm text-[var(--muted-foreground)]">{project.type}</span>
                   </span>
                   <span className="flex shrink-0 items-center gap-3 text-sm text-[var(--muted-foreground)]">
                     {project.year}
-                    <span aria-hidden="true" className="transition-transform group-open:rotate-180 motion-reduce:transition-none">⌄</span>
+                    <svg aria-hidden="true" className="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                      <path d="M5 12h14" />
+                      <path d="M12 5v14" className="origin-center transition-transform group-open:scale-y-0 motion-reduce:transition-none" />
+                    </svg>
                   </span>
                 </summary>
                 <div className="border-t border-[var(--border)]">
@@ -166,12 +161,9 @@ export function Portfolio({
           </div>
         </section>
 
-        <section className="grid gap-2">
-          <h3 className="text-xl font-semibold">{t.cta}</h3>
-          <p className="max-w-2xl text-sm leading-relaxed text-[var(--muted-foreground)]">{t.ctaBody}</p>
-        </section>
-
-        <section id="portfolio-contact" aria-label={t.contact} className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-[var(--border)] pt-5 text-sm">
+        <section id="portfolio-contact" aria-labelledby="portfolio-contact-title" className="grid gap-4 border-t border-[var(--border)] pt-5 text-sm">
+          <h3 id="portfolio-contact-title" className="text-xl font-semibold">{t.contact}</h3>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
           {profile.email ? (
             <a href={"mailto:" + profile.email} className="rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-4 py-2 font-semibold no-underline [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]">{t.email}</a>
           ) : null}
@@ -185,6 +177,7 @@ export function Portfolio({
               LinkedIn <svg aria-hidden="true" className="inline-block size-4 align-text-bottom" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 18 18 6M8 6h10v10" /></svg><span className="sr-only">{t.newTab}</span>
             </a>
           ) : null}
+          </div>
         </section>
       </main>
 
@@ -196,56 +189,195 @@ export function Portfolio({
   );
 }
 
-const exampleProjects: PortfolioProject[] = [
-  {
-    title: "Wayline",
-    type: "Product design and front-end",
-    year: "2026",
-    summary: "A dispatch planning workspace that turns route changes into clear next actions.",
-    challenge: "Dispatchers needed to distinguish urgent route changes from routine updates.",
-    approach: "Mapped planning and dispatch handoffs, then prototyped one shared queue.",
-    deliverables: "Workflow map, interaction prototype, accessible React workspace.",
-    outcome: "One view of ownership, exceptions and the next action for each route.",
+const exampleContent = {
+  "en": {
+    "profile": {
+      "name": "Sora Han",
+      "role": "Product designer and front-end developer.",
+      "location": "Seoul",
+      "intro": [
+        "I design scheduling, reporting and inventory tools.",
+        "My work covers the screen layout, interaction prototype and React implementation."
+      ],
+      "email": "hello@example.com"
+    },
+    "projects": [
+      {
+        "title": "Dispatch queue",
+        "type": "Product design · React",
+        "year": "2026",
+        "summary": "A queue for assigning changed delivery routes before the morning shift.",
+        "challenge": "Route changes and driver assignments arrived in separate messages.",
+        "approach": "Put the route, assigned driver and unresolved stops in the same row.",
+        "deliverables": "Queue, route detail and reassignment form.",
+        "outcome": "The prototype keeps an unassigned route visible until a dispatcher selects a driver."
+      },
+      {
+        "title": "Month-end review",
+        "type": "Product design",
+        "year": "2025",
+        "summary": "A monthly report with the source entries next to each account total.",
+        "challenge": "Reviewers had to leave the report to check an unexplained balance.",
+        "approach": "Link each account row to its entries and keep the comparison period visible.",
+        "deliverables": "Account table, period selector and entry detail.",
+        "outcome": "The prototype shows which entries make up a total and which still need review."
+      },
+      {
+        "title": "Equipment directory",
+        "type": "Web design · React",
+        "year": "2025",
+        "summary": "A searchable inventory of shared cameras, microphones and lighting.",
+        "challenge": "Availability was recorded in a spreadsheet separate from the equipment list.",
+        "approach": "Show availability with each item and group equipment by its use.",
+        "deliverables": "Inventory, category filters and equipment detail.",
+        "outcome": "The prototype distinguishes available equipment from checked-out items."
+      }
+    ],
+    "note": "Fictional profile and project briefs for this example."
   },
-  {
-    title: "Ledgerline",
-    type: "Product design",
-    year: "2025",
-    summary: "A calm reporting system for finance teams reviewing a busy monthly close.",
-    challenge: "Reporting assumptions were scattered across tables, slides and messages.",
-    approach: "Designed a common review structure with comparable periods and visible definitions.",
-    deliverables: "Reporting model, chart language, reusable review components.",
-    outcome: "Reviewers can trace each summary back to its source and unresolved questions.",
+  "ko": {
+    "profile": {
+      "name": "Sora Han",
+      "role": "제품 디자이너 · 프런트엔드 개발자",
+      "location": "서울",
+      "intro": [
+        "일정 관리, 보고서, 재고 관리 도구를 디자인합니다.",
+        "화면 설계부터 인터랙션 시제품과 React 구현까지 작업합니다."
+      ],
+      "email": "hello@example.com"
+    },
+    "projects": [
+      {
+        "title": "배차 대기 목록",
+        "type": "제품 디자인 · React",
+        "year": "2026",
+        "summary": "아침 근무 전에 변경된 배송 경로에 기사를 배정하는 화면입니다.",
+        "challenge": "경로 변경과 기사 배정이 서로 다른 메시지로 전달됐습니다.",
+        "approach": "경로, 담당 기사, 미해결 배송지를 같은 행에 배치했습니다.",
+        "deliverables": "대기 목록, 경로 상세, 기사 재배정 폼.",
+        "outcome": "시제품에서는 기사를 선택할 때까지 미배정 경로가 목록에 남습니다."
+      },
+      {
+        "title": "월말 계정 검토",
+        "type": "제품 디자인",
+        "year": "2025",
+        "summary": "계정별 합계 옆에서 원본 거래 내역을 확인하는 월간 보고서입니다.",
+        "challenge": "설명되지 않은 잔액을 확인하려면 보고서를 벗어나야 했습니다.",
+        "approach": "계정 행과 거래 내역을 연결하고 비교 기간을 표시했습니다.",
+        "deliverables": "계정 표, 기간 선택, 거래 상세.",
+        "outcome": "시제품에서 합계에 포함된 거래와 검토가 필요한 항목을 구별할 수 있습니다."
+      },
+      {
+        "title": "공용 장비 목록",
+        "type": "웹 디자인 · React",
+        "year": "2025",
+        "summary": "카메라, 마이크, 조명의 대여 가능 여부를 검색하는 목록입니다.",
+        "challenge": "대여 현황과 장비 목록이 별도 문서에 기록돼 있었습니다.",
+        "approach": "각 장비 옆에 대여 상태를 표시하고 용도별로 분류했습니다.",
+        "deliverables": "장비 목록, 분류 필터, 장비 상세.",
+        "outcome": "시제품에서 대여 가능한 장비와 사용 중인 장비를 구별할 수 있습니다."
+      }
+    ],
+    "note": "이 예제의 인물과 프로젝트는 가상의 사례입니다."
   },
-  {
-    title: "Open Index",
-    type: "Web design and development",
-    year: "2025",
-    summary: "An accessible directory for shared tools, datasets and practical guides.",
-    challenge: "A growing collection of public resources was difficult to browse and maintain.",
-    approach: "Organized resources around user tasks and tested search, filters and empty states.",
-    deliverables: "Information architecture, responsive directory, keyboard interaction checks.",
-    outcome: "A searchable directory with clear categories and maintainable contribution rules.",
+  "ja": {
+    "profile": {
+      "name": "Sora Han",
+      "role": "プロダクトデザイナー · フロントエンド開発者",
+      "location": "ソウル",
+      "intro": [
+        "予定管理、レポート、在庫管理のツールをデザインしています。",
+        "画面設計から操作の試作、Reactでの実装まで担当します。"
+      ],
+      "email": "hello@example.com"
+    },
+    "projects": [
+      {
+        "title": "配車待ち一覧",
+        "type": "プロダクトデザイン · React",
+        "year": "2026",
+        "summary": "朝のシフト前に、変更された配送ルートへ担当者を割り当てる画面です。",
+        "challenge": "ルート変更と担当者の割り当てが別々のメッセージで届いていました。",
+        "approach": "ルート、担当者、未解決の配送先を同じ行に配置しました。",
+        "deliverables": "待ち一覧、ルート詳細、担当者の変更フォーム。",
+        "outcome": "試作画面では、担当者を選ぶまで未割り当てのルートが一覧に残ります。"
+      },
+      {
+        "title": "月次決算の確認",
+        "type": "プロダクトデザイン",
+        "year": "2025",
+        "summary": "勘定ごとの合計と、その元となる明細を確認する月次レポートです。",
+        "challenge": "不明な残高を調べるには、レポートを離れる必要がありました。",
+        "approach": "勘定の行と明細をつなぎ、比較対象の期間を表示しました。",
+        "deliverables": "勘定一覧、期間選択、明細画面。",
+        "outcome": "試作画面で、合計に含まれる明細と未確認の項目を区別できます。"
+      },
+      {
+        "title": "共有機材の一覧",
+        "type": "Webデザイン · React",
+        "year": "2025",
+        "summary": "カメラ、マイク、照明の貸出状況を検索する一覧です。",
+        "challenge": "貸出状況と機材一覧は、別々の文書に記録されていました。",
+        "approach": "各機材の横に貸出状況を表示し、用途で分類しました。",
+        "deliverables": "機材一覧、分類フィルター、機材詳細。",
+        "outcome": "試作画面で、利用可能な機材と貸出中の機材を区別できます。"
+      }
+    ],
+    "note": "この例の人物とプロジェクトは架空のものです。"
   },
-];
+  "zh": {
+    "profile": {
+      "name": "Sora Han",
+      "role": "产品设计师 · 前端开发者",
+      "location": "首尔",
+      "intro": [
+        "我设计排期、报表和库存管理工具。",
+        "工作包括界面布局、交互原型与 React 实现。"
+      ],
+      "email": "hello@example.com"
+    },
+    "projects": [
+      {
+        "title": "配送调度列表",
+        "type": "产品设计 · React",
+        "year": "2026",
+        "summary": "在早班开始前，为变更后的配送路线分配司机的界面。",
+        "challenge": "路线变更与司机分配通过不同的消息传达。",
+        "approach": "将路线、司机和待处理站点放在同一行。",
+        "deliverables": "待分配列表、路线详情与重新分配表单。",
+        "outcome": "在原型中，未分配的路线会保留在列表中，直到调度员选择司机。"
+      },
+      {
+        "title": "月末账目核对",
+        "type": "产品设计",
+        "year": "2025",
+        "summary": "在账户合计旁查看原始交易记录的月度报表。",
+        "challenge": "核对不明余额时，审核人员必须离开报表。",
+        "approach": "将账户行与交易记录关联，并显示比较期间。",
+        "deliverables": "账户表、期间选择与交易详情。",
+        "outcome": "原型区分了计入合计的交易和仍待核对的项目。"
+      },
+      {
+        "title": "共享设备目录",
+        "type": "网页设计 · React",
+        "year": "2025",
+        "summary": "可查询相机、麦克风和灯具借用状态的目录。",
+        "challenge": "设备目录和借用状态分别记录在不同文档中。",
+        "approach": "在每件设备旁显示借用状态，并按用途分类。",
+        "deliverables": "设备列表、类别筛选与设备详情。",
+        "outcome": "原型明确区分可借用设备和已借出的设备。"
+      }
+    ],
+    "note": "此示例中的人物和项目均为虚构。"
+  }
+} satisfies Record<PortfolioLocale, { profile: PortfolioProfile; projects: PortfolioProject[]; note: string }>;
 
 export function PortfolioExample({ locale = "en" }: { locale?: PortfolioLocale }) {
+  const sample = exampleContent[locale];
   return (
-    <Portfolio
-      locale={locale}
-      profile={{
-        name: "Sora Han",
-        role: "Product designer and front-end developer.",
-        location: "Seoul",
-        intro: [
-          "I design focused digital products for people doing complex work.",
-          "I work from early product thinking through accessible front-end delivery.",
-        ],
-        email: "hello@example.com",
-        github: "https://github.com",
-        linkedin: "https://www.linkedin.com",
-      }}
-      projects={exampleProjects}
-    />
+    <div className="grid gap-4">
+      <Portfolio locale={locale} profile={sample.profile} projects={sample.projects} />
+      <p className="text-xs leading-relaxed text-[var(--muted-foreground)]">{sample.note}</p>
+    </div>
   );
 }

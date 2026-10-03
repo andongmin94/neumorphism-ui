@@ -69,7 +69,7 @@ export function BlogPost({
         </div>
       </header>
 
-      <p className="my-8 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] px-5 py-5 text-lg leading-relaxed [box-shadow:var(--neu-shadow-inset)] sm:px-7">
+      <p data-slot="blog-post-lead" className="my-8 max-w-prose text-lg leading-8">
         {post.intro}
       </p>
 
@@ -102,37 +102,129 @@ export function BlogPost({
   );
 }
 
-const exampleArticle: BlogArticle = {
-  slug: "small-interfaces",
-  title: "Why small interfaces age better",
-  summary: "A practical case for fewer controls, clearer defaults, and less maintenance.",
-  topic: "Design",
-  publishedAt: "2026-09-12",
-  publishedLabel: "Sep 12, 2026",
-  readTime: "5 min read",
-  intro: "Small interfaces are easier to understand on the first visit and easier to maintain on the hundredth release.",
-  sections: [
-    {
-      heading: "Start with the boundary",
-      paragraphs: [
-        "A useful interface begins by deciding what it will not ask the user to manage.",
-        "Keep the controls that change the outcome and move rare configuration closer to the moment it matters.",
-      ],
-    },
-    {
-      heading: "Make the default path obvious",
-      paragraphs: [
-        "A strong default removes a decision without hiding what happened.",
-      ],
-      points: [
-        "Name the primary action precisely.",
-        "Show the current state beside the control that changes it.",
-        "Keep advanced choices available without making them mandatory.",
-      ],
-    },
-  ],
-};
+const exampleArticles = {
+  "en": {
+    "slug": "draft-after-failed-save",
+    "title": "Keep a draft after a failed save",
+    "summary": "What the editor should retain when a save request fails.",
+    "topic": "Engineering",
+    "publishedAt": "2026-09-12",
+    "publishedLabel": "Sep 12, 2026",
+    "readTime": "4 min read",
+    "intro": "A failed save should not erase the title, summary or body that someone just edited. Keep the draft in the form and show the error next to the save action.",
+    "sections": [
+      {
+        "heading": "Separate the draft from the saved copy",
+        "paragraphs": [
+          "When the editor opens, start with the saved post and keep a separate draft for changes. Typing updates the draft; it does not mark the post as saved.",
+          "Only replace the saved copy after the save callback resolves. When it rejects, leave both the draft and the previous saved copy intact."
+        ]
+      },
+      {
+        "heading": "Retry without re-entering the post",
+        "paragraphs": [
+          "After a failed request, the author should be able to correct a field or retry with the same draft."
+        ],
+        "points": [
+          "Show a save error without clearing the inputs.",
+          "Keep Save available after the request finishes.",
+          "Ask before discarding a draft with unsaved changes."
+        ]
+      }
+    ]
+  },
+  "ko": {
+    "slug": "draft-after-failed-save",
+    "title": "저장에 실패해도 초안은 유지하기",
+    "summary": "저장 요청이 실패했을 때 편집기에 남아 있어야 하는 내용입니다.",
+    "topic": "개발",
+    "publishedAt": "2026-09-12",
+    "publishedLabel": "2026년 9월 12일",
+    "readTime": "4분 읽기",
+    "intro": "저장에 실패했다고 방금 고친 제목, 요약, 본문까지 사라져서는 안 됩니다. 입력한 초안은 폼에 남기고 저장 버튼 근처에 오류를 표시합니다.",
+    "sections": [
+      {
+        "heading": "초안과 저장된 사본 구분하기",
+        "paragraphs": [
+          "편집기를 열면 저장된 글을 불러오고, 수정할 초안을 별도로 둡니다. 입력은 초안만 바꾸며 글을 저장된 상태로 표시하지 않습니다.",
+          "저장 콜백이 성공한 뒤에만 저장된 사본을 교체합니다. 요청이 실패하면 초안과 이전 사본을 모두 유지합니다."
+        ]
+      },
+      {
+        "heading": "다시 입력하지 않고 재시도하기",
+        "paragraphs": [
+          "요청이 실패한 뒤에도 작성자는 항목을 고치거나 같은 초안으로 저장을 다시 시도할 수 있어야 합니다."
+        ],
+        "points": [
+          "입력란을 비우지 않고 저장 오류를 표시합니다.",
+          "요청이 끝나면 저장 버튼을 다시 사용할 수 있게 합니다.",
+          "저장하지 않은 초안을 버리기 전에 확인을 받습니다."
+        ]
+      }
+    ]
+  },
+  "ja": {
+    "slug": "draft-after-failed-save",
+    "title": "保存に失敗しても下書きを残す",
+    "summary": "保存リクエストが失敗したときに、編集画面で保持する内容です。",
+    "topic": "開発",
+    "publishedAt": "2026-09-12",
+    "publishedLabel": "2026年9月12日",
+    "readTime": "4分で読めます",
+    "intro": "保存に失敗しても、編集したタイトル、概要、本文を消してはいけません。下書きをフォームに残し、保存ボタンの近くにエラーを表示します。",
+    "sections": [
+      {
+        "heading": "下書きと保存済みの内容を分ける",
+        "paragraphs": [
+          "編集画面を開いたら、保存済みの記事とは別に編集用の下書きを用意します。入力は下書きだけを変更し、記事を保存済みにはしません。",
+          "保存コールバックが成功してから、保存済みの内容を更新します。失敗した場合は、下書きと前回の保存内容をどちらも保持します。"
+        ]
+      },
+      {
+        "heading": "再入力せずにやり直す",
+        "paragraphs": [
+          "リクエストが失敗した後も、項目を修正したり、同じ下書きのまま保存を再試行したりできるようにします。"
+        ],
+        "points": [
+          "入力欄を空にせず、保存エラーを表示します。",
+          "リクエストが終わったら、保存ボタンを再び使えるようにします。",
+          "未保存の下書きを破棄する前に確認します。"
+        ]
+      }
+    ]
+  },
+  "zh": {
+    "slug": "draft-after-failed-save",
+    "title": "保存失败后保留草稿",
+    "summary": "保存请求失败时，编辑器应当保留哪些内容。",
+    "topic": "开发",
+    "publishedAt": "2026-09-12",
+    "publishedLabel": "2026年9月12日",
+    "readTime": "阅读约4分钟",
+    "intro": "保存失败不应清除刚刚编辑的标题、摘要和正文。将草稿保留在表单中，并在保存按钮附近显示错误。",
+    "sections": [
+      {
+        "heading": "区分草稿与已保存的副本",
+        "paragraphs": [
+          "打开编辑器时，读取已保存的文章，同时建立单独的编辑草稿。输入只更新草稿，不会将文章标记为已保存。",
+          "仅在保存回调成功后更新已保存的副本。如果请求失败，保留草稿和上一次保存的内容。"
+        ]
+      },
+      {
+        "heading": "无需重新输入即可重试",
+        "paragraphs": [
+          "请求失败后，作者仍应能够修改字段，或使用同一份草稿重新保存。"
+        ],
+        "points": [
+          "显示保存错误，不清空输入内容。",
+          "请求结束后，让保存按钮可以再次使用。",
+          "丢弃未保存的草稿之前请求确认。"
+        ]
+      }
+    ]
+  }
+} satisfies Record<BlogPostLocale, BlogArticle>;
 
 export function BlogPostExample({ locale = "en" }: { locale?: BlogPostLocale }) {
-  return <BlogPost post={exampleArticle} locale={locale} backHref="#all-posts" />;
+  return <BlogPost post={exampleArticles[locale]} locale={locale} backHref="#all-posts" />;
 }

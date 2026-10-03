@@ -238,3 +238,35 @@ or removed assertions. No dependency or registry item is added.
 Remaining visual work is not certified by these tests: example articles and
 portfolio content, the chart gallery beyond its heading, and native device/assistive
 technology review require their own assessment.
+
+## Editorial content and chart reading — 2026-10-03
+
+Portfolio examples now describe dispatch, account-review and equipment screens in
+four locales. They are labeled fictional, and no invented business metric is used.
+The installed Portfolio removes its generic pitch section, keeps contact links,
+and uses a fixed SVG plus/minus on native details. The inset keyboard ring stays
+inside the clipped project plate. The header may wrap instead of pushing contact
+navigation off a narrow host.
+
+Blog, Blog Post and CMS fixtures use concrete editing, focus and review tasks in
+all four locales. CMS keeps its existing save-failure/retry and application-owned
+persistence boundary. Blog Post's introduction is a reading paragraph, not a
+recessed input-like box. Blog removes its duplicated all-caps masthead. Sample
+article routing remains application-owned as documented; this pass adds no router.
+Separator keeps both separator orientations and names actual documentation sections
+instead of a promotional slogan.
+
+The chart gallery adds three ordinary section links with 44px targets and visible
+keyboard focus. Product, operations and installation headings share a 700-weight
+hierarchy. All eight installation references have localized titles and descriptions;
+the decorative recipe numbers are removed. Operational chart controls retain their
+existing English labels. Plot data, axes, flat marks, exact tables, range controls,
+source disclosure and copied source bytes are unchanged.
+
+`content-review.spec.ts` covers localized preview content, keyboard disclosure,
+320px reflow, CMS recovery, chart anchors and exact source copying, including the
+published site. `editorial.spec.ts` runs Portfolio and Blog Post from synchronized
+shipping source without documentation CSS at 320/390/1440px, in both modes and four
+locales. Existing MD-01–10 tests remain. These assertions do not certify subjective
+visual quality or native-device/assistive-technology behavior; inspect the captures
+and report actual run results separately. The blocking dependency audit is unchanged.

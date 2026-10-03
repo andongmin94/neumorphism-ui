@@ -32,8 +32,8 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
 test('blog post documentation renders article sections', async ({ page }) => {
   await page.goto('/en/templates/blog-post');
   const preview = page.locator('[data-template="blog-post"]');
-  await expect(preview.getByRole('heading', { name: 'Why small interfaces age better', exact: true })).toBeVisible();
-  await expect(preview.getByRole('heading', { name: 'Start with the boundary', exact: true })).toBeVisible();
+  await expect(preview.getByRole('heading', { name: 'Keep a draft after a failed save', exact: true })).toBeVisible();
+  await expect(preview.getByRole('heading', { name: 'Separate the draft from the saved copy', exact: true })).toBeVisible();
   await expect(preview.getByRole('listitem')).toHaveCount(3);
 });
 
@@ -44,8 +44,8 @@ test('blog documentation filters by topic and search', async ({ page }) => {
   await preview.getByRole('button', { name: 'Engineering', exact: true }).click();
   await expect(preview.getByRole('status')).toContainText('1 post');
   const search = preview.getByRole('searchbox', { name: 'Search posts' });
-  await search.fill('Keyboard');
-  await expect(preview.getByRole('link', { name: 'Keyboard-first overlays without separate logic' })).toBeVisible();
+  await search.fill('keyboard');
+  await expect(preview.getByRole('link', { name: 'Return keyboard focus after closing a dialog' })).toBeVisible();
 });
 
 test('CMS documentation preserves edits through a failed save', async ({ page }) => {
