@@ -1,0 +1,136 @@
+name: Article wrap review
+on:
+  status:
+permissions:
+  contents: write
+jobs:
+  candidate:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      github.event.context == 'Vercel' && github.event.state == 'success' &&
+      github.event.sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Apply the authored article and regression changes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def replace(name, old, new):
+              p=Path(name); t=p.read_text()
+              assert t.count(old)==1, (name,t.count(old))
+              p.write_text(t.replace(old,new))
+          replace('registry/src/components/blocks/blog-post.tsx',
+          'className={cn("mx-auto w-full max-w-3xl text-[var(--foreground)]", className)}',
+          '''className={cn(
+                  "mx-auto w-full max-w-3xl text-[var(--foreground)]",
+                  locale === "ko" && "break-keep [overflow-wrap:anywhere]",
+                  className,
+                )}''')
+          replace('docs/tests/material/editorial.spec.ts',
+          '''      await page.locator('[data-slot="blog-post"]').screenshot({ path: info.outputPath(`article-${locale}.png`) });''',
+          '''      const article = page.locator('[data-slot="blog-post"]');
+                if (locale === "ko") {
+                  await expect(article).toHaveCSS("word-break", "keep-all");
+                  await expect(article).toHaveCSS("overflow-wrap", "anywhere");
+                  for (const heading of await article.locator("h1, h2").all()) {
+                    const words = await heading.evaluate(element => {
+                      const node = element.firstChild!;
+                      const text = node.textContent!;
+                      return Array.from(text.matchAll(/\\S+/g), match => {
+                        const range = document.createRange();
+                        range.setStart(node, match.index!);
+                        range.setEnd(node, match.index! + match[0].length);
+                        return { word: match[0], lines: range.getClientRects().length };
+                      });
+                    });
+                    expect(words).toEqual(words.map(({ word }) => ({ word, lines: 1 })));
+                  }
+                }
+                await article.screenshot({ path: info.outputPath(`article-${locale}.png`) });''')
+          replace('docs/tests/detail/content-review.spec.ts',
+          '''    await article.screenshot({ path: info.outputPath("article-320.png") });''',
+          '''    if (locale === "ko") {
+                await expect(article).toHaveCSS("word-break", "keep-all");
+                await expect(article).toHaveCSS("overflow-wrap", "anywhere");
+              }
+              await article.screenshot({ path: info.outputPath("article-320.png") });''')
+          p=Path('docs/visual-reference.md')
+          p.write_text(p.read_text()+'''
+
+          ## Korean article wrapping
+
+          At 320px, the default Korean Blog Post split short words across lines, including
+          "초안" in the title. The installed article uses keep-all only for Korean, with
+          anywhere wrapping for a single token wider than its container. Other locales and
+          caller-owned classes remain unchanged. Source-only heading ranges verify complete
+          words at 320/390/1440px in both modes; the published check verifies the same CSS.
+          ''')
+          Path('.github/workflows/article-wrap-review.yml').unlink()
+          PY
+      - name: Generate and build from source
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Verify actual source-only and document word boundaries
+        working-directory: docs
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test --config=playwright.material.config.ts editorial.spec.ts
+          npx playwright test --config=playwright.detail.config.ts content-review.spec.ts
+      - name: Save a candidate tree without moving any branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/article-wrap"
+          git diff --check HEAD
+          npm run check:generated --prefix registry
+          python3 - <<'PY'
+          import json, os, pathlib, subprocess
+          repo=os.environ['GITHUB_REPOSITORY']; parent=os.environ['GITHUB_SHA']
+          commit=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/commits/{parent}']))
+          paths=subprocess.check_output(['git','diff','--name-only','HEAD'],text=True).splitlines()
+          paths+=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
+          tree=[]
+          for name in sorted(set(paths)):
+              p=pathlib.Path(name); entry=dict(path=name,mode='100644',type='blob')
+              if p.exists(): entry['content']=p.read_text()
+              else: entry['sha']=None
+              tree.append(entry)
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'article-wrap'
+          request=out/'tree-request.json'
+          request.write_text(json.dumps(dict(base_tree=commit['tree']['sha'],tree=tree)))
+          result=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input',str(request)]))
+          request.unlink()
+          (out/'candidate.json').write_text(json.dumps(dict(parent=parent,tree=result['sha'],changed_paths=sorted(set(paths))),indent=2))
+          (out/'candidate-source.json').write_text(json.dumps({e['path']:e.get('content') for e in tree},ensure_ascii=False))
+          (out/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
+          print(json.dumps(dict(parent=parent,tree=result['sha'])))
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: article-wrap-candidate
+          retention-days: 3
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/article-wrap
+            docs/test-results
