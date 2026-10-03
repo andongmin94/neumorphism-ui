@@ -26,7 +26,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
-          import base64, hashlib, json, lzma, os, pathlib, subprocess
+          import base64, hashlib, json, lzma, os, pathlib, re, subprocess
           repo = os.environ['GITHUB_REPOSITORY']
           blob = json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/blobs/911034ed1a85bab2e0c2f21904fd09752e8b0c71']))
           patch = lzma.decompress(base64.b64decode(blob['content']))
@@ -40,6 +40,35 @@ jobs:
           text = p.read_text(); marker='      await expect(frame).toHaveCount(1);'
           assert text.count(marker) == 1
           p.write_text(text.replace(marker, marker + '\n      await expect(page.locator(".docs-page-header")).toHaveCSS("border-bottom-width", "0px");'))
+          # Base UI retains the exiting, inert panel until its transition ends.
+          # Check the live panel and the selected tab, not an arbitrary first match.
+          p = pathlib.Path('docs/tests/material/tabs-clarity.spec.ts')
+          text = p.read_text(); assert text.count('getByRole("tabpanel")') == 4
+          text = text.replace('getByRole("tabpanel")', 'locator(\'[role="tabpanel"]:not([inert])\')')
+          marker = '      await tabs.first().click();'; assert text.count(marker) == 1
+          text = text.replace(marker, marker + '\n      await expect(tabs.first()).toHaveAttribute("aria-selected", "true");')
+          p.write_text(text)
+          # The first actual capture exposed obsolete installation-only tab skins.
+          p = pathlib.Path('docs/src/app.css'); text = p.read_text()
+          pattern = r'\.component-installation \[data-slot="tabs-(?:list|trigger)"\](?:\[data-active\])? \{[^{}]*\}\n'
+          text, count = re.subn(pattern, '', text); assert count == 4, count
+          p.write_text(text)
+          p = pathlib.Path('docs/tests/detail/chrome-finish.spec.ts'); text = p.read_text()
+          marker = '    const meta = page.locator(".component-doc-meta");'; assert text.count(marker) == 1
+          check = '''    const installation = page.locator(".component-installation");
+              await expect(installation).toHaveAttribute("aria-busy", "false");
+              const previewTab = example.getByRole("tab").first();
+              const installTab = installation.getByRole("tab").first();
+              const tabStyle = await previewTab.evaluate(e => {
+                const s = getComputedStyle(e); return { background: s.backgroundColor, color: s.color, shadow: s.boxShadow };
+              });
+              await expect(installTab).toHaveCSS("background-color", tabStyle.background);
+              await expect(installTab).toHaveCSS("color", tabStyle.color);
+              await expect(installTab).toHaveCSS("box-shadow", tabStyle.shadow);
+              await expect(installTab).toHaveCSS("font-size", "14px");
+              await expect(installation.getByRole("tablist")).toHaveCSS("height", "44px");
+          '''
+          p.write_text(text.replace(marker, check + marker))
           p = pathlib.Path('docs/playwright.published.config.ts')
           text = p.read_text(); assert text.count('testMatch: [') == 1
           p.write_text(text.replace('testMatch: [', 'testMatch: ["**/detail/template-boundary.spec.ts", '))
@@ -54,6 +83,8 @@ jobs:
           gray surface. Keyboard focus is independent of selection and visible on both
           active and inactive segments. Base UI still owns orientation, disabled tabs,
           manual activation and controlled/uncontrolled state. No new API or package.
+          Obsolete installation-tab size, shadow and selected-color overrides are
+          removed so Preview/Code and CLI/source use the same installed Tabs.
 
           All eight template detail pages use one documentation-owned frame with a
           localized preview heading, literal installation identifier and Install/Source
@@ -67,8 +98,9 @@ jobs:
 
           Source-only tabs-clarity tests cover both orientations, four locales, disabled
           and selected states, keyboard activation, long labels and 320/390/1440px in
-          both themes. template-boundary tests check every template and its separation
-          from documentation, including the published site. MD-01–10 remain in their
+          both themes. They distinguish live panels from Base UI's inert exit panels.
+          template-boundary tests check every template and its separation from
+          documentation, including the published site. MD-01–10 remain in their
           existing suites. Actual runs and visual review are reported separately.
           ''')
           pathlib.Path('.github/workflows/tabs-template-review.yml').unlink()
