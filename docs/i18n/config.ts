@@ -28,13 +28,13 @@ export const localeDetails: Record<
   zh: {
     htmlLang: "zh-CN",
     label: "简体中文",
-    shortLabel: "中文",
+    shortLabel: "ZH",
     openGraphLocale: "zh_CN",
   },
   ja: {
     htmlLang: "ja",
     label: "日本語",
-    shortLabel: "日本語",
+    shortLabel: "JA",
     openGraphLocale: "ja_JP",
   },
 };
