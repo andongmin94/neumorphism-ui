@@ -1,0 +1,25 @@
+name: Content finish review
+on:
+  status:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      github.event.context == 'Vercel' && github.event.state == 'success' &&
+      github.event.sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.sha }}
+      - name: Archive authored and generated inputs for isolated review
+        run: git archive --format=tar.gz -o "$RUNNER_TEMP/content-source.tar.gz" HEAD
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: content-source
+          path: ${{ runner.temp }}/content-source.tar.gz
+          retention-days: 1
+          if-no-files-found: error
