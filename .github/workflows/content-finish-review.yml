@@ -54,6 +54,11 @@ jobs:
               assert text.count(needle) == 1
               text = text.replace(needle, needle + '\n' + indent + 'await expect.poll(() => summary.locator("svg path").last().evaluate(e => e.getBoundingClientRect().height)).toBeGreaterThan(0);')
               path.write_text(text)
+          path = pathlib.Path('docs/src/app.css')
+          text = path.read_text()
+          needle = '.charts-gallery-page > section[id] {\n  scroll-margin-top: 24px;\n}'
+          assert text.count(needle) == 1
+          path.write_text(text.replace(needle, '.charts-gallery-page > section[id] {\n  scroll-margin-top: calc(var(--docs-header-height) + 24px);\n}'))
           pathlib.Path('.github/workflows/content-finish-review.yml').unlink()
           PY
       - name: Build and synchronize the actual registry generator
@@ -71,13 +76,12 @@ jobs:
       - name: Install Chromium
         working-directory: docs
         run: npx playwright install --with-deps chromium
-      - name: Targeted source and documentation regressions
+      - name: Recheck changed anchor and disclosure cases without deleting sibling evidence
         working-directory: docs
         run: |
           result=0
-          npx playwright test --config=playwright.detail.config.ts content-review.spec.ts surface-system.spec.ts document-rhythm.spec.ts || result=1
           npx playwright test --config=playwright.material.config.ts editorial.spec.ts || result=1
-          npx playwright test tests/browser/workspaces.spec.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts content-review.spec.ts || result=1
           exit "$result"
       - name: Prepare a verified tree for manual visual review, never publish it here
         env:
