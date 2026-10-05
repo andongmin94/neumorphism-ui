@@ -12,7 +12,7 @@ function AlertDialogContent({ className, ...props }: Primitive.Popup.Props) {
   return <Primitive.Portal>
     <Primitive.Backdrop data-slot="alert-dialog-overlay" className="fixed inset-0 z-50 bg-[var(--neu-overlay)] backdrop-blur-sm transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0" />
     <Primitive.Popup data-slot="alert-dialog-content" className={mergeClassName<Primitive.Popup.State>(
-      "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md max-h-[calc(100dvh-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:scale-95 data-[ending-style]:opacity-0", className,
+      "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md max-h-[calc(100dvh-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform,scale] duration-[var(--neu-duration)] motion-reduce:transition-none motion-safe:data-[starting-style]:scale-95 data-[starting-style]:opacity-0 motion-safe:data-[ending-style]:scale-95 data-[ending-style]:opacity-0", className,
     )} {...props} />
   </Primitive.Portal>;
 }

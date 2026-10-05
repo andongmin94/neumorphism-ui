@@ -352,3 +352,38 @@ and 320/390/1440px in both themes. They distinguish live panels from inert
 exit panels. template-boundary checks every template and separation from
 documentation, including the published site. MD-01–10 remain in their
 existing suites. Actual runs and visual review are reported separately.
+
+## Selection controls and template catalog finish
+
+ToggleGroup uses the same shallow rail and primary/on-primary selection pair as
+Tabs. Standalone Toggle keeps its inset pressed state with a selected tint;
+hover does not lift a pressed control. Both retain Base UI state, keyboard and
+disabled behavior. Toggle sizes keep their existing minimum heights while long
+labels can increase the height instead of escaping the face. Keyboard outlines
+stay inside the face and caller classes/icon sizes are preserved.
+
+The template catalog has one CSS module owner. Remove the obsolete global gallery
+skins, unused featured-card rules, repeated numbers, tiny glyph arrows and tag
+pills. Each card presents a real example, its title/description, literal registry
+reference and one labeled navigation link. The title is not repeated in the
+visible link; it remains in the link's accessible name. Card footers align even
+when descriptions wrap. All four locales use native labels for the count/action.
+
+Thumbnail transforms scale their logical width with their host width. The old
+fixed 1040px/920px content widths cropped the right half at intermediate widths.
+The preview remains intentionally cropped vertically and inert; detailed live
+examples, their frames, source panels and application-owned state are unchanged.
+No screenshot/iframe replacement, new dependency or new product API is added.
+
+selection-finish tests run without documentation CSS; gallery-finish checks
+320px, 768px and desktop dimensions, actual element bounds, each public item
+reference and keyboard navigation. Existing MD-01–10, language-font checks,
+Dark+ and template-boundary checks remain. Actual run results and visual review
+are reported separately; passing CSS assertions are not a visual approval.
+
+
+A first-frame composition trace also exposed scale-95 on a newly opened Alert
+Dialog despite reduced motion, briefly rendering a 40px action at 38px. Alert
+Dialog now scopes scaling to motion-safe and includes the independent scale
+property in normal transitions. Native first-mount geometry is recorded by a
+MutationObserver regression; existing action-size assertions are retained.
