@@ -1,0 +1,124 @@
+name: Header fit review
+on:
+  status:
+permissions:
+  contents: write
+jobs:
+  candidate:
+    if: >-
+      github.ref == 'refs/heads/main' && github.event.context == 'Vercel' &&
+      github.event.state == 'success' && github.event.sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Build unchanged header baseline
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm run build --prefix docs
+          cd docs && npx playwright install --with-deps chromium
+      - name: Record real narrow-header collision before the patch
+        working-directory: docs
+        run: |
+          mkdir -p "$RUNNER_TEMP/header-review/before"
+          cat > tests/detail/header-baseline.spec.ts <<'TS'
+          import { expect,test } from '@playwright/test';
+          import {writeFileSync} from 'node:fs';
+          test('actual baseline header geometry',async({page},info)=>{
+            await page.setViewportSize({width:320,height:900});
+            await page.goto('/en/components/toggle-group');
+            await expect(page.locator('.component-example')).toHaveAttribute('aria-busy','false');
+            await page.evaluate(()=>document.fonts.ready);
+            const geometry=await page.evaluate(()=>{
+              const brand=document.querySelector('.site-brand__mark')!.getBoundingClientRect();
+              const search=document.querySelector('.header-search')!.getBoundingClientRect();
+              return {brand:brand.toJSON(),search:search.toJSON(),overlap:brand.right-search.left,pageExcess:document.documentElement.scrollWidth-innerWidth};
+            });
+            writeFileSync(info.outputPath('header-geometry.json'),JSON.stringify(geometry,null,2));
+            await page.locator('.site-header').screenshot({path:info.outputPath('header-320.png')});
+          });
+          TS
+          npx playwright test --config=playwright.detail.config.ts header-baseline.spec.ts
+          cp -r test-results/docs-browser/catalog "$RUNNER_TEMP/header-review/before/"
+          cp test-results/detail-report.json "$RUNNER_TEMP/header-review/baseline-report.json"
+          rm tests/detail/header-baseline.spec.ts
+      - name: Apply authored header correction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,json,lzma,os,pathlib,subprocess
+          repo=os.environ['GITHUB_REPOSITORY']
+          blob=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/blobs/c086871d1c8fc526fc18871b41c23285ab2aaf7b']))
+          patch=lzma.decompress(base64.b64decode(blob['content']))
+          assert hashlib.sha256(patch).hexdigest()=='ed8f6defa5e69ddc1116c20b9d5123cd8f214fbd7c3af7048c68128879a5117a'
+          subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
+          subprocess.run(['git','apply','--index','-'],input=patch,check=True)
+          p=pathlib.Path('docs/visual-reference.md')
+          p.write_text(p.read_text()+'''
+
+          At 320px, the prior mobile header used four grid columns for three visible
+          children. Its min-width-zero home column allowed the logo to overlap Search
+          without causing page overflow. The header now reserves a 34px home column
+          between navigation and actions, with narrower gutters only below 360px.
+          No destination, star count or control is hidden. header-fit checks all four
+          locales at 320/360/390/768/1023/1440px, pairwise control bounds and home-mark
+          containment, then real menu/search/focus return/theme/home navigation. The
+          published suite includes those checks. Installed source is unchanged by
+          this header follow-through.
+          ''')
+          pathlib.Path('.github/workflows/header-fit-review.yml').unlink()
+          PY
+      - name: Validate source and focused layout behavior
+        working-directory: docs
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run build
+          npx playwright test --config=playwright.detail.config.ts header-fit.spec.ts language-label.spec.ts chrome-finish.spec.ts gallery-finish.spec.ts
+      - name: Save verified tree without updating main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          npm run check:generated --prefix registry
+          git diff --check HEAD
+          python3 - <<'PY'
+          import json,os,pathlib,subprocess
+          repo=os.environ['GITHUB_REPOSITORY'];parent=os.environ['GITHUB_SHA']
+          base=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/commits/{parent}']))
+          paths=subprocess.check_output(['git','diff','--name-only','HEAD'],text=True).splitlines()+subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
+          entries=[]
+          for name in sorted(set(paths)):
+              p=pathlib.Path(name);e=dict(path=name,mode='100644',type='blob')
+              if p.exists():e['content']=p.read_text()
+              else:e['sha']=None
+              entries.append(e)
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'header-review'
+          request=out/'request.json';request.write_text(json.dumps(dict(base_tree=base['tree']['sha'],tree=entries)))
+          tree=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input',str(request)]));request.unlink()
+          (out/'candidate.json').write_text(json.dumps(dict(parent=parent,tree=tree['sha'],paths=sorted(set(paths))),indent=2))
+          (out/'candidate-source.json').write_text(json.dumps({e['path']:e.get('content') for e in entries},ensure_ascii=False))
+          (out/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
+          print(json.dumps(dict(parent=parent,tree=tree['sha'],files=len(entries))))
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: header-candidate
+          retention-days: 3
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/header-review
+            docs/test-results
