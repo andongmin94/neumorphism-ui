@@ -387,3 +387,14 @@ Dialog despite reduced motion, briefly rendering a 40px action at 38px. Alert
 Dialog now scopes scaling to motion-safe and includes the independent scale
 property in normal transitions. Native first-mount geometry is recorded by a
 MutationObserver regression; existing action-size assertions are retained.
+
+
+At 320px, the prior mobile header used four grid columns for three visible
+children. Its min-width-zero home column allowed the logo to overlap Search
+without causing page overflow. The header now reserves a 34px home column
+between navigation and actions, with narrower gutters only below 360px.
+No destination, star count or control is hidden. header-fit checks all four
+locales at 320/360/390/768/1023/1440px, pairwise control bounds and home-mark
+containment, then real menu/search/focus return/theme/home navigation. The
+published suite includes those checks. Installed source is unchanged by
+this header follow-through.

@@ -6630,7 +6630,8 @@ body {
 
 @media (max-width: 1023px) {
   .site-header__inner {
-    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    /* Mobile navigation, home link, actions: reserve a real column for each. */
+    grid-template-columns: auto minmax(34px, 1fr) auto;
     gap: 12px;
   }
 
@@ -6911,5 +6912,17 @@ body {
   .charts-reference-section,
   .theme-studio-page > .theme-studio {
     padding-inline: 18px;
+  }
+}
+
+/* Keep every header action and the home mark distinct on narrow phones. */
+@media (max-width: 360px) {
+  .site-header__inner {
+    padding-inline: 8px;
+    gap: 6px;
+  }
+
+  .site-actions {
+    gap: 4px;
   }
 }
