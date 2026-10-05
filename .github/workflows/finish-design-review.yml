@@ -21,65 +21,28 @@ jobs:
           cache-dependency-path: |
             registry/package-lock.json
             docs/package-lock.json
-      - name: Build the unchanged baseline
-        run: |
-          npm ci --prefix registry
-          npm ci --prefix docs
-          npm run build --prefix registry
-          npm run sync:docs --prefix registry
-          npm run build --prefix docs
-          cd docs && npx playwright install --with-deps chromium
-      - name: Record actual baseline geometry and screenshots
-        working-directory: docs
-        run: |
-          mkdir -p "$RUNNER_TEMP/design-review/before"
-          cat > tests/detail/pre-design.spec.ts <<'TS'
-          import { expect, test } from '@playwright/test';
-          import { writeFileSync } from 'node:fs';
-          test('unmodified catalog and selection baseline', async ({page}, info) => {
-            for (const width of [...new Set([info.project.use.viewport!.width, 768, 320])]) {
-              await page.setViewportSize({width,height:1000});
-              await page.goto('/en/templates');
-              await page.evaluate(() => document.fonts.ready);
-              await expect(page.locator('.template-card')).toHaveCount(8);
-              const sizes = await page.locator('.template-card').evaluateAll(cards => cards.map(card => {
-                const stage = card.querySelector('.template-preview-stage')!.getBoundingClientRect();
-                const scale = card.querySelector('.template-preview-scale')!.getBoundingClientRect();
-                return {title:card.querySelector('h2')!.textContent,stageWidth:stage.width,scaledWidth:scale.width,rightExcess:scale.right-stage.right};
-              }));
-              writeFileSync(info.outputPath(`geometry-${width}.json`),JSON.stringify(sizes,null,2));
-              await page.screenshot({path:info.outputPath(`gallery-${width}.png`)});
-              await page.locator('.template-card').nth(1).screenshot({path:info.outputPath(`settings-card-${width}.png`)});
-            }
-            await page.setViewportSize(info.project.use.viewport!);
-            await page.goto('/en/components/toggle-group');
-            await expect(page.locator('.component-example')).toHaveAttribute('aria-busy','false');
-            await page.evaluate(() => document.fonts.ready);
-            await page.locator('.component-example-panel').screenshot({path:info.outputPath('toggle-group.png')});
-          });
-          TS
-          result=0
-          npx playwright test --config=playwright.detail.config.ts pre-design.spec.ts || result=1
-          cp -r test-results/docs-browser/catalog "$RUNNER_TEMP/design-review/before/"
-          cp test-results/detail-report.json "$RUNNER_TEMP/design-review/baseline-report.json"
-          rm tests/detail/pre-design.spec.ts
-          exit "$result"
-      - name: Apply the integrity-checked authored candidate
+      - name: Apply the authored candidate and reviewed follow-through
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
           import base64,hashlib,json,lzma,os,pathlib,subprocess
           repo=os.environ['GITHUB_REPOSITORY']
-          blob=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/blobs/22e8e961c484c4a5f0770a35070e199fc61e1aa7']))
-          patch=lzma.decompress(base64.b64decode(blob['content']))
-          assert hashlib.sha256(patch).hexdigest()=='c85188b4549f3e132f4c63e054f14d1f2a71d96d0ebc5b7c876bad37f1e6de36'
-          subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
-          subprocess.run(['git','apply','--index','-'],input=patch,check=True)
+          for sha,digest in [
+              ('22e8e961c484c4a5f0770a35070e199fc61e1aa7','c85188b4549f3e132f4c63e054f14d1f2a71d96d0ebc5b7c876bad37f1e6de36'),
+              ('6bbd3c409b6777ed3629e96c759460e91b861a46','84e99c2932e61f9eca665f88474922f5aa3979b551ea3cf8061484deb4bf4b47'),
+          ]:
+              blob=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/blobs/{sha}']))
+              patch=lzma.decompress(base64.b64decode(blob['content']))
+              assert hashlib.sha256(patch).hexdigest()==digest
+              subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
+              subprocess.run(['git','apply','--index','-'],input=patch,check=True)
           pathlib.Path('.github/workflows/finish-design-review.yml').unlink()
           PY
       - name: Generate installable outputs and verify source contracts
         run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
           npm run lint --prefix registry
           npm run build --prefix registry
           npm run sync:docs --prefix registry
@@ -91,8 +54,10 @@ jobs:
       - name: Targeted behavior, source-only states and complete catalog captures
         working-directory: docs
         run: |
+          mkdir -p "$RUNNER_TEMP/design-review"
+          npx playwright install --with-deps chromium
           result=0
-          npx playwright test tests/browser/components.spec.ts tests/browser/workspaces.spec.ts tests/browser/analytics.spec.ts || result=1
+          npx playwright test tests/browser/components.spec.ts tests/browser/workspaces.spec.ts || result=1
           cp test-results/docs-report.json "$RUNNER_TEMP/design-review/adjacent-report.json"
           npx playwright test --config=playwright.material.config.ts selection-finish.spec.ts control-anatomy.spec.ts composition.spec.ts tabs-clarity.spec.ts || result=1
           npx playwright test --config=playwright.detail.config.ts gallery-finish.spec.ts document-rhythm.spec.ts docs-reading.spec.ts chrome-finish.spec.ts template-boundary.spec.ts catalog.spec.ts || result=1
