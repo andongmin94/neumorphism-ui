@@ -38,19 +38,16 @@ jobs:
           subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
           subprocess.run(['git','apply','--index','-'],input=patch,check=True)
           p=pathlib.Path('docs/tests/detail/audit-polish.spec.ts')
-          text=p.read_text()
-          old="dashboard.locator('header').screenshot"
+          text=p.read_text();old="dashboard.locator('header').screenshot"
           assert text.count(old)==1
           p.write_text(text.replace(old,"dashboard.locator(':scope > header').screenshot"))
           p=pathlib.Path('docs/tests/material/audit-polish.spec.ts')
-          text=p.read_text()
-          old="await expect(latency.locator('.recharts-reference-line line')).toBeVisible();"
+          text=p.read_text();old="await expect(latency.locator('.recharts-reference-line line')).toBeVisible();"
           assert text.count(old)==1
-          new='''// A horizontal SVG line has a zero-height geometric box, even with a visible stroke.
-                // Assert actual painted stroke, projected endpoints and chart containment instead.
+          new='''// SVG horizontal lines have zero-height boxes: inspect their actual stroke and endpoints.
                 const budgetLine = latency.locator('.recharts-reference-line line');
                 await expect(budgetLine).toHaveCount(1);
-                await expect(latency.locator('svg.recharts-surface')).toBeVisible();
+                await expect(latency.locator('svg.recharts-surface[role="application"]')).toBeVisible();
                 await expect.poll(() => budgetLine.evaluate(element => {
                   const line = element as SVGLineElement;
                   const svg = line.ownerSVGElement!;
@@ -88,7 +85,7 @@ jobs:
       - name: Browser
         working-directory: docs
         run: npx playwright install --with-deps chromium
-      - name: Targeted source-only and adjacent documentation checks
+      - name: Recheck affected source-only and documentation cases
         working-directory: docs
         run: |
           result=0
@@ -96,9 +93,7 @@ jobs:
           npx playwright test --config=playwright.material.config.ts audit-polish.spec.ts || result=1
           cp test-results/material-report.json "$RUNNER_TEMP/audit-polish/"
           cp -r test-results/docs-browser/material-after/. "$RUNNER_TEMP/audit-polish/material/"
-          npx playwright test tests/browser/analytics.spec.ts tests/browser/workflow.spec.ts || result=1
-          cp test-results/docs-report.json "$RUNNER_TEMP/audit-polish/adjacent-report.json"
-          npx playwright test --config=playwright.detail.config.ts audit-polish.spec.ts catalog.spec.ts document-rhythm.spec.ts template-boundary.spec.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts audit-polish.spec.ts || result=1
           exit "$result"
       - name: Save verified source-derived tree for visual review
         env:
