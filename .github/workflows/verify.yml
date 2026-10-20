@@ -111,9 +111,13 @@ jobs:
           path: docs/test-results/independent-items
 
   presentation:
-    name: Documentation presentation
+    name: Documentation presentation (${{ matrix.suite }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [browser, material, detail]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -138,17 +142,17 @@ jobs:
       - name: Capture key documentation surfaces and interaction quality
         working-directory: docs
         run: |
-          # Collect every suite's evidence without concealing any failed assertion.
-          result=0
-          npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts || result=1
-          npx playwright test --config=playwright.material.config.ts || result=1
-          npx playwright test --config=playwright.detail.config.ts || result=1
-          exit "$result"
+          # Each suite has its own runner; none is skipped if another fails.
+          case "${{ matrix.suite }}" in
+            browser) npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts ;;
+            material) npx playwright test --config=playwright.material.config.ts ;;
+            detail) npx playwright test --config=playwright.detail.config.ts ;;
+          esac
       - name: Save presentation screenshots
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: docs-presentation
+          name: docs-presentation-${{ matrix.suite }}
           retention-days: 7
           if-no-files-found: error
           path: |
@@ -157,6 +161,7 @@ jobs:
             docs/test-results/material-report.json
             docs/test-results/detail-report.json
       - name: Save directly viewable workspace detail
+        if: ${{ matrix.suite == 'detail' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           path: docs/test-results/docs-browser/catalog/*-desktop-light/theme-interaction.png
@@ -164,6 +169,7 @@ jobs:
           retention-days: 7
           if-no-files-found: error
       - name: Save directly viewable input anatomy
+        if: ${{ matrix.suite == 'detail' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           path: docs/test-results/docs-browser/catalog/*-desktop-light/input-group.png
