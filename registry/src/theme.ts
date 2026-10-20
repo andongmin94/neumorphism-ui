@@ -479,7 +479,7 @@ export function buildThemeVariables(
   const litRim = mode === "light"
     ? `${-x}px ${-y}px 1px 0px color-mix(in srgb, ${tokens.shadowLight} 54%, transparent), `
     : "";
-  const plateShadow = `${litRim}${x}px ${y * 2}px 3px -1px ${raisedDark}, ${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${raisedDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedPlateLight}`;
+  const plateShadow = `${x}px ${y * 2}px 3px -1px ${raisedDark}, ${litRim}${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${raisedDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedPlateLight}`;
   const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 86%, transparent)`;
   const primaryShadow = `${x * raisedSmallOffset}px ${y * (raisedSmallOffset + 1)}px ${profile.smallBlur + 1}px ${raisedDark}, ${-x * raisedSmallOffset}px ${-y * raisedSmallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`;
   const primaryInsetShadow = shadowValue(

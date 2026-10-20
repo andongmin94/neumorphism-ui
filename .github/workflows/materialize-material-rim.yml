@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/materialize-material-rim.yml
+      - registry/src/theme.ts
 permissions:
   contents: write
 jobs:
