@@ -10,3 +10,21 @@ test("all material presets retain distinct tinted hover and recessed fill", () =
     else assert.match(tokens["--neu-edge"], /color-mix/);
   }
 });
+
+test("light raised highlights are softer without changing dark or inset material", () => {
+  for (const preset of themePresetIds) {
+    const settings = { ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset };
+    for (const mode of ["light", "dark"]) {
+      const tokens = buildThemeVariables(settings, mode);
+      const expected = mode === "light" ? { small: 64, plate: 68, large: 74 } : { small: 84, plate: 84, large: 94 };
+      assert.ok(tokens["--neu-shadow-raised-sm"].includes(`${expected.small}%, transparent`));
+      assert.ok(tokens["--neu-shadow-plate"].includes(`${expected.plate}%, transparent`));
+      assert.ok(tokens["--neu-shadow-raised"].includes(`${expected.large}%, transparent`));
+      assert.ok(tokens["--neu-shadow-hover"].includes(`${expected.small}%, transparent`));
+      assert.ok(tokens["--neu-shadow-primary"].includes(`${expected.small}%, transparent`));
+      assert.match(tokens["--neu-shadow-inset"], /inset/);
+      assert.match(tokens["--neu-shadow-inset-sm"], /inset/);
+      assert.doesNotMatch(tokens["--neu-shadow-plate"], /inset/);
+    }
+  }
+});
