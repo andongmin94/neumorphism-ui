@@ -18,6 +18,10 @@ test("raised controls and plates retain clear material with quieter light", asyn
       ["--neu-shadow-plate", light ? "68%" : "84%"]] as const) {
       expect(values[key]).toContain(mix);
     }
+    for (const key of ["--neu-shadow-raised-sm", "--neu-shadow-hover", "--neu-shadow-plate"]) {
+      if (light) expect(values[key]).toMatch(/^-1px -1px 1px 0px color-mix\(in srgb, .* 54%, transparent\), /);
+      else expect(values[key]).not.toContain("54%, transparent");
+    }
     await expect(button).not.toHaveCSS("box-shadow", "none");
     expect(await button.evaluate(el => getComputedStyle(el).boxShadow)).not.toContain("inset");
     await button.screenshot({ path: info.outputPath("button.png"), animations: "disabled" });

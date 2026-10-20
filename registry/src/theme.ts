@@ -475,7 +475,11 @@ export function buildThemeVariables(
   const raisedLargeLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 74 : 94}%, transparent)`;
   const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 64 : 84}%, transparent)`;
   const raisedPlateLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 68 : 84}%, transparent)`;
-  const plateShadow = `${x}px ${y * 2}px 3px -1px ${raisedDark}, ${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${raisedDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedPlateLight}`;
+  // Keep the broad, soft light unchanged; give the lit outer edge a precise rim.
+  const litRim = mode === "light"
+    ? `${-x}px ${-y}px 1px 0px color-mix(in srgb, ${tokens.shadowLight} 54%, transparent), `
+    : "";
+  const plateShadow = `${litRim}${x}px ${y * 2}px 3px -1px ${raisedDark}, ${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${raisedDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedPlateLight}`;
   const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 86%, transparent)`;
   const primaryShadow = `${x * raisedSmallOffset}px ${y * (raisedSmallOffset + 1)}px ${profile.smallBlur + 1}px ${raisedDark}, ${-x * raisedSmallOffset}px ${-y * raisedSmallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`;
   const primaryInsetShadow = shadowValue(
@@ -527,7 +531,7 @@ export function buildThemeVariables(
       raisedDark,
       raisedLargeLight,
     ),
-    "--neu-shadow-raised-sm": shadowValue(
+    "--neu-shadow-raised-sm": litRim + shadowValue(
       x,
       y,
       raisedSmallOffset,
@@ -582,7 +586,7 @@ export function buildThemeVariables(
     "--neu-selected": `color-mix(in srgb, ${primary} 8%, ${tokens.surface})`,
     "--neu-selected-border": `color-mix(in srgb, ${primary} 44%, ${tokens.border})`,
     "--neu-error-text": mode === "light" ? `color-mix(in srgb, ${tokens.destructive} 76%, ${tokens.foreground})` : tokens.destructive,
-    "--neu-shadow-hover": shadowValue(x, y, raisedSmallOffset + 1, profile.smallBlur + 3, raisedDark, raisedSmallLight),
+    "--neu-shadow-hover": litRim + shadowValue(x, y, raisedSmallOffset + 1, profile.smallBlur + 3, raisedDark, raisedSmallLight),
     "--neu-shadow-floating": `0 16px 40px ${tokens.shadowDark}, 0 3px 8px ${tokens.shadowDark}, inset ${x}px ${y}px 0 color-mix(in srgb, ${tokens.edge} 45%, transparent)`,
   };
 }

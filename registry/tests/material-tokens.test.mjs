@@ -28,3 +28,28 @@ test("light raised highlights are softer without changing dark or inset material
     }
   }
 });
+
+test("light-mode raised edges retain a crisp directional rim without changing recessed or dark shadows", () => {
+  const directions = {
+    "top-left": [1, 1],
+    "top-right": [-1, 1],
+    "bottom-left": [1, -1],
+    "bottom-right": [-1, -1],
+  };
+  for (const presetId of themePresetIds) {
+    for (const [lightDirection, [x, y]] of Object.entries(directions)) {
+      const settings = { ...defaultThemeSettings, ...getThemePreset(presetId).defaults, presetId, lightDirection };
+      const light = buildThemeVariables(settings, "light");
+      const dark = buildThemeVariables(settings, "dark");
+      const rim = `${-x}px ${-y}px 1px 0px color-mix(in srgb, `;
+      for (const key of ["--neu-shadow-raised-sm", "--neu-shadow-plate", "--neu-shadow-hover"]) {
+        assert.ok(light[key].startsWith(rim), `${presetId}/${lightDirection}/${key} missing lit edge`);
+        assert.match(light[key], /54%, transparent/);
+        assert.doesNotMatch(light[key], /inset /);
+        assert.ok(!dark[key].startsWith(rim), `${presetId}/${lightDirection}/${key} changed dark material`);
+      }
+      assert.doesNotMatch(light["--neu-shadow-inset"], /54%, transparent/);
+      assert.equal(light["--neu-edge"], "transparent");
+    }
+  }
+});
