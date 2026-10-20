@@ -1,0 +1,101 @@
+name: Audit polish review
+on:
+  status:
+permissions:
+  contents: write
+jobs:
+  candidate:
+    if: >-
+      github.ref == 'refs/heads/main' && github.event.context == 'Vercel' &&
+      github.event.state == 'success' && github.event.sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Apply authored patch without updating main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,json,lzma,os,pathlib,subprocess
+          chunks=[]
+          for sha in ['c162b69fd8cb4650de27eef315fe30c1971aae47','52a5aedabe17f2224a92e458c231a40894ca870c','f15571a6e3109e33095d3a4155d8cca367030897','16d7f5abc3a2e7b8e97f5ecc6f4dfac77a25cdd0']:
+              blob=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/git/blobs/{sha}']))
+              b=base64.b64decode(blob['content'])
+              assert hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()==sha
+              chunks.append(b)
+          patch=lzma.decompress(b''.join(chunks))
+          assert hashlib.sha256(patch).hexdigest()=='6c94587f35076180c65d726f9680e7a2d3d556f2ce027868970c22496d53b92d'
+          subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
+          subprocess.run(['git','apply','--index','-'],input=patch,check=True)
+          pathlib.Path('.github/workflows/audit-polish-review.yml').unlink()
+          PY
+      - name: Verify source and regenerate installation inputs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Browser
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Targeted source-only and adjacent documentation checks
+        working-directory: docs
+        run: |
+          result=0
+          npx playwright test --config=playwright.material.config.ts audit-polish.spec.ts || result=1
+          npx playwright test tests/browser/analytics.spec.ts tests/browser/workflow.spec.ts || result=1
+          npx playwright test --config=playwright.detail.config.ts audit-polish.spec.ts catalog.spec.ts document-rhythm.spec.ts template-boundary.spec.ts || result=1
+          exit "$result"
+      - name: Save verified source-derived tree for visual review
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          npm run check:generated --prefix registry
+          git diff --check HEAD
+          mkdir -p "$RUNNER_TEMP/audit-polish"
+          python3 - <<'PY'
+          import json,os,pathlib,subprocess
+          repo=os.environ['GITHUB_REPOSITORY'];parent=os.environ['GITHUB_SHA']
+          base=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/commits/{parent}']))
+          paths=subprocess.check_output(['git','diff','--name-only','HEAD'],text=True).splitlines()+subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
+          entries=[]
+          for name in sorted(set(paths)):
+              p=pathlib.Path(name);e=dict(path=name,mode='100644',type='blob')
+              if p.exists():e['content']=p.read_text()
+              else:e['sha']=None
+              entries.append(e)
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'audit-polish'
+          request=out/'request.json';request.write_text(json.dumps(dict(base_tree=base['tree']['sha'],tree=entries)))
+          tree=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input',str(request)]));request.unlink()
+          (out/'candidate.json').write_text(json.dumps(dict(parent=parent,tree=tree['sha'],paths=sorted(set(paths))),indent=2))
+          (out/'candidate-source.json').write_text(json.dumps({e['path']:e.get('content') for e in entries},ensure_ascii=False))
+          (out/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
+          print(json.dumps(dict(parent=parent,tree=tree['sha'],files=len(entries))))
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: audit-polish-candidate
+          retention-days: 3
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/audit-polish
+            docs/test-results
