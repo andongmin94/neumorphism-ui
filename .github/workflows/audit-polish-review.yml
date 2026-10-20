@@ -37,6 +37,38 @@ jobs:
           assert hashlib.sha256(patch).hexdigest()=='6c94587f35076180c65d726f9680e7a2d3d556f2ce027868970c22496d53b92d'
           subprocess.run(['git','apply','--check','--index','-'],input=patch,check=True)
           subprocess.run(['git','apply','--index','-'],input=patch,check=True)
+          p=pathlib.Path('docs/tests/detail/audit-polish.spec.ts')
+          text=p.read_text()
+          old="dashboard.locator('header').screenshot"
+          assert text.count(old)==1
+          p.write_text(text.replace(old,"dashboard.locator(':scope > header').screenshot"))
+          p=pathlib.Path('docs/tests/material/audit-polish.spec.ts')
+          text=p.read_text()
+          old="await expect(latency.locator('.recharts-reference-line line')).toBeVisible();"
+          assert text.count(old)==1
+          new='''// A horizontal SVG line has a zero-height geometric box, even with a visible stroke.
+                // Assert actual painted stroke, projected endpoints and chart containment instead.
+                const budgetLine = latency.locator('.recharts-reference-line line');
+                await expect(budgetLine).toHaveCount(1);
+                await expect(latency.locator('svg.recharts-surface')).toBeVisible();
+                await expect.poll(() => budgetLine.evaluate(element => {
+                  const line = element as SVGLineElement;
+                  const svg = line.ownerSVGElement!;
+                  const matrix = line.getScreenCTM();
+                  if (!matrix) return false;
+                  const a = new DOMPoint(line.x1.baseVal.value, line.y1.baseVal.value).matrixTransform(matrix);
+                  const b = new DOMPoint(line.x2.baseVal.value, line.y2.baseVal.value).matrixTransform(matrix);
+                  const plot = svg.getBoundingClientRect();
+                  const style = getComputedStyle(line);
+                  const ancestors = [];
+                  for (let node: Element | null = line; node; node = node.parentElement) ancestors.push(getComputedStyle(node));
+                  return b.x - a.x > plot.width / 2 && Math.abs(a.y - b.y) < 0.1 &&
+                    a.x >= plot.left && b.x <= plot.right && a.y > plot.top && a.y < plot.bottom &&
+                    style.stroke !== 'none' && parseFloat(style.strokeWidth) > 0 && parseFloat(style.strokeOpacity) > 0 &&
+                    ancestors.every(s => s.display !== 'none' && s.visibility === 'visible' && Number(s.opacity) > 0);
+                })).toBe(true);
+                await latency.screenshot({ path: info.outputPath(`latency-budget-${locale}.png`) });'''
+          p.write_text(text.replace(old,new))
           pathlib.Path('.github/workflows/audit-polish-review.yml').unlink()
           PY
       - name: Verify source and regenerate installation inputs
@@ -60,8 +92,12 @@ jobs:
         working-directory: docs
         run: |
           result=0
+          mkdir -p "$RUNNER_TEMP/audit-polish/material"
           npx playwright test --config=playwright.material.config.ts audit-polish.spec.ts || result=1
+          cp test-results/material-report.json "$RUNNER_TEMP/audit-polish/"
+          cp -r test-results/docs-browser/material-after/. "$RUNNER_TEMP/audit-polish/material/"
           npx playwright test tests/browser/analytics.spec.ts tests/browser/workflow.spec.ts || result=1
+          cp test-results/docs-report.json "$RUNNER_TEMP/audit-polish/adjacent-report.json"
           npx playwright test --config=playwright.detail.config.ts audit-polish.spec.ts catalog.spec.ts document-rhythm.spec.ts template-boundary.spec.ts || result=1
           exit "$result"
       - name: Save verified source-derived tree for visual review
@@ -86,9 +122,17 @@ jobs:
           request=out/'request.json';request.write_text(json.dumps(dict(base_tree=base['tree']['sha'],tree=entries)))
           tree=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input',str(request)]));request.unlink()
           (out/'candidate.json').write_text(json.dumps(dict(parent=parent,tree=tree['sha'],paths=sorted(set(paths))),indent=2))
-          (out/'candidate-source.json').write_text(json.dumps({e['path']:e.get('content') for e in entries},ensure_ascii=False))
-          (out/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
           print(json.dumps(dict(parent=parent,tree=tree['sha'],files=len(entries))))
+          PY
+      - name: Preserve applied source and reports even on a failed assertion
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib,subprocess
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'audit-polish';out.mkdir(parents=True,exist_ok=True)
+          paths=subprocess.check_output(['git','diff','--name-only','HEAD'],text=True).splitlines()+subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
+          (out/'candidate-source.json').write_text(json.dumps({n:pathlib.Path(n).read_text() if pathlib.Path(n).is_file() else None for n in sorted(set(paths))},ensure_ascii=False))
+          (out/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
           PY
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
