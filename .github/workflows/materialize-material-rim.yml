@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/materialize-material-rim.yml
       - registry/src/theme.ts
+      - registry/tests/material-tokens.test.mjs
 permissions:
   contents: write
 jobs:

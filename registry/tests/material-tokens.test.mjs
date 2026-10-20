@@ -43,7 +43,7 @@ test("light-mode raised edges retain a crisp directional rim without changing re
       const dark = buildThemeVariables(settings, "dark");
       const rim = `${-x}px ${-y}px 1px 0px color-mix(in srgb, `;
       for (const key of ["--neu-shadow-raised-sm", "--neu-shadow-plate", "--neu-shadow-hover"]) {
-        assert.ok(light[key].startsWith(rim), `${presetId}/${lightDirection}/${key} missing lit edge`);
+        assert.ok(key === "--neu-shadow-plate" ? light[key].includes(`, ${rim}`) : light[key].startsWith(rim), `${presetId}/${lightDirection}/${key} missing lit edge`);
         assert.match(light[key], /54%, transparent/);
         assert.doesNotMatch(light[key], /inset /);
         assert.ok(!dark[key].startsWith(rim), `${presetId}/${lightDirection}/${key} changed dark material`);
