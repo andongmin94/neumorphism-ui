@@ -27,13 +27,13 @@ jobs:
            (
             '  const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} 84%, transparent)`;\n',
             '''  // Light mode: less chalky highlights on controls and plates.
-  // Retain dark-mode geometry and inset shadows.
-  const raisedSmallOffset = mode === "light" ? Math.max(1, profile.smallOffset - 1) : profile.smallOffset;
-  const raisedDark = mode === "light" ? `color-mix(in srgb, ${tokens.shadowDark} 92%, transparent)` : tokens.shadowDark;
-  const raisedLargeLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 74 : 94}%, transparent)`;
-  const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 64 : 84}%, transparent)`;
-  const raisedPlateLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 68 : 84}%, transparent)`;
-'''
+            // Retain dark-mode geometry and inset shadows.
+            const raisedSmallOffset = mode === "light" ? Math.max(1, profile.smallOffset - 1) : profile.smallOffset;
+            const raisedDark = mode === "light" ? `color-mix(in srgb, ${tokens.shadowDark} 92%, transparent)` : tokens.shadowDark;
+            const raisedLargeLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 74 : 94}%, transparent)`;
+            const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 64 : 84}%, transparent)`;
+            const raisedPlateLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 68 : 84}%, transparent)`;
+          '''
            ),
            (
             'const plateShadow = `${x}px ${y * 2}px 3px -1px ${tokens.shadowDark}, ${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${tokens.shadowDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedSmallLight}`;',
@@ -66,63 +66,62 @@ jobs:
           src.write_text(text)
           tests=Path('registry/tests/material-tokens.test.mjs')
           tests.write_text(tests.read_text()+'''
-test("light raised highlights are softer without changing dark or inset material", () => {
-  for (const preset of themePresetIds) {
-    const settings = { ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset };
-    for (const mode of ["light", "dark"]) {
-      const tokens = buildThemeVariables(settings, mode);
-      const expected = mode === "light" ? { small: 64, plate: 68, large: 74 } : { small: 84, plate: 84, large: 94 };
-      assert.ok(tokens["--neu-shadow-raised-sm"].includes(`${expected.small}%, transparent`));
-      assert.ok(tokens["--neu-shadow-plate"].includes(`${expected.plate}%, transparent`));
-      assert.ok(tokens["--neu-shadow-raised"].includes(`${expected.large}%, transparent`));
-      assert.ok(tokens["--neu-shadow-hover"].includes(`${expected.small}%, transparent`));
-      assert.ok(tokens["--neu-shadow-primary"].includes(`${expected.small}%, transparent`));
-      assert.match(tokens["--neu-shadow-inset"], /inset/);
-      assert.match(tokens["--neu-shadow-inset-sm"], /inset/);
-      assert.doesNotMatch(tokens["--neu-shadow-plate"], /inset/);
-    }
-  }
-});
-''')
+          test("light raised highlights are softer without changing dark or inset material", () => {
+            for (const preset of themePresetIds) {
+              const settings = { ...defaultThemeSettings, ...getThemePreset(preset).defaults, presetId: preset };
+              for (const mode of ["light", "dark"]) {
+                const tokens = buildThemeVariables(settings, mode);
+                const expected = mode === "light" ? { small: 64, plate: 68, large: 74 } : { small: 84, plate: 84, large: 94 };
+                assert.ok(tokens["--neu-shadow-raised-sm"].includes(`${expected.small}%, transparent`));
+                assert.ok(tokens["--neu-shadow-plate"].includes(`${expected.plate}%, transparent`));
+                assert.ok(tokens["--neu-shadow-raised"].includes(`${expected.large}%, transparent`));
+                assert.ok(tokens["--neu-shadow-hover"].includes(`${expected.small}%, transparent`));
+                assert.ok(tokens["--neu-shadow-primary"].includes(`${expected.small}%, transparent`));
+                assert.match(tokens["--neu-shadow-inset"], /inset/);
+                assert.match(tokens["--neu-shadow-inset-sm"], /inset/);
+                assert.doesNotMatch(tokens["--neu-shadow-plate"], /inset/);
+              }
+            }
+          });
+          ''')
           test=Path('docs/tests/detail/light-refinement.spec.ts')
           test.write_text('''import { expect, test } from "@playwright/test";
 
-for (const mode of ["light", "dark"] as const) {
-  test(`raised controls and plates retain clear material with quieter light: ${mode}`, async ({ page }, info) => {
-    await page.goto("/en/components/button");
-    await page.evaluate(() => document.fonts.ready);
-    const button = page.locator(".component-example-panel [data-slot=button][data-variant=default]").first();
-    await expect(button).toBeVisible();
-    const values = await page.evaluate(() => {
-      const style = getComputedStyle(document.documentElement);
-      return Object.fromEntries(["--neu-shadow-raised", "--neu-shadow-raised-sm", "--neu-shadow-hover",
-        "--neu-shadow-plate", "--neu-shadow-inset"].map(key => [key, style.getPropertyValue(key).trim()]));
-    });
-    const light = mode === "light";
-    for (const [key, mix] of [["--neu-shadow-raised", light ? "74%" : "94%"],
-      ["--neu-shadow-raised-sm", light ? "64%" : "84%"],
-      ["--neu-shadow-hover", light ? "64%" : "84%"],
-      ["--neu-shadow-plate", light ? "68%" : "84%"]] as const) {
-      expect(values[key]).toContain(mix);
-    }
-    await expect(button).not.toHaveCSS("box-shadow", "none");
-    expect(await button.evaluate(el => getComputedStyle(el).boxShadow)).not.toContain("inset");
-    await button.screenshot({ path: info.outputPath("button.png"), animations: "disabled" });
-    await button.focus();
-    await expect(button).toHaveCSS("outline-width", "2px");
-    await page.locator(".component-installation").screenshot({ path: info.outputPath("copy-and-registry.png"), animations: "disabled" });
+          test("raised controls and plates retain clear material with quieter light", async ({ page }, info) => {
+            const mode = info.project.name.endsWith("dark") ? "dark" : "light";
+              await page.goto("/en/components/button");
+              await page.evaluate(() => document.fonts.ready);
+              const button = page.locator(".component-example-panel [data-slot=button][data-variant=default]").first();
+              await expect(button).toBeVisible();
+              const values = await page.evaluate(() => {
+                const style = getComputedStyle(document.documentElement);
+                return Object.fromEntries(["--neu-shadow-raised", "--neu-shadow-raised-sm", "--neu-shadow-hover",
+                  "--neu-shadow-plate", "--neu-shadow-inset"].map(key => [key, style.getPropertyValue(key).trim()]));
+              });
+              const light = mode === "light";
+              for (const [key, mix] of [["--neu-shadow-raised", light ? "74%" : "94%"],
+                ["--neu-shadow-raised-sm", light ? "64%" : "84%"],
+                ["--neu-shadow-hover", light ? "64%" : "84%"],
+                ["--neu-shadow-plate", light ? "68%" : "84%"]] as const) {
+                expect(values[key]).toContain(mix);
+              }
+              await expect(button).not.toHaveCSS("box-shadow", "none");
+              expect(await button.evaluate(el => getComputedStyle(el).boxShadow)).not.toContain("inset");
+              await button.screenshot({ path: info.outputPath("button.png"), animations: "disabled" });
+              await button.focus();
+              await expect(button).toHaveCSS("outline-width", "2px");
+              await page.locator(".component-installation").screenshot({ path: info.outputPath("copy-and-registry.png"), animations: "disabled" });
 
-    await page.goto("/en/components/card");
-    const card = page.locator(".component-example-panel [data-slot=card][data-variant=raised]").first();
-    await expect(card).toBeVisible();
-    const shadow = await card.evaluate(el => getComputedStyle(el).boxShadow);
-    expect(shadow).not.toBe("none");
-    expect(shadow).not.toContain("inset");
-    await card.screenshot({ path: info.outputPath("card.png"), animations: "disabled" });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
-  });
-}
-''')
+              await page.goto("/en/components/card");
+              const card = page.locator(".component-example-panel [data-slot=card][data-variant=raised]").first();
+              await expect(card).toBeVisible();
+              const shadow = await card.evaluate(el => getComputedStyle(el).boxShadow);
+              expect(shadow).not.toBe("none");
+              expect(shadow).not.toContain("inset");
+              await card.screenshot({ path: info.outputPath("card.png"), animations: "disabled" });
+              expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+          });
+          ''')
           cfg=Path('docs/playwright.published.config.ts')
           c=cfg.read_text()
           needle='"**/detail/audit-polish.spec.ts", '
