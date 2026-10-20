@@ -1,4 +1,4 @@
-name: Soft light candidate
+name: Soft light candidate review
 on:
   push:
     branches: [main]
