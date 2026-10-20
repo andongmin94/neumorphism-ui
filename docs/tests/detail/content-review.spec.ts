@@ -10,7 +10,11 @@ const content = {
 } as const;
 
 async function fits(page: Page) {
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  // Recharts measures its SVG and legend after the viewport resize notification.
+  // Keep the same overflow threshold; a persistent layout defect still fails.
+  await expect.poll(() => page.evaluate(() =>
+    document.documentElement.scrollWidth - innerWidth),
+  { message: "Rendered content must fit the current viewport" }).toBeLessThanOrEqual(1);
 }
 
 for (const locale of ["en", "ko", "ja", "zh"] as const) {
