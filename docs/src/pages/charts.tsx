@@ -127,7 +127,7 @@ const data: ${recipe.typeName}[] = [
 ];
 
 export function Example() {
-  return <${recipe.name} data={data} />;
+  return <${recipe.name} data={data} locale="${locale}" />;
 }`,
     })),
   ];

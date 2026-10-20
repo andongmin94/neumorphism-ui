@@ -39,12 +39,12 @@ export function OperationalChartGallery({ locale }: { locale: Locale }) {
         </p>
       </header>
       <div className="grid min-w-0 gap-6 xl:grid-cols-2">
-        <BuildDurationExample />
-        <ServiceLatencyExample />
-        <ReleaseActivityExample />
-        <DeliveryCapacityExample />
+        <BuildDurationExample locale={locale} />
+        <ServiceLatencyExample locale={locale} />
+        <ReleaseActivityExample locale={locale} />
+        <DeliveryCapacityExample locale={locale} />
       </div>
-      <InstallDiagnosticsExample />
+      <InstallDiagnosticsExample locale={locale} />
     </section>
   );
 }

@@ -79,7 +79,13 @@ export function AnalyticsDashboard({ records, locale = "en", currency = "USD" }:
 export function AnalyticsExample({ locale = "en" }: { locale?: AnalyticsLocale }) {
   const [empty, setEmpty] = React.useState(false);
   const t = analyticsCopy[locale];
-  return <div className="grid min-w-0 gap-5"><div className="flex flex-wrap items-center justify-between gap-3"><p className="max-w-prose text-xs leading-relaxed text-[var(--muted-foreground)]">{t.sample}</p><label className="flex items-center gap-2 text-xs"><Checkbox checked={empty} onCheckedChange={value => setEmpty(value === true)} />{t.showEmpty}</label></div><AnalyticsDashboard records={empty ? [] : demoAnalytics} locale={locale} /></div>;
+  return <div className="grid min-w-0 gap-5">
+    <AnalyticsDashboard records={empty ? [] : demoAnalytics} locale={locale} />
+    <aside data-demo-controls className="flex min-w-0 flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-4">
+      <p className="max-w-prose text-xs leading-relaxed text-[var(--muted-foreground)]">{t.sample}</p>
+      <label className="flex items-center gap-2 text-xs"><Checkbox checked={empty} onCheckedChange={value => setEmpty(value === true)} />{t.showEmpty}</label>
+    </aside>
+  </div>;
 }
 
 export { demoAnalytics } from "./analytics-demo";

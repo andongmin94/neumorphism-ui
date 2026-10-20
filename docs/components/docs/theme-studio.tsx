@@ -24,12 +24,10 @@ import {
 } from "@/components/docs/theme-config";
 
 
-
-
-
-
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@neumorphism-ui/registry/ui/tabs";
+
+import { ToggleGroup, ToggleGroupItem } from "@neumorphism-ui/registry/ui/toggle-group";
+import styles from "./theme-studio.module.css";
 
 type PreviewMode = "light" | "dark";
 
@@ -224,41 +222,25 @@ export function ThemeStudio() {
         </ControlGroup>
 
         <ControlGroup label={copy.depth}>
-          <div className="theme-segmented theme-segmented-stacked">
+          <ToggleGroup className={styles.choices} aria-label={copy.depth} data-theme-choice="depth"
+            value={[String(settings.depth)]} onValueChange={(value) => { if (value[0]) updateSettings({ depth: value[0] as ThemeDepth }); }}>
             {depthOptions.map((option) => (
-              <button
-                aria-pressed={settings.depth === option.id}
-                className={settings.depth === option.id ? "is-active" : undefined}
-                key={option.id}
-                onClick={() => updateSettings({ depth: option.id })}
-                type="button"
-              >
-                {option.label}
-              </button>
+              <ToggleGroupItem key={option.id} value={option.id}>{option.label}</ToggleGroupItem>
             ))}
-          </div>
+          </ToggleGroup>
         </ControlGroup>
 
         <ControlGroup label={copy.light}>
-          <div className="theme-direction-grid">
+          <ToggleGroup className={`theme-direction-grid ${styles.directions}`} aria-label={copy.light}
+            value={[settings.lightDirection]} onValueChange={(value) => {
+              if (value[0]) updateSettings({ lightDirection: value[0] as ThemeLightDirection });
+            }}>
             {directionOptions.map((option) => (
-              <button
-                aria-label={option.label}
-                aria-pressed={settings.lightDirection === option.id}
-                className={
-                  settings.lightDirection === option.id ? "is-active" : undefined
-                }
-                key={option.id}
-                onClick={() =>
-                  updateSettings({ lightDirection: option.id })
-                }
-                title={option.label}
-                type="button"
-              >
+              <ToggleGroupItem key={option.id} value={option.id} aria-label={option.label} title={option.label}>
                 <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={option.path} /></svg>
-              </button>
+              </ToggleGroupItem>
             ))}
-          </div>
+          </ToggleGroup>
         </ControlGroup>
 
         <ControlGroup label={copy.radius}>
@@ -279,74 +261,44 @@ export function ThemeStudio() {
         </ControlGroup>
 
         <ControlGroup label={copy.controlShape}>
-          <div className="theme-segmented">
+          <ToggleGroup className={styles.choices} aria-label={copy.controlShape} data-theme-choice="controlShape"
+            value={[String(settings.controlShape)]} onValueChange={(value) => { if (value[0]) updateSettings({ controlShape: value[0] as ThemeControlShape }); }}>
             {shapeOptions.map((option) => (
-              <button
-                aria-pressed={settings.controlShape === option.id}
-                className={
-                  settings.controlShape === option.id ? "is-active" : undefined
-                }
-                key={option.id}
-                onClick={() => updateSettings({ controlShape: option.id })}
-                type="button"
-              >
-                {option.label}
-              </button>
+              <ToggleGroupItem key={option.id} value={option.id}>{option.label}</ToggleGroupItem>
             ))}
-          </div>
+          </ToggleGroup>
         </ControlGroup>
 
         <ControlGroup label={copy.motion}>
-          <div className="theme-segmented">
+          <ToggleGroup className={styles.choices} aria-label={copy.motion} data-theme-choice="motion"
+            value={[String(settings.motion)]} onValueChange={(value) => { if (value[0]) updateSettings({ motion: Number(value[0]) as ThemeMotion }); }}>
             {([120, 180, 260] as ThemeMotion[]).map((motion) => (
-              <button
-                aria-pressed={settings.motion === motion}
-                className={settings.motion === motion ? "is-active" : undefined}
-                key={motion}
-                onClick={() => updateSettings({ motion })}
-                type="button"
-              >
-                {motion}ms
-              </button>
+              <ToggleGroupItem key={motion} value={String(motion)}>{motion}ms</ToggleGroupItem>
             ))}
-          </div>
+          </ToggleGroup>
         </ControlGroup>
       </aside>
 
       <div className="theme-studio-workbench" id="theme-preview">
         <div className="theme-preview-toolbar">
-          <div>
+          <div className="theme-preview-title">
             <strong>{copy.preview}</strong>
             <small>{copy.previewCaption}</small>
           </div>
-          <div
-            className="theme-preview-mode"
-            aria-label={copy.previewTheme}
-          >
-            <button
-              aria-pressed={previewMode === "light"}
-              className={previewMode === "light" ? "is-active" : undefined}
-              onClick={() => setThemeMode("light")}
-              type="button"
-            >
-              Light
-            </button>
-            <button
-              aria-pressed={previewMode === "dark"}
-              className={previewMode === "dark" ? "is-active" : undefined}
-              onClick={() => setThemeMode("dark")}
-              type="button"
-            >
-              Dark
-            </button>
-          </div>
+          <ToggleGroup className="theme-preview-mode" aria-label={copy.previewTheme}
+            value={[previewMode]} onValueChange={(value) => {
+              if (value[0]) setThemeMode(value[0] as PreviewMode);
+            }}>
+            <ToggleGroupItem value="light">Light</ToggleGroupItem>
+            <ToggleGroupItem value="dark">Dark</ToggleGroupItem>
+          </ToggleGroup>
           <span>{preset.name} · {depthOptions.find((option) => option.id === settings.depth)?.label}</span>
         </div>
 
         <ThemePreview copy={copy} locale={locale} previewMode={previewMode} style={previewStyle} />
 
         <Tabs className="theme-output" defaultValue="css" id="theme-output">
-          <div className="theme-output-heading">
+          <div className={`theme-output-heading ${styles.outputHeading}`}>
             <h2>{copy.output}</h2>
             <TabsList aria-label={copy.outputFormat}>
               <TabsTrigger value="css">CSS</TabsTrigger>

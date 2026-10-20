@@ -398,3 +398,32 @@ locales at 320/360/390/768/1023/1440px, pairwise control bounds and home-mark
 containment, then real menu/search/focus return/theme/home navigation. The
 published suite includes those checks. Installed source is unchanged by
 this header follow-through.
+
+
+## Operational reading and remaining audit polish
+
+Five operational chart recipes own their en/ko/ja/zh UI copy. Locale is passed
+through their examples and the documentation, including copied usage. Caller
+observation labels and numeric values are unchanged. Only bundled example
+weekday/stage labels are localized. Empty states, table headings, status summaries,
+controls and tooltip series names use the same locale.
+
+The existing Recharts Legend/DefaultLegendContent discovers visible series and
+measures wrapped labels. ChartLegend adds the reference line's current label/value
+without inventing a data series; line dash patterns remain readable. Changing the
+series/view updates the legend, and budgets outside observed values remain visible.
+The plot/table/CSV data model is unchanged. OTP slots retain inset depth and a
+separate focus ring with a modest token-derived edge at rest, also in dark mode.
+
+Theme Studio uses the shipped ToggleGroup for depth, shape, motion, light direction
+and preview mode. The selected value cannot be cleared; Base UI owns focus and keys.
+Old segmented-control CSS is removed rather than overridden. The output heading is
+left-aligned and bold; code is still Dark+. AnalyticsExample's diagnostic checkbox
+and sample notice follow the dashboard and do not become dashboard props.
+
+The audit-polish material suite runs without documentation CSS at 320/390/1440 in
+both themes and all four locales. It checks real charts, live legends and budget
+changes, caller labels, exact table values, empty/recovery, OTP typing/backspace,
+clipboard paste and disabled behavior. Detail/public checks exercise locale wiring,
+keyboard theme selection, persistence/reset, CSS/CLI and the demo-control boundary.
+Actual run results and screenshot review are recorded separately.
