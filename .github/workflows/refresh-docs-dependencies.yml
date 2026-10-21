@@ -1,0 +1,67 @@
+name: Refresh docs dependency patches (temporary)
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/refresh-docs-dependencies.yml
+permissions:
+  contents: write
+jobs:
+  refresh:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Install and patch docs dependencies within existing ranges
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm update --prefix docs vite hono
+          node --input-type=module -e 'import fs from "node:fs"; const version = JSON.parse(fs.readFileSync("docs/node_modules/vite/package.json")).version; const [maj,min,pat]=version.split(".").map(Number); if(maj!==8||min<3||(min===3&&pat<3)) throw Error("Vite security patch missing: "+version); console.log("Patched Vite:",version);'
+          npm audit --prefix docs --audit-level=high
+      - name: Check registry, generated outputs, and documentation
+        run: |
+          npm run lint --prefix registry
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm test --prefix registry
+          npm run check:generated --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Install Chromium
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Verify each theme preset's saved readouts on desktop and mobile
+        working-directory: docs
+        run: npx playwright test --config=playwright.detail.config.ts tests/detail/sculptural-layout.spec.ts
+      - name: Commit npm-produced lockfile only
+        run: |
+          git add docs/package.json docs/package-lock.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "No npm-produced dependency patch to commit" >&2
+            exit 1
+          fi
+          git diff --cached --stat
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "fix(docs): update patched Vite and Hono dependency tree"
+          git push origin HEAD:main
+      - name: Save focused browser evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: theme-presets-after-security-patch
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            docs/test-results/docs-browser/catalog/**/sculptural-*.png
+            docs/test-results/docs-browser/catalog/**/trace.zip
+            docs/test-results/detail-report.json
