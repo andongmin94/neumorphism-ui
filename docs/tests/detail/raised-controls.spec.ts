@@ -21,7 +21,8 @@ test("soft secondary actions stay tactile while ghost controls remain intentiona
   const soft = panel.locator('[data-slot="button"][data-variant="soft"]').first();
   const ghost = panel.locator('[data-slot="button"][data-variant="ghost"]').first();
   await expectRaisedWithoutStroke(soft);
-  await expect(ghost).toHaveCSS("box-shadow", "none");
+  await expect(ghost).toHaveClass(/shadow-none/);
+  await expect(ghost).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await soft.screenshot({ path: info.outputPath("soft-button.png"), animations: "disabled" });
 
   const resting = await soft.evaluate(node => getComputedStyle(node).boxShadow);

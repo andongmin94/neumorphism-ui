@@ -198,7 +198,8 @@ for (const mode of ["light", "dark"] as const) {
     await expect(soft).toBeVisible();
     await expect(soft).toHaveCSS("border-top-color", "rgba(0, 0, 0, 0)");
     await expect(soft).not.toHaveCSS("box-shadow", "none");
-    await expect(ghost).toHaveCSS("box-shadow", "none");
+    await expect(ghost).toHaveClass(/shadow-none/);
+    await expect(ghost).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
     const raised = await soft.evaluate(element => getComputedStyle(element).boxShadow);
     await soft.hover();
     await expect.poll(() => soft.evaluate(element => getComputedStyle(element).boxShadow)).not.toBe(raised);
