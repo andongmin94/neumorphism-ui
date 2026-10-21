@@ -29,6 +29,9 @@ const navigationCopy = {
 function MobileDocsNavigation() {
   const { messages } = useLocale();
   const [open, setOpen] = React.useState(false);
+  // Static HTML must not accept taps before React can handle the dialog trigger.
+  const [hydrated, setHydrated] = React.useState(false);
+  React.useEffect(() => setHydrated(true), []);
   const closeMobileNav = React.useCallback(() => setOpen(false), []);
 
   React.useEffect(() => {
@@ -48,6 +51,7 @@ function MobileDocsNavigation() {
             aria-controls="mobile-docs-navigation"
             aria-label={open ? messages.navigation.mobileClose : messages.navigation.mobileOpen}
             className="mobile-nav-trigger"
+            disabled={!hydrated}
             type="button"
           />
         }

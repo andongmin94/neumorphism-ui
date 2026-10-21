@@ -71,3 +71,56 @@ for (const locale of ["en", "ko", "ja", "zh"]) {
     }
   });
 }
+
+for (const locale of ["en", "ko", "ja", "zh"]) {
+  test(`mobile menu ignores pre-hydration taps and opens on its first enabled touch: ${locale}`, async ({ page }, info) => {
+    test.skip(!info.project.name.startsWith("mobile"), "Mobile navigation only.");
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    let releaseScripts!: () => void;
+    const scriptsReleased = new Promise<void>(resolve => { releaseScripts = resolve; });
+    await page.route(url => url.pathname.endsWith(".js"), async route => {
+      await scriptsReleased;
+      await route.continue();
+    });
+    try {
+      await page.goto(`/${locale}/components/button`, { waitUntil: "commit" });
+      const trigger = page.locator(".mobile-nav-trigger");
+      await expect(trigger).toBeVisible();
+      await expect(trigger).toBeDisabled();
+      // A visible but still-static button cannot silently absorb the first tap.
+      const firstBox = await trigger.boundingBox();
+      expect(firstBox).not.toBeNull();
+      await page.touchscreen.tap(firstBox!.x + firstBox!.width / 2, firstBox!.y + firstBox!.height / 2);
+      await expect(page.locator("#mobile-docs-navigation")).toHaveCount(0);
+      await page.screenshot({ path: info.outputPath("mobile-nav-before-hydration.png"), animations: "disabled" });
+      releaseScripts();
+      await expect(trigger).toBeEnabled({ timeout: 20_000 });
+      const box = await trigger.boundingBox();
+      expect(box).not.toBeNull();
+      await page.touchscreen.tap(box!.x + box!.width / 2, box!.y + box!.height / 2);
+      const dialog = page.locator("#mobile-docs-navigation");
+      await expect(dialog).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await dialog.screenshot({ path: info.outputPath("mobile-nav-first-touch.png"), animations: "disabled" });
+      await dialog.locator(".mobile-nav-close").click();
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      // Repeat real taps at the narrowest supported width without retrying failed clicks.
+      await page.setViewportSize({ width: 320, height: 844 });
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await expect(trigger).toBeEnabled();
+        const nextBox = await trigger.boundingBox();
+        expect(nextBox).not.toBeNull();
+        await page.touchscreen.tap(nextBox!.x + nextBox!.width / 2, nextBox!.y + nextBox!.height / 2);
+        await expect(dialog).toBeVisible();
+        await dialog.locator(".mobile-nav-close").click();
+        await expect(dialog).toBeHidden();
+      }
+      expect(errors).toEqual([]);
+    } finally {
+      releaseScripts();
+      await page.unrouteAll({ behavior: "wait" });
+    }
+  });
+}

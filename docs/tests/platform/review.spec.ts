@@ -141,6 +141,8 @@ test("real touch emulation opens navigation and modal without losing overlay tar
   await page.goto("/en/components/button");
   const open = page.getByRole("button", { name: "Open docs menu" });
   await expect(open).toBeVisible();
+  // The SSR button remains disabled until hydration attaches the touch handler.
+  await expect(open).toBeEnabled();
   await tapCenter(page, open);
   const nav = page.getByRole("dialog", { name: "Mobile documentation navigation" });
   await expect(nav).toBeVisible();
