@@ -56,10 +56,11 @@ function RadioGroup({
     const form = groupRef.current?.closest("form");
     if (!form) return;
     const restore = (event: Event) => {
-      // Respect a cancelled native reset, including a React onReset handler.
-      queueMicrotask(() => {
+      // React onReset may cancel later in event propagation.
+      // Defer until the native reset decision is final.
+      setTimeout(() => {
         if (!event.defaultPrevented) setUncontrolledValue(defaultValue);
-      });
+      }, 0);
     };
     form.addEventListener("reset", restore);
     return () => form.removeEventListener("reset", restore);
