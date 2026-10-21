@@ -24,7 +24,7 @@ function Avatar({ className, size = "default", ...props }: AvatarProps) {
       data-size={size}
       className={mergeClassName<AvatarPrimitive.Root.State>(
         cn(
-          "group/avatar relative flex shrink-0 rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]",
+          "group/avatar relative flex shrink-0 rounded-full border border-transparent bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]",
           avatarSizes[size],
         ),
         className,
@@ -94,7 +94,7 @@ function AvatarGroupCount({ className, ...props }: React.ComponentProps<"div">) 
     <div
       data-slot="avatar-group-count"
       className={cn(
-        "relative flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-sm font-semibold leading-none tabular-nums text-[var(--muted-foreground)] [box-shadow:0_0_0_2px_var(--neu-surface),var(--neu-shadow-raised-sm)] group-has-data-[size=lg]/avatar-group:size-12 group-has-data-[size=lg]/avatar-group:text-base group-has-data-[size=sm]/avatar-group:size-8 group-has-data-[size=sm]/avatar-group:text-xs",
+        "relative flex size-10 shrink-0 items-center justify-center rounded-full border border-transparent bg-[var(--neu-surface)] text-sm font-semibold leading-none tabular-nums text-[var(--muted-foreground)] [box-shadow:0_0_0_2px_var(--neu-surface),var(--neu-shadow-raised-sm)] group-has-data-[size=lg]/avatar-group:size-12 group-has-data-[size=lg]/avatar-group:text-base group-has-data-[size=sm]/avatar-group:size-8 group-has-data-[size=sm]/avatar-group:text-xs",
         className,
       )}
       {...props}

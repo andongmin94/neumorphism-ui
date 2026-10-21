@@ -156,7 +156,7 @@ function LinkHub({
               key={item}
               type="button"
               size="sm"
-              variant={group === item ? "primary" : "soft"}
+              variant={group === item ? "primary" : "ghost"}
               aria-pressed={group === item}
               onClick={() => setGroup(item)}
             >

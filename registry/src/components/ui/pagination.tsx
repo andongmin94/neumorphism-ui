@@ -51,7 +51,7 @@ function PaginationLink({
       className={cn(
         "inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--neu-radius-control)] border text-sm font-semibold leading-5 tabular-nums aria-disabled:opacity-40 aria-disabled:shadow-none outline-none transition-[box-shadow,color,background-color] duration-[var(--neu-duration)] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:outline-[var(--ring)]",
         isActive
-          ? "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--neu-accent-ink)] [box-shadow:var(--neu-shadow-raised-sm)]"
+          ? "border-transparent bg-[var(--neu-surface)] text-[var(--neu-accent-ink)] [box-shadow:var(--neu-shadow-raised-sm)]"
           : "border-transparent bg-transparent text-[var(--foreground)] hover:bg-[var(--neu-surface)] hover:[box-shadow:var(--neu-shadow-inset-sm)]",
         className,
       )}

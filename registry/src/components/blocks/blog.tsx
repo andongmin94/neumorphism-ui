@@ -194,7 +194,7 @@ export function Blog({
                 key={item}
                 type="button"
                 size="sm"
-                variant={topic === item ? "primary" : "soft"}
+                variant={topic === item ? "primary" : "ghost"}
                 aria-pressed={topic === item}
                 onClick={() => setTopic(item)}
               >

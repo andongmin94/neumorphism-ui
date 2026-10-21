@@ -188,3 +188,23 @@ test("source-only family anatomy shares physical geometry without docs CSS", asy
     await page.setViewportSize({ width: 1200, height: 1000 });
   }
 });
+
+for (const mode of ["light", "dark"] as const) {
+  test(`soft raised controls keep their depth independently of documentation CSS: ${mode}`, async ({ page }, info) => {
+    await page.goto("/");
+    if (mode === "dark") await page.getByRole("button", { name: "Change mode" }).click();
+    const soft = page.locator('#actions [data-slot="button"][data-variant="soft"]');
+    const ghost = page.locator('#actions [data-slot="button"][data-variant="ghost"]');
+    await expect(soft).toBeVisible();
+    await expect(soft).toHaveCSS("border-top-color", "rgba(0, 0, 0, 0)");
+    await expect(soft).not.toHaveCSS("box-shadow", "none");
+    await expect(ghost).toHaveCSS("box-shadow", "none");
+    const raised = await soft.evaluate(element => getComputedStyle(element).boxShadow);
+    await soft.hover();
+    await expect.poll(() => soft.evaluate(element => getComputedStyle(element).boxShadow)).not.toBe(raised);
+    await page.mouse.down();
+    await expect.poll(() => soft.evaluate(element => getComputedStyle(element).boxShadow.includes("inset"))).toBe(true);
+    await page.screenshot({ path: info.outputPath(`soft-pressed-${mode}.png`), animations: "disabled" });
+    await page.mouse.up();
+  });
+}

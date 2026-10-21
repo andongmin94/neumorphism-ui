@@ -28,7 +28,7 @@ export function ChartContainer({
     <section
       data-slot="chart"
       aria-labelledby={`${id}-title`}
-      className={cn("grid min-w-0 gap-5 rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] p-5 text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]", className)}
+      className={cn("grid min-w-0 gap-5 rounded-[var(--neu-radius-surface)] border border-transparent bg-[var(--neu-surface)] p-5 text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]", className)}
       {...props}
     >
       <header className="flex flex-wrap items-start justify-between gap-4">

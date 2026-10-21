@@ -74,7 +74,7 @@ function Marquee({
         aria-pressed={paused}
         aria-label={paused ? resumeLabel : pauseLabel}
         onClick={() => setPaused(value => !value)}
-        className="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]"
+        className="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]"
       >
         <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={paused ? "m8 5 11 7-11 7Z" : "M8 5v14M16 5v14"} /></svg>
       </button>

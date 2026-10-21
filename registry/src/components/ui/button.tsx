@@ -8,7 +8,7 @@ const buttonVariants = {
   primary:
     "border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:var(--neu-fill-inset)] text-[var(--neu-accent-ink)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
   soft:
-    "border-transparent bg-[var(--neu-surface-soft)] text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface)] hover:shadow-[var(--neu-shadow-raised-sm)] active:shadow-[var(--neu-shadow-inset)]",
+    "border-transparent bg-[var(--neu-surface-soft)] text-[var(--foreground)] shadow-[var(--neu-shadow-raised-sm)] hover:bg-[var(--neu-surface)] hover:shadow-[var(--neu-shadow-hover)] active:bg-[var(--neu-surface)] active:[background-image:var(--neu-fill-inset)] active:shadow-[var(--neu-shadow-inset)]",
   ghost:
     "border-transparent bg-transparent text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface-soft)] active:bg-[var(--neu-surface-low)] active:shadow-[var(--neu-shadow-inset)]",
   destructive:

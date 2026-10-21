@@ -9,15 +9,15 @@ type CalendarProps = React.ComponentProps<typeof DayPicker>;
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return <div data-slot="calendar" className="max-w-full"><DayPicker
     showOutsideDays={showOutsideDays}
-    className={cn("w-fit min-w-0 max-w-full rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-4 font-sans text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] [--cell-size:clamp(1.75rem,7.5vw,2.25rem)]", props.showWeekNumber ? "[--calendar-columns:8]" : "[--calendar-columns:7]", className)}
+    className={cn("w-fit min-w-0 max-w-full rounded-[var(--neu-radius-surface)] border border-transparent bg-[var(--neu-surface)] p-4 font-sans text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] [--cell-size:clamp(1.75rem,7.5vw,2.25rem)]", props.showWeekNumber ? "[--calendar-columns:8]" : "[--calendar-columns:7]", className)}
     classNames={{
       months: "relative flex max-w-full flex-wrap justify-center gap-6",
       month: "flex min-w-0 max-w-full grow flex-col gap-3 w-[calc(var(--cell-size)*var(--calendar-columns))]",
       month_caption: "flex h-10 items-center justify-center px-10",
       caption_label: "min-w-0 text-center text-sm font-semibold leading-5 text-balance",
       nav: "pointer-events-none absolute inset-x-0 top-0 flex h-10 items-center justify-between",
-      button_previous: "pointer-events-auto grid size-9 place-items-center rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-35 aria-disabled:opacity-35 [&>svg]:size-4",
-      button_next: "pointer-events-auto grid size-9 place-items-center rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-35 aria-disabled:opacity-35 [&>svg]:size-4",
+      button_previous: "pointer-events-auto grid size-9 place-items-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-35 aria-disabled:opacity-35 [&>svg]:size-4",
+      button_next: "pointer-events-auto grid size-9 place-items-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-35 aria-disabled:opacity-35 [&>svg]:size-4",
       chevron: "fill-current",
       dropdowns: "flex items-center justify-center gap-2 text-sm font-semibold",
       dropdown_root: "relative rounded-[var(--neu-radius-small)] focus-within:ring-2 focus-within:ring-[var(--ring)]",

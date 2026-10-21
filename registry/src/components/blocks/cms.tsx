@@ -323,7 +323,7 @@ export function CmsWorkspace({
                   key={value}
                   type="button"
                   size="sm"
-                  variant={filter === value ? "primary" : "soft"}
+                  variant={filter === value ? "primary" : "ghost"}
                   aria-pressed={filter === value}
                   onClick={() => setFilter(value)}
                 >
