@@ -1,0 +1,98 @@
+name: Platform and accessibility smoke
+
+on:
+  workflow_run:
+    workflows: ["Published registry"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  browser-platforms:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == 'andongmin94/neumorphism-ui'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: linux-chromium-desktop-light
+            os: ubuntu-latest
+            browser: chromium
+            device: desktop
+            mode: light
+            full: "true"
+          - id: linux-chromium-mobile-dark
+            os: ubuntu-latest
+            browser: chromium
+            device: mobile
+            mode: dark
+            full: "true"
+          - id: linux-firefox-desktop-dark
+            os: ubuntu-latest
+            browser: firefox
+            device: desktop
+            mode: dark
+            full: "true"
+          - id: linux-webkit-mobile-light
+            os: ubuntu-latest
+            browser: webkit
+            device: mobile
+            mode: light
+            full: "true"
+          - id: windows-chromium-desktop-light
+            os: windows-latest
+            browser: chromium
+            device: desktop
+            mode: light
+            full: "false"
+          - id: macos-webkit-mobile-dark
+            os: macos-latest
+            browser: webkit
+            device: mobile
+            mode: dark
+            full: "false"
+    name: ${{ matrix.id }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - name: Install existing Playwright dependency
+        run: npm ci --prefix docs
+      - name: Install browser on this platform
+        working-directory: docs
+        shell: bash
+        run: |
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            npx playwright install --with-deps ${{ matrix.browser }}
+          else
+            npx playwright install ${{ matrix.browser }}
+          fi
+      - name: Review published browser, touch and accessibility semantics
+        working-directory: docs
+        env:
+          PLATFORM_ID: ${{ matrix.id }}
+          PLATFORM_BROWSER: ${{ matrix.browser }}
+          PLATFORM_DEVICE: ${{ matrix.device }}
+          PLATFORM_MODE: ${{ matrix.mode }}
+          PLATFORM_FULL_CATALOG: ${{ matrix.full }}
+        run: npx playwright test --config=playwright.platform.config.ts
+      - name: Preserve browser screenshots and failed traces
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: platform-${{ matrix.id }}
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            docs/test-results/platform/${{ matrix.id }}
+            docs/test-results/platform-report-${{ matrix.id }}.json
