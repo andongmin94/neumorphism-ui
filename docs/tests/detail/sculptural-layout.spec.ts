@@ -95,15 +95,18 @@ test("reference composition keeps geometry in all document locales", async ({ pa
   }
 });
 
-test("preset and preview mode changes preserve the saved readout and tile bounds", async ({ page }, info) => {
-  await openStudio(page, "en", false);
-  const canvas = page.locator("[data-theme-price-preview]");
-  await canvas.locator('input[type="number"]').fill("240");
-  await canvas.getByRole("button", { name: "Save", exact: true }).click();
-  const choices = page.locator(".theme-preset-grid").getByRole("button");
-  const presets = ["air", "lavender", "sage", "clay", "graphite"];
-  await expect(choices).toHaveCount(presets.length);
-  for (const [index, preset] of presets.entries()) {
+// Keep each preset's two-mode and saved-value checks in one bounded test.
+// A single 10-screenshot test can exhaust Playwright's per-test time budget
+// while waiting for screenshots to stabilize on mobile runners.
+const finishPresets = ["air", "lavender", "sage", "clay", "graphite"] as const;
+for (const [index, preset] of finishPresets.entries()) {
+  test(`preset ${preset} keeps saved readouts and tile bounds in both modes`, async ({ page }, info) => {
+    await openStudio(page, "en", false);
+    const canvas = page.locator("[data-theme-price-preview]");
+    await canvas.locator('input[type="number"]').fill("240");
+    await canvas.getByRole("button", { name: "Save", exact: true }).click();
+    const choices = page.locator(".theme-preset-grid").getByRole("button");
+    await expect(choices).toHaveCount(finishPresets.length);
     await choices.nth(index).click();
     for (const mode of ["light", "dark"] as const) {
       await page.locator(".theme-preview-mode").getByRole("button", {
@@ -118,5 +121,5 @@ test("preset and preview mode changes preserve the saved readout and tile bounds
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
       await canvas.screenshot({ path: info.outputPath(`sculptural-${preset}-${mode}.png`), animations: "disabled" });
     }
-  }
-});
+  });
+}
