@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 18px;
   padding: 24px;
-  border: 1px solid var(--neu-edge);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   background-image: var(--neu-fill-raised);

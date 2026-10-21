@@ -3046,14 +3046,14 @@ html {
   align-items: center;
   justify-content: center;
   padding: 0.48rem 0.8rem;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: 7px;
   font-size: 0.73rem;
   font-weight: 650;
 }
 
 .docs-primary-action {
-  border-color: var(--neu-edge);
+  border-color: transparent;
   background: var(--neu-surface);
   background-image: var(--neu-fill-raised);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -4376,7 +4376,7 @@ html {
 
 .docs-primary-action,
 .docs-secondary-action {
-  border-color: var(--line-light);
+  border-color: transparent;
   border-radius: var(--docs-radius-sm);
   transition:
     box-shadow 150ms ease,
@@ -4384,7 +4384,7 @@ html {
 }
 
 .docs-primary-action {
-  border-color: var(--neu-edge);
+  border-color: transparent;
   background: var(--neu-surface);
   background-image: var(--neu-fill-raised);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -4972,7 +4972,7 @@ body {
   height: 34px;
   flex: none;
   place-items: center;
-  border: 1px solid var(--neu-edge);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -5051,7 +5051,7 @@ body {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
-  border: 1px solid var(--neu-edge);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -5082,7 +5082,7 @@ body {
   height: 40px;
   min-width: 40px;
   place-items: center;
-  border: 1px solid var(--neu-edge);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -5678,7 +5678,7 @@ body {
   justify-content: center;
   gap: 8px;
   padding: 0 15px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
   font-size: 0.82rem;
   font-weight: 680;
@@ -5686,7 +5686,7 @@ body {
 }
 
 .docs-primary-action {
-  border-color: var(--neu-edge);
+  border-color: transparent;
   background: var(--neu-surface);
   background-image: var(--neu-fill-raised);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -5695,6 +5695,7 @@ body {
 
 .docs-secondary-action {
   background: var(--neu-surface);
+  background-image: var(--neu-fill-raised);
   box-shadow: var(--neu-shadow-raised-sm);
   color: var(--foreground);
 }
@@ -5712,10 +5713,13 @@ body {
 .docs-primary-action:active {
   box-shadow: var(--neu-shadow-inset);
   background: var(--neu-surface);
+  background-image: var(--neu-fill-inset);
+  color: var(--neu-accent-ink);
 }
 
 .docs-secondary-action:active {
   box-shadow: var(--neu-shadow-inset);
+  background-image: var(--neu-fill-inset);
 }
 
 .directory-hero-meta {
@@ -5731,11 +5735,10 @@ body {
 .home-preview-card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
-  border-color: var(--neu-edge);
 }
 
 .home-preview-card .interactive-preview {
@@ -6111,7 +6114,7 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 24px;
-  border: 1px solid var(--neu-edge);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   background-image: var(--neu-fill-raised);

@@ -29,27 +29,32 @@ test("light raised highlights are softer without changing dark or inset material
   }
 });
 
-test("light-mode raised edges retain a crisp directional rim without changing recessed or dark shadows", () => {
+test("raised borders resolve to a directional zero-blur rim in every preset and mode", () => {
   const directions = {
-    "top-left": [1, 1],
-    "top-right": [-1, 1],
-    "bottom-left": [1, -1],
-    "bottom-right": [-1, -1],
+    "top-left": [1, 1], "top-right": [-1, 1],
+    "bottom-left": [1, -1], "bottom-right": [-1, -1],
   };
   for (const presetId of themePresetIds) {
+    const preset = getThemePreset(presetId);
     for (const [lightDirection, [x, y]] of Object.entries(directions)) {
-      const settings = { ...defaultThemeSettings, ...getThemePreset(presetId).defaults, presetId, lightDirection };
-      const light = buildThemeVariables(settings, "light");
-      const dark = buildThemeVariables(settings, "dark");
-      const rim = `${-x}px ${-y}px 1px 0px color-mix(in srgb, `;
-      for (const key of ["--neu-shadow-raised-sm", "--neu-shadow-plate", "--neu-shadow-hover"]) {
-        assert.ok(key === "--neu-shadow-plate" ? light[key].includes(`, ${rim}`) : light[key].startsWith(rim), `${presetId}/${lightDirection}/${key} missing lit edge`);
-        assert.match(light[key], /54%, transparent/);
-        assert.doesNotMatch(light[key], /inset /);
-        assert.ok(!dark[key].startsWith(rim), `${presetId}/${lightDirection}/${key} changed dark material`);
+      const settings = { ...defaultThemeSettings, ...preset.defaults, presetId, lightDirection };
+      for (const mode of ["light", "dark"]) {
+        const tokens = buildThemeVariables(settings, mode);
+        const color = mode === "light"
+          ? `color-mix(in srgb, ${preset.light.shadowLight} 82%, transparent)`
+          : `color-mix(in srgb, ${preset.dark.foreground} 10%, transparent)`;
+        const rim = `${-x}px ${-y}px 0px 0px ${color}`;
+        for (const key of ["--neu-shadow-raised", "--neu-shadow-raised-sm", "--neu-shadow-hover", "--neu-shadow-plate"]) {
+          const shadow = tokens[key];
+          // Contact shadow stays first on plates so the material hierarchy remains intact.
+          assert.ok(key === "--neu-shadow-plate" ? shadow.includes(`, ${rim}, `) : shadow.startsWith(`${rim}, `),
+            `${presetId}/${lightDirection}/${mode}/${key} lacks the directional rim`);
+          assert.doesNotMatch(shadow, /inset /);
+        }
+        assert.doesNotMatch(tokens["--neu-shadow-inset"], /82%, transparent|10%, transparent/);
+        assert.match(tokens["--neu-shadow-inset"], /inset/);
+        assert.notEqual(tokens["--neu-fill-raised"], tokens["--neu-fill-inset"]);
       }
-      assert.doesNotMatch(light["--neu-shadow-inset"], /54%, transparent/);
-      assert.equal(light["--neu-edge"], "transparent");
     }
   }
 });

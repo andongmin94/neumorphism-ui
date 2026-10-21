@@ -21,7 +21,7 @@ function ImageCard({
     <figure
       data-slot="image-card"
       className={cn(
-        "w-full max-w-sm overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]",
+        "w-full max-w-sm overflow-hidden rounded-[var(--neu-radius-surface)] border border-transparent bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)]",
         className,
       )}
       {...props}

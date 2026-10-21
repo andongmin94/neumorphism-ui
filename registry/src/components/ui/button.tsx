@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = {
   default:
-    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:none] text-[var(--foreground)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
+    "border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:none] text-[var(--foreground)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
   primary:
-    "border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:var(--neu-fill-inset)] text-[var(--neu-accent-ink)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
+    "border-transparent bg-[var(--neu-surface)] [background-image:var(--neu-fill-raised)] active:[background-image:var(--neu-fill-inset)] text-[var(--neu-accent-ink)] shadow-[var(--neu-shadow-raised-sm)] hover:shadow-[var(--neu-shadow-hover)] active:shadow-[var(--neu-shadow-inset)]",
   soft:
     "border-transparent bg-[var(--neu-surface-soft)] text-[var(--foreground)] shadow-none hover:bg-[var(--neu-surface)] hover:shadow-[var(--neu-shadow-raised-sm)] active:shadow-[var(--neu-shadow-inset)]",
   ghost:

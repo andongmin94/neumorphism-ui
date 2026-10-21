@@ -190,7 +190,7 @@ function Sidebar({
           "border-[color:var(--neu-edge)] bg-[var(--neu-surface)]",
           side === "left" ? "border-r" : "border-l",
         )
-      : "m-2 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]";
+      : "m-2 rounded-[var(--neu-radius-surface)] border border-transparent bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]";
 
   return (
     <aside

@@ -67,7 +67,7 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-3 right-3 grid size-10 place-items-center rounded-[var(--neu-radius-control)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] shadow-[var(--neu-shadow-raised-sm)] outline-hidden transition-[color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:shadow-[var(--neu-shadow-inset)] disabled:pointer-events-none"
+            className="absolute top-3 right-3 grid size-10 place-items-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] text-lg leading-none text-[var(--muted-foreground)] shadow-[var(--neu-shadow-raised-sm)] outline-hidden transition-[color,box-shadow,transform] duration-[var(--neu-duration)] motion-reduce:transition-none hover:text-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:translate-y-px active:shadow-[var(--neu-shadow-inset)] disabled:pointer-events-none"
           >
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="m6 6 12 12M6 18 18 6" /></svg>
             <span className="sr-only">{closeLabel}</span>

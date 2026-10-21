@@ -475,10 +475,11 @@ export function buildThemeVariables(
   const raisedLargeLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 74 : 94}%, transparent)`;
   const raisedSmallLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 64 : 84}%, transparent)`;
   const raisedPlateLight = `color-mix(in srgb, ${tokens.shadowLight} ${mode === "light" ? 68 : 84}%, transparent)`;
-  // Keep the broad, soft light unchanged; give the lit outer edge a precise rim.
-  const litRim = mode === "light"
-    ? `${-x}px ${-y}px 1px 0px color-mix(in srgb, ${tokens.shadowLight} 54%, transparent), `
-    : "";
+  // A crisp directional rim defines the lit edge without increasing diffuse glow.
+  // Dark surfaces need a quieter foreground glint in place of a full outline.
+  const litRim = `${-x}px ${-y}px 0px 0px ${mode === "light"
+    ? `color-mix(in srgb, ${tokens.shadowLight} 82%, transparent)`
+    : `color-mix(in srgb, ${tokens.foreground} 10%, transparent)`}, `;
   const plateShadow = `${x}px ${y * 2}px 3px -1px ${raisedDark}, ${litRim}${x * (profile.smallOffset + 1)}px ${y * (profile.smallOffset + 1)}px ${profile.smallBlur + 3}px -2px ${raisedDark}, ${-x * profile.smallOffset}px ${-y * profile.smallOffset}px ${profile.smallBlur}px -1px ${raisedPlateLight}`;
   const insetLight = `color-mix(in srgb, ${tokens.shadowLight} 86%, transparent)`;
   const primaryShadow = `${x * raisedSmallOffset}px ${y * (raisedSmallOffset + 1)}px ${profile.smallBlur + 1}px ${raisedDark}, ${-x * raisedSmallOffset}px ${-y * raisedSmallOffset}px ${profile.smallBlur}px ${raisedSmallLight}, inset ${x}px ${y}px 2px color-mix(in srgb, ${primary} 94%, white)`;
@@ -523,7 +524,7 @@ export function buildThemeVariables(
     "--neu-edge": mode === "light" ? "transparent" : `color-mix(in srgb, ${tokens.foreground} 4%, transparent)`,
     "--neu-shadow-dark": tokens.shadowDark,
     "--neu-shadow-light": tokens.shadowLight,
-    "--neu-shadow-raised": shadowValue(
+    "--neu-shadow-raised": litRim + shadowValue(
       x,
       y,
       profile.offset,

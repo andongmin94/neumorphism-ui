@@ -46,7 +46,7 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  border: 1px solid var(--neu-edge);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-surface);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-plate);
