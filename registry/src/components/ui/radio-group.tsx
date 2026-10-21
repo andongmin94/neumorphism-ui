@@ -32,6 +32,7 @@ function RadioGroup({
   disabled,
   name,
   onValueChange,
+  ref,
   orientation = "vertical",
   required,
   value,
@@ -40,6 +41,29 @@ function RadioGroup({
   const generatedName = React.useId();
   const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
   const currentValue = value ?? uncontrolledValue;
+  const groupRef = React.useRef<HTMLDivElement>(null);
+  const setRef = React.useCallback((node: HTMLDivElement | null) => {
+    groupRef.current = node;
+    if (typeof ref === "function") {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  }, [ref]);
+
+  React.useEffect(() => {
+    if (value !== undefined) return;
+    const form = groupRef.current?.closest("form");
+    if (!form) return;
+    const restore = (event: Event) => {
+      // Respect a cancelled native reset, including a React onReset handler.
+      queueMicrotask(() => {
+        if (!event.defaultPrevented) setUncontrolledValue(defaultValue);
+      });
+    };
+    form.addEventListener("reset", restore);
+    return () => form.removeEventListener("reset", restore);
+  }, [defaultValue, value]);
 
   const updateValue = React.useCallback(
     (nextValue: string) => {
@@ -66,6 +90,7 @@ function RadioGroup({
   return (
     <RadioGroupContext.Provider value={context}>
       <div
+        ref={setRef}
         role="radiogroup"
         aria-orientation={orientation}
         data-slot="radio-group"
