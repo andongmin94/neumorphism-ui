@@ -5411,7 +5411,7 @@ body {
   align-items: center;
   gap: 6px;
   padding: 0 12px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -5955,7 +5955,7 @@ body {
   margin-top: 8px;
   min-height: 40px;
   padding: 0 14px;
-  border: 1px solid var(--docs-line-strong);
+  border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
@@ -6434,10 +6434,14 @@ body {
     width: 36px;
     height: 36px;
     place-items: center;
-    border: 1px solid var(--docs-line-strong);
+    border: 1px solid transparent;
     border-radius: var(--neu-radius-control);
     background: var(--neu-surface);
     box-shadow: var(--neu-shadow-raised-sm);
+  }
+
+  .mobile-nav-close:hover {
+    border-color: transparent;
   }
 
   .mobile-nav-scroll {

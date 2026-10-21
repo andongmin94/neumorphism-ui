@@ -72,3 +72,26 @@ test("raised buttons and cards use a directional rim without a perimeter stroke 
     await page.locator(".directory-hero-actions").screenshot({ path: info.outputPath("home-cta-320.png"), animations: "disabled" });
   }
 });
+
+test("documentation raised links and empty-state controls do not restore decorative borders", async ({ page }, info) => {
+  await page.goto("/en/components/button");
+  const registryLink = page.locator(".component-doc-registry-link").first();
+  await expectNoVisibleStroke(registryLink);
+  await registryLink.screenshot({ path: info.outputPath("registry-link.png"), animations: "disabled" });
+
+  await page.goto("/en");
+  const search = page.getByRole("textbox", { name: "Search components" });
+  await search.fill("not-a-real-neumorphism-component");
+  const emptyAction = page.locator(".component-directory-empty button");
+  await expectNoVisibleStroke(emptyAction);
+  await emptyAction.screenshot({ path: info.outputPath("empty-action.png"), animations: "disabled" });
+
+  if (info.project.name.startsWith("mobile")) {
+    await page.getByRole("button", { name: "Open docs menu" }).click();
+    const close = page.locator(".mobile-nav-close");
+    await expectNoVisibleStroke(close);
+    await close.screenshot({ path: info.outputPath("mobile-nav-close.png"), animations: "disabled" });
+    await close.click();
+    await expect(page.getByRole("dialog", { name: "Mobile documentation navigation" })).not.toBeVisible();
+  }
+});
