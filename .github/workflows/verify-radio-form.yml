@@ -1,0 +1,67 @@
+name: Verify radio-group form reset (temporary)
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-radio-form.yml
+      - registry/src/components/ui/radio-group.tsx
+permissions:
+  contents: write
+concurrency:
+  group: radio-reset-main
+  cancel-in-progress: false
+jobs:
+  reproduce-and-sync:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            registry/package-lock.json
+            docs/package-lock.json
+      - name: Build Registry and sync actual installed source into Docs
+        run: |
+          npm ci --prefix registry
+          npm ci --prefix docs
+          npm run build --prefix registry
+          npm run sync:docs --prefix registry
+          npm run check:generated --prefix registry
+      - name: Install Chromium
+        working-directory: docs
+        run: npx playwright install --with-deps chromium
+      - name: Verify native reset, rerender and cancelled reset in both color modes
+        working-directory: docs
+        run: npx playwright test --config=playwright.material.config.ts tests/material/radio-form.spec.ts
+      - name: Verify Registry and Docs contracts
+        run: |
+          npm run lint --prefix registry
+          npm test --prefix registry
+          npm run lint --prefix docs
+          npm run typecheck --prefix docs
+          npm run build --prefix docs
+      - name: Commit generated Registry JSON (only after all tests succeed)
+        run: |
+          git add registry/public/r/radio-group.json docs/public/r/radio-group.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "No generated radio-group change was produced" >&2
+            exit 1
+          fi
+          git diff --cached --stat
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "build: synchronize radio group form reset registry"
+          git push origin HEAD:main
+      - name: Save regression evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: radio-form-reset-regression
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            docs/test-results/material-report.json
+            docs/test-results/docs-browser/material-after/**/trace.zip
