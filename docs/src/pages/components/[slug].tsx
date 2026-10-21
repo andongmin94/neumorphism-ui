@@ -149,9 +149,9 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
 
         <section className="component-doc-section" id="api-reference">
           <div className="component-doc-section-heading">
-            <h2>{messages.common.apiReference}</h2>
+            <h2 id="component-api-heading">{messages.common.apiReference}</h2>
           </div>
-          <div className="component-api-table-wrap">
+          <div className="component-api-table-wrap" role="region" aria-labelledby="component-api-heading" tabIndex={0}>
             <table className="component-api-table">
               <thead>
                 <tr>

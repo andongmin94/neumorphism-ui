@@ -5589,6 +5589,17 @@ body {
   min-width: 720px;
 }
 
+/* Keep API identifiers readable on narrow screens; the labelled table region scrolls horizontally. */
+.component-api-table td:nth-child(-n + 2) code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.component-api-table-wrap:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
 .component-api-table thead th {
   background: var(--neu-surface-low);
 }

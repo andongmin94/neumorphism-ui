@@ -174,3 +174,38 @@ test("static usage code ships highlighted before client JavaScript", async ({ br
     await shell.screenshot({ path: info.outputPath("dark-plus-without-js.png") });
   } finally { await context.close(); }
 });
+
+for (const locale of ["en", "ko", "ja", "zh"]) {
+  test(`API reference identifiers remain intact and scroll with keyboard: ${locale}`, async ({ page }, info) => {
+    await page.goto(`/${locale}/components/button`);
+    const table = page.locator(".component-api-table");
+    const region = page.locator(".component-api-table-wrap");
+    const prop = table.locator("tbody tr:first-child td:nth-child(2) code");
+    await expect(prop).toHaveText("variant");
+    await expect(region).toHaveAttribute("role", "region");
+    await expect(region).toHaveAttribute("aria-labelledby", "component-api-heading");
+    await expect(prop).toHaveCSS("white-space", "nowrap");
+    for (const width of [390, 320]) {
+      await page.setViewportSize({ width, height: 844 });
+      await expect.poll(() => page.evaluate(() =>
+        document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+      const textLines = await prop.evaluate(element => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        return range.getClientRects().length;
+      });
+      expect(textLines, `property label must not break at ${width}px`).toBe(1);
+      const size = await region.evaluate(element => ({
+        scroll: element.scrollWidth,
+        visible: element.clientWidth,
+      }));
+      expect(size.scroll).toBeGreaterThan(size.visible);
+      await region.focus();
+      await expect(region).toBeFocused();
+      await region.evaluate(element => { element.scrollLeft = 0; });
+      await region.press("ArrowRight");
+      await expect.poll(() => region.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+      await region.screenshot({ path: info.outputPath(`api-reference-${width}.png`), animations: "disabled" });
+    }
+  });
+}
