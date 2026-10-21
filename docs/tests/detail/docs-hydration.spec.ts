@@ -124,3 +124,58 @@ for (const locale of ["en", "ko", "ja", "zh"]) {
     }
   });
 }
+
+const blogFilters = {
+  en: { topic: "Engineering", search: "Search posts", query: "Return keyboard focus after closing a dialog" },
+  ko: { topic: "개발", search: "글 검색", query: "대화상자를 닫은 뒤 키보드 포커스 돌려주기" },
+  ja: { topic: "開発", search: "記事を検索", query: "ダイアログを閉じた後にフォーカスを戻す" },
+  zh: { topic: "开发", search: "搜索文章", query: "关闭对话框后恢复键盘焦点" },
+} as const;
+
+for (const [locale, labels] of Object.entries(blogFilters)) {
+  test(`blog filters only accept the first touch after hydration: ${locale}`, async ({ page }, info) => {
+    let releaseScripts!: () => void;
+    const scriptsReleased = new Promise<void>(resolve => { releaseScripts = resolve; });
+    await page.route(url => url.pathname.endsWith(".js"), async route => {
+      await scriptsReleased;
+      await route.continue();
+    });
+    try {
+      await page.goto(`/${locale}/templates/blog`, { waitUntil: "commit" });
+      const blog = page.locator('[data-slot="blog"]');
+      const controls = blog.locator('section[aria-busy]');
+      const search = blog.getByRole("searchbox", { name: labels.search });
+      const topic = blog.getByRole("button", { name: labels.topic, exact: true });
+      const sort = blog.locator('[data-slot="select"]');
+      await expect(blog.locator("article")).toHaveCount(3);
+      await expect(controls).toHaveAttribute("aria-busy", "true");
+      await expect(search).toBeDisabled();
+      await expect(topic).toBeDisabled();
+      await expect(sort).toBeDisabled();
+      await page.screenshot({ path: info.outputPath("blog-static-before-hydration.png"), animations: "disabled" });
+
+      releaseScripts();
+      await expect(controls).toHaveAttribute("aria-busy", "false", { timeout: 20_000 });
+      await expect(search).toBeEnabled();
+      await expect(topic).toBeEnabled();
+      await expect(sort).toBeEnabled();
+      // One real interaction must update both pressed state and the result set.
+      if (info.project.use.isMobile) {
+        const bounds = await topic.boundingBox();
+        expect(bounds).not.toBeNull();
+        await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+      } else {
+        await topic.click();
+      }
+      await expect(topic).toHaveAttribute("aria-pressed", "true");
+      await expect(blog.locator("article")).toHaveCount(1);
+      await search.fill(labels.query);
+      await expect(search).toHaveValue(labels.query);
+      await expect(blog.locator("article")).toHaveCount(1);
+      await page.screenshot({ path: info.outputPath("blog-filtered-after-hydration.png"), animations: "disabled" });
+    } finally {
+      releaseScripts();
+      await page.unrouteAll({ behavior: "wait" });
+    }
+  });
+}

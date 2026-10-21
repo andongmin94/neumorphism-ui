@@ -115,6 +115,9 @@ export function Blog({
   const [query, setQuery] = React.useState("");
   const [topic, setTopic] = React.useState<string>(t.all);
   const [sort, setSort] = React.useState<"newest" | "oldest" | "shortest">("newest");
+  // Server-rendered filters cannot accept edits before the client owns their state.
+  const [hydrated, setHydrated] = React.useState(false);
+  React.useEffect(() => setHydrated(true), []);
   const searchRef = React.useRef<HTMLInputElement>(null);
 
   const topics = React.useMemo(
@@ -164,7 +167,7 @@ export function Blog({
         </p>
       </header>
 
-      <section className="grid gap-4 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-transparent py-4 shadow-none">
+      <section aria-busy={!hydrated} className="grid gap-4 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-transparent py-4 shadow-none">
         <div className="grid gap-2">
           <label htmlFor="blog-search" className="text-xs font-semibold">
             {t.search}
@@ -175,12 +178,13 @@ export function Blog({
               id="blog-search"
               type="search"
               role="searchbox"
+              disabled={!hydrated}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t.placeholder}
             />
             {query ? (
-              <Button type="button" variant="soft" onClick={() => { setQuery(""); searchRef.current?.focus(); }}>
+              <Button type="button" variant="soft" disabled={!hydrated} onClick={() => { setQuery(""); searchRef.current?.focus(); }}>
                 {t.clear}
               </Button>
             ) : null}
@@ -194,6 +198,7 @@ export function Blog({
                 key={item}
                 type="button"
                 size="sm"
+                disabled={!hydrated}
                 variant={topic === item ? "primary" : "ghost"}
                 aria-pressed={topic === item}
                 onClick={() => setTopic(item)}
@@ -205,7 +210,7 @@ export function Blog({
 
           <label className="grid min-w-44 gap-1 text-xs font-semibold">
             {t.sort}
-            <Select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}>
+            <Select disabled={!hydrated} value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}>
               <SelectItem value="newest">{t.newest}</SelectItem>
               <SelectItem value="oldest">{t.oldest}</SelectItem>
               <SelectItem value="shortest">{t.shortest}</SelectItem>
@@ -243,7 +248,7 @@ export function Blog({
       ) : (
         <div className="grid justify-items-center gap-4 rounded-[var(--neu-radius-surface)] border border-dashed border-[var(--border)] py-10">
           <p className="text-sm text-[var(--muted-foreground)]">{t.noResults}</p>
-          <Button type="button" onClick={resetFilters}>{t.reset}</Button>
+          <Button type="button" disabled={!hydrated} onClick={resetFilters}>{t.reset}</Button>
         </div>
       )}
     </section>
