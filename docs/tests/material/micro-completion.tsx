@@ -21,6 +21,33 @@ function SidebarActions() {
     <output aria-label="Sidebar callback count">{calls}</output>
   </div>;
 }
+
+function ObservableSidebar() {
+  const [notifications, setNotifications] = React.useState<string[]>([]);
+  return (
+    <SidebarProvider defaultOpen={false} onOpenChange={next => setNotifications(calls => [...calls, next ? "open" : "closed"])}>
+      <SidebarTrigger label="Observed uncontrolled sidebar" />
+      <output aria-label="Uncontrolled sidebar notifications">{notifications.join(",")}</output>
+    </SidebarProvider>
+  );
+}
+
+function ControlledSidebar() {
+  const [open, setOpen] = React.useState(false);
+  const [accept, setAccept] = React.useState(false);
+  const [requests, setRequests] = React.useState(0);
+  return (
+    <SidebarProvider open={open} onOpenChange={next => { setRequests(count => count + 1); if (accept) setOpen(next); }}>
+      <SidebarTrigger label="Controlled sidebar" />
+      <label className="flex items-center gap-2">
+        <input type="checkbox" checked={accept} onChange={event => setAccept(event.target.checked)} />
+        Accept controlled change
+      </label>
+      <output aria-label="Controlled sidebar requests">{requests}</output>
+    </SidebarProvider>
+  );
+}
+
 function MicroCompletion() {
   const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
   const [sent, setSent] = React.useState(false);
@@ -31,6 +58,7 @@ function MicroCompletion() {
   return <main className="mx-auto max-w-3xl space-y-8 px-5 py-8">
     <h1 className="text-2xl font-semibold">Micro completion</h1>
     <section data-testid="sidebar-actions" className="space-y-3"><h2>Caller-owned sidebar controls</h2><SidebarProvider><SidebarActions /></SidebarProvider></section>
+    <section data-testid="sidebar-state" className="grid gap-3"><h2>Sidebar state ownership</h2><ObservableSidebar /><ControlledSidebar /></section>
     <section data-testid="sheet-case" className="space-y-3"><h2>Sheet close geometry</h2><Sheet><SheetTrigger render={<Button />}>Open review sheet</SheetTrigger><SheetContent closeLabel="Close review sheet"><SheetTitle>Review changes</SheetTitle><SheetDescription>Keep the title, content and close action separate.</SheetDescription></SheetContent></Sheet></section>
     <section data-testid="long-action" className="space-y-3"><h2>Localized multiline actions</h2><form onSubmit={event => { event.preventDefault(); setSent(true); }}><InputGroup><InputGroupTextarea aria-label="Review message" defaultValue="긴 설명과 적용 작업은 동일한 입력 면 안에서 겹치지 않습니다." /><InputGroupButton type="submit">{longLabel}</InputGroupButton></InputGroup></form><output aria-label="Applied changes">{sent ? "Applied" : "Pending"}</output></section>
     <section data-testid="normal-input" className="space-y-3"><h2>Unchanged compact action</h2><InputGroup><InputGroupInput aria-label="Search items" /><InputGroupButton>Find</InputGroupButton></InputGroup></section>

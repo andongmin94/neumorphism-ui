@@ -70,3 +70,36 @@ for (const mode of ["light", "dark"]) for (const width of [320, 390, 1440]) {
     });
   });
 }
+
+for (const mode of ["light", "dark"] as const) for (const width of [800, 1440]) {
+  test(`SidebarProvider observes uncontrolled changes without freezing its state: ${mode} ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(`/micro-completion.html?mode=${mode}`);
+    const area = page.getByTestId("sidebar-state");
+    const observed = area.getByRole("button", { name: "Observed uncontrolled sidebar" });
+    const notifications = area.getByRole("status", { name: "Uncontrolled sidebar notifications" });
+    const controlled = area.getByRole("button", { name: "Controlled sidebar" });
+    const requests = area.getByRole("status", { name: "Controlled sidebar requests" });
+    await expect(observed).toHaveAttribute("aria-expanded", "false");
+    await observed.click();
+    await expect(observed).toHaveAttribute("aria-expanded", "true");
+    await expect(notifications).toHaveText("open");
+    await observed.click();
+    await expect(observed).toHaveAttribute("aria-expanded", "false");
+    await expect(notifications).toHaveText("open,closed");
+
+    // A controlled provider must remain closed until its owner accepts a request.
+    await expect(controlled).toHaveAttribute("aria-expanded", "false");
+    await controlled.click();
+    await expect(requests).toHaveText("1");
+    await expect(controlled).toHaveAttribute("aria-expanded", "false");
+    await area.getByRole("checkbox", { name: "Accept controlled change" }).check();
+    await controlled.click();
+    await expect(requests).toHaveText("2");
+    await expect(controlled).toHaveAttribute("aria-expanded", "true");
+    await controlled.click();
+    await expect(requests).toHaveText("3");
+    await expect(controlled).toHaveAttribute("aria-expanded", "false");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width + 1);
+  });
+}
