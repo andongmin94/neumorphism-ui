@@ -62,10 +62,10 @@ function SidebarProvider({
   const setOpen = React.useCallback<React.Dispatch<React.SetStateAction<boolean>>>(
     (next) => {
       const value = typeof next === "function" ? next(open) : next;
-      if (onOpenChange) onOpenChange(value);
-      else setUncontrolledOpen(value);
+      if (openProp === undefined) setUncontrolledOpen(value);
+      onOpenChange?.(value);
     },
-    [onOpenChange, open],
+    [onOpenChange, open, openProp],
   );
 
   const toggleSidebar = React.useCallback(() => {
