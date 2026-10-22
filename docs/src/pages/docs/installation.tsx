@@ -3,6 +3,7 @@ import { notFound } from "fumapress/router";
 
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { DocsToc } from "@/components/docs/docs-toc";
+import { PageMetadata } from "@/components/docs/page-metadata";
 import { InstallCommand } from "@/components/docs/install-command";
 import {
   getComponentsJsonRegistry,
@@ -34,6 +35,7 @@ export default async function InstallationPage({ lang }: { lang: string }) {
 
   return (
     <div className="docs-content-layout docs-reference-layout">
+      <PageMetadata locale={locale} pathname="/docs/installation" title={messages.navigation.installation} description={messages.installationPage.intro} />
       <article className="docs-content docs-article docs-reference-article">
         <header className="docs-page-header">
           <h1>Installation</h1>

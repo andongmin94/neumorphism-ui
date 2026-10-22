@@ -1,4 +1,5 @@
 import { notFound } from "fumapress/router";
+import { PageMetadata } from "@/components/docs/page-metadata";
 
 import { ChartWorkbench } from "@/components/docs/chart-workbench";
 import { CopyableCode } from "@/components/docs/copyable-code";
@@ -135,6 +136,7 @@ export function Example() {
   return (
     <div className="charts-gallery-page">
       <header className="charts-gallery-hero">
+        <PageMetadata locale={locale} pathname="/charts" title={page.title} description={page.body} />
         <h1>{page.title}</h1>
         <p>{page.body}</p>
         <nav aria-label={page.contents} className="charts-section-nav">

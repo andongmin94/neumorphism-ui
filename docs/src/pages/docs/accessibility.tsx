@@ -1,4 +1,5 @@
 import { notFound } from "fumapress/router";
+import { PageMetadata } from "@/components/docs/page-metadata";
 
 import { isLocale } from "@/i18n/config";
 
@@ -48,6 +49,7 @@ export default function AccessibilityPage({ lang }: { lang: string }) {
   return (
     <div className="docs-reference-page">
       <article className="docs-content docs-article docs-reference-article">
+        <PageMetadata locale={lang} pathname="/docs/accessibility" title={t.title} description={t.intro} />
         <header className="docs-page-header"><h1>{t.title}</h1><p>{t.intro}</p></header>
 
         <section className="docs-content-section">

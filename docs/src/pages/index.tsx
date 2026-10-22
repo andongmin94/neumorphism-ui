@@ -2,6 +2,7 @@ import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
 import { ComponentDirectory } from "@/components/docs/component-directory";
+import { PageMetadata } from "@/components/docs/page-metadata";
 import { HomeShowcase } from "@/components/docs/home-showcase";
 import { componentDocs } from "@/components/docs/component-docs-data";
 import { isLocale, localeHref } from "@/i18n/config";
@@ -38,6 +39,7 @@ export default function Home({ lang }: { lang: string }) {
 
   return (
     <div className="directory-page">
+      <PageMetadata locale={locale} pathname="/" title={copy.title} description={copy.body} />
       <section className="directory-hero">
         <div className="directory-hero-inner">
           <div className="directory-hero-copy">

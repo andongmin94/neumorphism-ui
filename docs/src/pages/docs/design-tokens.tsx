@@ -1,5 +1,6 @@
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
+import { PageMetadata } from "@/components/docs/page-metadata";
 
 import { isLocale, localeHref } from "@/i18n/config";
 import {
@@ -103,6 +104,7 @@ export default function DesignTokensPage({ lang }: { lang: string }) {
     <div className="docs-reference-page">
       <article className="docs-content docs-article docs-reference-article">
         <header className="docs-page-header">
+          <PageMetadata locale={locale} pathname="/docs/design-tokens" title={t.title} description={t.intro} />
           <h1>{t.title}</h1>
           <p>{t.intro}</p>
         </header>

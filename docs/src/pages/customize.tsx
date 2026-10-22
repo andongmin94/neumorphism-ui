@@ -1,4 +1,5 @@
 import { notFound } from "fumapress/router";
+import { PageMetadata } from "@/components/docs/page-metadata";
 
 import { ThemeStudio } from "@/components/docs/theme-studio";
 import { isLocale } from "@/i18n/config";
@@ -53,6 +54,7 @@ export default function CustomizePage({ lang }: { lang: string }) {
 
   return (
     <div className="theme-studio-page">
+      <PageMetadata locale={locale} pathname="/customize" title={copy.title} description={copy.body} />
       <header className="theme-studio-page-hero">
         <h1>{copy.title}</h1>
         <p>{copy.body}</p>

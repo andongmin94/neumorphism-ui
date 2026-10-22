@@ -1,6 +1,8 @@
 import { defineConfig, type PressPlugin } from "fumapress";
 import { fumapressTranslations } from "fumapress/i18n";
 import { createRootLayout } from "fumapress/layouts/root";
+import { robotsPlugin } from "fumapress/plugins/robots";
+import { sitemapPlugin } from "fumapress/plugins/sitemap";
 import { defineI18n } from "fumadocs-core/i18n";
 
 import { SiteShell } from "@/components/docs/site-shell";
@@ -36,8 +38,6 @@ const config = defineConfig({
     root() {
       return (
         <>
-          <title>Neumorphism UI</title>
-          <meta name="description" content="Source-owned neumorphic React components for Base UI and shadcn projects." />
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Neumorphism UI" />
           <meta property="og:image" content="https://neumorphism-ui.andongmin.com/og.png" />
@@ -68,7 +68,7 @@ const config = defineConfig({
   },
   renderNotFound: ({ lang }) => {
     const locale = resolveLocale(lang);
-    return <main className="docs-content docs-article"><h1>404</h1><p>{getMessages(locale).site.description}</p></main>;
+    return <main className="docs-content docs-article"><title>404 | Neumorphism UI</title><meta name="robots" content="noindex" /><h1>404</h1><p>{getMessages(locale).site.description}</p></main>;
   },
 });
 
@@ -108,4 +108,4 @@ const githubStarsPlugin: PressPlugin<typeof config.$context> = {
   },
 };
 
-export default config.plugins(githubStarsPlugin);
+export default config.plugins(githubStarsPlugin, sitemapPlugin(), robotsPlugin());

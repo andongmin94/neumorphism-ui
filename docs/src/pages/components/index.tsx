@@ -1,6 +1,7 @@
 import { notFound } from "fumapress/router";
 
 import { ComponentDirectory } from "@/components/docs/component-directory";
+import { PageMetadata } from "@/components/docs/page-metadata";
 import { isLocale } from "@/i18n/config";
 
 const pageCopy = {
@@ -28,6 +29,7 @@ export default function ComponentsPage({ lang }: { lang: string }) {
 
   return (
     <div className="directory-page component-directory-page">
+      <PageMetadata locale={lang} pathname="/components" title={copy.title} description={copy.body} />
       <header className="special-page-header">
         <div className="special-page-header-inner">
           <h1>{copy.title}</h1>

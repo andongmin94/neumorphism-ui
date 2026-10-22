@@ -2,6 +2,7 @@ import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
 import { DocsToc } from "@/components/docs/docs-toc";
+import { PageMetadata } from "@/components/docs/page-metadata";
 import { isLocale, localeHref } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 
@@ -61,6 +62,7 @@ export default function DocsIndexPage({ lang }: { lang: string }) {
 
   return (
     <div className="docs-content-layout docs-reference-layout">
+      <PageMetadata locale={locale} pathname="/docs" title={t.title} description={t.intro} />
       <article className="docs-content docs-article docs-reference-article">
         <header className="docs-page-header">
           <p className="docs-page-kicker">PROJECT DOCS / NEUMORPHISM UI</p>

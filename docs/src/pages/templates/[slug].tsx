@@ -1,4 +1,5 @@
 import type { RouteConfig } from "fumapress";
+import { PageMetadata } from "@/components/docs/page-metadata";
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
@@ -217,6 +218,7 @@ export default function TemplatePage({
 
   return (
     <div className={`${styles.page} mx-auto w-full max-w-7xl px-5 pt-8 pb-16 sm:px-8`}>
+      <PageMetadata locale={locale} pathname={`/templates/${slug}`} title={templateTitle(slug, locale)} description={templateDescription(slug, locale)} />
       <article className="docs-content docs-article">
         <header className={`docs-page-header ${styles.header}`}>
           <Link href={localeHref(locale, "/templates")} className="text-sm">

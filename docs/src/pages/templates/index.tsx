@@ -1,5 +1,6 @@
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
+import { PageMetadata } from "@/components/docs/page-metadata";
 
 import { templateCopy } from "@/components/docs/template-copy";
 import { TemplatePreview, type TemplateSlug } from "@/components/docs/template-preview";
@@ -41,6 +42,7 @@ export default function TemplatesPage({ lang }: { lang: string }) {
     <div className={`template-gallery-page ${styles.page}`}>
       <header className={`template-gallery-header ${styles.header}`}>
         <span className={styles.count}>{page.count(items.length)}</span>
+        <PageMetadata locale={locale} pathname="/templates" title={t.title} description={t.intro} />
         <h1>{t.title}</h1>
         <p>{t.intro}</p>
       </header>

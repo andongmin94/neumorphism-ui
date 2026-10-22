@@ -1,4 +1,5 @@
 import type { RouteConfig } from "fumapress";
+import { PageMetadata } from "@/components/docs/page-metadata";
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
 
@@ -52,6 +53,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
 
   return (
     <div className="component-doc-page docs-content-layout">
+      <PageMetadata locale={locale} pathname={`/components/${slug}`} title={component.title} description={component.description} />
       <article className="component-doc-article">
         <header className="component-doc-intro">
           <nav
