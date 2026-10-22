@@ -78,7 +78,7 @@ for (const mode of ["light", "dark"] as const) for (const width of [800, 1440]) 
     const area = page.getByTestId("sidebar-state");
     const observed = area.getByRole("button", { name: "Observed uncontrolled sidebar" });
     const notifications = area.getByRole("status", { name: "Uncontrolled sidebar notifications" });
-    const controlled = area.getByRole("button", { name: "Controlled sidebar" });
+    const controlled = area.getByRole("button", { name: "Controlled sidebar", exact: true });
     const requests = area.getByRole("status", { name: "Controlled sidebar requests" });
     await expect(observed).toHaveAttribute("aria-expanded", "false");
     await observed.click();

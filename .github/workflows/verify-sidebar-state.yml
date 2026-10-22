@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/verify-sidebar-state.yml
       - registry/src/components/ui/sidebar.tsx
+      - docs/tests/material/micro-completion.spec.ts
 permissions:
   contents: write
 concurrency:
