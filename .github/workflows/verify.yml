@@ -41,8 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           npm run lint --prefix docs
-          npm run typecheck --prefix docs
-          npm run build --prefix docs
+          npm run typecheck:site --prefix docs
+          npm run build:site --prefix docs
       - name: Browser engines
         working-directory: docs
         run: npx playwright install --with-deps chromium
@@ -150,7 +150,7 @@ jobs:
           npm ci --prefix docs
           npm run build --prefix registry
           npm run sync:docs --prefix registry
-          npm run build --prefix docs
+          npm run build:site --prefix docs
       - name: Presentation browser
         working-directory: docs
         run: npx playwright install --with-deps chromium
