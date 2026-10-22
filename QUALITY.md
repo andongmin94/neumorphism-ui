@@ -147,7 +147,10 @@ the exact running commit. Inspect the workflow result and its smoke evidence.
 Local generation, complete manifest/file equality, acyclic dependency checks,
 and fresh Next.js/Vite installation verification remain independent signals.
 All-item HTTP equality now runs against the local documentation server, and
-the six-platform accessibility/browser matrix also builds and serves locally.
+the manually dispatched six-platform accessibility/browser matrix also builds
+and serves locally. Default CI retains source/registry contracts, the Chromium
+documentation suite and core fresh Vite/Next consumer smoke. Full installation
+and presentation matrices require the manual `Verify` comprehensive option.
 Production CI does not crawl the catalog or install every public registry item.
 
 ## Micro-design synchronization

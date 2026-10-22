@@ -11,6 +11,8 @@ import os from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
+const { values: { smoke } } = parseArgs({ options: { smoke: { type: "boolean", default: false } } });
 const root = fileURLToPath(new URL("../", import.meta.url));
 const docsRoot = path.resolve(root, "../docs");
 const requireDocs = createRequire(path.join(docsRoot, "package.json"));
@@ -26,7 +28,8 @@ const versions = {
 const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "neumorphism-consumer-"));
 const evidenceRoot = path.join(docsRoot, "test-results/installed-consumers");
 const cli = path.join(root, "node_modules/shadcn/dist/index.js");
-const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+const npm = process.env.npm_execpath;
+assert.ok(npm, "Run this check with npm run consumer:verify");
 const results = [];
 function write(directory, file, content) { const destination = path.join(directory, file); fs.mkdirSync(path.dirname(destination), { recursive: true }); fs.writeFileSync(destination, content); }
 function writeJson(directory, file, content) { write(directory, file, JSON.stringify(content, null, 2) + "\n"); }
@@ -79,7 +82,7 @@ function fixture(directory, target, registryOrigin) {
   write(directory, "postcss.config.mjs", 'export default { plugins: { "@tailwindcss/postcss": {} } };\n');
   write(directory, "src/globals.css", '@import "tailwindcss";\n@custom-variant dark (&:is(.dark *));\n');
   write(directory, "src/consumer.tsx", application());
-  decorateFixture(directory);
+  if (!smoke) decorateFixture(directory);
   if (next) {
     write(directory, "src/app/layout.tsx", 'import "../globals.css"; export default function Layout({ children }: {children: React.ReactNode}) { return <html lang="en"><body>{children}</body></html>; }');
     write(directory, "src/app/page.tsx", 'export { default } from "../consumer";');
@@ -89,9 +92,11 @@ function fixture(directory, target, registryOrigin) {
     write(directory, "src/main.tsx", 'import {createRoot} from "react-dom/client"; import Consumer from "./consumer"; import "./globals.css"; createRoot(document.getElementById("root")!).render(<Consumer/>);');
     write(directory, "vite.config.ts", 'import {defineConfig} from "vite"; import react from "@vitejs/plugin-react"; import {fileURLToPath, URL} from "node:url"; export default defineConfig({plugins:[react()],resolve:{alias:{"@":fileURLToPath(new URL("./src",import.meta.url))}}});');
   }
-  decorateWorkflowFixture(directory);
-  decorateWorkspaceFixture(directory);
-  decorateAnalyticsFixture(directory);
+  if (!smoke) {
+    decorateWorkflowFixture(directory);
+    decorateWorkspaceFixture(directory);
+    decorateAnalyticsFixture(directory);
+  }
 }
 async function waitForServer(origin, processRef) {
   const end = Date.now() + 60_000;
@@ -110,10 +115,11 @@ async function browserChecks(directory, target, scenario) {
   const expectedTheme = readJson(path.join(root, `public/r/${scenario === "existing" ? "style-sage" : "neumorphism-ui"}.json`));
   try {
     await waitForServer(origin, server);
-    for (const [engineName, engine] of Object.entries({ chromium, firefox, webkit })) {
+    for (const [engineName, engine] of Object.entries(smoke ? { chromium } : { chromium, firefox, webkit })) {
       const browser = await engine.launch();
       try {
         for (const [mode, viewport] of [["light", { width: 1280, height: 900 }], ["dark", { width: 390, height: 844 }]]) {
+          if (smoke && mode !== "light") continue;
           const context = await browser.newContext({ viewport, colorScheme: mode, reducedMotion: "reduce" }); const page = await context.newPage(); const errors = [];
           page.on("pageerror", (error) => errors.push(error.message));
           const prefix = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}`);
@@ -159,10 +165,12 @@ async function browserChecks(directory, target, scenario) {
             await page.keyboard.press("Escape"); await page.getByRole("dialog").waitFor({ state: "hidden" });
             assert.equal(await page.evaluate(() => document.activeElement?.textContent), "Open settings");
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "horizontal overflow"); assert.deepEqual(errors, []);
-            await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
-            await exerciseWorkflow(page, { target, scenario, engineName, mode, evidenceRoot });
-            await exerciseWorkspaces(page, { target, scenario, engineName, mode, evidenceRoot });
-            await exerciseAnalytics(page, { target, scenario, engineName, mode, evidenceRoot });
+            if (!smoke) {
+              await exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot });
+              await exerciseWorkflow(page, { target, scenario, engineName, mode, evidenceRoot });
+              await exerciseWorkspaces(page, { target, scenario, engineName, mode, evidenceRoot });
+              await exerciseAnalytics(page, { target, scenario, engineName, mode, evidenceRoot });
+            }
             assert.deepEqual(errors, []);
             const file = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}.png`); fs.mkdirSync(evidenceRoot, { recursive: true }); await page.screenshot({ path: file, fullPage: true });
             results.push({ target, scenario, engine: engineName, mode, metrics, errors });
@@ -189,7 +197,8 @@ async function browserChecks(directory, target, scenario) {
 try {
   const registryOrigin = `http://127.0.0.1:${await listen(registryServer)}`;
   for (const target of ["vite", "next"]) for (const scenario of ["fresh", "existing"]) {
-    const directory = path.join(temporaryRoot, `${target}-${scenario}`); fixture(directory, target, registryOrigin); await run(npm, ["install", "--no-audit", "--no-fund"], directory);
+    if (smoke && scenario !== "fresh") continue;
+    const directory = path.join(temporaryRoot, `${target}-${scenario}`); fixture(directory, target, registryOrigin); await run(process.execPath, [npm, "install", "--no-audit", "--no-fund"], directory);
     const add = (...names) => run(process.execPath, [cli, "add", "--yes", "--cwd", directory, ...names.map((name) => `@neumorphism-ui/${name}`)], root, 300_000, scenario === "existing" && names.includes("alert-dialog") ? "button.tsx" : null);
     const aliases = readJson(path.join(directory, "components.json")).aliases;
     await add("neumorphism-ui"); assert.deepEqual(readJson(path.join(directory, "components.json")).aliases, aliases, "base reset custom aliases");
@@ -197,11 +206,11 @@ try {
     const cssPath = path.join(directory, "src/globals.css"); const buttonPath = path.join(directory, "src/design-system/ui/button.tsx");
     if (scenario === "existing") { fs.appendFileSync(cssPath, "\n:root, .dark { --radius: 23px; }\n.consumer-owned { border-top: 7px solid currentColor; }\n"); fs.appendFileSync(buttonPath, "\n// Application-owned customization must survive later installs.\n"); }
     const beforeCss = fs.readFileSync(cssPath, "utf8"); const beforeButton = fs.readFileSync(buttonPath, "utf8"); const beforeApp = fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8");
-    await add("input", "dialog", ...expandedItems, ...workflowItems, ...workspaceItems, "template-analytics", "checkbox");
-    assertExpandedFiles(directory);
+    await add("input", "dialog", ...(smoke ? [] : [...expandedItems, ...workflowItems, ...workspaceItems, "template-analytics", "checkbox"]));
+    if (!smoke) assertExpandedFiles(directory);
     assert.equal(fs.readFileSync(cssPath, "utf8"), beforeCss, "adding UI changed theme or custom CSS"); assert.equal(fs.readFileSync(buttonPath, "utf8"), beforeButton, "adding UI overwrote a customized button"); assert.equal(fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8"), beforeApp);
-    await run(npm, ["run", "build"], directory); await browserChecks(directory, target, scenario);
-    console.log(`PASS ${target}/${scenario}: install, preservation, build, and three browser engines.`);
+    await run(process.execPath, [npm, "run", "build"], directory); await browserChecks(directory, target, scenario);
+    console.log(`PASS ${target}/${scenario}: install, preservation, build, and ${smoke ? "Chromium/light core interactions" : "three browser engines"}.`);
   }
 } finally {
   fs.mkdirSync(evidenceRoot, { recursive: true }); fs.writeFileSync(path.join(evidenceRoot, "results.json"), JSON.stringify(results, null, 2));

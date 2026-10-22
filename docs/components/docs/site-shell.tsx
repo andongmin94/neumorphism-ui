@@ -6,6 +6,7 @@ import { useRouter } from "fumapress/client";
 import { DocsSidebar } from "@/components/docs/docs-sidebar";
 import { SiteFooter } from "@/components/docs/site-footer";
 import { SiteHeader } from "@/components/docs/site-header";
+import { SiteAnalytics } from "@/components/docs/site-analytics";
 
 function normalizePath(pathname: string) {
   const withoutQuery = pathname.split("?")[0]?.split("#")[0] ?? "/";
@@ -27,6 +28,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="site-frame">
+      <SiteAnalytics />
       <SiteHeader />
 
       <div

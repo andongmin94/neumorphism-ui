@@ -157,8 +157,16 @@ npm run consumer:verify --prefix registry
 npm run test:browser --prefix docs
 ```
 
-The six-platform browser matrix builds and serves the documentation locally,
-including the full Chromium, Firefox and WebKit catalog passes. To run a platform
+Pushes and pull requests run source contracts, lint, types, a documentation build,
+the Chromium desktop/mobile browser suite and fresh Vite/Next installation smoke
+checks for the base, button, input and dialog. Dependency audits remain blocking.
+The material/detail presentation suites, all-item installation shards and full
+installed-consumer matrix run when manually dispatching `Verify` with
+`comprehensive` enabled. The duplicate presentation/browser invocation is removed.
+
+The manually dispatched `Local platform and accessibility` workflow retains its
+six-platform matrix, including full Chromium, Firefox and WebKit catalog passes.
+Every check builds and serves locally. To run a platform
 check locally, use `npx playwright test --config=playwright.platform.config.ts`
 from `docs` (set `PLATFORM_FULL_CATALOG=true` for the catalog pass).
 
@@ -171,6 +179,12 @@ Independent Next.js/Vite applications install the actual registry JSON, retain
 custom aliases and application-owned CSS/source, build and run without docs CSS.
 Documentation checks exercise hydrated previews, theme output, forms, date-only
 serialization, data management and analytical filtering/export.
+
+Vercel Web Analytics records pageviews only on the canonical production hostname.
+Development, preview hosts, localhost and automated browsers do not load it.
+The official SDK tracks client-side navigation; query strings and fragments are
+removed before sending, and custom events are discarded. Enable the included
+Hobby Web Analytics feature in Vercel and deploy to activate its collection routes.
 
 ## Source ownership
 

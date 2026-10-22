@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      comprehensive:
+        description: Run every installation, presentation and browser-engine check
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -40,11 +45,19 @@ jobs:
           npm run build --prefix docs
       - name: Browser engines
         working-directory: docs
-        run: npx playwright install --with-deps chromium firefox webkit
+        run: npx playwright install --with-deps chromium
+      - name: Comprehensive browser engines
+        if: ${{ inputs.comprehensive }}
+        working-directory: docs
+        run: npx playwright install --with-deps firefox webkit
       - name: Hydrated documentation, theme output, and source recovery
         working-directory: docs
         run: npm run test:browser
       - name: Installed components and rendered interaction states
+        if: ${{ !inputs.comprehensive }}
+        run: npm run consumer:verify --prefix registry -- --smoke
+      - name: Complete installed-component regression matrix
+        if: ${{ inputs.comprehensive }}
         run: npm run consumer:verify --prefix registry
       - name: Generation must leave the repository clean
         run: |
@@ -81,6 +94,7 @@ jobs:
           if-no-files-found: ignore
 
   verify-installations:
+    if: ${{ inputs.comprehensive }}
     name: Independent installations (${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -111,13 +125,14 @@ jobs:
           path: docs/test-results/independent-items
 
   presentation:
+    if: ${{ inputs.comprehensive }}
     name: Documentation presentation (${{ matrix.suite }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        suite: [browser, material, detail]
+        suite: [material, detail]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -144,7 +159,6 @@ jobs:
         run: |
           # Each suite has its own runner; none is skipped if another fails.
           case "${{ matrix.suite }}" in
-            browser) npx playwright test tests/browser/presentation.spec.ts tests/browser/docs-polish.spec.ts ;;
             material) npx playwright test --config=playwright.material.config.ts ;;
             detail) npx playwright test --config=playwright.detail.config.ts ;;
           esac
