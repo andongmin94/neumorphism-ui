@@ -139,14 +139,16 @@ index, calendar and table endpoints before changing the authored origins.
 
 Source configuration, generated indexes, installation instructions and page
 metadata now use the configured homepage. The `Published registry` workflow
-checks out the exact main commit reported successful by Vercel, compares the
-index and all 80 complete item objects, runs the independent installation
-matrix against the public origin, and exercises the live documentation.
-A deployment status alone is not a passed public check: inspect the actual
-workflow result and its HTTP, installation and browser evidence.
+checks out the main commit reported successful by Vercel and runs a bounded
+Chromium smoke suite: index/base/button JSON equality, home/search hydration and
+one dialog preview. A matching sample does not prove every deployed endpoint or
+the exact running commit. Inspect the workflow result and its smoke evidence.
 
 Local generation, complete manifest/file equality, acyclic dependency checks,
 and fresh Next.js/Vite installation verification remain independent signals.
+All-item HTTP equality now runs against the local documentation server, and
+the six-platform accessibility/browser matrix also builds and serves locally.
+Production CI does not crawl the catalog or install every public registry item.
 
 ## Micro-design synchronization
 

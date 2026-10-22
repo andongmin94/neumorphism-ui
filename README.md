@@ -14,10 +14,11 @@ remaining release work.
 ## First installation
 
 The registry uses the repository's configured homepage,
-`https://neumorphism-ui.andongmin.com`. The `Published registry` workflow checks
-the deployed JSON, real public installs and documentation after Vercel reports
-a successful deployment. See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28)
-for the distinction between deployment and verified public installation.
+`https://neumorphism-ui.andongmin.com`. After a successful Vercel deployment,
+`Published registry` runs three smoke tests: the registry index/base/button JSON,
+the home/search UI and one component dialog. Complete endpoint comparisons,
+independent installations and browser/platform suites use local servers in CI.
+See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28) for scope.
 
 Use React 19, Tailwind CSS 4 and an initialized shadcn project. Select Base UI:
 
@@ -155,6 +156,16 @@ cd ..
 npm run consumer:verify --prefix registry
 npm run test:browser --prefix docs
 ```
+
+The six-platform browser matrix builds and serves the documentation locally,
+including the full Chromium, Firefox and WebKit catalog passes. To run a platform
+check locally, use `npx playwright test --config=playwright.platform.config.ts`
+from `docs` (set `PLATFORM_FULL_CATALOG=true` for the catalog pass).
+
+`npm run test:smoke --prefix docs` is the bounded production check. To validate
+it against a local build, start the documentation server and set `DOCS_TEST_URL`
+to that server's origin. The smoke suite uses one Chromium browser, two page
+navigations and three registry JSON requests, without retries or catalog crawls.
 
 Independent Next.js/Vite applications install the actual registry JSON, retain
 custom aliases and application-owned CSS/source, build and run without docs CSS.

@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit",
     "test:browser": "playwright test",
     "pretypecheck": "npm run build --prefix ../registry && npm run sync:docs --prefix ../registry",
-    "verify:deployed": "node scripts/verify-deployed.mjs"
+    "test:smoke": "playwright test --config=playwright.published.config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

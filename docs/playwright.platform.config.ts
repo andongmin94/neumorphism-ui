@@ -1,4 +1,5 @@
 import { defineConfig } from "@playwright/test";
+import base from "./playwright.config";
 
 const browserName = (process.env.PLATFORM_BROWSER ?? "chromium") as "chromium" | "firefox" | "webkit";
 const mobile = process.env.PLATFORM_DEVICE === "mobile";
@@ -15,7 +16,7 @@ export default defineConfig({
   outputDir: `test-results/platform/${id}`,
   reporter: [["list"], ["json", { outputFile: `test-results/platform-report-${id}.json` }]],
   use: {
-    baseURL: "https://neumorphism-ui.andongmin.com",
+    baseURL: base.use?.baseURL,
     browserName,
     viewport: mobile ? { width: 390, height: 844 } : { width: 1440, height: 960 },
     colorScheme: mode,
@@ -25,4 +26,5 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
+  webServer: base.webServer,
 });

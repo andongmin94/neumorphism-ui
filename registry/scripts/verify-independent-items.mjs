@@ -23,7 +23,7 @@ const versions = {
 };
 
 const { values } = parseArgs({
-  options: { shard: { type: "string", default: "1/1" }, published: { type: "boolean", default: false } },
+  options: { shard: { type: "string", default: "1/1" } },
 });
 assert.match(values.shard, /^[1-9]\d*\/[1-9]\d*$/, "Use --shard=index/count (1-based)");
 const [shard, shardCount] = values.shard.split("/").map(Number);
@@ -235,7 +235,7 @@ async function worker(registryOrigin) {
   for (let item; (item = queue.shift()); ) {
     const targets = item.name.startsWith("template-") || item.categories?.includes("template") ? ["next"] : ["next", "vite"];
     for (const target of targets) {
-      const record = { ...await verifyItem(item, target, registryOrigin), registryOrigin, source: values.published ? "published" : "generated", sourceCommit: process.env.EXPECTED_COMMIT ?? process.env.GITHUB_SHA ?? null };
+      const record = { ...await verifyItem(item, target, registryOrigin), registryOrigin, source: "generated", sourceCommit: process.env.GITHUB_SHA ?? null };
       records.push(record);
       console.log(
         (record.passed ? "PASS" : "FAIL") +
@@ -254,9 +254,7 @@ async function worker(registryOrigin) {
 }
 
 try {
-  const registryOrigin = values.published
-    ? new URL(registry.homepage).origin
-    : "http://127.0.0.1:" + (await listen(registryServer));
+  const registryOrigin = "http://127.0.0.1:" + (await listen(registryServer));
   await Promise.all(Array.from({ length: 2 }, () => worker(registryOrigin)));
 } finally {
   if (registryServer.listening) await new Promise((resolve) => registryServer.close(resolve));

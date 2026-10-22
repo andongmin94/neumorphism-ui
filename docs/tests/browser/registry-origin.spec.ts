@@ -1,6 +1,17 @@
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
-const registry = JSON.parse(readFileSync(new URL("../../../registry/public/r/registry.json", import.meta.url), "utf8")) as { homepage: string };
+const registry = JSON.parse(readFileSync(new URL("../../../registry/public/r/registry.json", import.meta.url), "utf8")) as { homepage: string; items: { name: string }[] };
+
+test("local HTTP registry index and every item match generated source", async ({ request }) => {
+  for (const name of ["registry", ...registry.items.map(item => item.name)]) {
+    const response = await request.get(`/r/${name}.json`);
+    expect(response.status(), name).toBe(200);
+    expect(response.headers()["content-type"], name).toContain("json");
+    const expected = JSON.parse(readFileSync(new URL(`../../../registry/public/r/${name}.json`, import.meta.url), "utf8"));
+    expect(await response.json(), name).toEqual(expected);
+  }
+});
+
 for (const locale of ["en", "ko", "ja", "zh"]) {
   test(`canonical origin in rendered installation and metadata: ${locale}`, async ({ page, request }, info) => {
     const url = `/${locale}/docs/installation`;

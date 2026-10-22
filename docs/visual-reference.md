@@ -106,7 +106,7 @@ Table cells keep status badges on one line; the table scroll container owns narr
 
 Carousel examples leave an 8px flat gutter around each raised face inside the existing masked viewport. The viewport still hides adjacent slides; no global overflow override is used. Live previews and all four copied examples share this structure. The English compilation fixture is derived from the displayed source. Navigation and four-edge clearance are checked after real Embla snaps in all four screen/mode projects and locales.
 
-Published registry URLs use the homepage actually configured on the repository, not an unresolvable alternate domain. Complete public JSON equality, the public-origin independent installation matrix and live browser checks run separately from local Verify after a successful main deployment. Shortcut tests wait for an existing client-owned readiness state before asserting a keyboard effect; they do not replay a missed key or remove the focus assertion.
+Published registry URLs use the homepage configured on the repository. Complete JSON endpoint equality, independent installation checks and all browser/platform regression suites run against local servers. After a successful main deployment, the published workflow checks only the index/base/button JSON, home/search and one dialog preview with Chromium. Shortcut tests wait for an existing client-owned readiness state before asserting a keyboard effect; they do not replay a missed key or remove the focus assertion.
 
 ## Micro-design case closure (MD-01–10)
 
