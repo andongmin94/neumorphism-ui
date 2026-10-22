@@ -50,7 +50,7 @@
     "@types/react-dom": "^19.2.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "shadcn": "^4.21.0",
+    "shadcn": "4.22.1",
     "typescript": "^7.0.2",
     "@typescript/typescript6": "6.0.2"
   }
