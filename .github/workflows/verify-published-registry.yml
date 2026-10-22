@@ -1,22 +1,20 @@
 name: Published registry
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
-  status:
 permissions:
   contents: read
 concurrency:
-  group: published-registry-${{ github.event.sha || github.sha }}
-  cancel-in-progress: false
+  group: published-registry-${{ github.ref }}
+  cancel-in-progress: true
 env:
-  EXPECTED_COMMIT: ${{ github.event.sha || github.sha }}
+  EXPECTED_COMMIT: ${{ github.sha }}
 jobs:
   smoke:
-    if: >-
-      github.ref == 'refs/heads/main' &&
-      (github.event_name == 'workflow_dispatch' ||
-       (github.event.context == 'Vercel' && github.event.state == 'success' && github.event.sha == github.sha))
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -27,6 +25,9 @@ jobs:
           cache: npm
           cache-dependency-path: docs/package-lock.json
       - run: npm ci --prefix docs
+      - name: Wait for this commit to reach production
+        working-directory: docs
+        run: npm run verify:deployment
       - name: Install one smoke-test browser
         working-directory: docs
         run: npx playwright install --with-deps chromium

@@ -14,8 +14,8 @@ remaining release work.
 ## First installation
 
 The registry uses the repository's configured homepage,
-`https://neumorphism-ui.andongmin.com`. After a successful Vercel deployment,
-`Published registry` runs three smoke tests: the registry index/base/button JSON,
+`https://neumorphism-ui.andongmin.com`. On a main push, `Published registry`
+waits for that commit's build marker, then runs three smoke tests: registry index/base/button JSON,
 the home/search UI and one component dialog. Complete endpoint comparisons,
 independent installations and browser/platform suites use local servers in CI.
 See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28) for scope.
@@ -180,11 +180,36 @@ custom aliases and application-owned CSS/source, build and run without docs CSS.
 Documentation checks exercise hydrated previews, theme output, forms, date-only
 serialization, data management and analytical filtering/export.
 
-Vercel Web Analytics records pageviews only on the canonical production hostname.
-Development, preview hosts, localhost and automated browsers do not load it.
-The official SDK tracks client-side navigation; query strings and fragments are
-removed before sending, and custom events are discarded. Enable the included
-Hobby Web Analytics feature in Vercel and deploy to activate its collection routes.
+The official Cloudflare Web Analytics beacon loads once on the canonical
+production hostname. Development, preview hosts, localhost and automated
+browsers do not load it. The token identifies this public site and is not a
+credential; the app does not emit custom analytics events.
+
+## Cloudflare deployment
+
+The site uses Fumapress `mode: "static"`. Deploy only `docs/dist/public` with
+Workers Static Assets; no Worker runtime, SSR function or SPA fallback is needed.
+`docs/wrangler.jsonc` preserves extensionless page URLs and real 404 responses,
+and `docs/public/_headers` defines RSC/API MIME types and caches hashed assets.
+
+```bash
+npm ci --prefix docs
+npm run build --prefix docs
+npm run test:cloudflare --prefix docs
+npm run deploy:cloudflare --prefix docs
+```
+
+For Workers Builds, choose `docs` as the root directory, `npm run build` as the
+build command and `npm run deploy:cloudflare` as the deploy command. The native
+Cloudflare adapter is detected there; local and GitHub CI builds keep the Node
+adapter for `npm run start`. Set the Workers Builds variable `NODE_VERSION=24`
+to match this project's engine requirement. No API token is stored in the repository.
+
+Each build writes an ignored `public/build-info.json` marker from its source
+commit. The production smoke workflow waits up to five minutes for the expected
+marker before testing the canonical domain. Validate a workers.dev preview with
+`DOCS_TEST_URL` before moving the custom domain; retain the existing deployment
+until that preview passes.
 
 ## Source ownership
 

@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.wrangler/
+/public/build-info.json
 .source/
 .env
 .env.*

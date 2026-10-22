@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { inject } from "@vercel/analytics";
 
 const productionOrigin = "https://neumorphism-ui.andongmin.com";
 
@@ -9,16 +8,13 @@ export function SiteAnalytics() {
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.origin !== productionOrigin || navigator.webdriver) return;
 
-    inject({
-      mode: "production",
-      debug: false,
-      beforeSend(event) {
-        if (event.type !== "pageview") return null;
-        const url = new URL(event.url);
-        if (url.origin !== productionOrigin) return null;
-        return { ...event, url: `${url.origin}${url.pathname}` };
-      },
-    });
+    if (document.getElementById("cloudflare-web-analytics")) return;
+    const script = document.createElement("script");
+    script.id = "cloudflare-web-analytics";
+    script.type = "module";
+    script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+    script.dataset.cfBeacon = JSON.stringify({ token: "70770d2bd86349b3bbc52fcbb8c9a9ca" });
+    document.head.appendChild(script);
   }, []);
 
   return null;

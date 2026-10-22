@@ -139,10 +139,10 @@ index, calendar and table endpoints before changing the authored origins.
 
 Source configuration, generated indexes, installation instructions and page
 metadata now use the configured homepage. The `Published registry` workflow
-checks out the main commit reported successful by Vercel and runs a bounded
+checks out the pushed main commit, waits for its deployed build marker and runs a bounded
 Chromium smoke suite: index/base/button JSON equality, home/search hydration and
-one dialog preview. A matching sample does not prove every deployed endpoint or
-the exact running commit. Inspect the workflow result and its smoke evidence.
+one dialog preview. A matching sample does not prove every deployed endpoint.
+Inspect the marker wait result and the workflow's smoke evidence.
 
 Local generation, complete manifest/file equality, acyclic dependency checks,
 and fresh Next.js/Vite installation verification remain independent signals.
