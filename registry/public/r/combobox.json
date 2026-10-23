@@ -4,7 +4,7 @@
   "title": "Combobox",
   "description": "Searchable selection with filtering, empty results, and keyboard interaction.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

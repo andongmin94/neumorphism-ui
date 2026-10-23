@@ -4,7 +4,7 @@
   "title": "Context Menu",
   "description": "A pointer-positioned menu with checkbox, radio, submenu, disabled and destructive states.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

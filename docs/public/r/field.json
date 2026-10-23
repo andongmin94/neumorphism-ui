@@ -4,7 +4,7 @@
   "title": "Field",
   "description": "Connect a control with its label, description, and validation errors.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

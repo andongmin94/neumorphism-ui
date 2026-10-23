@@ -53,7 +53,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
 
   return (
     <div className="component-doc-page docs-content-layout">
-      <PageMetadata locale={locale} pathname={`/components/${slug}`} title={component.title} description={component.description} />
+      <PageMetadata locale={locale} title={component.title} description={component.description} />
       <article className="component-doc-article">
         <header className="component-doc-intro">
           <nav

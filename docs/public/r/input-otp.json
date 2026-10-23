@@ -4,7 +4,7 @@
   "title": "Input OTP",
   "description": "A paste-friendly one-time-code input with accessible visual slots.",
   "dependencies": [
-    "input-otp@^1.4.2"
+    "input-otp@^1.5.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

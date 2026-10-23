@@ -42,7 +42,7 @@ export default function TemplatesPage({ lang }: { lang: string }) {
     <div className={`template-gallery-page ${styles.page}`}>
       <header className={`template-gallery-header ${styles.header}`}>
         <span className={styles.count}>{page.count(items.length)}</span>
-        <PageMetadata locale={locale} pathname="/templates" title={t.title} description={t.intro} />
+        <PageMetadata locale={locale} title={t.title} description={t.intro} />
         <h1>{t.title}</h1>
         <p>{t.intro}</p>
       </header>

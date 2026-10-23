@@ -4,7 +4,7 @@
   "title": "Calendar",
   "description": "Single, multiple and range selection with keyboard navigation and neumorphic selected days.",
   "dependencies": [
-    "@daypicker/react@^10.0.0"
+    "@daypicker/react@^10.0.2"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

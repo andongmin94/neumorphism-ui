@@ -4,7 +4,7 @@
   "title": "Collapsible",
   "description": "Reveal or hide one group of optional settings.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

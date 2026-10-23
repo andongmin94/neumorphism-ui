@@ -39,7 +39,7 @@ export default function Home({ lang }: { lang: string }) {
 
   return (
     <div className="directory-page">
-      <PageMetadata locale={locale} pathname="/" title={copy.title} description={copy.body} />
+      <PageMetadata locale={locale} title={copy.title} description={copy.body} />
       <section className="directory-hero">
         <div className="directory-hero-inner">
           <div className="directory-hero-copy">

@@ -108,6 +108,8 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await drawerTrigger.click();
   const drawer = page.locator('[data-slot="drawer-content"]');
   await drawer.waitFor();
+  // Visibility can precede Base UI's opening-frame transform in WebKit.
+  await expect(drawer).not.toHaveAttribute("data-starting-style", "");
   const drawerBounds = await drawer.boundingBox();
   const drawerViewport = page.viewportSize();
   assert.ok(drawerBounds && drawerBounds.y >= -1 && drawerBounds.y + drawerBounds.height <= drawerViewport.height + 1);

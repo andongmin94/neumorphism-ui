@@ -23,7 +23,7 @@ export default async function RegistryArchitecturePage({ lang }: { lang: string 
   return (
     <div className="docs-content-layout docs-reference-layout">
       <article className="docs-content docs-article docs-reference-article">
-        <PageMetadata locale={locale} pathname="/docs/registry" title={t.title} description={t.intro} />
+        <PageMetadata locale={locale} title={t.title} description={t.intro} />
         <header className="docs-page-header">
           <h1>{t.title}</h1><p>{t.intro}</p>
           <nav className="component-doc-quicknav" aria-label={getMessages(locale).common.pageToc}>

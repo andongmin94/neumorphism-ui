@@ -4,7 +4,7 @@
   "title": "Class name utility",
   "description": "A Tailwind-aware class name utility that resolves conflicting utilities.",
   "dependencies": [
-    "tailwind-merge"
+    "tailwind-merge@^3.7.0"
   ],
   "files": [
     {

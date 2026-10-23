@@ -74,16 +74,3 @@ export function switchLocaleHref(
 ): string {
   return localeHref(nextLocale, stripLocalePrefix(pathname));
 }
-
-export function getLocaleAlternates(locale: Locale, pathname = "/") {
-  return {
-    canonical: localeHref(locale, pathname),
-    languages: {
-      ko: localeHref("ko", pathname),
-      en: localeHref("en", pathname),
-      "zh-CN": localeHref("zh", pathname),
-      ja: localeHref("ja", pathname),
-      "x-default": localeHref(defaultLocale, pathname),
-    },
-  };
-}

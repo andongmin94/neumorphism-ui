@@ -4,7 +4,7 @@
   "title": "Meter",
   "description": "Represent a measurement within a known range.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

@@ -21,7 +21,7 @@ const docsPackage = JSON.parse(fs.readFileSync(path.join(docsRoot, "package.json
 const versions = {
   ...docsPackage.dependencies,
   ...docsPackage.devDependencies,
-  next: "16.3.5",
+  next: "16.4.2",
   "@vitejs/plugin-react": "6.0.2",
   "@tailwindcss/postcss": "^4.3.3",
 };

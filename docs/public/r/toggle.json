@@ -4,7 +4,7 @@
   "title": "Toggle",
   "description": "A standalone button with a persistent pressed state.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

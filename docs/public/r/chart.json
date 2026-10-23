@@ -5,7 +5,7 @@
   "description": "Responsive chart surfaces with exact-data disclosure and styled tooltips. Compose Recharts directly.",
   "dependencies": [
     "recharts@3.10.1",
-    "react-is@19.2.8"
+    "react-is@19.3.1"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

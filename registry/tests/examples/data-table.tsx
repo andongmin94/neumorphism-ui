@@ -1,13 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel, getPaginationRowModel, type ColumnDef } from "@tanstack/react-table";
+import { useTable, tableFeatures, columnFilteringFeature, columnVisibilityFeature, globalFilteringFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, createFilteredRowModel, createSortedRowModel, createPaginatedRowModel, filterFn_includesString, filterFn_equalsString, sortFn_alphanumeric, sortFn_text, type ColumnDef } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, DataTablePagination } from "@/components/ui/data-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Select, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 type Project = { id: string; name: string; status: "active" | "paused"; seats: number };
+const features = tableFeatures({
+  columnFilteringFeature, columnVisibilityFeature, globalFilteringFeature,
+  rowPaginationFeature, rowSelectionFeature, rowSortingFeature,
+  filteredRowModel: createFilteredRowModel(), sortedRowModel: createSortedRowModel(), paginatedRowModel: createPaginatedRowModel(),
+  filterFns: { includesString: filterFn_includesString, equalsString: filterFn_equalsString },
+  sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+});
 const data: Project[] = [
   { id: "p1", name: "Atlas", status: "active", seats: 12 },
   { id: "p2", name: "Beacon", status: "paused", seats: 4 },
@@ -27,7 +34,7 @@ const copy = {
 
 export default function DataTableExample({ locale = "en" }: { locale?: keyof typeof copy }) {
   const text = copy[locale];
-  const columns = React.useMemo<ColumnDef<Project>[]>(() => [
+  const columns = React.useMemo<ColumnDef<typeof features, Project>[]>(() => [
     { id: "selection", enableSorting: false, enableGlobalFilter: false,
       header: ({ table }) => <Checkbox aria-label={text.selectPage} checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? "indeterminate" : false} onCheckedChange={checked => table.toggleAllPageRowsSelected(checked === true)} />,
       cell: ({ row }) => <Checkbox aria-label={`${text.select} ${row.original.name}`} checked={row.getIsSelected()} onCheckedChange={checked => row.toggleSelected(checked === true)} /> },
@@ -35,10 +42,10 @@ export default function DataTableExample({ locale = "en" }: { locale?: keyof typ
     { accessorKey: "status", header: text.status, enableSorting: false, filterFn: "equalsString", cell: ({ row }) => <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border)] px-2.5 py-1 text-xs font-medium"><span aria-hidden="true">{row.original.status === "active" ? "●" : "Ⅱ"}</span>{text[row.original.status]}</span> },
     { accessorKey: "seats", header: ({ column }) => <DataTableColumnHeader column={column} title={text.seats} />, cell: ({ row }) => <span className="tabular-nums">{row.original.seats}</span> },
   ], [text]);
-  const table = useReactTable({ data, columns, getRowId: row => row.id, getCoreRowModel: getCoreRowModel(), getFilteredRowModel: getFilteredRowModel(), getSortedRowModel: getSortedRowModel(), getPaginationRowModel: getPaginationRowModel(), initialState: { pagination: { pageIndex: 0, pageSize: 5 } } });
+  const table = useTable({ features, data, columns, getRowId: row => row.id, globalFilterFn: "includesString", initialState: { pagination: { pageIndex: 0, pageSize: 5 } } });
   return <div className="grid w-full min-w-0 gap-4">
     <DataTable table={table} caption={text.caption} emptyMessage={text.empty}>
-      <div className="flex flex-wrap items-center gap-3"><Input aria-label={text.search} placeholder={text.search} className="min-w-0 flex-1 basis-44" value={(table.getState().globalFilter as string) ?? ""} onChange={event => { table.setGlobalFilter(event.target.value); table.setPageIndex(0); }} /><div className="w-40 max-w-full"><Select aria-label={text.status} value={(table.getColumn("status")?.getFilterValue() as string) ?? ""} onChange={event => { table.getColumn("status")?.setFilterValue(event.target.value || undefined); table.setPageIndex(0); }}><SelectItem value="">{text.all}</SelectItem><SelectItem value="active">{text.active}</SelectItem><SelectItem value="paused">{text.paused}</SelectItem></Select></div></div>
+      <div className="flex flex-wrap items-center gap-3"><Input aria-label={text.search} placeholder={text.search} className="min-w-0 flex-1 basis-44" value={(table.state.globalFilter as string) ?? ""} onChange={event => { table.setGlobalFilter(event.target.value); table.setPageIndex(0); }} /><div className="w-40 max-w-full"><Select aria-label={text.status} value={(table.getColumn("status")?.getFilterValue() as string) ?? ""} onChange={event => { table.getColumn("status")?.setFilterValue(event.target.value || undefined); table.setPageIndex(0); }}><SelectItem value="">{text.all}</SelectItem><SelectItem value="active">{text.active}</SelectItem><SelectItem value="paused">{text.paused}</SelectItem></Select></div></div>
     </DataTable>
     <div className="flex flex-wrap items-center justify-between gap-2"><output data-testid="selected-rows" className="text-sm text-[var(--muted-foreground)]">{text.selected}: {table.getSelectedRowModel().rows.length}</output><Button variant="ghost" size="sm" disabled={!table.getSelectedRowModel().rows.length} onClick={() => table.resetRowSelection()}>{text.clear}</Button></div>
     <DataTablePagination table={table} labels={{ previous: text.previous, next: text.next, rowsPerPage: text.rows, page: (current, total) => `${text.page} ${current} / ${total}` }} />

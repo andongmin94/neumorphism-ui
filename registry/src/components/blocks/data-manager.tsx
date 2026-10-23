@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState, type RowSelectionState, type ColumnFiltersState, type VisibilityState } from "@tanstack/react-table";
+import { useTable, tableFeatures, columnFilteringFeature, columnVisibilityFeature, globalFilteringFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, createFilteredRowModel, createSortedRowModel, createPaginatedRowModel, filterFn_includesString, filterFn_equalsString, sortFn_alphanumeric, sortFn_text, type ColumnDef, type SortingState, type RowSelectionState, type ColumnFiltersState, type ColumnVisibilityState } from "@tanstack/react-table";
 import { ko, ja, zhCN } from "@daypicker/react/locale";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -29,14 +29,20 @@ const copy = {
 } as const;
 const statusClass: Record<RecordStatus, string> = { active: "border-[var(--success)]", draft: "border-[var(--primary)]", archived: "border-[var(--border)]" };
 const dateLocales = { ko, en: undefined, ja, zh: zhCN };
+const features = tableFeatures({
+  columnFilteringFeature, columnVisibilityFeature, globalFilteringFeature,
+  rowPaginationFeature, rowSelectionFeature, rowSortingFeature,
+  filteredRowModel: createFilteredRowModel(), sortedRowModel: createSortedRowModel(), paginatedRowModel: createPaginatedRowModel(),
+  filterFns: { includesString: filterFn_includesString, equalsString: filterFn_equalsString },
+  sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+});
 
 function RecordsEditor({ initialRecords, onSave, onDelete, locale = "en" }: DataManagerProps) {
-  "use no memo";
   const t = copy[locale]; const id = React.useId(); const toast = useToast();
   const [records, setRecords] = React.useState(() => initialRecords.map(record => ({ ...record })));
   const [search, setSearch] = React.useState(""); const [filters, setFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([{ id: "title", desc: false }]);
-  const [selection, setSelection] = React.useState<RowSelectionState>({}); const [visibility, setVisibility] = React.useState<VisibilityState>({});
+  const [selection, setSelection] = React.useState<RowSelectionState>({}); const [visibility, setVisibility] = React.useState<ColumnVisibilityState>({});
   const [draft, setDraft] = React.useState<ManagedRecord | null>(null); const [baseline, setBaseline] = React.useState<ManagedRecord | null>(null);
   const [pending, setPending] = React.useState(false); const busy = React.useRef(false);
   const [failed, setFailed] = React.useState(false); const [deleteIds, setDeleteIds] = React.useState<string[]>([]);
@@ -52,7 +58,7 @@ function RecordsEditor({ initialRecords, onSave, onDelete, locale = "en" }: Data
     opener.current = trigger; setBaseline(next); setDraft(next); setFailed(false);
   }
   const reset = () => { setSearch(""); setFilters([]); setSelection({}); };
-  const columns: ColumnDef<ManagedRecord>[] = [
+  const columns: ColumnDef<typeof features, ManagedRecord>[] = [
     { id: "selection", enableSorting: false, enableGlobalFilter: false, header: ({ table }) => <Checkbox aria-label={t.selectPage} checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? "indeterminate" : false} onCheckedChange={value => table.toggleAllPageRowsSelected(value === true)} disabled={pending || !table.getRowModel().rows.length} />, cell: ({ row }) => <Checkbox aria-label={`${t.selectRecord} ${row.original.title}`} checked={row.getIsSelected()} disabled={pending} onCheckedChange={value => row.toggleSelected(value === true)} /> },
     { accessorKey: "title", header: ({ column }) => <DataTableColumnHeader column={column} title={t.record} />, cell: ({ row }) => <span className="block min-w-40 max-w-80 font-medium [overflow-wrap:anywhere]">{row.original.title}</span> },
     { accessorKey: "owner", header: ({ column }) => <DataTableColumnHeader column={column} title={t.owner} /> },
@@ -60,7 +66,7 @@ function RecordsEditor({ initialRecords, onSave, onDelete, locale = "en" }: Data
     { accessorKey: "dueDate", header: ({ column }) => <DataTableColumnHeader column={column} title={t.due} />, cell: ({ row }) => <span className="whitespace-nowrap text-xs tabular-nums text-[var(--muted-foreground)]">{row.original.dueDate || "—"}</span> },
     { id: "actions", enableGlobalFilter: false, header: t.actions, cell: ({ row }) => <Button size="sm" variant="ghost" disabled={pending} onClick={event => openEditor(row.original, event.currentTarget)} aria-label={`${t.edit} ${row.original.title}`}>{t.edit}</Button> },
   ];
-  const table = useReactTable({ data: records, columns, state: { globalFilter: search, columnFilters: filters, sorting, rowSelection: selection, columnVisibility: visibility }, onGlobalFilterChange: setSearch, onColumnFiltersChange: setFilters, onSortingChange: setSorting, onRowSelectionChange: setSelection, onColumnVisibilityChange: setVisibility, getRowId: row => row.id, globalFilterFn: "includesString", getCoreRowModel: getCoreRowModel(), getFilteredRowModel: getFilteredRowModel(), getSortedRowModel: getSortedRowModel(), getPaginationRowModel: getPaginationRowModel(), initialState: { pagination: { pageSize: 5 } } });
+  const table = useTable({ features, data: records, columns, state: { globalFilter: search, columnFilters: filters, sorting, rowSelection: selection, columnVisibility: visibility }, onGlobalFilterChange: setSearch, onColumnFiltersChange: setFilters, onSortingChange: setSorting, onRowSelectionChange: setSelection, onColumnVisibilityChange: setVisibility, getRowId: row => row.id, globalFilterFn: "includesString", initialState: { pagination: { pageIndex: 0, pageSize: 5 } } });
   const selected = table.getSelectedRowModel().rows.map(row => row.original.id);
   const requestClose = () => { if (busy.current) return; if (dirty) setDiscardOpen(true); else { setDraft(null); setFailed(false); } };
   async function saveRecord(event: React.FormEvent<HTMLFormElement>) {

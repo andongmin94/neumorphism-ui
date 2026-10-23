@@ -4,7 +4,7 @@
   "title": "Sheet",
   "description": "A scrollable task panel attached to a viewport edge.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils",

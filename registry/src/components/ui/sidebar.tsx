@@ -241,7 +241,11 @@ function SidebarTrigger({
       className={cn("size-9", className)}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented) toggleSidebar();
+        if (!event.defaultPrevented) {
+          // Safari does not focus native buttons on pointer activation.
+          if (isMobile && !openMobile) event.currentTarget.focus({ preventScroll: true });
+          toggleSidebar();
+        }
       }}
       {...props}
     >

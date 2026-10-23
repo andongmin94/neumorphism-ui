@@ -4,7 +4,7 @@
   "title": "Progress",
   "description": "An accessible inset progress track with a primary fill.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

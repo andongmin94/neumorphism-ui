@@ -4,7 +4,7 @@
   "title": "Menubar",
   "description": "Application command menus with shared menu parts and roving keyboard focus.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils",

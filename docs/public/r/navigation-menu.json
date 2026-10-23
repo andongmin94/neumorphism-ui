@@ -4,7 +4,7 @@
   "title": "Navigation Menu",
   "description": "Keyboard-aware website navigation with inset open states and floating panels.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

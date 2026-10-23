@@ -4,7 +4,7 @@
   "title": "Date Picker",
   "description": "A controlled date-only picker with local form serialization, clearing and constrained dates.",
   "dependencies": [
-    "@daypicker/react@^10.0.0"
+    "@daypicker/react@^10.0.2"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils",

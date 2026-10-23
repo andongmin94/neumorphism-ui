@@ -54,7 +54,7 @@ export default function CustomizePage({ lang }: { lang: string }) {
 
   return (
     <div className="theme-studio-page">
-      <PageMetadata locale={locale} pathname="/customize" title={copy.title} description={copy.body} />
+      <PageMetadata locale={locale} title={copy.title} description={copy.body} />
       <header className="theme-studio-page-hero">
         <h1>{copy.title}</h1>
         <p>{copy.body}</p>

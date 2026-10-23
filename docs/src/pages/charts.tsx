@@ -136,7 +136,7 @@ export function Example() {
   return (
     <div className="charts-gallery-page">
       <header className="charts-gallery-hero">
-        <PageMetadata locale={locale} pathname="/charts" title={page.title} description={page.body} />
+        <PageMetadata locale={locale} title={page.title} description={page.body} />
         <h1>{page.title}</h1>
         <p>{page.body}</p>
         <nav aria-label={page.contents} className="charts-section-nav">

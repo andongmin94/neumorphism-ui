@@ -4,7 +4,7 @@
   "title": "Toggle Group",
   "description": "A keyboard-navigable group of single or multiple selections.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils",

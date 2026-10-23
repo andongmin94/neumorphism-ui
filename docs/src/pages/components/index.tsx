@@ -29,7 +29,7 @@ export default function ComponentsPage({ lang }: { lang: string }) {
 
   return (
     <div className="directory-page component-directory-page">
-      <PageMetadata locale={lang} pathname="/components" title={copy.title} description={copy.body} />
+      <PageMetadata locale={lang} title={copy.title} description={copy.body} />
       <header className="special-page-header">
         <div className="special-page-header-inner">
           <h1>{copy.title}</h1>

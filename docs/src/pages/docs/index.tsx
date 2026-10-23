@@ -62,7 +62,7 @@ export default function DocsIndexPage({ lang }: { lang: string }) {
 
   return (
     <div className="docs-content-layout docs-reference-layout">
-      <PageMetadata locale={locale} pathname="/docs" title={t.title} description={t.intro} />
+      <PageMetadata locale={locale} title={t.title} description={t.intro} />
       <article className="docs-content docs-article docs-reference-article">
         <header className="docs-page-header">
           <p className="docs-page-kicker">PROJECT DOCS / NEUMORPHISM UI</p>

@@ -11,6 +11,8 @@ test("static HTML includes page-specific metadata and four-language alternates",
       const head = (await response.text()).split("</head>")[0]!;
       const canonical = `${canonicalOrigin}/${locale}${pathname}`;
       expect(head.match(/<title>/g)).toHaveLength(1);
+      expect(head.match(/rel="canonical"/g)).toHaveLength(1);
+      expect(head.match(/property="og:url"/g)).toHaveLength(1);
       expect(head).toContain(" | Neumorphism UI</title>");
       expect(head).toContain(`<link rel="canonical" href="${canonical}"`);
       expect(head).toContain(`<meta property="og:url" content="${canonical}"`);
@@ -19,6 +21,7 @@ test("static HTML includes page-specific metadata and four-language alternates",
       for (const [language, prefix] of [["en", "en"], ["ko", "ko"], ["ja", "ja"], ["zh-CN", "zh"], ["x-default", "en"]]) {
         expect(head).toContain(`rel="alternate" hrefLang="${language}" href="${canonicalOrigin}/${prefix}${pathname}"`);
       }
+      expect(head.match(/rel="alternate"/g)).toHaveLength(5);
       const description = head.match(/<meta name="description" content="([^"]+)"/)?.[1];
       expect(description).toBeTruthy();
       descriptions.add(description!);

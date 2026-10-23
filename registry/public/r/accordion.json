@@ -4,7 +4,7 @@
   "title": "Accordion",
   "description": "A keyboard-accessible disclosure group with inset open states.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

@@ -4,7 +4,7 @@
   "title": "Fieldset",
   "description": "Group related controls under a shared legend and disabled state.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"

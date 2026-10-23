@@ -4,7 +4,7 @@
   "title": "Toolbar",
   "description": "An arrow-key-navigable set of document actions.",
   "dependencies": [
-    "@base-ui/react"
+    "@base-ui/react@^1.9.0"
   ],
   "registryDependencies": [
     "@neumorphism-ui/utils"
