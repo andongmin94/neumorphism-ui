@@ -32,6 +32,8 @@ export function DocsSearch() {
   const { componentDocGroups, locale, messages } = useLocale();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const [ready, setReady] = React.useState(false);
+  React.useEffect(() => setReady(true), []);
   const copy = referenceCopy[locale];
   const templates = templateCopy[locale];
   const entries = React.useMemo(() => {
@@ -105,7 +107,7 @@ export function DocsSearch() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<button aria-label={messages.search.trigger} className="docs-search-trigger" type="button" />}>
+      <DialogTrigger render={<button aria-label={messages.search.trigger} className="docs-search-trigger" disabled={!ready} type="button" />}>
         <span aria-hidden="true"><SearchIcon /></span>
         <span>{copy.search}</span>
         <kbd>Ctrl K</kbd>

@@ -28,6 +28,7 @@ test("published component preview opens and closes its dialog", async ({ page })
   page.on("pageerror", error => errors.push(error.message));
   const response = await page.goto("/en/components/dialog");
   expect(response?.status()).toBe(200);
+  await expect(page.locator(".component-example")).toHaveAttribute("aria-busy", "false");
   const trigger = page.getByRole("button", { name: "Edit profile", exact: true });
   await trigger.click();
   const dialog = page.getByRole("dialog").first();

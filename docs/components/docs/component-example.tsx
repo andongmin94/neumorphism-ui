@@ -39,7 +39,7 @@ export function ComponentExample({
       </div>
       <TabsContent className={`component-example-panel ${styles.preview}`} value="preview">
         {/* The stage owns the documentation width, not the installed control. */}
-        <div className="grid min-w-0 place-items-center" data-component-stage>
+        <div className="grid min-w-0 place-items-center" data-component-stage inert={!ready}>
           <ComponentDetailPreview copy={copy} locale={locale} slug={slug} />
         </div>
       </TabsContent>
