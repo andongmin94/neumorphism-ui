@@ -81,6 +81,13 @@
   padding-block: 0;
 }
 
+/* The documentation header stays fixed while example anchor links navigate. */
+.canvas :global([data-slot="portfolio"]),
+.canvas :global([data-slot="portfolio"] section[id]),
+.canvas :global([data-slot="blog-post"]) {
+  scroll-margin-top: calc(var(--docs-header-height, 72px) + 16px);
+}
+
 @media (max-width: 560px) {
   .frame {
     /* Spend the outer documentation gutter on the frame, not workspace width. */

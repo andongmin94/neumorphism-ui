@@ -29,7 +29,7 @@ function AccordionItem({
     <AccordionPrimitive.Item
       data-slot="accordion-item"
       className={mergeClassName<AccordionPrimitive.Item.State>(
-        "mb-2 overflow-hidden rounded-[var(--neu-radius-control)] border border-transparent border-b-[color:var(--border)] bg-transparent has-[[aria-expanded=true]]:border-transparent has-[[aria-expanded=true]]:bg-[var(--neu-surface)] has-[[aria-expanded=true]]:[box-shadow:var(--neu-shadow-inset-sm)] last:mb-0",
+        "mb-2 overflow-hidden rounded-[var(--neu-radius-control)] border border-transparent border-b-[color:var(--border)] bg-transparent has-[[aria-expanded=true]]:rounded-[var(--neu-radius-surface)] has-[[aria-expanded=true]]:border-transparent has-[[aria-expanded=true]]:bg-[var(--neu-surface)] has-[[aria-expanded=true]]:[box-shadow:var(--neu-shadow-inset-sm)] last:mb-0",
         className,
       )}
       {...props}

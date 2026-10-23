@@ -68,7 +68,7 @@ export function ChartContainer({
 export function ChartTooltip(props: React.ComponentProps<typeof Tooltip>) {
   return <Tooltip
     isAnimationActive={false}
-    contentStyle={{ background: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)", borderRadius: "var(--neu-radius-control)", boxShadow: "var(--neu-shadow-floating)", fontSize: 12 }}
+    contentStyle={{ background: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)", borderRadius: "var(--neu-radius-overlay)", boxShadow: "var(--neu-shadow-floating)", fontSize: 12 }}
     labelStyle={{ color: "var(--popover-foreground)", fontWeight: 600 }}
     itemStyle={{ color: "var(--popover-foreground)" }}
     {...props}

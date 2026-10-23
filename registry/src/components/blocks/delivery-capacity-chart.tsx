@@ -129,7 +129,7 @@ export function DeliveryCapacityChart({
           <Bar dataKey="variance" name={t.difference} fill="var(--primary)" maxBarSize={52} isAnimationActive={false} />
         ) : (
           <>
-            <Bar dataKey="planned" name={t.planned} fill="var(--muted)" stroke="var(--muted-foreground)" strokeDasharray="4 3" maxBarSize={40} isAnimationActive={false} />
+            <Bar dataKey="planned" name={t.planned} legendType="plainline" fill="var(--muted-foreground)" fillOpacity={0.14} stroke="var(--muted-foreground)" strokeDasharray="4 3" maxBarSize={40} isAnimationActive={false} />
             <Bar dataKey="delivered" name={t.delivered} fill="var(--primary)" maxBarSize={40} isAnimationActive={false} />
           </>
         )}

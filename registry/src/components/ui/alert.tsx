@@ -24,7 +24,7 @@ function Alert({ className, variant = "default", ...props }: AlertProps) {
       data-variant={variant}
       role="alert"
       className={cn(
-        "relative grid w-full min-w-0 grid-cols-[0_1fr] items-start gap-y-1 rounded-[var(--neu-radius-control)] border px-4 py-3 [box-shadow:var(--neu-shadow-inset-sm)] text-sm has-[>svg]:grid-cols-[1.125rem_1fr] has-[>svg]:gap-x-3 [&>svg]:col-start-1 [&>svg]:row-start-1 [&>svg]:row-span-2 [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:text-current",
+        "relative grid w-full min-w-0 grid-cols-[0_1fr] items-start gap-y-1 rounded-[var(--neu-radius-surface)] border px-4 py-3 [box-shadow:var(--neu-shadow-inset-sm)] text-sm has-[>svg]:grid-cols-[1.125rem_1fr] has-[>svg]:gap-x-3 [&>svg]:col-start-1 [&>svg]:row-start-1 [&>svg]:row-span-2 [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:text-current",
         alertVariants[variant],
         className,
       )}

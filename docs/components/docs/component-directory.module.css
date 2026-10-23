@@ -152,7 +152,7 @@
   display: block;
   width: 16px;
   height: 18px;
-  border-radius: 3px;
+  border-radius: max(3px, calc(var(--neu-radius-control) - 3px));
   background: var(--neu-surface);
 }
 .swatch[data-preview="tabs"] > span:first-child { background: var(--primary); }
