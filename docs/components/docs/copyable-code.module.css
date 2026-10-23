@@ -7,7 +7,7 @@
   gap: 12px;
   padding: 14px;
   border: 1px solid #454545;
-  border-radius: var(--neu-radius-control);
+  border-radius: var(--neu-radius-surface);
   background: #1e1e1e;
   color: #d4d4d4;
   color-scheme: dark;
@@ -20,7 +20,7 @@
   margin: 0;
   padding: 2px;
   overflow: auto;
-  background: #1e1e1e;
+  background: transparent;
   color: #d4d4d4;
   font-family: var(--neu-font-mono);
   font-size: 13px;
