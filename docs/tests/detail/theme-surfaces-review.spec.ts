@@ -266,3 +266,55 @@ test("template fragment links clear the fixed docs header at 320px", async ({ pa
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }
 });
+
+test("navigation example links reveal every destination below the fixed header at 320px", async ({ page }, info) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto("/ko/components/navigation-menu");
+  await expect(page.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+  const stage = page.locator("[data-component-stage]");
+  const trigger = stage.locator('[data-slot="navigation-menu-trigger"]');
+  const popup = page.locator('[data-slot="navigation-menu-popup"]');
+
+  for (const name of ["안내", "컴포넌트", "테마"] as const) {
+    await stage.scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    if (name !== "안내") {
+      await trigger.focus();
+      await trigger.press("ArrowDown");
+      await expect(popup).toBeVisible();
+      await page.keyboard.press("Tab");
+      if (name === "테마") await page.keyboard.press("Tab");
+    }
+    const link = (name === "안내" ? stage : popup).getByRole("link", { name, exact: true });
+    const href = (await link.getAttribute("href"))!;
+    if (name === "안내") await link.click();
+    else {
+      await expect(link).toBeFocused();
+      await link.press("Enter");
+    }
+    await expect.poll(() => new URL(page.url()).hash).toBe(href);
+    if (name !== "안내") {
+      await page.keyboard.press("Escape");
+      await expect(popup).toBeHidden();
+    }
+    const destination = stage.locator(`p[id="${href.slice(1)}"]`);
+    await expect.poll(async () => {
+      const target = (await destination.boundingBox())!;
+      const header = (await page.locator(".site-header").boundingBox())!;
+      return target.y - header.y - header.height;
+    }, { message: `${name} destination must clear the fixed header` }).toBeGreaterThanOrEqual(8);
+    expect((await destination.boundingBox())!.y).toBeLessThan(844 / 2);
+    await page.screenshot({ path: info.outputPath(`navigation-${name}-destination-320.png`) });
+  }
+
+  await stage.scrollIntoViewIfNeeded();
+  await trigger.focus();
+  await trigger.press("ArrowDown");
+  await expect(popup).toBeVisible();
+  await page.keyboard.press("Tab");
+  await expect(popup.getByRole("link", { name: "컴포넌트", exact: true })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(popup).toBeHidden();
+  await expect(trigger).toBeFocused();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+});
