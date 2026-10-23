@@ -4977,9 +4977,12 @@ body {
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
   color: var(--neu-accent-ink);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 800;
+}
+
+.site-brand__mark svg {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 
 .site-brand__name {

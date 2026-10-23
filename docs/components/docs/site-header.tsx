@@ -109,7 +109,12 @@ export function SiteHeader() {
       <div className="site-header__inner">
         <MobileDocsNavigation key={pathname} />
         <Link className="site-brand" href={homeHref} aria-label={messages.site.homeLabel}>
-          <span className="site-brand__mark" aria-hidden="true">N</span>
+          <span className="site-brand__mark" aria-hidden="true">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+              <rect x="7" y="7" width="15" height="15" rx="4.3" fill="currentColor" opacity="0.32" />
+              <rect x="2" y="2" width="15" height="15" rx="4.3" fill="currentColor" />
+            </svg>
+          </span>
           <span className="site-brand__name">Neumorphism UI</span>
         </Link>
         <nav className="primary-nav" aria-label={messages.navigation.primaryLabel}>
