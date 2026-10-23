@@ -5357,55 +5357,35 @@ body {
 }
 
 
-/* Category and source identifier share a 24px line box, not inherited uppercase code. */
-.component-doc-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-  min-height: 24px;
-  margin: 0;
-  color: var(--foreground-soft);
+.component-doc-example-caption h3 {
+  margin: 0 0 8px;
+  color: var(--foreground);
+  font-size: 1rem;
+  font-weight: 650;
 }
 
-.component-doc-meta > span,
-.component-doc-meta > code {
-  display: inline-flex;
-  align-items: center;
-  min-height: 24px;
-  max-width: 100%;
-  margin: 0;
-  font-size: 12px;
-  line-height: 20px;
-  letter-spacing: 0;
-  text-transform: none;
-  overflow-wrap: anywhere;
+.component-doc-example-caption p {
+  max-width: 72ch;
+  margin: 0 0 20px;
 }
 
-.component-doc-meta > span {
-  font-family: var(--font-sans);
-  font-weight: 600;
+.component-doc-install-note {
+  margin: 0 0 20px;
 }
 
-.component-doc-meta > code {
-  padding: 2px 6px;
-  border: 0;
-  border-radius: var(--neu-radius-small);
-  background: var(--neu-surface-soft);
-  font-family: var(--font-mono);
-  font-weight: 500;
+.component-doc-install-note a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.component-doc-intro-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+.component-doc-example-dependencies {
+  margin-top: 24px;
 }
 
-.component-doc-intro-actions .compact-install {
-  min-width: min(100%, 360px);
+.component-doc-example-dependencies > p {
+  margin: 0 0 10px;
+  font-weight: 650;
 }
 
 .component-doc-registry-link {
@@ -5413,6 +5393,7 @@ body {
   min-height: 40px;
   align-items: center;
   gap: 6px;
+  margin-top: 20px;
   padding: 0 12px;
   border: 1px solid transparent;
   border-radius: var(--neu-radius-control);
@@ -6242,6 +6223,42 @@ body {
   min-width: 0;
   grid-column: 2;
   margin-block: 0;
+}
+
+.docs-guide-article > .docs-content-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  scroll-margin-top: calc(var(--docs-header-height) + 16px);
+}
+
+.docs-guide-article > .docs-content-section > * {
+  min-width: 0;
+  margin-block: 0;
+}
+
+.docs-guide-article .docs-content-section :is(ol, ul) {
+  padding-inline-start: 1.4rem;
+}
+
+.docs-guide-article .docs-content-section ol {
+  list-style: decimal;
+}
+
+.docs-guide-article .docs-content-section ul {
+  list-style: disc;
+}
+
+.docs-guide-article .docs-content-section li + li {
+  margin-top: 6px;
+}
+
+.docs-guide-article .docs-content-section > div > h3 {
+  margin-top: 8px;
+}
+
+.docs-guide-article .docs-content-section > div > p {
+  margin-bottom: 0;
 }
 
 .site-footer {

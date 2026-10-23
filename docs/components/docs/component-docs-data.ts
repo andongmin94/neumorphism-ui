@@ -53,26 +53,8 @@ export const componentDocs = [
     summary: "여러 섹션을 한 번에 하나씩 또는 동시에 펼치는 disclosure group.",
     description:
       "Base UI Accordion의 상태 관리와 접근성 연결을 유지하면서 열린 항목을 inset 표면으로 표현합니다. multiple 옵션과 controlled·uncontrolled 사용을 모두 지원합니다.",
-    importCode: `import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"`,
-    usageCode: `<Accordion defaultValue={["shipping"]}>
-  <AccordionItem value="shipping">
-    <AccordionTrigger>배송은 얼마나 걸리나요?</AccordionTrigger>
-    <AccordionContent>
-      주문 후 영업일 기준 2–3일 안에 발송됩니다.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="returns">
-    <AccordionTrigger>반품할 수 있나요?</AccordionTrigger>
-    <AccordionContent>
-      수령 후 14일 이내에 반품을 신청할 수 있습니다.
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>`,
+    importCode: "\"use client\";\nimport { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from \"@/components/ui/accordion\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"accordion\": {\n            \"items\": [\n                {\n                    \"question\": \"스타일 토큰도 함께 설치되나요?\",\n                    \"answer\": \"먼저 공통 스타일을 한 번 설치하세요. 뉴모피즘 surface, shadow, radius 토큰이 프로젝트 CSS에 연결되고 각 컴포넌트가 이를 사용합니다.\"\n                },\n                {\n                    \"question\": \"설치 후 소스를 수정할 수 있나요?\",\n                    \"answer\": \"네. 패키지 안에 감추지 않고 실제 TSX 파일을 프로젝트로 복사합니다.\"\n                },\n                {\n                    \"question\": \"키보드 조작을 지원하나요?\",\n                    \"answer\": \"Tab으로 trigger에 접근하고 Enter 또는 Space로 내용을 열 수 있습니다.\"\n                }\n            ]\n        }\n    };\n    return (<div className=\"mx-auto w-full max-w-[620px]\">\n          <Accordion defaultValue={[\"tokens\"]}>\n            <AccordionItem value=\"tokens\">\n              <AccordionTrigger>\n                {copy.accordion.items[0].question}\n              </AccordionTrigger>\n              <AccordionContent>\n                {copy.accordion.items[0].answer}\n              </AccordionContent>\n            </AccordionItem>\n            <AccordionItem value=\"source\">\n              <AccordionTrigger>\n                {copy.accordion.items[1].question}\n              </AccordionTrigger>\n              <AccordionContent>\n                {copy.accordion.items[1].answer}\n              </AccordionContent>\n            </AccordionItem>\n            <AccordionItem value=\"keyboard\">\n              <AccordionTrigger>\n                {copy.accordion.items[2].question}\n              </AccordionTrigger>\n              <AccordionContent>\n                {copy.accordion.items[2].answer}\n              </AccordionContent>\n            </AccordionItem>\n          </Accordion>\n        </div>);\n}",
     props: [
       {
         component: "Accordion",
@@ -128,18 +110,8 @@ export const componentDocs = [
     summary: "중요한 상태와 결과를 raised 표면으로 전달하는 메시지.",
     description:
       "아이콘, 제목, 설명을 정렬하는 조합형 Alert입니다. default, success, destructive 변형이 있으며 모든 변형이 색상 외에 테두리와 텍스트 대비를 함께 사용합니다.",
-    importCode: `import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"`,
-    usageCode: `<Alert variant="success">
-  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg>
-  <AlertTitle>저장했습니다</AlertTitle>
-  <AlertDescription>
-    변경 사항이 모든 팀원에게 반영되었습니다.
-  </AlertDescription>
-</Alert>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Alert, AlertDescription, AlertTitle } from \"@/components/ui/alert\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"alert\": {\n            \"newVersion\": \"새 Registry 버전\",\n            \"newVersionBody\": \"로컬 소스를 다시 설치하면 변경점을 확인할 수 있습니다.\",\n            \"synced\": \"동기화 완료\",\n            \"syncedBody\": \"56개 컴포넌트가 현재 프로젝트와 일치합니다.\",\n            \"missingTokens\": \"토큰을 찾을 수 없습니다\",\n            \"missingTokensBody\": \"globals.css에 base 항목을 먼저 설치해 주세요.\"\n        }\n    };\n    return (<PreviewStack>\n          <Alert>\n            <svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 11v6M12 7h.01\"/></svg>\n            <AlertTitle>{copy.alert.newVersion}</AlertTitle>\n            <AlertDescription>{copy.alert.newVersionBody}</AlertDescription>\n          </Alert>\n          <Alert variant=\"success\">\n            <svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m5 12 4 4L19 6\"/></svg>\n            <AlertTitle>{copy.alert.synced}</AlertTitle>\n            <AlertDescription>{copy.alert.syncedBody}</AlertDescription>\n          </Alert>\n          <Alert variant=\"destructive\">\n            <svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v6M12 17h.01\"/></svg>\n            <AlertTitle>{copy.alert.missingTokens}</AlertTitle>\n            <AlertDescription>{copy.alert.missingTokensBody}</AlertDescription>\n          </Alert>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Alert",
@@ -174,25 +146,8 @@ export const componentDocs = [
     summary: "이미지 로딩 실패에도 fallback을 유지하는 프로필 표면.",
     description:
       "Base UI Avatar 기반으로 이미지 로딩과 fallback 전환을 처리합니다. 세 가지 크기, 상태 badge, 겹쳐진 group과 잔여 인원 count를 제공합니다.",
-    importCode: `import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallback,
-  AvatarGroup,
-  AvatarGroupCount,
-  AvatarImage,
-} from "@/components/ui/avatar"`,
-    usageCode: `<AvatarGroup>
-  <Avatar size="lg">
-    <AvatarImage src="/members/ana.jpg" alt="Ana Martins" />
-    <AvatarFallback>AM</AvatarFallback>
-    <AvatarBadge aria-label="온라인" />
-  </Avatar>
-  <Avatar size="lg">
-    <AvatarFallback>UI</AvatarFallback>
-  </Avatar>
-  <AvatarGroupCount aria-label="그 외 8명">+8</AvatarGroupCount>
-</AvatarGroup>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount } from \"@/components/ui/avatar\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"avatar\": {\n            \"team\": \"팀\"\n        }\n    };\n    return (<PreviewStack compact>\n          <div className=\"flex items-center gap-3\">\n            <Avatar size=\"sm\">\n              <AvatarFallback>SM</AvatarFallback>\n            </Avatar>\n            <Avatar>\n              <AvatarFallback>AM</AvatarFallback>\n              <AvatarBadge />\n            </Avatar>\n            <Avatar size=\"lg\">\n              <AvatarFallback>UI</AvatarFallback>\n              <AvatarBadge />\n            </Avatar>\n          </div>\n          <div className=\"flex flex-wrap items-center justify-between gap-8 p-4\">\n            <span className=\"text-sm font-medium text-[var(--muted-foreground)]\">{copy.avatar.team}</span>\n            <AvatarGroup>\n              <Avatar><AvatarFallback>AN</AvatarFallback></Avatar>\n              <Avatar><AvatarFallback>DE</AvatarFallback></Avatar>\n              <Avatar><AvatarFallback>SO</AvatarFallback></Avatar>\n              <AvatarGroupCount>+9</AvatarGroupCount>\n            </AvatarGroup>\n          </div>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Avatar",
@@ -241,13 +196,8 @@ export const componentDocs = [
     summary: "상태와 분류를 짧고 선명하게 표시하는 inline label.",
     description:
       "다섯 가지 변형을 제공하는 가벼운 span 기반 컴포넌트입니다. 시각적 강조만 제공하고 별도의 상호작용이나 암묵적 ARIA role은 추가하지 않습니다.",
-    importCode: `import { Badge } from "@/components/ui/badge"`,
-    usageCode: `<div className="flex gap-2">
-  <Badge>Default</Badge>
-  <Badge variant="primary">Ready</Badge>
-  <Badge variant="soft">Draft</Badge>
-  <Badge variant="destructive">Failed</Badge>
-</div>`,
+    importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";",
+    usageCode: "export default function Example() {\n    return (<div className=\"flex items-center gap-3 flex-wrap justify-center\">\n          <Badge>Default</Badge>\n          <Badge variant=\"primary\">Primary</Badge>\n          <Badge variant=\"soft\">Soft</Badge>\n          <Badge variant=\"outline\">Outline</Badge>\n          <Badge variant=\"destructive\">Destructive</Badge>\n        </div>);\n}",
     props: [
       {
         component: "Badge",
@@ -283,29 +233,8 @@ export const componentDocs = [
     summary: "현재 페이지까지의 경로를 의미 있는 순서 목록으로 표시합니다.",
     description:
       "nav와 ol의 기본 시맨틱을 보존하며 링크, 현재 페이지, separator, 축약 표시를 조합할 수 있습니다. 현재 페이지는 aria-current=page로 자동 표시됩니다.",
-    importCode: `import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"`,
-    usageCode: `<Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink href="/">Home</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-    </BreadcrumbItem>
-  </BreadcrumbList>
-</Breadcrumb>`,
+    importCode: "\"use client\";\nimport { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from \"@/components/ui/breadcrumb\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"breadcrumb\": {\n            \"label\": \"페이지 경로\"\n        }\n    };\n    return (<Breadcrumb aria-label={copy.breadcrumb.label}>\n          <BreadcrumbList>\n            <BreadcrumbItem>\n              <BreadcrumbLink href={\"/components\"}>\n                Components\n              </BreadcrumbLink>\n            </BreadcrumbItem>\n            <BreadcrumbItem>\n              <BreadcrumbSeparator />\n              <BreadcrumbEllipsis />\n            </BreadcrumbItem>\n            <BreadcrumbItem>\n              <BreadcrumbSeparator />\n              <BreadcrumbLink href={\"/components\"}>\n                Navigation\n              </BreadcrumbLink>\n            </BreadcrumbItem>\n            <BreadcrumbItem>\n              <BreadcrumbSeparator />\n              <BreadcrumbPage>Breadcrumb</BreadcrumbPage>\n            </BreadcrumbItem>\n          </BreadcrumbList>\n        </Breadcrumb>);\n}",
     props: [
       {
         component: "Breadcrumb",
@@ -349,23 +278,8 @@ export const componentDocs = [
     summary: "raised, pressed, primary 상태를 갖는 기본 행동 컨트롤.",
     description:
       "네이티브 button을 사용해 폼과 키보드 동작을 그대로 유지합니다. 다섯 가지 variant와 네 가지 size를 제공하며 active 상태는 inset shadow로 눌림을 표현합니다.",
-    importCode: `import { Button } from "@/components/ui/button"`,
-    usageCode: `<div className="grid w-full gap-5">
-  <div className="flex flex-wrap items-center justify-center gap-3.5">
-    <Button>Default</Button>
-    <Button variant="primary">Primary</Button>
-    <Button variant="soft">Soft</Button>
-    <Button variant="ghost">Ghost</Button>
-    <Button variant="destructive">삭제</Button>
-  </div>
-  <div className="flex flex-wrap items-center justify-center gap-3.5">
-    <Button size="sm">작게</Button>
-    <Button>Default</Button>
-    <Button size="lg">크게</Button>
-    <Button size="icon" aria-label="항목 추가"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
-    <Button disabled>비활성</Button>
-  </div>
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"button\": {\n            \"delete\": \"삭제\",\n            \"small\": \"작게\",\n            \"large\": \"크게\",\n            \"addItem\": \"항목 추가\",\n            \"disabled\": \"비활성\"\n        }\n    };\n    return (<PreviewStack>\n          <div className=\"flex items-center gap-3 flex-wrap justify-center\">\n            <Button>Default</Button>\n            <Button variant=\"primary\">Primary</Button>\n            <Button variant=\"soft\">Soft</Button>\n            <Button variant=\"ghost\">Ghost</Button>\n            <Button variant=\"destructive\">{copy.button.delete}</Button>\n          </div>\n          <div className=\"flex items-center gap-3 flex-wrap justify-center\">\n            <Button size=\"sm\">{copy.button.small}</Button>\n            <Button>Default</Button>\n            <Button size=\"lg\">{copy.button.large}</Button>\n            <Button size=\"icon\" aria-label={copy.button.addItem}><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M5 12h14M12 5v14\"/></svg></Button>\n            <Button disabled>{copy.button.disabled}</Button>\n          </div>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Button",
@@ -409,27 +323,8 @@ export const componentDocs = [
     summary: "콘텐츠를 raised, soft, inset 또는 flat 표면으로 묶고 accent 면으로 강조합니다.",
     description:
       "Header, Title, Description, Action, Content, Footer를 조합하는 레이아웃 컴포넌트입니다. 기본 root는 div이므로 콘텐츠의 의미에 맞춰 제목과 상호작용 요소를 구성합니다.",
-    importCode: `import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"`,
-    usageCode: `<Card variant="raised">
-  <CardHeader>
-    <CardTitle>Team workspace</CardTitle>
-    <CardDescription>공유 토큰으로 함께 작업하세요.</CardDescription>
-    <CardAction>
-      <Button size="sm">열기</Button>
-    </CardAction>
-  </CardHeader>
-  <CardContent>8명의 멤버가 참여 중입니다.</CardContent>
-  <CardFooter>마지막 업데이트: 방금 전</CardFooter>
-</Card>`,
+    importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from \"@/components/ui/card\";\nimport { Progress } from \"@/components/ui/progress\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"card\": {\n            \"marketOverview\": \"시장 요약\",\n            \"marketOverviewBody\": \"오늘 관심 종목의 흐름을 한눈에 확인하세요.\",\n            \"live\": \"실시간\",\n            \"details\": \"상세 보기\",\n            \"insetSurface\": \"함몰 표면\",\n            \"insetSurfaceBody\": \"보조 정보에는 눌린 깊이를 적용할 수 있습니다.\",\n            \"portfolioTarget\": \"포트폴리오 목표\"\n        }\n    };\n    return (<div className=\"grid gap-5 sm:grid-cols-2\">\n          <Card className=\"min-w-0\">\n            <CardHeader>\n              <CardTitle>{copy.card.marketOverview}</CardTitle>\n              <CardDescription>{copy.card.marketOverviewBody}</CardDescription>\n              <CardAction>\n                <Badge variant=\"primary\">{copy.card.live}</Badge>\n              </CardAction>\n            </CardHeader>\n            <CardContent>\n              <div className=\"flex items-baseline justify-between gap-4 [&_strong]:text-2xl [&_span]:text-[var(--success)]\">\n                <strong>₩72,400</strong>\n                <span>+2.41%</span>\n              </div>\n            </CardContent>\n            <CardFooter>\n              <Button variant=\"soft\" className=\"w-full\">\n                {copy.card.details}\n              </Button>\n            </CardFooter>\n          </Card>\n          <Card className=\"min-w-0\" variant=\"inset\">\n            <CardHeader>\n              <CardTitle>{copy.card.insetSurface}</CardTitle>\n              <CardDescription>{copy.card.insetSurfaceBody}</CardDescription>\n            </CardHeader>\n            <CardContent>\n              <Progress aria-label={copy.card.portfolioTarget} value={68}/>\n            </CardContent>\n          </Card>\n        </div>);\n}",
     props: [
       {
         component: "Card",
@@ -472,12 +367,8 @@ import {
     summary: "boolean과 indeterminate 상태를 지원하는 네이티브 체크박스.",
     description:
       "투명한 native input 위에 뉴모피즘 표면을 겹쳐 폼 제출과 브라우저 접근성을 유지합니다. controlled, uncontrolled, indeterminate 상태와 shadcn식 onCheckedChange를 제공합니다.",
-    importCode: `import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="flex items-center gap-2">
-  <Checkbox id="updates" defaultChecked />
-  <Label htmlFor="updates">제품 업데이트 받기</Label>
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Checkbox, type CheckedState } from \"@/components/ui/checkbox\";\nimport { Label } from \"@/components/ui/label\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const [mixed, setMixed] = React.useState<CheckedState>(\"indeterminate\");\n    const copy = {\n        \"checkbox\": {\n            \"priceAlerts\": \"가격 알림 받기\",\n            \"partialWorkspace\": \"일부 워크스페이스에 적용됨\",\n            \"unavailable\": \"사용할 수 없는 옵션\"\n        }\n    };\n    return (<PreviewStack compact>\n          <Label className=\"inline-flex w-fit cursor-pointer items-center gap-2.5 text-sm\" htmlFor=\"docs-checkbox-checked\">\n            <Checkbox id=\"docs-checkbox-checked\" defaultChecked/>\n            {copy.checkbox.priceAlerts}\n          </Label>\n          <Label className=\"inline-flex w-fit cursor-pointer items-center gap-2.5 text-sm\" htmlFor=\"docs-checkbox-mixed\">\n            <Checkbox id=\"docs-checkbox-mixed\" checked={mixed} onCheckedChange={setMixed}/>\n            {copy.checkbox.partialWorkspace}\n          </Label>\n          <Label className=\"inline-flex w-fit cursor-pointer items-center gap-2.5 text-sm\" htmlFor=\"docs-checkbox-disabled\">\n            <Checkbox id=\"docs-checkbox-disabled\" disabled/>\n            {copy.checkbox.unavailable}\n          </Label>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Checkbox",
@@ -525,34 +416,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "포커스를 안전하게 가두고 원래 trigger로 돌려보내는 모달 표면.",
     description:
       "Base UI Dialog 기반으로 Portal, Backdrop, Popup, 제목, 설명, 닫기 동작을 조합합니다. Escape, 외부 클릭, focus trap과 복귀 동작을 primitive가 처리합니다.",
-    importCode: `import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"`,
-    usageCode: `<Dialog>
-  <DialogTrigger render={<Button variant="primary" />}>
-    프로젝트 만들기
-  </DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>새 프로젝트</DialogTitle>
-      <DialogDescription>
-        이름과 설명은 나중에도 변경할 수 있습니다.
-      </DialogDescription>
-    </DialogHeader>
-    <DialogFooter>
-      <DialogClose render={<Button variant="soft" />}>취소</DialogClose>
-      <Button variant="primary">만들기</Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from \"@/components/ui/dialog\";\nimport { Input } from \"@/components/ui/input\";\nimport { Label } from \"@/components/ui/label\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nfunction PreviewField({ children, htmlFor, label }: {\n    children: React.ReactNode;\n    htmlFor?: string;\n    label: string;\n}) {\n    return <div className=\"grid gap-2\">{htmlFor ? <Label htmlFor={htmlFor}>{label}</Label> : <span className=\"text-sm font-medium\">{label}</span>}{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"dialog\": {\n            \"editProfile\": \"프로필 편집\",\n            \"description\": \"공개 프로필에 표시될 이름과 핸들을 변경합니다.\",\n            \"name\": \"이름\",\n            \"username\": \"사용자 이름\",\n            \"cancel\": \"취소\",\n            \"save\": \"저장\",\n            \"hint\": \"열어서 focus trap과 Escape 닫기를 확인하세요.\"\n        }\n    };\n    return (<div className=\"flex items-center gap-3\">\n          <Dialog>\n            <DialogTrigger render={<Button variant=\"primary\"/>}>\n              {copy.dialog.editProfile}\n            </DialogTrigger>\n            <DialogContent showCloseButton={false}>\n              <DialogHeader>\n                <DialogTitle>{copy.dialog.editProfile}</DialogTitle>\n                <DialogDescription>{copy.dialog.description}</DialogDescription>\n              </DialogHeader>\n              <PreviewStack compact>\n                <PreviewField htmlFor=\"docs-dialog-name\" label={copy.dialog.name}>\n                  <Input defaultValue=\"Andongmin\" id=\"docs-dialog-name\"/>\n                </PreviewField>\n                <PreviewField htmlFor=\"docs-dialog-username\" label={copy.dialog.username}>\n                  <Input defaultValue=\"@softsurface\" id=\"docs-dialog-username\"/>\n                </PreviewField>\n              </PreviewStack>\n              <DialogFooter>\n                <DialogClose render={<Button variant=\"soft\"/>}>\n                  {copy.dialog.cancel}\n                </DialogClose>\n                <DialogClose render={<Button variant=\"primary\"/>}>\n                  {copy.dialog.save}\n                </DialogClose>\n              </DialogFooter>\n            </DialogContent>\n          </Dialog>\n          <span className=\"text-xs text-[var(--muted-foreground)]\">{copy.dialog.hint}</span>\n        </div>);\n}",
     props: [
       {
         component: "Dialog",
@@ -614,47 +479,8 @@ import {
     summary: "행동, 선택, submenu를 키보드로 탐색하는 맥락 메뉴.",
     description:
       "Base UI Menu 기반의 완전한 조합 API입니다. 일반 item, checkbox, radio group, label, separator, shortcut, 중첩 submenu를 한 표면 안에서 구성할 수 있습니다.",
-    importCode: `import * as React from "react"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"`,
-    usageCode: `export function WorkspaceMenu() {
-  const [showDepthGrid, setShowDepthGrid] = React.useState(true)
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="soft" />}>
-        메뉴 열기
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Workspace</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            복제
-            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuCheckboxItem
-            checked={showDepthGrid}
-            onCheckedChange={setShowDepthGrid}
-          >
-            깊이 격자 표시
-          </DropdownMenuCheckboxItem>
-          <DropdownMenuItem variant="destructive">삭제</DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from \"@/components/ui/dropdown-menu\";",
+    usageCode: "export default function Example() {\n    const [showDepthGrid, setShowDepthGrid] = React.useState(true);\n    const copy = {\n        \"dropdown\": {\n            \"workspaceMenu\": \"워크스페이스 메뉴\",\n            \"workspace\": \"내 워크스페이스\",\n            \"newPage\": \"새 페이지\",\n            \"duplicate\": \"복제\",\n            \"showDepthGrid\": \"깊이 가이드 표시\",\n            \"theme\": \"테마\",\n            \"light\": \"라이트\",\n            \"dark\": \"다크\",\n            \"system\": \"시스템\",\n            \"deleteWorkspace\": \"워크스페이스 삭제\"\n        }\n    };\n    return (<DropdownMenu>\n          <DropdownMenuTrigger render={<Button variant=\"soft\"/>}>\n            {copy.dropdown.workspaceMenu} <svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg>\n          </DropdownMenuTrigger>\n          <DropdownMenuContent align=\"start\">\n            <DropdownMenuGroup>\n              <DropdownMenuLabel>{copy.dropdown.workspace}</DropdownMenuLabel>\n              <DropdownMenuSeparator />\n              <DropdownMenuItem>\n                {copy.dropdown.newPage}{\" \"}\n                <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>\n              </DropdownMenuItem>\n              <DropdownMenuItem>{copy.dropdown.duplicate}</DropdownMenuItem>\n              <DropdownMenuCheckboxItem checked={showDepthGrid} onCheckedChange={setShowDepthGrid}>\n                {copy.dropdown.showDepthGrid}\n              </DropdownMenuCheckboxItem>\n              <DropdownMenuSub>\n                <DropdownMenuSubTrigger>{copy.dropdown.theme}</DropdownMenuSubTrigger>\n                <DropdownMenuSubContent>\n                  <DropdownMenuRadioGroup defaultValue=\"system\">\n                    <DropdownMenuRadioItem value=\"light\">\n                      {copy.dropdown.light}\n                    </DropdownMenuRadioItem>\n                    <DropdownMenuRadioItem value=\"dark\">\n                      {copy.dropdown.dark}\n                    </DropdownMenuRadioItem>\n                    <DropdownMenuRadioItem value=\"system\">\n                      {copy.dropdown.system}\n                    </DropdownMenuRadioItem>\n                  </DropdownMenuRadioGroup>\n                </DropdownMenuSubContent>\n              </DropdownMenuSub>\n              <DropdownMenuSeparator />\n              <DropdownMenuItem variant=\"destructive\">\n                {copy.dropdown.deleteWorkspace}\n              </DropdownMenuItem>\n            </DropdownMenuGroup>\n          </DropdownMenuContent>\n        </DropdownMenu>);\n}",
     props: [
       {
         component: "DropdownMenu",
@@ -729,18 +555,8 @@ import {
     summary: "focus와 validation 상태가 선명한 inset 단일 행 입력.",
     description:
       "native input의 모든 속성을 전달하며 뉴모피즘 inset 표면, file input, disabled, aria-invalid 상태를 일관되게 표현합니다.",
-    importCode: `import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="grid gap-2">
-  <Label htmlFor="email">이메일</Label>
-  <Input
-    id="email"
-    name="email"
-    type="email"
-    placeholder="you@example.com"
-    autoComplete="email"
-  />
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Input } from \"@/components/ui/input\";\nimport { Label } from \"@/components/ui/label\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nfunction PreviewField({ children, htmlFor, label }: {\n    children: React.ReactNode;\n    htmlFor?: string;\n    label: string;\n}) {\n    return <div className=\"grid gap-2\">{htmlFor ? <Label htmlFor={htmlFor}>{label}</Label> : <span className=\"text-sm font-medium\">{label}</span>}{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"input\": {\n            \"email\": \"이메일\",\n            \"invalid\": \"오류 상태\",\n            \"disabled\": \"비활성\",\n            \"readOnlyWorkspace\": \"읽기 전용 워크스페이스\"\n        }\n    };\n    return (<PreviewStack>\n          <PreviewField htmlFor=\"docs-input-email\" label={copy.input.email}>\n            <Input id=\"docs-input-email\" type=\"email\" placeholder=\"you@example.com\"/>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-input-invalid\" label={copy.input.invalid}>\n            <Input aria-invalid defaultValue=\"wrong-address\" id=\"docs-input-invalid\"/>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-input-disabled\" label={copy.input.disabled}>\n            <Input defaultValue={copy.input.readOnlyWorkspace} disabled id=\"docs-input-disabled\"/>\n          </PreviewField>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Input",
@@ -788,22 +604,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "입력, addon, action을 하나의 inset 표면으로 묶는 조합형 필드.",
     description:
       "InputGroupInput 또는 InputGroupTextarea에 앞뒤 addon, 보조 텍스트, button을 조합합니다. root의 focus-within 상태가 그룹 전체에 하나의 focus 표현을 제공합니다.",
-    importCode: `import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupText,
-} from "@/components/ui/input-group"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="grid gap-2">
-  <Label htmlFor="workspace">Workspace</Label>
-  <InputGroup>
-    <InputGroupAddon aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg></InputGroupAddon>
-    <InputGroupInput id="workspace" defaultValue="soft-interface" />
-    <InputGroupButton type="button">검색</InputGroupButton>
-  </InputGroup>
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from \"@/components/ui/input-group\";\nimport { Label } from \"@/components/ui/label\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nfunction PreviewField({ children, htmlFor, label }: {\n    children: React.ReactNode;\n    htmlFor?: string;\n    label: string;\n}) {\n    return <div className=\"grid gap-2\">{htmlFor ? <Label htmlFor={htmlFor}>{label}</Label> : <span className=\"text-sm font-medium\">{label}</span>}{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"inputGroup\": {\n            \"search\": \"검색\",\n            \"searchPlaceholder\": \"컴포넌트 검색...\",\n            \"website\": \"웹사이트\",\n            \"message\": \"메시지\",\n            \"messagePlaceholder\": \"짧은 메모를 입력하세요...\",\n            \"send\": \"보내기\"\n        }\n    };\n    return (<PreviewStack>\n          <PreviewField htmlFor=\"docs-input-group-search\" label={copy.inputGroup.search}>\n            <InputGroup>\n              <InputGroupAddon aria-hidden=\"true\"><svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-4-4\"/></svg></InputGroupAddon>\n              <InputGroupInput id=\"docs-input-group-search\" placeholder={copy.inputGroup.searchPlaceholder}/>\n              <InputGroupButton>{copy.inputGroup.search}</InputGroupButton>\n            </InputGroup>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-input-group-website\" label={copy.inputGroup.website}>\n            <InputGroup>\n              <InputGroupAddon><InputGroupText>https://</InputGroupText></InputGroupAddon>\n              <InputGroupInput defaultValue=\"neumorphism.local\" id=\"docs-input-group-website\"/>\n            </InputGroup>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-input-group-message\" label={copy.inputGroup.message}>\n            <InputGroup>\n              <InputGroupTextarea id=\"docs-input-group-message\" placeholder={copy.inputGroup.messagePlaceholder}/>\n              <InputGroupButton>{copy.inputGroup.send}</InputGroupButton>\n            </InputGroup>\n          </PreviewField>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "InputGroup",
@@ -851,11 +653,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "폼 control의 이름과 클릭 영역을 연결하는 native label.",
     description:
       "native label을 얇게 감싼 컴포넌트로 모든 표준 속성을 전달합니다. peer-disabled 상태와 일치하는 글자색과 cursor를 제공합니다.",
-    importCode: `import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="grid gap-2">
-  <Label htmlFor="project-name">프로젝트 이름</Label>
-  <Input id="project-name" name="projectName" />
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Input } from \"@/components/ui/input\";\nimport { Label } from \"@/components/ui/label\";\nimport { Switch } from \"@/components/ui/switch\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nfunction PreviewField({ children, htmlFor, label }: {\n    children: React.ReactNode;\n    htmlFor?: string;\n    label: string;\n}) {\n    return <div className=\"grid gap-2\">{htmlFor ? <Label htmlFor={htmlFor}>{label}</Label> : <span className=\"text-sm font-medium\">{label}</span>}{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"label\": {\n            \"caption\": \"레이블을 클릭하면 연결된 입력으로 이동합니다.\",\n            \"email\": \"이메일 주소\",\n            \"weeklyReport\": \"주간 리포트 받기\"\n        }\n    };\n    return (<PreviewStack>\n          <PreviewField label={copy.label.caption}>\n            <Label htmlFor=\"docs-label-email\">{copy.label.email}</Label>\n            <Input id=\"docs-label-email\" type=\"email\" placeholder=\"name@company.com\"/>\n          </PreviewField>\n          <Label className=\"inline-flex w-fit cursor-pointer items-center gap-2.5 text-sm\" htmlFor=\"docs-label-switch\">\n            <Switch id=\"docs-label-switch\" defaultChecked/>\n            {copy.label.weeklyReport}\n          </Label>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Label",
@@ -890,32 +689,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "현재 페이지와 이전·다음 이동을 명시하는 raised 링크 모음.",
     description:
       "nav, ul, li, anchor의 시맨틱을 유지하는 조합형 pagination입니다. 활성 페이지, 이전·다음 링크, 축약 표시를 제공합니다.",
-    importCode: `import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"`,
-    usageCode: `<Pagination>
-  <PaginationContent>
-    <PaginationItem>
-      <PaginationPrevious href="?page=1" />
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationLink href="?page=1">1</PaginationLink>
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationLink href="?page=2" isActive>2</PaginationLink>
-    </PaginationItem>
-    <PaginationItem><PaginationEllipsis /></PaginationItem>
-    <PaginationItem>
-      <PaginationNext href="?page=3" />
-    </PaginationItem>
-  </PaginationContent>
-</Pagination>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from \"@/components/ui/pagination\";",
+    usageCode: "export default function Example() {\n    const [paginationPage, setPaginationPage] = React.useState(2);\n    const copy = {\n        \"pagination\": {\n            \"label\": \"페이지 이동\",\n            \"previous\": \"이전\",\n            \"previousLabel\": \"이전 페이지로 이동\",\n            \"next\": \"다음\",\n            \"nextLabel\": \"다음 페이지로 이동\"\n        }\n    };\n    return (<Pagination aria-label={copy.pagination.label}>\n          <PaginationContent>\n            <PaginationItem>\n              <PaginationPrevious aria-label={copy.pagination.previousLabel} aria-disabled={paginationPage === 1} href=\"#pagination-example\" onClick={event => { event.preventDefault(); setPaginationPage(value => Math.max(1, value - 1)); }}>{copy.pagination.previous}</PaginationPrevious>\n            </PaginationItem>\n            {[1, 2, 3].map(value => <PaginationItem key={value}>\n              <PaginationLink href=\"#pagination-example\" isActive={paginationPage === value} onClick={event => { event.preventDefault(); setPaginationPage(value); }}>{value}</PaginationLink>\n            </PaginationItem>)}\n            <PaginationItem>\n              <PaginationNext aria-label={copy.pagination.nextLabel} aria-disabled={paginationPage === 3} href=\"#pagination-example\" onClick={event => { event.preventDefault(); setPaginationPage(value => Math.min(3, value + 1)); }}>{copy.pagination.next}</PaginationNext>\n            </PaginationItem>\n          </PaginationContent>\n        </Pagination>);\n}",
     props: [
       {
         component: "Pagination",
@@ -959,14 +734,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "완료 정도를 inset track과 primary fill로 표시하는 진행 상태.",
     description:
       "Base UI Progress의 progressbar 시맨틱을 사용합니다. 유효한 max와 value를 정규화하며 value가 없거나 유효하지 않으면 indeterminate 상태로 전달합니다.",
-    importCode: `import { Progress } from "@/components/ui/progress"`,
-    usageCode: `<div className="grid gap-2">
-  <div id="upload-label" className="flex justify-between">
-    <span>파일 업로드</span>
-    <span>72%</span>
-  </div>
-  <Progress value={72} max={100} aria-labelledby="upload-label" />
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Progress } from \"@/components/ui/progress\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"progress\": {\n            \"registryBuild\": \"Registry 빌드\",\n            \"themeTokens\": \"테마 토큰\",\n            \"waiting\": \"데이터 대기 중\"\n        }\n    };\n    return (<PreviewStack>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.progress.registryBuild}</span>\n              <strong>82%</strong>\n            </div>\n            <Progress aria-label={copy.progress.registryBuild} value={82}/>\n          </div>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.progress.themeTokens}</span>\n              <strong>12 / 16</strong>\n            </div>\n            <Progress aria-label={copy.progress.themeTokens} max={16} value={12}/>\n          </div>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.progress.waiting}</span>\n              <strong>—</strong>\n            </div>\n            <Progress aria-label={copy.progress.waiting} value={null}/>\n          </div>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Progress",
@@ -1008,25 +777,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "하나의 값을 선택하는 native radio input 그룹.",
     description:
       "React context로 name과 선택 상태를 공유하면서 각 항목은 실제 input[type=radio]로 렌더링합니다. controlled와 uncontrolled 값, 가로·세로 배치, disabled와 required를 지원합니다.",
-    importCode: `import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<RadioGroup
-  defaultValue="comfortable"
-  orientation="horizontal"
-  aria-label="화면 밀도"
->
-  <Label className="flex gap-2" htmlFor="density-compact">
-    <RadioGroupItem id="density-compact" value="compact" />
-    Compact
-  </Label>
-  <Label className="flex gap-2" htmlFor="density-comfortable">
-    <RadioGroupItem id="density-comfortable" value="comfortable" />
-    Comfortable
-  </Label>
-</RadioGroup>`,
+    importCode: "\"use client\";\nimport { Label } from \"@/components/ui/label\";\nimport { RadioGroup, RadioGroupItem } from \"@/components/ui/radio-group\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"radio\": {\n            \"label\": \"인터페이스 밀도\",\n            \"compact\": \"좁게\",\n            \"compactBody\": \"한 화면에 더 많은 정보를 표시합니다.\",\n            \"comfortable\": \"기본\",\n            \"comfortableBody\": \"기본 간격과 부드러운 깊이를 사용합니다.\",\n            \"spacious\": \"넓게\",\n            \"spaciousBody\": \"터치 환경에 넉넉한 간격을 제공합니다.\"\n        }\n    };\n    return (<RadioGroup defaultValue=\"comfortable\" aria-label={copy.radio.label}>\n          <Label className=\"flex w-full max-w-[560px] cursor-pointer items-center gap-3 border-b border-[var(--border)] px-1 py-3.5 [&>span]:grid [&>span]:flex-1 [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" htmlFor=\"density-compact-doc\">\n            <RadioGroupItem id=\"density-compact-doc\" value=\"compact\"/>\n            <span>\n              <strong>{copy.radio.compact}</strong>\n              <small>{copy.radio.compactBody}</small>\n            </span>\n          </Label>\n          <Label className=\"flex w-full max-w-[560px] cursor-pointer items-center gap-3 border-b border-[var(--border)] px-1 py-3.5 [&>span]:grid [&>span]:flex-1 [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" htmlFor=\"density-comfortable-doc\">\n            <RadioGroupItem id=\"density-comfortable-doc\" value=\"comfortable\"/>\n            <span>\n              <strong>{copy.radio.comfortable}</strong>\n              <small>{copy.radio.comfortableBody}</small>\n            </span>\n          </Label>\n          <Label className=\"flex w-full max-w-[560px] cursor-pointer items-center gap-3 border-b border-[var(--border)] px-1 py-3.5 [&>span]:grid [&>span]:flex-1 [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" htmlFor=\"density-spacious-doc\">\n            <RadioGroupItem id=\"density-spacious-doc\" value=\"spacious\"/>\n            <span>\n              <strong>{copy.radio.spacious}</strong>\n              <small>{copy.radio.spaciousBody}</small>\n            </span>\n          </Label>\n        </RadioGroup>);\n}",
     props: [
       {
         component: "RadioGroup",
@@ -1082,20 +834,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "브라우저의 native scrolling을 유지하는 테마형 overflow 표면.",
     description:
       "overflow-auto와 native scrollbar를 사용해 휠, 터치, 키보드, 브라우저 접근성을 그대로 유지합니다. ScrollBar export는 shadcn 조합 호환을 위한 숨겨진 placeholder입니다.",
-    importCode: `import {
-  ScrollArea,
-  ScrollBar,
-} from "@/components/ui/scroll-area"`,
-    usageCode: `<ScrollArea
-  className="h-64 p-4"
-  tabIndex={0}
-  aria-label="최근 활동"
->
-  {activities.map((activity) => (
-    <article key={activity.id}>{activity.title}</article>
-  ))}
-  <ScrollBar orientation="vertical" />
-</ScrollArea>`,
+    importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { ScrollArea } from \"@/components/ui/scroll-area\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"scrollArea\": {\n            \"label\": \"컴포넌트 상태 목록\",\n            \"categories\": {\n                \"accessibility\": \"접근성\",\n                \"overlay\": \"오버레이\",\n                \"data\": \"데이터\",\n                \"input\": \"입력\",\n                \"composite\": \"복합\"\n            },\n            \"statuses\": {\n                \"ready\": \"준비됨\",\n                \"review\": \"검토\",\n                \"planned\": \"예정\"\n            }\n        }\n    };\n    return (<ScrollArea aria-label={copy.scrollArea.label} className=\"h-[280px] w-full max-w-[580px] p-2.5\">\n          {[\n            [\n                \"NVDA\",\n                copy.scrollArea.categories.accessibility,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Dialog\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Data table\",\n                copy.scrollArea.categories.data,\n                copy.scrollArea.statuses.review,\n                \"review\",\n            ],\n            [\n                \"Slider\",\n                copy.scrollArea.categories.input,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Tooltip\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Calendar\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n            [\n                \"Command\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n        ].map(([name, category, state, stateId]) => (<div className=\"flex items-center justify-between gap-4 border-b border-[var(--border)] p-3.5 last:border-0 [&>span]:grid [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" key={name}>\n              <span><strong>{name}</strong><small>{category}</small></span>\n              <Badge variant={stateId === \"ready\" ? \"primary\" : \"soft\"}>\n                {state}\n              </Badge>\n            </div>))}\n        </ScrollArea>);\n}",
     props: [
       {
         component: "ScrollArea",
@@ -1136,20 +876,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "브라우저 접근성을 보존한 native select 표면.",
     description:
       "native select, optgroup, option을 그대로 사용하면서 inset field와 장식 chevron을 적용합니다. 모바일 플랫폼의 기본 picker와 폼 제출 동작을 유지합니다.",
-    importCode: `import {
-  Select,
-  SelectGroup,
-  SelectItem,
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="grid gap-2">
-  <Label htmlFor="role">역할</Label>
-  <Select id="role" name="role" defaultValue="designer">
-    <SelectItem value="designer">Designer</SelectItem>
-    <SelectItem value="developer">Developer</SelectItem>
-    <SelectItem value="founder">Founder</SelectItem>
-  </Select>
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Label } from \"@/components/ui/label\";\nimport { Select, SelectGroup, SelectItem } from \"@/components/ui/select\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nfunction PreviewField({ children, htmlFor, label }: {\n    children: React.ReactNode;\n    htmlFor?: string;\n    label: string;\n}) {\n    return <div className=\"grid gap-2\">{htmlFor ? <Label htmlFor={htmlFor}>{label}</Label> : <span className=\"text-sm font-medium\">{label}</span>}{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"select\": {\n            \"region\": \"지역\",\n            \"asiaPacific\": \"아시아 태평양\",\n            \"seoul\": \"대한민국 서울\",\n            \"tokyo\": \"일본 도쿄\",\n            \"singapore\": \"싱가포르\",\n            \"northAmerica\": \"북아메리카\",\n            \"sanFrancisco\": \"미국 샌프란시스코\",\n            \"disabled\": \"비활성\",\n            \"selectedByAdmin\": \"관리자가 선택함\"\n        }\n    };\n    return (<PreviewStack>\n          <PreviewField htmlFor=\"docs-select-region\" label={copy.select.region}>\n            <Select defaultValue=\"kr\" id=\"docs-select-region\">\n              <SelectGroup label={copy.select.asiaPacific}>\n                <SelectItem value=\"kr\">{copy.select.seoul}</SelectItem>\n                <SelectItem value=\"jp\">{copy.select.tokyo}</SelectItem>\n                <SelectItem value=\"sg\">{copy.select.singapore}</SelectItem>\n              </SelectGroup>\n              <SelectGroup label={copy.select.northAmerica}>\n                <SelectItem value=\"us-west\">\n                  {copy.select.sanFrancisco}\n                </SelectItem>\n              </SelectGroup>\n            </Select>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-select-disabled\" label={copy.select.disabled}>\n            <Select disabled defaultValue=\"locked\" id=\"docs-select-disabled\">\n              <SelectItem value=\"locked\">\n                {copy.select.selectedByAdmin}\n              </SelectItem>\n            </Select>\n          </PreviewField>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Select",
@@ -1198,12 +926,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "관련 콘텐츠 사이의 경계를 빛과 얇은 그림자로 표현하는 구분선.",
     description:
       "수평과 수직 방향을 지원하며 기본값은 장식용입니다. 의미 있는 섹션 경계가 필요하면 decorative=false로 separator role과 aria-orientation을 활성화할 수 있습니다.",
-    importCode: `import { Separator } from "@/components/ui/separator"`,
-    usageCode: `<div>
-  <section>프로필 설정</section>
-  <Separator className="my-6" />
-  <section>알림 설정</section>
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Separator } from \"@/components/ui/separator\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"separator\": {\n            \"title\": \"컴포넌트 문서\",\n            \"description\": \"예제, 설치 방법, 속성 정보를 확인하세요.\",\n            \"preview\": \"미리보기\",\n            \"installation\": \"설치\"\n        }\n    };\n    return (<PreviewStack>\n          <div className=\"grid gap-1 [&_span]:text-sm [&_span]:text-[var(--muted-foreground)]\">\n            <strong>{copy.separator.title}</strong>\n            <span>{copy.separator.description}</span>\n          </div>\n          <Separator />\n          <div className=\"flex items-center gap-3 h-5 text-sm\">\n            <a href=\"#preview\">{copy.separator.preview}</a>\n            <Separator decorative={false} orientation=\"vertical\"/>\n            <a href=\"#installation\">{copy.separator.installation}</a>\n            <Separator decorative={false} orientation=\"vertical\"/>\n            <a href=\"#api-reference\">API</a>\n          </div>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Separator",
@@ -1239,15 +963,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "로딩될 콘텐츠의 크기와 위치를 미리 보여주는 inset placeholder.",
     description:
       "단순 div 기반의 pulse placeholder입니다. 시각적 로딩 형태만 제공하며 aria-hidden=true로 보조기술에서 숨겨집니다.",
-    importCode: `import { Skeleton } from "@/components/ui/skeleton"`,
-    usageCode: `<div className="flex items-center gap-3" aria-busy="true">
-  <span className="sr-only">프로필을 불러오는 중</span>
-  <Skeleton className="size-12 rounded-full" />
-  <div className="grid flex-1 gap-2">
-    <Skeleton className="h-4 w-1/3" />
-    <Skeleton className="h-3 w-2/3" />
-  </div>
-</div>`,
+    importCode: "\"use client\";\nimport { Skeleton } from \"@/components/ui/skeleton\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"skeleton\": {\n            \"loading\": \"콘텐츠 로딩 중\"\n        }\n    };\n    return (<div className=\"w-full max-w-[520px] overflow-hidden rounded-[var(--neu-radius-surface)] border border-[var(--border)]\" aria-label={copy.skeleton.loading}>\n          <Skeleton className=\"h-[150px] w-full rounded-none\"/>\n          <div className=\"grid gap-4 p-5\">\n            <div className=\"flex items-center gap-3\">\n              <Skeleton className=\"size-12 rounded-full\"/>\n              <div className=\"grid flex-1 gap-2.5\">\n                <Skeleton className=\"h-3.5 w-[58%]\"/>\n                <Skeleton className=\"h-2.5 w-full\"/>\n              </div>\n            </div>\n            <Skeleton className=\"h-2.5 w-full\"/>\n            <Skeleton className=\"h-2.5 w-full max-w-[72%]\"/>\n          </div>\n        </div>);\n}",
     props: [
       {
         component: "Skeleton",
@@ -1277,22 +994,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "하나 또는 여러 값을 가로·세로 track에서 조정하는 범위 컨트롤.",
     description:
       "Base UI Slider 기반으로 단일 값과 number[] range API를 제공합니다. 배열 항목 수만큼 thumb를 만들고 thumbLabels로 각 input의 이름을 지정하며, 가로·세로 방향과 controlled·uncontrolled 값을 지원합니다.",
-    importCode: `import { Slider } from "@/components/ui/slider"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="grid gap-3">
-  <div className="flex justify-between">
-    <Label id="depth-label">Depth intensity</Label>
-    <output>64%</output>
-  </div>
-  <Slider
-    defaultValue={[64]}
-    min={0}
-    max={100}
-    step={1}
-    aria-labelledby="depth-label"
-    thumbLabels={["Depth intensity"]}
-  />
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Slider } from \"@/components/ui/slider\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const [sliderValue, setSliderValue] = React.useState([32, 72]);\n    const copy = {\n        \"slider\": {\n            \"priceRange\": \"가격 범위\",\n            \"minimumPrice\": \"최저 가격\",\n            \"maximumPrice\": \"최고 가격\",\n            \"verticalVolume\": \"세로 음량\",\n            \"verticalOrientation\": \"세로 방향\"\n        }\n    };\n    return (<PreviewStack>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.slider.priceRange}</span>\n              <strong>₩{sliderValue[0]}K – ₩{sliderValue[1]}K</strong>\n            </div>\n            <Slider aria-label={copy.slider.priceRange} max={100} min={0} step={1} thumbLabels={[\n            copy.slider.minimumPrice,\n            copy.slider.maximumPrice,\n        ]} value={sliderValue} onValueChange={(nextValue) => {\n            setSliderValue(Array.isArray(nextValue) ? [...nextValue] : [nextValue]);\n        }}/>\n          </div>\n          <div className=\"flex items-center gap-3 min-h-[200px] justify-center text-sm\">\n            <Slider aria-label={copy.slider.verticalVolume} defaultValue={[60]} orientation=\"vertical\" thumbLabels={[copy.slider.verticalVolume]}/>\n            <span>{copy.slider.verticalOrientation}</span>\n          </div>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Slider",
@@ -1356,12 +1059,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "즉시 적용되는 켜짐·꺼짐 설정을 눌린 track으로 표현하는 control.",
     description:
       "native checkbox input에 role=switch를 적용해 폼과 브라우저 동작을 유지합니다. checked, defaultChecked, onCheckedChange를 모두 사용할 수 있습니다.",
-    importCode: `import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"`,
-    usageCode: `<div className="flex items-center justify-between gap-4">
-  <Label htmlFor="system-theme">시스템 테마 따르기</Label>
-  <Switch id="system-theme" name="systemTheme" defaultChecked />
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Label } from \"@/components/ui/label\";\nimport { Switch } from \"@/components/ui/switch\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const [switchValue, setSwitchValue] = React.useState(true);\n    const copy = {\n        \"switch\": {\n            \"livePrices\": \"실시간 가격\",\n            \"livePricesBody\": \"시장 가격을 자동으로 갱신합니다.\",\n            \"emailAlerts\": \"이메일 알림\",\n            \"emailAlertsBody\": \"중요한 변동만 받아봅니다.\",\n            \"adminPolicy\": \"관리자 정책\",\n            \"adminPolicyBody\": \"현재 워크스페이스에서 잠겨 있습니다.\"\n        }\n    };\n    return (<PreviewStack compact>\n          <Label className=\"flex w-full max-w-[560px] cursor-pointer items-center gap-3 border-b border-[var(--border)] px-1 py-3.5 [&>span]:grid [&>span]:flex-1 [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" htmlFor=\"docs-switch-live\">\n            <span>\n              <strong>{copy.switch.livePrices}</strong>\n              <small>{copy.switch.livePricesBody}</small>\n            </span>\n            <Switch id=\"docs-switch-live\" checked={switchValue} onCheckedChange={setSwitchValue}/>\n          </Label>\n          <Label className=\"flex w-full max-w-[560px] cursor-pointer items-center gap-3 border-b border-[var(--border)] px-1 py-3.5 [&>span]:grid [&>span]:flex-1 [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" htmlFor=\"docs-switch-email\">\n            <span>\n              <strong>{copy.switch.emailAlerts}</strong>\n              <small>{copy.switch.emailAlertsBody}</small>\n            </span>\n            <Switch id=\"docs-switch-email\"/>\n          </Label>\n          <Label className=\"flex w-full max-w-[560px] cursor-pointer items-center gap-3 border-b border-[var(--border)] px-1 py-3.5 [&>span]:grid [&>span]:flex-1 [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" htmlFor=\"docs-switch-locked\">\n            <span>\n              <strong>{copy.switch.adminPolicy}</strong>\n              <small>{copy.switch.adminPolicyBody}</small>\n            </span>\n            <Switch id=\"docs-switch-locked\" disabled/>\n          </Label>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Switch",
@@ -1408,32 +1107,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "작은 화면에서 가로 스크롤되는 의미 있는 데이터 표.",
     description:
       "native table 요소와 caption, thead, tbody, tfoot, tr, th, td를 조합합니다. 외부 container가 overflow-x-auto와 뉴모피즘 raised 표면을 제공합니다.",
-    importCode: `import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"`,
-    usageCode: `<Table>
-  <TableCaption>최근 설치한 컴포넌트</TableCaption>
-  <TableHeader>
-    <TableRow>
-      <TableHead scope="col">Component</TableHead>
-      <TableHead scope="col">Category</TableHead>
-      <TableHead scope="col">Status</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow>
-      <TableCell>Dialog</TableCell>
-      <TableCell>Overlay</TableCell>
-      <TableCell>Ready</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>`,
+    importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from \"@/components/ui/table\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"table\": {\n            \"caption\": \"관심 종목 · 10분 지연 데이터\",\n            \"symbol\": \"종목\",\n            \"price\": \"가격\",\n            \"change\": \"변동\",\n            \"status\": \"상태\",\n            \"open\": \"장중\",\n            \"selected\": \"선택됨\",\n            \"watch\": \"관심\"\n        }\n    };\n    return (<Table>\n          <TableCaption>{copy.table.caption}</TableCaption>\n          <TableHeader>\n            <TableRow>\n              <TableHead>{copy.table.symbol}</TableHead>\n              <TableHead>{copy.table.price}</TableHead>\n              <TableHead>{copy.table.change}</TableHead>\n              <TableHead>{copy.table.status}</TableHead>\n            </TableRow>\n          </TableHeader>\n          <TableBody>\n            <TableRow>\n              <TableCell><strong>NVDA</strong></TableCell>\n              <TableCell>$181.92</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+2.41%</TableCell>\n              <TableCell>\n                <Badge variant=\"primary\">{copy.table.open}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow data-state=\"selected\">\n              <TableCell><strong>005930</strong></TableCell>\n              <TableCell>₩72,400</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+1.08%</TableCell>\n              <TableCell>\n                <Badge variant=\"soft\">{copy.table.selected}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow>\n              <TableCell><strong>TSLA</strong></TableCell>\n              <TableCell>$318.27</TableCell>\n              <TableCell className=\"font-semibold text-[var(--destructive)]\">−0.64%</TableCell>\n              <TableCell>\n                <Badge variant=\"outline\">{copy.table.watch}</Badge>\n              </TableCell>\n            </TableRow>\n          </TableBody>\n        </Table>);\n}",
     props: [
       {
         component: "Table",
@@ -1480,22 +1155,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "같은 맥락 안의 panel을 키보드로 전환하는 tab interface.",
     description:
       "Base UI Tabs 기반으로 active trigger를 raised 표면으로, list를 inset track으로 표현합니다. controlled와 uncontrolled 값, 자동·수동 활성화, 가로·세로 방향을 지원합니다.",
-    importCode: `import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"`,
-    usageCode: `<Tabs defaultValue="surface">
-  <TabsList aria-label="디자인 토큰">
-    <TabsTrigger value="surface">Surface</TabsTrigger>
-    <TabsTrigger value="motion">Motion</TabsTrigger>
-    <TabsTrigger value="access">Access</TabsTrigger>
-  </TabsList>
-  <TabsContent value="surface">Raised와 inset 표면 토큰입니다.</TabsContent>
-  <TabsContent value="motion">짧고 일관된 전환 토큰입니다.</TabsContent>
-  <TabsContent value="access">Focus와 대비 토큰입니다.</TabsContent>
-</Tabs>`,
+    importCode: "\"use client\";\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from \"@/components/ui/tabs\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"tabs\": {\n            \"label\": \"포트폴리오 보기\",\n            \"overview\": \"개요\",\n            \"activity\": \"활동\",\n            \"settings\": \"설정\",\n            \"portfolioValue\": \"포트폴리오 가치\",\n            \"monthlyChange\": \"이번 달 +6.8%\",\n            \"activityBody\": \"최근 7일 동안 12개의 거래와 4개의 가격 알림이 있었습니다.\",\n            \"settingsBody\": \"계좌 동기화와 알림 설정을 이 영역에 구성할 수 있습니다.\"\n        }\n    };\n    return (<Tabs defaultValue=\"overview\">\n          <TabsList aria-label={copy.tabs.label}>\n            <TabsTrigger value=\"overview\">{copy.tabs.overview}</TabsTrigger>\n            <TabsTrigger value=\"activity\">{copy.tabs.activity}</TabsTrigger>\n            <TabsTrigger value=\"settings\">{copy.tabs.settings}</TabsTrigger>\n          </TabsList>\n          <TabsContent value=\"overview\" className=\"grid min-h-[140px] content-center gap-2 py-6 text-sm [&_strong]:text-3xl [&_small]:text-[var(--success)]\">\n            <span className=\"text-sm font-medium text-[var(--muted-foreground)]\">\n              {copy.tabs.portfolioValue}\n            </span>\n            <strong>₩18,420,000</strong>\n            <small>{copy.tabs.monthlyChange}</small>\n          </TabsContent>\n          <TabsContent value=\"activity\" className=\"grid min-h-[140px] content-center gap-2 py-6 text-sm [&_strong]:text-3xl [&_small]:text-[var(--success)]\">\n            {copy.tabs.activityBody}\n          </TabsContent>\n          <TabsContent value=\"settings\" className=\"grid min-h-[140px] content-center gap-2 py-6 text-sm [&_strong]:text-3xl [&_small]:text-[var(--success)]\">\n            {copy.tabs.settingsBody}\n          </TabsContent>\n        </Tabs>);\n}",
     props: [
       {
         component: "Tabs",
@@ -1551,17 +1212,8 @@ import { Label } from "@/components/ui/label"`,
     summary: "여러 줄 텍스트를 입력하는 resizable inset field.",
     description:
       "native textarea의 모든 속성을 전달하며 최소 높이, 세로 resize, focus와 aria-invalid 상태를 뉴모피즘 토큰으로 표현합니다.",
-    importCode: `import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"`,
-    usageCode: `<div className="grid gap-2">
-  <Label htmlFor="note">메모</Label>
-  <Textarea
-    id="note"
-    name="note"
-    placeholder="팀에 남길 내용을 입력하세요."
-    rows={5}
-  />
-</div>`,
+    importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Label } from \"@/components/ui/label\";\nimport { Textarea } from \"@/components/ui/textarea\";",
+    usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nfunction PreviewField({ children, htmlFor, label }: {\n    children: React.ReactNode;\n    htmlFor?: string;\n    label: string;\n}) {\n    return <div className=\"grid gap-2\">{htmlFor ? <Label htmlFor={htmlFor}>{label}</Label> : <span className=\"text-sm font-medium\">{label}</span>}{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"textarea\": {\n            \"investmentNote\": \"투자 메모\",\n            \"investmentNoteValue\": \"실적 발표 이후 거래량과 지지선을 다시 확인한다.\",\n            \"validationState\": \"오류 상태\",\n            \"invalidValue\": \"너무 짧은 메모\",\n            \"disabled\": \"비활성\",\n            \"disabledValue\": \"공유된 메모는 편집할 수 없습니다.\"\n        }\n    };\n    return (<PreviewStack>\n          <PreviewField htmlFor=\"docs-textarea-note\" label={copy.textarea.investmentNote}>\n            <Textarea defaultValue={copy.textarea.investmentNoteValue} id=\"docs-textarea-note\" maxLength={240}/>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-textarea-invalid\" label={copy.textarea.validationState}>\n            <Textarea aria-invalid defaultValue={copy.textarea.invalidValue} id=\"docs-textarea-invalid\"/>\n          </PreviewField>\n          <PreviewField htmlFor=\"docs-textarea-disabled\" label={copy.textarea.disabled}>\n            <Textarea defaultValue={copy.textarea.disabledValue} disabled id=\"docs-textarea-disabled\"/>\n          </PreviewField>\n        </PreviewStack>);\n}",
     props: [
       {
         component: "Textarea",
@@ -1608,25 +1260,8 @@ import { Textarea } from "@/components/ui/textarea"`,
     summary: "hover와 keyboard focus에 짧은 보조 설명을 제공하는 popup.",
     description:
       "Base UI Tooltip 기반으로 Provider, Root, Trigger, Portal, Positioner와 Popup을 조합합니다. 기본 provider 지연은 250ms이며 popup은 trigger 주변 충돌을 자동으로 피합니다.",
-    importCode: `import { Button } from "@/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"`,
-    usageCode: `<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger
-      render={<Button size="icon" aria-label="설정 열기" />}
-    >
-      <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z" /><circle cx="12" cy="12" r="3" /></svg>
-    </TooltipTrigger>
-    <TooltipContent side="top">
-      설정
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>`,
+    importCode: "\"use client\";\nimport { Button } from \"@/components/ui/button\";\nimport { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from \"@/components/ui/tooltip\";",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"tooltip\": {\n            \"addToWatchlist\": \"관심 종목에 추가\",\n            \"keyboardFocus\": \"키보드 포커스\",\n            \"keyboardFocusBody\": \"Tab으로 이동해도 같은 설명이 표시됩니다.\",\n            \"hint\": \"버튼에 hover하거나 focus하세요.\"\n        }\n    };\n    return (<TooltipProvider delay={100}>\n          <div className=\"flex items-center gap-3\">\n            <Tooltip>\n              <TooltipTrigger render={<Button size=\"icon\" variant=\"soft\" aria-label={copy.tooltip.addToWatchlist}/>}>\n                <svg aria-hidden=\"true\" className=\"size-4\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\">\n                  <path d=\"M12 5v14M5 12h14\"/>\n                </svg>\n              </TooltipTrigger>\n              <TooltipContent side=\"top\">\n                {copy.tooltip.addToWatchlist}\n              </TooltipContent>\n            </Tooltip>\n            <Tooltip>\n              <TooltipTrigger render={<Button variant=\"ghost\"/>}>\n                {copy.tooltip.keyboardFocus}\n              </TooltipTrigger>\n              <TooltipContent side=\"bottom\">\n                {copy.tooltip.keyboardFocusBody}\n              </TooltipContent>\n            </Tooltip>\n            <span className=\"text-xs text-[var(--muted-foreground)]\">{copy.tooltip.hint}</span>\n          </div>\n        </TooltipProvider>);\n}",
     props: [
       {
         component: "TooltipProvider",
@@ -2299,8 +1934,8 @@ import {
     "사이트 이동에는 실제 href 링크를 사용하고 nav에 이름을 부여하세요.",
     "Tab·방향키·Escape로 조작하고, 포커스 표시를 제거하지 마세요."
   ],
-  "importCode": "\"use client\";\nimport { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport } from \"@/components/ui/navigation-menu\";",
-  "usageCode": "export default function Example() {\n  return <div><NavigationMenu aria-label=\"제품\"><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger>제품</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href=\"#navigation-guide\">안내</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport /></NavigationMenu><p id=\"navigation-guide\">안내</p></div>;\n}"
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport } from \"@/components/ui/navigation-menu\";",
+  "usageCode": "export default function Example() {\n    const t = {\n        \"product\": \"제품\",\n        \"components\": \"컴포넌트\",\n        \"themes\": \"테마\",\n        \"guides\": \"안내\",\n        \"guideText\": \"메뉴에서 이동할 섹션을 선택하세요.\"\n    };\n    const id = React.useId();\n    const componentCount = 56;\n    return <div className=\"grid w-full gap-5\"><NavigationMenu aria-label={t.product}><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger>{t.product}</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href={`#${id}-components`}>{t.components}</NavigationMenuLink><NavigationMenuLink href={`#${id}-themes`}>{t.themes}</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem><NavigationMenuItem><NavigationMenuLink href={`#${id}-guide`}>{t.guides}</NavigationMenuLink></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport /></NavigationMenu><div className=\"grid gap-2 text-sm text-[var(--muted-foreground)] [&>p[id]]:scroll-mt-24\"><p id={`${id}-guide`}>{t.guideText}</p><p id={`${id}-components`}>{t.components} · {componentCount}</p><p id={`${id}-themes`}>{t.themes} · 5</p></div></div>;\n}"
 },
 {
   "slug": "menubar",
@@ -2332,8 +1967,8 @@ import {
     "페이지 이동이 아닌 명령에 사용하고 menubar에 이름을 부여하세요.",
     "방향키로 메뉴 사이를 이동합니다. 비활성 항목은 실행되지 않습니다."
   ],
-  "importCode": "\"use client\";\nimport * as React from \"react\";\nimport { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarCheckboxItem } from \"@/components/ui/menubar\";",
-  "usageCode": "export default function Example() {\n  const [visible, setVisible] = React.useState(true);\n  const [message, setMessage] = React.useState(\"준비됨\");\n  return <div><Menubar aria-label=\"파일\"><MenubarMenu><MenubarTrigger>파일</MenubarTrigger><MenubarContent><MenubarItem onClick={() => setMessage(\"문서를 만들었습니다\")}>새 문서</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>보기</MenubarTrigger><MenubarContent><MenubarCheckboxItem checked={visible} onCheckedChange={setVisible}>상태 표시</MenubarCheckboxItem></MenubarContent></MenubarMenu></Menubar>{visible && <p role=\"status\">{message}</p>}</div>;\n}"
+  "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarCheckboxItem } from \"@/components/ui/menubar\";",
+  "usageCode": "export default function Example() {\n    const t = {\n        \"file\": \"파일\",\n        \"create\": \"새 문서\",\n        \"archived\": \"보관\",\n        \"view\": \"보기\",\n        \"status\": \"상태 표시\",\n        \"created\": \"새 문서를 만들었습니다\",\n        \"ready\": \"준비됨\"\n    };\n    const [showStatus, setShowStatus] = React.useState(true);\n    const [created, setCreated] = React.useState(false);\n    return <div className=\"grid w-full gap-4\"><Menubar aria-label={t.file}><MenubarMenu><MenubarTrigger>{t.file}</MenubarTrigger><MenubarContent><MenubarItem onClick={() => setCreated(true)}>{t.create}</MenubarItem><MenubarItem disabled>{t.archived}</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>{t.view}</MenubarTrigger><MenubarContent><MenubarCheckboxItem checked={showStatus} onCheckedChange={setShowStatus}>{t.status}</MenubarCheckboxItem></MenubarContent></MenubarMenu></Menubar>{showStatus && <p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{created ? t.created : t.ready}</p>}</div>;\n}"
 },
 {
   "slug": "chart",
@@ -2384,8 +2019,8 @@ import {
     category: "navigation-disclosure",
     summary: "검색과 키보드 선택을 결합한 명령 팔레트와 빠른 이동 목록.",
     description: "cmdk의 검색·활성 항목·키보드 탐색을 유지하면서 입력 영역은 inset, 선택된 항목은 눌린 표면으로 표현합니다. CommandDialog로 기존 Dialog와 조합할 수 있습니다.",
-    importCode: "\"use client\";\nimport * as React from \"react\";\nimport {\n  Command,\n  CommandEmpty,\n  CommandGroup,\n  CommandInput,\n  CommandItem,\n  CommandList,\n  CommandShortcut,\n} from \"@/components/ui/command\";",
-    usageCode: "export default function Example() {\n  const [selected, setSelected] = React.useState(\"선택한 명령 없음\");\n  return <div className=\"grid w-full max-w-md gap-3\">\n    <Command>\n      <CommandInput placeholder=\"명령 검색\" />\n      <CommandList>\n        <CommandEmpty>일치하는 명령이 없습니다.</CommandEmpty>\n        <CommandGroup heading=\"탐색\">\n          <CommandItem value=\"dashboard\" onSelect={() => setSelected(\"대시보드\")}>대시보드<CommandShortcut>⌘D</CommandShortcut></CommandItem>\n          <CommandItem value=\"settings\" onSelect={() => setSelected(\"설정\")}>설정<CommandShortcut>⌘,</CommandShortcut></CommandItem>\n        </CommandGroup>\n      </CommandList>\n    </Command>\n    <p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{selected}</p>\n  </div>;\n}",
+    importCode: "\"use client\";\n\nimport * as React from \"react\";\nimport { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut } from \"@/components/ui/command\";",
+    usageCode: "export default function Example() {\n    const text = {\n        \"city\": \"도시 검색\",\n        \"empty\": \"일치하는 도시가 없습니다.\",\n        \"quiet\": \"저장된 상태\"\n    };\n    const cities = [\"Busan\", \"London\", \"Seoul\", \"Tokyo\"];\n    const [message, setMessage] = React.useState(\"\");\n    return <div className=\"grid w-full max-w-sm gap-3\"><Command><CommandInput placeholder={text.city} aria-label={text.city}/><CommandList><CommandEmpty>{text.empty}</CommandEmpty><CommandGroup heading={text.city}>{cities.map((city, index) => <CommandItem key={city} value={city} onSelect={() => setMessage(city)}>{city}<CommandShortcut>⌘{index + 1}</CommandShortcut></CommandItem>)}</CommandGroup></CommandList></Command><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message || text.quiet}</p></div>;\n}",
     props: [
       {
         component: "Command",
@@ -2432,8 +2067,8 @@ import {
     category: "actions-overlays",
     summary: "포인터 위치에서 열리는 작업 메뉴와 체크·라디오·하위 메뉴.",
     description: "Base UI Context Menu의 포인터 anchoring과 키보드 탐색을 유지하면서 팝업을 floating 뉴모피즘 표면으로 표현합니다. 일반 항목, 체크·라디오 항목, 하위 메뉴와 destructive 상태를 조합할 수 있습니다.",
-    importCode: "\"use client\";\nimport * as React from \"react\";\nimport {\n  ContextMenu,\n  ContextMenuCheckboxItem,\n  ContextMenuContent,\n  ContextMenuItem,\n  ContextMenuLabel,\n  ContextMenuShortcut,\n  ContextMenuTrigger,\n} from \"@/components/ui/context-menu\";",
-    usageCode: "export default function Example() {\n  const [details, setDetails] = React.useState(true);\n  const [message, setMessage] = React.useState(\"준비됨\");\n  return <div className=\"grid gap-3\">\n    <ContextMenu>\n      <ContextMenuTrigger className=\"grid min-h-32 place-items-center rounded-[var(--neu-radius-surface)] border border-[var(--neu-edge)] bg-[var(--neu-surface)] p-6 [box-shadow:var(--neu-shadow-inset)]\">\n        마우스 오른쪽 버튼을 눌러 메뉴를 여세요\n      </ContextMenuTrigger>\n      <ContextMenuContent>\n        <ContextMenuLabel>문서</ContextMenuLabel>\n        <ContextMenuItem onClick={() => setMessage(\"복사했습니다\")}>복사<ContextMenuShortcut>⌘C</ContextMenuShortcut></ContextMenuItem>\n        <ContextMenuCheckboxItem checked={details} onCheckedChange={setDetails}>세부 정보 표시</ContextMenuCheckboxItem>\n      </ContextMenuContent>\n    </ContextMenu>\n    <p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message}</p>\n  </div>;\n}",
+    importCode: "\"use client\";\n\nimport * as React from \"react\";\nimport { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuLabel, ContextMenuItem, ContextMenuCheckboxItem, ContextMenuShortcut } from \"@/components/ui/context-menu\";",
+    usageCode: "export default function Example() {\n    const text = {\n        \"tools\": \"문서 도구\",\n        \"undo\": \"실행 취소\",\n        \"details\": \"세부 설정\",\n        \"quiet\": \"저장된 상태\"\n    };\n    const [message, setMessage] = React.useState(\"\");\n    const [expanded, setExpanded] = React.useState(false);\n    return <div className=\"grid w-full max-w-sm gap-3\"><ContextMenu><ContextMenuTrigger className=\"grid min-h-32 place-items-center rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-5 text-center text-sm font-medium [box-shadow:var(--neu-shadow-inset)]\">{text.tools}</ContextMenuTrigger><ContextMenuContent><ContextMenuLabel>{text.tools}</ContextMenuLabel><ContextMenuItem onClick={() => setMessage(text.undo)}>{text.undo}<ContextMenuShortcut>⌘Z</ContextMenuShortcut></ContextMenuItem><ContextMenuCheckboxItem checked={expanded} onCheckedChange={setExpanded}>{text.details}</ContextMenuCheckboxItem></ContextMenuContent></ContextMenu><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message || text.quiet}</p></div>;\n}",
     props: [
       {
         component: "ContextMenu",
@@ -2500,8 +2135,8 @@ import {
     category: "forms-selection",
     summary: "한 개의 실제 입력과 여러 시각적 slot을 결합한 인증 코드 입력.",
     description: "input-otp의 포커스·붙여넣기·자동 이동 동작을 그대로 사용하고 각 slot만 뉴모피즘 표면으로 표현합니다. 화면에는 여러 칸이 보이지만 접근성 트리와 폼 값은 하나의 입력으로 유지됩니다.",
-    importCode: "\"use client\";\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@/components/ui/input-otp\";",
-    usageCode: "export default function Example() {\n  return <InputOTP maxLength={6} defaultValue=\"123456\" aria-label=\"인증 코드\">\n    <InputOTPGroup>\n      <InputOTPSlot index={0} />\n      <InputOTPSlot index={1} />\n      <InputOTPSlot index={2} />\n    </InputOTPGroup>\n    <InputOTPSeparator />\n    <InputOTPGroup>\n      <InputOTPSlot index={3} />\n      <InputOTPSlot index={4} />\n      <InputOTPSlot index={5} />\n    </InputOTPGroup>\n  </InputOTP>;\n}",
+    importCode: "\"use client\";\n\nimport { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from \"@/components/ui/input-otp\";",
+    usageCode: "export default function Example() {\n    const locale = \"ko\";\n    const otpCopy = {\n        \"ko\": \"인증 코드\",\n        \"en\": \"Verification code\",\n        \"ja\": \"認証コード\",\n        \"zh\": \"验证码\"\n    };\n    return <div className=\"grid gap-3\"><InputOTP maxLength={6} aria-label={otpCopy[locale]}><InputOTPGroup><InputOTPSlot index={0}/><InputOTPSlot index={1}/><InputOTPSlot index={2}/></InputOTPGroup><InputOTPSeparator /><InputOTPGroup><InputOTPSlot index={3}/><InputOTPSlot index={4}/><InputOTPSlot index={5}/></InputOTPGroup></InputOTP></div>;\n}",
     props: [
       { component: "InputOTP", name: "maxLength", type: "number", required: true, description: "허용할 인증 코드 길이를 지정합니다." },
       { component: "InputOTP", name: "value / defaultValue", type: "string", description: "controlled 또는 초기 uncontrolled 코드 값을 지정합니다." },
@@ -2563,8 +2198,8 @@ import {
     category: "navigation-disclosure",
     summary: "데스크톱 축소와 모바일 Sheet를 함께 제공하는 애플리케이션 내비게이션.",
     description: "SidebarProvider가 desktop·mobile 상태와 Ctrl/Cmd+B 단축키를 관리합니다. 데스크톱에서는 offcanvas 또는 icon 크기로 접고, 모바일에서는 기존 Sheet를 재사용합니다. 메뉴·툴팁·포커스 상태는 기존 뉴모피즘 토큰을 그대로 사용합니다.",
-    importCode: "\"use client\";\nimport {\n  Sidebar,\n  SidebarContent,\n  SidebarGroup,\n  SidebarGroupContent,\n  SidebarGroupLabel,\n  SidebarHeader,\n  SidebarInset,\n  SidebarMenu,\n  SidebarMenuItem,\n  SidebarMenuLink,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/sidebar\";",
-    usageCode: "export default function Example() {\n  return <SidebarProvider className=\"min-h-80\">\n    <Sidebar collapsible=\"icon\">\n      <SidebarHeader><strong>Workspace</strong></SidebarHeader>\n      <SidebarContent>\n        <SidebarGroup>\n          <SidebarGroupLabel>탐색</SidebarGroupLabel>\n          <SidebarGroupContent>\n            <SidebarMenu>\n              <SidebarMenuItem><SidebarMenuLink href=\"#overview\" isActive tooltip=\"개요\"><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m3 10 9-7 9 7v10H3Z\" /><path d=\"M9 20v-7h6v7\" /></svg><span>개요</span></SidebarMenuLink></SidebarMenuItem>\n              <SidebarMenuItem><SidebarMenuLink href=\"#settings\" tooltip=\"설정\"><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z\" /><circle cx=\"12\" cy=\"12\" r=\"3\" /></svg><span>설정</span></SidebarMenuLink></SidebarMenuItem>\n            </SidebarMenu>\n          </SidebarGroupContent>\n        </SidebarGroup>\n      </SidebarContent>\n    </Sidebar>\n    <SidebarInset><header className=\"p-3\"><SidebarTrigger label=\"사이드바 전환\" /></header><section id=\"overview\" className=\"p-4\">워크스페이스 개요</section></SidebarInset>\n  </SidebarProvider>;\n}",
+    importCode: "\"use client\";\n\nimport { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from \"@/components/ui/sidebar\";",
+    usageCode: "export default function Example() {\n    const text = {\n        \"close\": \"닫기\"\n    };\n    const sidebar = {\n        \"workspace\": \"워크스페이스\",\n        \"navigation\": \"탐색\",\n        \"overview\": \"개요\",\n        \"settings\": \"설정\",\n        \"toggle\": \"사이드바 전환\",\n        \"body\": \"현재 프로젝트의 주요 정보를 확인합니다.\"\n    };\n    return <SidebarProvider className=\"h-56 w-full max-w-lg overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] [box-shadow:var(--neu-shadow-inset)]\"><Sidebar collapsible=\"icon\" mobileTitle={sidebar.workspace} mobileDescription={sidebar.navigation} closeLabel={text.close}><SidebarHeader><strong className=\"truncate text-sm\">{sidebar.workspace}</strong></SidebarHeader><SidebarContent><SidebarGroup><SidebarGroupLabel>{sidebar.navigation}</SidebarGroupLabel><SidebarGroupContent><SidebarMenu><SidebarMenuItem><SidebarMenuButton isActive tooltip={sidebar.overview}><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m3 10 9-7 9 7v10H3Z\"/><path d=\"M9 20v-7h6v7\"/></svg><span>{sidebar.overview}</span></SidebarMenuButton></SidebarMenuItem><SidebarMenuItem><SidebarMenuButton tooltip={sidebar.settings}><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg><span>{sidebar.settings}</span></SidebarMenuButton></SidebarMenuItem></SidebarMenu></SidebarGroupContent></SidebarGroup></SidebarContent></Sidebar><SidebarInset><header className=\"flex items-center gap-2 border-b border-[var(--border)] p-2\"><SidebarTrigger label={sidebar.toggle}/><strong className=\"text-sm\">{sidebar.overview}</strong></header><div className=\"p-4 text-sm text-[var(--muted-foreground)]\">{sidebar.body}</div></SidebarInset></SidebarProvider>;\n}",
     props: [
       { component: "SidebarProvider", name: "defaultOpen / open / onOpenChange", type: "boolean / controlled state", description: "데스크톱 사이드바의 초기 또는 controlled 열림 상태를 관리합니다." },
       { component: "Sidebar", name: "collapsible", type: '"offcanvas" | "icon" | "none"', defaultValue: '"offcanvas"', description: "접힌 상태에서 완전히 숨길지 icon 너비로 유지할지 지정합니다." },
@@ -2584,8 +2219,8 @@ import {
     category: "data-feedback",
     summary: "이미지와 설명을 하나의 raised surface로 묶는 콘텐츠 카드.",
     description: "표준 img와 figure/figcaption 의미를 유지하면서 이미지와 설명을 뉴모피즘 surface로 묶습니다. 이미지 로딩·최적화는 애플리케이션이나 프레임워크가 소유하고, 이 컴포넌트는 콘텐츠 구조와 표면만 제공합니다.",
-    importCode: "import { ImageCard } from \"@/components/ui/image-card\";",
-    usageCode: "export default function Example() {\n  return <ImageCard src=\"/workspace-cover.jpg\" alt=\"부드러운 파란 그라데이션의 워크스페이스 표지\" caption=\"Design system workspace · 12 components\" />;\n}",
+    importCode: "\"use client\";\n\nimport { ImageCard } from \"@/components/ui/image-card\";",
+    usageCode: "export default function Example() {\n    const image = {\n        \"alt\": \"부드러운 파란 그라데이션의 워크스페이스 표지\",\n        \"caption\": \"디자인 시스템 워크스페이스 · 12 components\"\n    };\n    const previewImage = \"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop stop-color='%23dbeafe'/%3E%3Cstop offset='1' stop-color='%23bfdbfe'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='4' height='3' fill='url(%23g)'/%3E%3C/svg%3E\";\n    return <ImageCard src={previewImage} alt={image.alt} caption={image.caption} className=\"max-w-xs\"/>;\n}",
     props: [
       { component: "ImageCard", name: "src", type: "string", required: true, description: "표시할 이미지 URL입니다." },
       { component: "ImageCard", name: "alt", type: "string", required: true, description: "이미지의 목적을 설명하는 대체 텍스트입니다." },
@@ -2605,8 +2240,8 @@ import {
     category: "data-feedback",
     summary: "일시 정지와 reduced-motion을 지원하는 반복 정보 스트립.",
     description: "동일한 항목을 두 번 배치해 연속 흐름을 만들되 두 번째 복사본은 aria-hidden으로 제거합니다. 사용자는 Pause/Resume 버튼으로 움직임을 멈출 수 있고 prefers-reduced-motion에서는 애니메이션이 자동으로 정지됩니다.",
-    importCode: "\"use client\";\nimport { Marquee } from \"@/components/ui/marquee\";",
-    usageCode: "export default function Example() {\n  return <Marquee items={[\"접근성\", \"Base UI\", \"React 19\", \"Tailwind 4\"]} label=\"지원 기술\" pauseLabel=\"애니메이션 일시 정지\" resumeLabel=\"애니메이션 다시 시작\" />;\n}",
+    importCode: "\"use client\";\n\nimport { Marquee } from \"@/components/ui/marquee\";",
+    usageCode: "export default function Example() {\n    const marquee = {\n        \"items\": [\n            \"접근성\",\n            \"Base UI\",\n            \"React 19\",\n            \"Tailwind 4\"\n        ],\n        \"label\": \"지원 기술\",\n        \"pause\": \"애니메이션 일시 정지\",\n        \"resume\": \"애니메이션 다시 시작\"\n    };\n    return <Marquee items={marquee.items} label={marquee.label} pauseLabel={marquee.pause} resumeLabel={marquee.resume} duration={18}/>;\n}",
     props: [
       { component: "Marquee", name: "items", type: "readonly ReactNode[]", required: true, description: "순환해서 보여줄 항목 목록입니다." },
       { component: "Marquee", name: "duration", type: "number", defaultValue: "24", description: "한 주기의 애니메이션 시간을 초 단위로 지정합니다." },

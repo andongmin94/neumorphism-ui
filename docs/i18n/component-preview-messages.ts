@@ -6,7 +6,7 @@ const ko = {
       {
         question: "스타일 토큰도 함께 설치되나요?",
         answer:
-          "첫 컴포넌트를 추가할 때 뉴모피즘 surface, shadow, radius 토큰이 프로젝트 CSS에 함께 연결됩니다.",
+          "먼저 공통 스타일을 한 번 설치하세요. 뉴모피즘 surface, shadow, radius 토큰이 프로젝트 CSS에 연결되고 각 컴포넌트가 이를 사용합니다.",
       },
       {
         question: "설치 후 소스를 수정할 수 있나요?",
@@ -222,7 +222,7 @@ const en: ComponentPreviewMessages = {
       {
         question: "Are the style tokens installed too?",
         answer:
-          "Adding the first component also connects the neumorphic surface, shadow, and radius tokens to your project CSS.",
+          "Install the shared base once first. It connects the neumorphic surface, shadow, and radius tokens to your project CSS for components to use.",
       },
       {
         question: "Can I edit the source after installation?",
@@ -429,7 +429,7 @@ const zh: ComponentPreviewMessages = {
       {
         question: "样式 token 也会一起安装吗？",
         answer:
-          "添加第一个组件时，也会将新拟态的 surface、shadow 和 radius token 接入项目 CSS。",
+          "先安装一次共享基础样式，将新拟态的 surface、shadow 和 radius token 接入项目 CSS，供各组件使用。",
       },
       {
         question: "安装后可以修改源码吗？",
@@ -633,7 +633,7 @@ const ja: ComponentPreviewMessages = {
       {
         question: "スタイルトークンも一緒にインストールされますか？",
         answer:
-          "最初のコンポーネントを追加すると、ニューモーフィズムの surface、shadow、radius トークンもプロジェクトの CSS に接続されます。",
+          "最初に共通スタイルを一度導入してください。ニューモーフィズムの surface、shadow、radius トークンがプロジェクトの CSS に接続され、各コンポーネントで使われます。",
       },
       {
         question: "インストール後にソースを編集できますか？",

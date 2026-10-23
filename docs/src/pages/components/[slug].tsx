@@ -7,15 +7,17 @@ import { ComponentExample } from "@/components/docs/component-example";
 import { ComponentInstallation } from "@/components/docs/component-installation";
 import { InstallCommand } from "@/components/docs/install-command";
 import { componentDocs } from "@/components/docs/component-docs-data";
+import { getComponentUsageExample } from "@/components/docs/component-usage-examples";
 import { CopyableCode } from "@/components/docs/copyable-code";
 import { DocsToc } from "@/components/docs/docs-toc";
 import { componentPreviewMessages } from "@/i18n/component-preview-messages";
+import { getComponentGuide } from "@/i18n/component-guides";
 import { isLocale, localeHref } from "@/i18n/config";
 import {
   getLocalizedComponentDoc,
   getLocalizedComponentDocGroups,
 } from "@/i18n/localized-component-docs";
-import { formatMessage, getMessages } from "@/i18n/messages";
+import { getMessages } from "@/i18n/messages";
 
 export async function getConfig() {
   return { staticPaths: componentDocs.map(({ slug }) => slug) } satisfies RouteConfig;
@@ -30,14 +32,14 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
     notFound();
   }
 
-  const exampleItems = Array.from(new Set([...component.importCode.matchAll(/from\s+["']@\/components\/ui\/([a-z0-9-]+)["']/g)].map((match) => match[1])));
+  const guide = getComponentGuide(locale, slug);
+  const usageCode = getComponentUsageExample(slug);
+  const exampleItems = Array.from(new Set([...`${component.importCode}\n${usageCode}`.matchAll(/from\s+["']@\/components\/ui\/([a-z0-9-]+)["']/g)].map((match) => match[1])));
   const exampleInstall = `npx shadcn@latest add ${exampleItems.map((name) => `@neumorphism-ui/${name}`).join(" ")}`;
   const messages = getMessages(locale);
   const groups = getLocalizedComponentDocGroups(locale);
-  const category = groups.find(
-    ({ category: group }) => group.id === component.category,
-  )?.category;
-  const navigationComponents = groups.flatMap(({ items }) => items);
+  const navigationComponents = groups.flatMap(({ items }) => items)
+    .sort((a, b) => a.title.localeCompare(b.title, "en"));
   const componentIndex = navigationComponents.findIndex(
     (item) => item.slug === slug,
   );
@@ -53,42 +55,20 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
 
   return (
     <div className="component-doc-page docs-content-layout">
-      <PageMetadata locale={locale} title={component.title} description={component.description} />
+      <PageMetadata locale={locale} title={component.title} description={guide.purpose} />
       <article className="component-doc-article">
         <header className="component-doc-intro">
           <nav
             aria-label={messages.componentDetail.breadcrumb}
             className="component-doc-breadcrumb"
           >
-            <Link href={localeHref(locale, "/components")}>Components</Link>
+            <Link href={localeHref(locale, "/components")}>{messages.navigation.components}</Link>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{component.title}</span>
           </nav>
 
-          <div className="component-doc-meta">
-            <span>{category?.label}</span>
-            <code>@neumorphism-ui/{component.slug}</code>
-          </div>
-
-          <div className="component-doc-heading-row">
-            <div>
-              <h1>{component.title}</h1>
-              <p className="component-doc-description">{component.description}</p>
-            </div>
-          </div>
-
-          <div className="component-doc-intro-actions">
-            <InstallCommand locale={locale} compact name={component.slug} />
-            <a
-              className="component-doc-registry-link"
-              href={`/r/${component.slug}.json`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {messages.common.registryJson}
-              <span aria-hidden="true">↗</span>
-            </a>
-          </div>
+          <h1>{component.title}</h1>
+          <p className="component-doc-description">{guide.purpose}</p>
 
           <nav className="component-doc-quicknav" aria-label={messages.common.pageToc}>
             {componentTocItems.map((item) => (
@@ -101,8 +81,12 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           <div className="component-doc-section-heading">
             <h2>{messages.common.preview}</h2>
           </div>
+          <div className="component-doc-example-caption">
+            <h3>{guide.exampleTitle}</h3>
+            <p>{guide.exampleDescription}</p>
+          </div>
           <ComponentExample
-            code={<CopyableCode lang="tsx" code={component.usageCode} label={`${slug} ${messages.common.code}`} multiline />}
+            code={<CopyableCode lang="tsx" code={`${component.importCode}\n\n${component.usageCode}`} label={`${slug} ${messages.common.code}`} multiline />}
             copy={componentPreviewMessages[locale]}
             slug={component.slug}
           />
@@ -112,38 +96,39 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           <div className="component-doc-section-heading">
             <h2>{messages.common.installation}</h2>
           </div>
-          <ComponentInstallation slug={component.slug} command={<InstallCommand locale={locale} name={component.slug} />} />
-          <p className="docs-section-note">
+          <p className="component-doc-install-note">
             {messages.componentDetail.firstUsePrefix}{" "}
             <Link href={localeHref(locale, "/docs/installation")}>
-              {messages.componentDetail.namespaceSetup}
+              {messages.componentDetail.baseSetup}
             </Link>{" "}
             {messages.componentDetail.firstUseSuffix}
           </p>
+          <ComponentInstallation slug={component.slug} command={<InstallCommand locale={locale} name={component.slug} />} />
+          {exampleItems.length > 1 && (
+            <div className="component-doc-example-dependencies">
+              <p>{guide.exampleTitle}</p>
+              <CopyableCode lang="bash" code={exampleInstall} label={`${messages.common.preview}: ${messages.common.installation}`} />
+            </div>
+          )}
+          <a
+            className="component-doc-registry-link"
+            href={`/r/${component.slug}.json`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {messages.common.registryJson}<span aria-hidden="true">↗</span>
+          </a>
         </section>
 
         <section className="component-doc-section" id="usage">
           <div className="component-doc-section-heading">
             <h2>{messages.common.usage}</h2>
           </div>
-          {exampleItems.length > 1 && <CopyableCode lang="bash" code={exampleInstall} label={`${messages.common.usage}: ${messages.common.installation}`} />}
+          <p>{guide.usage}</p>
           <div className="component-doc-code-block">
-            <h3>Import</h3>
             <CopyableCode lang="tsx"
-              code={component.importCode}
-              label={formatMessage(messages.componentDetail.importCode, {
-                title: component.title,
-              })}
-              multiline
-            />
-          </div>
-          <div className="component-doc-code-block">
-            <h3>Example</h3>
-            <CopyableCode lang="tsx"
-              code={component.usageCode}
-              label={formatMessage(messages.componentDetail.usageCode, {
-                title: component.title,
-              })}
+              code={usageCode}
+              label={`${component.title}: ${messages.common.usage}`}
               multiline
             />
           </div>
@@ -153,6 +138,7 @@ export default function ComponentDetailPage({ lang, slug }: { lang: string; slug
           <div className="component-doc-section-heading">
             <h2 id="component-api-heading">{messages.common.apiReference}</h2>
           </div>
+          <p>{component.description}</p>
           <div className="component-api-table-wrap" role="region" aria-labelledby="component-api-heading" tabIndex={0}>
             <table className="component-api-table">
               <thead>

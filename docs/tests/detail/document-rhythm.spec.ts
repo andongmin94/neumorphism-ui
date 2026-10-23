@@ -2,7 +2,7 @@
 import { expect, test, type Page } from "@playwright/test";
 const references = ["", "installation", "design-tokens", "registry", "resources", "accessibility", "verification", "credits"];
 async function referenceMetrics(page: Page) {
-  return page.locator(".docs-reference-article").evaluate(article => {
+  return page.locator(".docs-article").evaluate(article => {
     const header = article.querySelector<HTMLElement>(":scope > .docs-page-header")!;
     const sections = [...article.querySelectorAll<HTMLElement>(":scope > .docs-content-section")];
     const rect = (element: HTMLElement) => {
@@ -53,7 +53,7 @@ for (const slug of references) {
     const metrics = await referenceMetrics(page);
     await info.attach("section-metrics", { body: JSON.stringify(metrics, null, 2), contentType: "application/json" });
     await page.screenshot({ path: info.outputPath(`${slug || "index"}-top.png`), animations: "disabled" });
-    await page.locator(".docs-reference-article").screenshot({ path: info.outputPath(`${slug || "index"}-article.png`), animations: "disabled" });
+    await page.locator(".docs-article").screenshot({ path: info.outputPath(`${slug || "index"}-article.png`), animations: "disabled" });
     await checkReference(page);
   });
 }
@@ -135,7 +135,7 @@ test("reference link rows use one internal rule without card borders", async ({ 
       await expect(links.nth(i)).toHaveCSS("border-radius", "0px");
     }
   }
-  await page.locator(".docs-reference-article").screenshot({ path: info.outputPath("reference-links.png"), animations: "disabled" });
+  await page.locator(".docs-article").screenshot({ path: info.outputPath("reference-links.png"), animations: "disabled" });
 });
 test("chart reference layout keeps gutters and source disclosure boundaries", async ({ page }, info) => {
   await page.goto("/en/charts");

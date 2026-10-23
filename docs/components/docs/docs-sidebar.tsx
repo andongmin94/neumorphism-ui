@@ -11,39 +11,51 @@ import { referenceSearchCopy } from "@/i18n/reference-search-copy";
 const navigationCopy = {
   ko: {
     start: "시작",
+    customize: "커스터마이징",
     explore: "탐색",
     reference: "레퍼런스",
+    project: "프로젝트",
     components: "컴포넌트",
     templates: "템플릿",
     charts: "차트",
     filter: "컴포넌트 필터",
+    empty: "일치하는 컴포넌트가 없습니다.",
   },
   en: {
     start: "Getting started",
+    customize: "Customize",
     explore: "Explore",
     reference: "Reference",
+    project: "Project",
     components: "Components",
     templates: "Templates",
     charts: "Charts",
     filter: "Filter components",
+    empty: "No matching components.",
   },
   ja: {
     start: "スタート",
+    customize: "カスタマイズ",
     explore: "探索",
     reference: "リファレンス",
+    project: "プロジェクト",
     components: "コンポーネント",
     templates: "テンプレート",
     charts: "チャート",
     filter: "コンポーネントを絞り込む",
+    empty: "一致するコンポーネントはありません。",
   },
   zh: {
     start: "开始",
+    customize: "定制",
     explore: "探索",
     reference: "参考",
+    project: "项目",
     components: "组件",
     templates: "模板",
     charts: "图表",
     filter: "筛选组件",
+    empty: "没有匹配的组件。",
   },
 } as const;
 
@@ -82,7 +94,8 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
   const copy = navigationCopy[locale];
   const reference = referenceSearchCopy[locale];
   const [query, setQuery] = React.useState("");
-  const components = componentDocGroups.flatMap(({ items }) => items);
+  const components = componentDocGroups.flatMap(({ items }) => items)
+    .sort((left, right) => left.title.localeCompare(right.title, "en"));
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
   const filteredComponents = components.filter((item) =>
     !normalizedQuery ||
@@ -106,49 +119,15 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
         </NavLink>
       </section>
 
-      <section className="docs-nav-group">
-        <span>{copy.explore}</span>
-        <NavLink href={localeHref(locale, "/components")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.components}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/templates")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.templates}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/charts")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.charts}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/customize")} onNavigate={onNavigate} pathname={pathname}>
-          {messages.navigation.themeStudio}
-        </NavLink>
-      </section>
-
-      <section className="docs-nav-group">
-        <span>{copy.reference}</span>
-        <NavLink href={localeHref(locale, "/docs/design-tokens")} onNavigate={onNavigate} pathname={pathname}>
-          {reference["design-tokens"].title}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/docs/registry")} onNavigate={onNavigate} pathname={pathname}>
-          {reference.registry.title}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/docs/accessibility")} onNavigate={onNavigate} pathname={pathname}>
-          {reference.accessibility.title}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/docs/verification")} onNavigate={onNavigate} pathname={pathname}>
-          {reference.verification.title}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/docs/resources")} onNavigate={onNavigate} pathname={pathname}>
-          {reference.resources.title}
-        </NavLink>
-        <NavLink href={localeHref(locale, "/docs/credits")} onNavigate={onNavigate} pathname={pathname}>
-          {reference.credits.title}
-        </NavLink>
-      </section>
-
       <section className="docs-nav-group docs-nav-group-components">
         <div className="docs-nav-group-heading">
           <span>{copy.components}</span>
           <small>{filteredComponents.length}/{components.length}</small>
         </div>
+
+        <NavLink href={localeHref(locale, "/components")} onNavigate={onNavigate} pathname={pathname}>
+          {messages.navigation.allComponents}
+        </NavLink>
 
         <label className="sidebar-filter">
           <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -175,7 +154,51 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
               {item.title}
             </NavLink>
           ))}
+          {filteredComponents.length === 0 && <p role="status">{copy.empty}</p>}
         </div>
+      </section>
+
+      <section className="docs-nav-group">
+        <span>{copy.customize}</span>
+        <NavLink href={localeHref(locale, "/docs/design-tokens")} onNavigate={onNavigate} pathname={pathname}>
+          {reference["design-tokens"].title}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/customize")} onNavigate={onNavigate} pathname={pathname}>
+          {messages.navigation.themeStudio}
+        </NavLink>
+      </section>
+
+      <section className="docs-nav-group">
+        <span>{copy.explore}</span>
+        <NavLink href={localeHref(locale, "/templates")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.templates}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/charts")} onNavigate={onNavigate} pathname={pathname}>
+          {copy.charts}
+        </NavLink>
+      </section>
+
+      <section className="docs-nav-group">
+        <span>{copy.reference}</span>
+        <NavLink href={localeHref(locale, "/docs/registry")} onNavigate={onNavigate} pathname={pathname}>
+          {reference.registry.title}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/docs/accessibility")} onNavigate={onNavigate} pathname={pathname}>
+          {reference.accessibility.title}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/docs/verification")} onNavigate={onNavigate} pathname={pathname}>
+          {reference.verification.title}
+        </NavLink>
+      </section>
+
+      <section className="docs-nav-group">
+        <span>{copy.project}</span>
+        <NavLink href={localeHref(locale, "/docs/resources")} onNavigate={onNavigate} pathname={pathname}>
+          {reference.resources.title}
+        </NavLink>
+        <NavLink href={localeHref(locale, "/docs/credits")} onNavigate={onNavigate} pathname={pathname}>
+          {reference.credits.title}
+        </NavLink>
       </section>
     </nav>
   );

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 const pages = [
   { name: "home", path: "/en", heading: "Neumorphic UI for React", sidebar: false },
-  { name: "docs", path: "/en/docs", heading: "Documentation", sidebar: true },
+  { name: "docs", path: "/en/docs", heading: "Introduction", sidebar: true },
   { name: "components", path: "/en/components", heading: "Components", sidebar: false },
   { name: "templates", path: "/en/templates", heading: "Templates", sidebar: false },
   { name: "charts", path: "/en/charts", heading: "Charts", sidebar: false },
@@ -103,7 +103,7 @@ test("presentation: mobile-docs-navigation", async ({ page }, info) => {
   const dialog = page.getByRole("dialog", { name: "Mobile documentation navigation" });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByText("Getting started", { exact: true })).toBeVisible();
-  await expect(dialog.getByRole("link", { name: "Components", exact: true })).toBeVisible();
+  await expect(dialog.locator('a[href="/en/components"]')).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Button", exact: true })).toBeVisible();
   const box = await dialog.boundingBox();
   expect(box?.width ?? 0).toBeGreaterThan(300);

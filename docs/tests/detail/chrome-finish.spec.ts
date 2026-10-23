@@ -22,19 +22,11 @@ for (const [locale, label] of Object.entries(labels)) {
     await expect(installTab).toHaveCSS("box-shadow", tabStyle.shadow);
     await expect(installTab).toHaveCSS("font-size", "14px");
     await expect(installation.getByRole("tablist")).toHaveCSS("height", "44px");
-    const meta = page.locator(".component-doc-meta");
-    await expect(meta.locator("code")).toHaveText("@neumorphism-ui/hover-card");
-    await expect(meta.locator("code")).toHaveCSS("text-transform", "none");
-    for (const part of await meta.locator(":scope > *").all()) {
-      await expect(part).toHaveCSS("font-size", "12px");
-      await expect(part).toHaveCSS("line-height", "20px");
-    }
+    const intro = page.locator(".component-doc-intro");
+    await expect(intro.locator("h1")).toHaveText("Hover Card");
+    await expect(intro.locator(".component-doc-description")).toBeVisible();
+    await expect(intro.locator(".compact-install, .component-doc-registry-link")).toHaveCount(0);
     if (info.project.use.viewport!.width > 560) {
-      const boxes = await meta.locator(":scope > *").evaluateAll(elements => elements.map(element => {
-        const r = element.getBoundingClientRect(); return { center: r.y + r.height / 2, height: r.height };
-      }));
-      expect(Math.abs(boxes[0].center - boxes[1].center)).toBeLessThanOrEqual(1);
-      expect(boxes[0].height).toBe(boxes[1].height);
       const current = page.locator('.docs-site-sidebar a[aria-current="page"]');
       await expect(current).toHaveCount(1);
       expect(await current.evaluate(element => getComputedStyle(element, "::before").content)).toBe("none");

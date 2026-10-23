@@ -130,17 +130,23 @@ test("pill controls keep theme code contained, scrollable and copyable", async (
   const css = output.getByRole("group", { name: "Generated neumorphism theme CSS", exact: true });
   const expectCodeSurface = async (shell: Locator) => {
     await expect(shell).toBeVisible();
-    const box = (await shell.boundingBox())!;
-    const corner = await shell.evaluate(element => Number.parseFloat(getComputedStyle(element).borderTopLeftRadius));
+    // Highlighting can replace the pre between two awaited measurements.
+    // Read the surface and both children in one DOM snapshot.
+    const { box, corner, children } = await shell.evaluate(element => ({
+      box: element.getBoundingClientRect().toJSON(),
+      corner: Number.parseFloat(getComputedStyle(element).borderTopLeftRadius),
+      children: ["pre", ".copy-button"].map(selector => element.querySelector(selector)?.getBoundingClientRect().toJSON()),
+    }));
     expect(corner).toBeGreaterThan(0);
     expect(corner).toBeLessThanOrEqual(32);
-    for (const child of [shell.locator("pre"), shell.locator(".copy-button")]) {
-      await expect(child).toBeVisible();
-      const childBox = (await child.boundingBox())!;
-      expect(childBox.x).toBeGreaterThanOrEqual(box.x);
-      expect(childBox.y).toBeGreaterThanOrEqual(box.y);
-      expect(childBox.x + childBox.width).toBeLessThanOrEqual(box.x + box.width + 1);
-      expect(childBox.y + childBox.height).toBeLessThanOrEqual(box.y + box.height + 1);
+    for (const childBox of children) {
+      expect(childBox).toBeDefined();
+      expect(childBox!.width).toBeGreaterThan(0);
+      expect(childBox!.height).toBeGreaterThan(0);
+      expect(childBox!.x).toBeGreaterThanOrEqual(box.x);
+      expect(childBox!.y).toBeGreaterThanOrEqual(box.y);
+      expect(childBox!.x + childBox!.width).toBeLessThanOrEqual(box.x + box.width + 1);
+      expect(childBox!.y + childBox!.height).toBeLessThanOrEqual(box.y + box.height + 1);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   };
