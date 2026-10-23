@@ -216,7 +216,7 @@ export const componentDocs = [
       },
       {
         component: "AvatarFallback",
-        name: "delayMs",
+        name: "delay",
         type: "number",
         defaultValue: "0",
         description: "fallback을 표시하기 전 대기 시간입니다.",
@@ -350,11 +350,21 @@ export const componentDocs = [
     description:
       "네이티브 button을 사용해 폼과 키보드 동작을 그대로 유지합니다. 다섯 가지 variant와 네 가지 size를 제공하며 active 상태는 inset shadow로 눌림을 표현합니다.",
     importCode: `import { Button } from "@/components/ui/button"`,
-    usageCode: `<div className="flex gap-3">
-  <Button variant="primary">변경 저장</Button>
-  <Button variant="soft">취소</Button>
-  <Button variant="ghost">나중에</Button>
-  <Button size="icon" aria-label="항목 추가"><svg aria-hidden="true"  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
+    usageCode: `<div className="grid w-full gap-5">
+  <div className="flex flex-wrap items-center justify-center gap-3.5">
+    <Button>Default</Button>
+    <Button variant="primary">Primary</Button>
+    <Button variant="soft">Soft</Button>
+    <Button variant="ghost">Ghost</Button>
+    <Button variant="destructive">삭제</Button>
+  </div>
+  <div className="flex flex-wrap items-center justify-center gap-3.5">
+    <Button size="sm">작게</Button>
+    <Button>Default</Button>
+    <Button size="lg">크게</Button>
+    <Button size="icon" aria-label="항목 추가"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
+    <Button disabled>비활성</Button>
+  </div>
 </div>`,
     props: [
       {
@@ -980,8 +990,8 @@ import { Label } from "@/components/ui/label"`,
       },
       {
         component: "Progress",
-        name: "getValueLabel",
-        type: "(value, max) => string",
+        name: "getAriaValueText",
+        type: "(formattedValue: string, value: number | null) => string",
         description: "수치 외 설명이 필요한 경우 aria-valuetext를 만듭니다.",
       },
     ],

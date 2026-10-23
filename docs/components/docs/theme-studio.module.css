@@ -30,3 +30,87 @@
   letter-spacing: -0.025em;
   text-align: start;
 }
+
+.sectionNavigation {
+  display: none;
+}
+
+.studio .controls,
+.studio .workbench,
+.studio .output {
+  /* Client hash navigation reads this margin without the page's scroll-padding. */
+  scroll-margin-top: calc(var(--docs-header-height, 72px) + 16px);
+}
+
+@media (max-width: 820px) {
+  .studio {
+    --theme-section-navigation-height: 64px;
+  }
+
+  .studio .sectionNavigation {
+    position: sticky;
+    top: var(--docs-header-height, 72px);
+    z-index: 20;
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    height: var(--theme-section-navigation-height);
+    gap: 8px;
+    padding-block: 8px;
+    border-bottom: 1px solid var(--border);
+    background: var(--neu-surface);
+  }
+
+  .studio .controls,
+  .studio .workbench,
+  .studio .output {
+    scroll-margin-top: calc(var(--docs-header-height, 72px) + var(--theme-section-navigation-height) + 16px);
+  }
+
+  .sectionNavigation a {
+    display: inline-flex;
+    min-width: 0;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--neu-radius-control);
+    background: var(--neu-surface-soft);
+    color: var(--foreground);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .sectionNavigation a:hover {
+    background: var(--neu-surface-low);
+  }
+
+  .sectionNavigation a:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  .studio .presets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .studio .presets > button {
+    min-height: 44px;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .studio .controls :global(.theme-control-group) {
+    padding-block: 10px;
+  }
+
+  .studio .controls :global(.theme-studio-panel-heading) > button {
+    min-height: 40px;
+    padding-inline: 10px;
+  }
+}

@@ -6,6 +6,7 @@ import { Link, useRouter } from "fumapress/client";
 
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
+import { referenceSearchCopy } from "@/i18n/reference-search-copy";
 
 const navigationCopy = {
   ko: {
@@ -15,12 +16,6 @@ const navigationCopy = {
     components: "컴포넌트",
     templates: "템플릿",
     charts: "차트",
-    designTokens: "디자인 토큰",
-    registry: "Registry 구조",
-    resources: "리소스",
-    accessibility: "접근성",
-    verification: "검증과 릴리스",
-    credits: "Credits & dependencies",
     filter: "컴포넌트 필터",
   },
   en: {
@@ -30,12 +25,6 @@ const navigationCopy = {
     components: "Components",
     templates: "Templates",
     charts: "Charts",
-    designTokens: "Design tokens",
-    registry: "Registry architecture",
-    resources: "Resources",
-    accessibility: "Accessibility",
-    verification: "Verification & release",
-    credits: "Credits & dependencies",
     filter: "Filter components",
   },
   ja: {
@@ -45,12 +34,6 @@ const navigationCopy = {
     components: "コンポーネント",
     templates: "テンプレート",
     charts: "チャート",
-    designTokens: "デザイントークン",
-    registry: "Registry 構造",
-    resources: "リソース",
-    accessibility: "アクセシビリティ",
-    verification: "検証とリリース",
-    credits: "Credits & dependencies",
     filter: "コンポーネントを絞り込む",
   },
   zh: {
@@ -60,12 +43,6 @@ const navigationCopy = {
     components: "组件",
     templates: "模板",
     charts: "图表",
-    designTokens: "设计令牌",
-    registry: "Registry 架构",
-    resources: "资源",
-    accessibility: "无障碍",
-    verification: "验证与发布",
-    credits: "Credits & dependencies",
     filter: "筛选组件",
   },
 } as const;
@@ -103,6 +80,7 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
   const { componentDocGroups, locale, messages } = useLocale();
   const { path: pathname } = useRouter();
   const copy = navigationCopy[locale];
+  const reference = referenceSearchCopy[locale];
   const [query, setQuery] = React.useState("");
   const components = componentDocGroups.flatMap(({ items }) => items);
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
@@ -130,7 +108,7 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
 
       <section className="docs-nav-group">
         <span>{copy.explore}</span>
-        <NavLink href={localeHref(locale)} onNavigate={onNavigate} pathname={pathname}>
+        <NavLink href={localeHref(locale, "/components")} onNavigate={onNavigate} pathname={pathname}>
           {copy.components}
         </NavLink>
         <NavLink href={localeHref(locale, "/templates")} onNavigate={onNavigate} pathname={pathname}>
@@ -147,22 +125,22 @@ export function DocsNav({ onNavigate }: DocsNavProps) {
       <section className="docs-nav-group">
         <span>{copy.reference}</span>
         <NavLink href={localeHref(locale, "/docs/design-tokens")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.designTokens}
+          {reference["design-tokens"].title}
         </NavLink>
         <NavLink href={localeHref(locale, "/docs/registry")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.registry}
+          {reference.registry.title}
         </NavLink>
         <NavLink href={localeHref(locale, "/docs/accessibility")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.accessibility}
+          {reference.accessibility.title}
         </NavLink>
         <NavLink href={localeHref(locale, "/docs/verification")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.verification}
+          {reference.verification.title}
         </NavLink>
         <NavLink href={localeHref(locale, "/docs/resources")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.resources}
+          {reference.resources.title}
         </NavLink>
         <NavLink href={localeHref(locale, "/docs/credits")} onNavigate={onNavigate} pathname={pathname}>
-          {copy.credits}
+          {reference.credits.title}
         </NavLink>
       </section>
 

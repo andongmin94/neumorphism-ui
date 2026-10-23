@@ -20,6 +20,17 @@ const categoryCopy = {
   zh: "分类",
 } as const;
 
+const swatchComponents = new Set(["button", "input", "switch", "tabs", "avatar", "progress"]);
+
+function ComponentSwatch({ slug }: { slug: string }) {
+  if (!swatchComponents.has(slug)) return null;
+  return (
+    <span aria-hidden="true" className={styles.swatch} data-preview={slug}>
+      <span /><span /><span />
+    </span>
+  );
+}
+
 export function ComponentDirectory() {
   const { componentDocGroups, locale, messages } = useLocale();
   const [category, setCategory] = React.useState<CategoryFilter>("all");
@@ -141,7 +152,10 @@ export function ComponentDirectory() {
                     <span>{component.categoryLabel}</span>
                   </div>
                   <div className={styles.body}>
-                    <h3>{component.title}</h3>
+                    <div className={styles.heading}>
+                      <h3>{component.title}</h3>
+                      <ComponentSwatch slug={component.slug} />
+                    </div>
                     <p>{component.summary}</p>
                   </div>
                   <div className={styles.footer}>

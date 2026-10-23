@@ -72,7 +72,7 @@ test("320px directory and highlighted examples retain all four locales", async (
   }
 });
 
-test("Dark+ highlights real TSX and installed source without changing copied bytes", async ({ page, context }, info) => {
+test("Dark+ highlights real TSX and installed source without changing copied content", async ({ page, context }, info) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -89,7 +89,8 @@ test("Dark+ highlights real TSX and installed source without changing copied byt
   await expect(pre).toBeFocused();
   await pre.press("End");
   await preview.locator(".copy-button").click();
-  expect((await page.evaluate(() => navigator.clipboard.readText())).trimEnd()).toBe((await pre.textContent())!.trimEnd());
+  // Windows native clipboard represents LF as CRLF; normalize only that platform line-ending difference.
+  expect((await page.evaluate(() => navigator.clipboard.readText())).replaceAll("\r\n", "\n")).toBe(await pre.textContent());
   await preview.screenshot({ path: info.outputPath("dark-plus-example.png") });
 
   await page.locator(".component-installation").getByRole("tab").nth(1).click();
@@ -98,7 +99,7 @@ test("Dark+ highlights real TSX and installed source without changing copied byt
   const item = JSON.parse(readFileSync(new URL("../../../registry/public/r/button.json", import.meta.url), "utf8"));
   expect((await sourcePre.textContent())!.trimEnd()).toBe(item.files[0].content.trimEnd());
   await source.locator(".copy-button").click();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(item.files[0].content);
+  expect((await page.evaluate(() => navigator.clipboard.readText())).replaceAll("\r\n", "\n")).toBe(item.files[0].content);
   // Header typography must not leak into highlighted source spans.
   await expect(sourcePre.locator("span[style]").first()).toHaveCSS("font-family", /Consolas/);
   await expect(sourcePre.locator("span[style]").first()).toHaveCSS("font-weight", "400");
@@ -139,7 +140,7 @@ test("editable theme CSS remains current while highlighting and copying", async 
     }
     await shell.locator(".copy-button").click();
     const copied = await page.evaluate(() => navigator.clipboard.readText());
-    expect(copied.trimEnd()).toBe((await pre.textContent())!.trimEnd());
+    expect(copied.replaceAll("\r\n", "\n")).toBe(await pre.textContent());
   }
   await shell.screenshot({ path: info.outputPath("dark-plus-theme-css.png") });
 });

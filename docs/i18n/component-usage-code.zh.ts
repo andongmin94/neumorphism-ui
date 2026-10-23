@@ -66,11 +66,21 @@ export const componentUsageCodeZh = defineComponentUsageCode({
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>`,
-  button: `<div className="flex gap-3">
-  <Button variant="primary">保存更改</Button>
-  <Button variant="soft">取消</Button>
-  <Button variant="ghost">稍后处理</Button>
-  <Button size="icon" aria-label="添加项目"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
+  button: `<div className="grid w-full gap-5">
+  <div className="flex flex-wrap items-center justify-center gap-3.5">
+    <Button>Default</Button>
+    <Button variant="primary">Primary</Button>
+    <Button variant="soft">Soft</Button>
+    <Button variant="ghost">Ghost</Button>
+    <Button variant="destructive">删除</Button>
+  </div>
+  <div className="flex flex-wrap items-center justify-center gap-3.5">
+    <Button size="sm">小</Button>
+    <Button>Default</Button>
+    <Button size="lg">大</Button>
+    <Button size="icon" aria-label="添加项目"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5v14" /></svg></Button>
+    <Button disabled>已禁用</Button>
+  </div>
 </div>`,
   card: `<Card variant="raised">
   <CardHeader>

@@ -1,48 +1,39 @@
 import { notFound } from "fumapress/router";
+import { DocsToc } from "@/components/docs/docs-toc";
 import { PageMetadata } from "@/components/docs/page-metadata";
-
 import { isLocale } from "@/i18n/config";
+import { getMessages } from "@/i18n/messages";
+import { referenceDocCopy } from "@/i18n/reference-doc-copy";
 
-const copy = {
-  ko: { title: "Credits & dependencies", intro: "Neumorphism UI가 의존하는 주요 오픈소스 패키지와 각 역할을 정리합니다.", note: "각 패키지는 자체 라이선스와 저작권 조건을 유지합니다. 이 페이지는 attribution 안내이며 프로젝트 자체 LICENSE를 대신하지 않습니다." },
-  en: { title: "Credits & dependencies", intro: "The major open-source packages used by Neumorphism UI and the responsibility each one retains.", note: "Each package retains its own license and copyright terms. This page documents dependencies; it does not substitute for the project's own LICENSE." },
-  ja: { title: "Credits & dependencies", intro: "Neumorphism UI が利用する主要オープンソースパッケージと各役割です。", note: "各パッケージにはそれぞれのライセンスと著作権条件があります。このページは依存関係の説明であり、プロジェクト自身の LICENSE の代わりではありません。" },
-  zh: { title: "Credits & dependencies", intro: "Neumorphism UI 使用的主要开源包以及各自负责的范围。", note: "每个包保留自己的许可证和版权条款。本页用于说明依赖关系，不能替代项目自身的 LICENSE。" },
-} as const;
-
-const dependencies = [
-  ["@base-ui/react", "Accessible interaction primitives and state machines"],
-  ["shadcn", "Registry schema, CLI installation and source distribution workflow"],
-  ["Fumapress / Fumadocs", "Documentation routing, layouts and internationalization infrastructure"],
-  ["Recharts", "Chart rendering"],
-  ["@tanstack/react-table", "Caller-owned table state model"],
-  ["@daypicker/react", "Calendar and date selection"],
-  ["cmdk", "Command palette filtering and keyboard navigation"],
-  ["input-otp", "One-time-code input behavior"],
-  ["embla-carousel-react", "Carousel scrolling and drag state"],
-  ["react-resizable-panels", "Resizable panel sizing and separator semantics"],
-  ["Pretendard", "Bundled UI font dependency"],
-  ["Pretendard JP", "Self-hosted Japanese language-menu labels (OFL-1.1)"],
-  ["Noto Sans SC / Fontsource", "Self-hosted Chinese language-menu labels, weight 500 (OFL-1.1)"],
-] as const;
+const dependencies = ["@base-ui/react", "shadcn", "Fumapress / Fumadocs", "Recharts", "@tanstack/react-table", "@daypicker/react", "cmdk", "input-otp", "embla-carousel-react", "react-resizable-panels", "Pretendard", "Pretendard JP", "Noto Sans SC / Fontsource"];
 
 export default function CreditsPage({ lang }: { lang: string }) {
   if (!isLocale(lang)) notFound();
-  const t = copy[lang];
+  const t = referenceDocCopy[lang].credits;
+  const toc = Object.entries(t.sections).map(([id, label]) => ({ href: `#${id}`, label }));
 
   return (
-    <div className="docs-reference-page">
+    <div className="docs-content-layout docs-reference-layout">
       <article className="docs-content docs-article docs-reference-article">
         <PageMetadata locale={lang} pathname="/docs/credits" title={t.title} description={t.intro} />
-        <header className="docs-page-header"><h1>{t.title}</h1><p>{t.intro}</p></header>
-        <section className="docs-content-section">
+        <header className="docs-page-header">
+          <h1>{t.title}</h1><p>{t.intro}</p>
+          <nav className="component-doc-quicknav" aria-label={getMessages(lang).common.pageToc}>
+            {toc.map(({ href, label }) => <a key={href} href={href}>{label}</a>)}
+          </nav>
+        </header>
+        <section className="docs-content-section" id="packages">
+          <h2>{t.sections.packages}</h2>
           <table>
-            <thead><tr><th>Package</th><th>Role</th></tr></thead>
-            <tbody>{dependencies.map(([name, role]) => <tr key={name}><th scope="row"><code>{name}</code></th><td>{role}</td></tr>)}</tbody>
+            <thead><tr><th>{t.package}</th><th>{t.role}</th></tr></thead>
+            <tbody>{dependencies.map((name, index) => <tr key={name}><th scope="row"><code>{name}</code></th><td>{t.roles[index]}</td></tr>)}</tbody>
           </table>
-          <p className="docs-section-note">{t.note}</p>
+        </section>
+        <section className="docs-content-section" id="licenses">
+          <h2>{t.sections.licenses}</h2><p className="docs-section-note">{t.note}</p>
         </section>
       </article>
+      <DocsToc items={toc} />
     </div>
   );
 }

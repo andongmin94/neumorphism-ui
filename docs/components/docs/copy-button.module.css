@@ -1,0 +1,30 @@
+.error {
+  display: grid;
+  grid-column: 1 / -1;
+  flex: 1 0 100%;
+  min-width: 0;
+  max-width: 100%;
+  gap: 0.5rem;
+  color: inherit;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.error p { margin: 0; }
+
+.manualText {
+  width: 100%;
+  min-height: 4.5rem;
+  max-height: 12rem;
+  padding: 0.6rem;
+  border: 1px solid currentColor;
+  border-radius: var(--neu-radius-small);
+  background: transparent;
+  color: inherit;
+  font-family: var(--neu-font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+:global(.compact-install):has(> .error) { flex-wrap: wrap; }

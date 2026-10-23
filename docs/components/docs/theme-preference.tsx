@@ -4,18 +4,13 @@ import * as React from "react";
 
 import {
   applyThemeSettings,
-  defaultThemeSettings,
-  parseThemeSettings,
-  THEME_STORAGE_KEY,
+  getPreferredThemeSettings,
 } from "@/components/docs/theme-config";
 
 export function ThemePreference() {
   React.useEffect(() => {
     function applyStoredSettings() {
-      const settings = parseThemeSettings(
-        localStorage.getItem(THEME_STORAGE_KEY),
-      );
-      applyThemeSettings(settings ?? defaultThemeSettings);
+      applyThemeSettings(getPreferredThemeSettings());
     }
 
     applyStoredSettings();

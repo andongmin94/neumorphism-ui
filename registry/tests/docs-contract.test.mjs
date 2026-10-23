@@ -65,6 +65,84 @@ test("documented UI import symbols exist in installable registry sources", () =>
   }
 });
 
+test("API table prop names exist on the installed component types", () => {
+  const config = ts.readConfigFile(path.join(root, "tsconfig.json"), ts.sys.readFile);
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
+  const program = ts.createProgram(parsed.fileNames, parsed.options);
+  const checker = program.getTypeChecker();
+  function propNames(type) {
+    const members = type.isUnion() ? type.types : [type];
+    return new Set(members.flatMap(member => checker.getPropertiesOfType(member).map(property => property.name)));
+  }
+
+  for (const doc of componentDocs) {
+    const file = program.getSourceFile(path.join(root, "src/components/ui", `${doc.slug}.tsx`));
+    assert.ok(file, `${doc.slug}: missing source file`);
+    const exported = checker.getExportsOfModule(checker.getSymbolAtLocation(file));
+    for (const row of doc.props) {
+      // Hook return methods and summaries of all forwarded HTML/Recharts props are not individual props.
+      if (!/^[A-Z]/.test(row.component) || row.name === "props") continue;
+      for (const component of row.component.split(" / ")) {
+        const symbol = exported.find(item => item.name === component)
+          ?? exported.find(item => item.name === `${doc.title.replaceAll(" ", "")}${component}`);
+        assert.ok(symbol, `${doc.slug}: undocumented export ${component}`);
+        const signature = checker.getTypeOfSymbolAtLocation(symbol, file).getCallSignatures()[0];
+        assert.ok(signature?.parameters[0], `${doc.slug}/${component}: missing props type`);
+        const props = propNames(checker.getTypeOfSymbolAtLocation(signature.parameters[0], file));
+        for (const name of row.name.split(" / ")) {
+          if (!/^[A-Za-z][\w-]*$/.test(name) || /^(?:aria|data)-/.test(name)) continue;
+          assert.ok(props.has(name), `${doc.slug}/${component}: API table documents missing prop ${name}`);
+        }
+      }
+    }
+  }
+});
+
+test("all localized Button snippets show the same variants, sizes and disabled state as the preview", () => {
+  function buttons(source) {
+    const ast = ts.createSourceFile("button.tsx", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const result = [];
+    function visit(node) {
+      if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && node.tagName.getText(ast) === "Button") {
+        const attributes = new Map(node.attributes.properties.filter(ts.isJsxAttribute).map(attribute => [attribute.name.getText(ast), attribute.initializer]));
+        result.push({
+          variant: attributes.get("variant")?.text ?? "default",
+          size: attributes.get("size")?.text ?? "default",
+          disabled: attributes.has("disabled"),
+          labelledIcon: attributes.has("aria-label"),
+        });
+      }
+      ts.forEachChild(node, visit);
+    }
+    visit(ast);
+    return result;
+  }
+  const previewPath = path.join(root, "../docs/components/docs/component-detail-preview.tsx");
+  const preview = ts.createSourceFile(previewPath, fs.readFileSync(previewPath, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let buttonCase;
+  function findCase(node) {
+    if (ts.isCaseClause(node) && ts.isStringLiteral(node.expression) && node.expression.text === "button") buttonCase = node;
+    ts.forEachChild(node, findCase);
+  }
+  findCase(preview);
+  assert.ok(buttonCase);
+  const expected = buttons(buttonCase.getText(preview));
+  assert.equal(expected.length, 10);
+  assert.deepEqual(buttons(componentDocs.find(doc => doc.slug === "button").usageCode), expected, "ko");
+  for (const locale of ["en", "ja", "zh"]) {
+    const source = fs.readFileSync(path.join(root, `../docs/i18n/component-usage-code.${locale}.ts`), "utf8");
+    const ast = ts.createSourceFile(locale, source, ts.ScriptTarget.Latest, true);
+    let snippet;
+    function findButton(node) {
+      if (ts.isPropertyAssignment(node) && node.name.getText(ast) === "button" && ts.isStringLiteralLike(node.initializer)) snippet = node.initializer.text;
+      ts.forEachChild(node, findButton);
+    }
+    findButton(ast);
+    assert.equal(typeof snippet, "string", `${locale}: missing Button snippet`);
+    assert.deepEqual(buttons(snippet), expected, locale);
+  }
+});
+
 test("localized source examples are parseable TSX and refer only to catalog component pages", () => {
   const installed = new Set(makeRegistry().items.filter(item => item.type === "registry:ui").map(item => item.name));
   const bySlug = new Map(componentDocs.map(doc => [doc.slug, doc]));

@@ -18,7 +18,11 @@ export function ThemeToggle() {
     const nextTheme =
       document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     applyTheme(nextTheme);
-    localStorage.setItem("neumorphism-ui-theme", nextTheme);
+    try {
+      localStorage.setItem("neumorphism-ui-theme", nextTheme);
+    } catch {
+      // The visible mode still changes when browser storage is unavailable.
+    }
   }
 
   return (

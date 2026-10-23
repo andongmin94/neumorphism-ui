@@ -45,7 +45,7 @@
   --line: rgb(255 255 255 / 0.1);
   --line-light: var(--neu-edge);
   --docs-accent: var(--primary);
-  --accent-ink: var(--primary);
+  --accent-ink: var(--neu-accent-ink);
   --accent-bright: color-mix(in srgb, var(--primary) 68%, white);
   --accent-deep: color-mix(in srgb, var(--primary) 76%, black);
   --docs-accent-foreground: var(--primary-foreground);
@@ -210,7 +210,7 @@ a {
 .primary-nav a:hover {
   background: var(--surface-low);
   box-shadow: var(--shadow-inset);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .theme-toggle {
@@ -247,7 +247,7 @@ a {
 }
 
 .copy-button:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: translateY(-1px);
 }
 
@@ -303,7 +303,7 @@ a {
   border-radius: 17px;
   background: var(--surface);
   box-shadow: var(--shadow-soft);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 0.75rem;
   font-weight: 900;
 }
@@ -591,7 +591,7 @@ a {
 
 .field-heading output,
 .field-heading strong {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.68rem;
 }
@@ -728,13 +728,13 @@ a {
 }
 
 .docs-sidebar nav a:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .docs-sidebar nav a.is-current {
   background: var(--surface-low);
   box-shadow: var(--shadow-inset);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-weight: 800;
 }
 
@@ -772,7 +772,7 @@ a {
 }
 
 .docs-next a:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: translateY(-2px);
 }
 
@@ -808,7 +808,7 @@ a {
 }
 
 .footer-inner nav a:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 @media (max-width: 960px) {
@@ -1001,7 +1001,7 @@ a {
 }
 
 .component-doc-breadcrumb a:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .component-doc-kicker {
@@ -1020,7 +1020,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   letter-spacing: 0.03em;
   text-transform: none;
 }
@@ -1050,7 +1050,7 @@ a {
 
 .component-doc-section-heading > span {
   padding-top: 0.5rem;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.58rem;
   font-weight: 750;
@@ -1195,7 +1195,7 @@ a {
 }
 
 .component-preview-progress strong {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.66rem;
 }
@@ -1293,7 +1293,7 @@ a {
 }
 
 .component-preview-separator-nav a:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .component-preview-skeleton-card {
@@ -1486,7 +1486,7 @@ a {
   border-radius: 10px;
   background: var(--surface);
   box-shadow: var(--shadow-soft);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.55rem;
 }
@@ -1590,7 +1590,7 @@ a {
 }
 
 .component-api-table code {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-mono);
   font-size: 0.62rem;
   overflow-wrap: anywhere;
@@ -1603,7 +1603,7 @@ a {
   padding: 0.16rem 0.36rem;
   border-radius: var(--radius-pill);
   background: rgb(18 103 244 / 0.09);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 0.48rem;
   font-weight: 850;
   text-transform: uppercase;
@@ -1637,7 +1637,7 @@ a {
   border-radius: 10px;
   background: var(--surface-low);
   box-shadow: var(--shadow-inset);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.55rem;
 }
@@ -1672,7 +1672,7 @@ a {
 
 .component-doc-pagination a:hover {
   box-shadow: var(--shadow-raised);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: translateY(-2px);
 }
 
@@ -1792,7 +1792,7 @@ a {
 .primary-nav a.is-active {
   background: var(--surface-low);
   box-shadow: none;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .docs-search-trigger {
@@ -1824,7 +1824,7 @@ a {
 }
 
 .docs-search-trigger > span:first-child {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 1.05rem;
 }
 
@@ -1930,7 +1930,7 @@ a {
 }
 
 .docs-search-input-wrap > span {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 1.2rem;
 }
 
@@ -1983,7 +1983,7 @@ a {
 
 .docs-search-result:hover {
   background: var(--surface-low);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .docs-search-result > span:first-child {
@@ -2036,7 +2036,7 @@ a {
 
 .docs-search-footer a {
   margin-left: auto;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-weight: 750;
 }
 
@@ -2073,7 +2073,7 @@ a {
 }
 
 .docs-toc nav a:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: translateX(2px);
 }
 
@@ -2142,7 +2142,7 @@ a {
   top: 50%;
   left: 0.9rem;
   z-index: 1;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: translateY(-50%);
 }
 
@@ -2181,7 +2181,7 @@ a {
 .component-directory-filters button.is-active {
   border-color: var(--line);
   background: var(--surface-low);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .component-directory-filters button span {
@@ -2197,7 +2197,7 @@ a {
 }
 
 .component-directory-count strong {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .component-directory-groups {
@@ -2261,7 +2261,7 @@ a {
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--surface);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 0.72rem;
   font-weight: 750;
   cursor: pointer;
@@ -2448,7 +2448,7 @@ a {
 }
 
 .theme-studio-panel-heading span{
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.57rem;
   font-weight: 760;
@@ -2473,7 +2473,7 @@ a {
 }
 
 .theme-studio-panel-heading > button:hover {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .theme-control-group {
@@ -2594,7 +2594,7 @@ a {
   padding: 0.45rem 0.55rem;
   border: 0;
   background: transparent;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 0.6rem;
   font-weight: 730;
   cursor: pointer;
@@ -2670,7 +2670,7 @@ a {
 }
 
 .theme-registry-commands > div > span {
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-family: var(--font-sans);
   font-size: 0.55rem;
   font-weight: 760;
@@ -3857,7 +3857,7 @@ html {
   border-color: color-mix(in srgb, var(--ring) 32%, var(--line));
   background: color-mix(in srgb, var(--primary) 6%, transparent);
   box-shadow: none;
-  color: var(--primary);
+  color: var(--neu-accent-ink);
 }
 
 .theme-studio-panel-heading > button:active {
@@ -4244,7 +4244,7 @@ html {
   border-radius: 9px;
   background: var(--surface-low);
   box-shadow: none;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   font-size: 0.68rem;
   font-weight: 850;
   transition:
@@ -4325,7 +4325,7 @@ html {
   border-color: color-mix(in srgb, var(--foreground) 24%, var(--line));
   background: var(--surface-low);
   box-shadow: none;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: none;
 }
 
@@ -4416,7 +4416,7 @@ html {
 .docs-secondary-action:active {
   background: var(--surface-low);
   box-shadow: var(--neu-shadow-inset-sm);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: translateY(1px);
 }
 
@@ -4470,7 +4470,7 @@ html {
 }
 
 .docs-toc nav a.is-current {
-  border-left-color: var(--docs-accent);
+  border-left-color: var(--primary);
   background: transparent;
   box-shadow: none;
   color: var(--accent-ink);
@@ -4559,7 +4559,7 @@ html {
   border-color: var(--line-light);
   background: var(--surface-low);
   box-shadow: var(--docs-inset);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
   transform: none;
 }
 
@@ -4664,7 +4664,7 @@ html {
   border-radius: 50%;
   background: color-mix(in srgb, var(--docs-accent) 11%, transparent);
   box-shadow: none;
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .component-manual-meta > div,
@@ -4700,7 +4700,7 @@ html {
   border-color: var(--line-light);
   background: var(--surface-low);
   box-shadow: var(--docs-inset);
-  color: var(--docs-accent);
+  color: var(--neu-accent-ink);
 }
 
 .docs-search-footer {
@@ -4976,7 +4976,7 @@ body {
   border-radius: var(--neu-radius-control);
   background: var(--neu-surface);
   box-shadow: var(--neu-shadow-raised-sm);
-  color: var(--primary);
+  color: var(--neu-accent-ink);
   font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 800;
@@ -6181,10 +6181,8 @@ body {
   border-top: 0;
 }
 
-.docs-reference-page {
-  width: min(100%, 1040px);
-  margin-inline: auto;
-  padding: 58px 40px 56px;
+.docs-reference-article > .docs-content-section {
+  scroll-margin-top: calc(var(--docs-header-height) + 16px);
 }
 
 /* Reference tables keep one rule per row boundary, not a second framed surface. */
@@ -6614,8 +6612,7 @@ body {
 
   .docs-content-layout,
   .component-doc-page,
-  .docs-reference-layout,
-  .docs-reference-page {
+  .docs-reference-layout {
     padding: 34px 17px 38px;
   }
 

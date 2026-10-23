@@ -119,14 +119,27 @@ async function fetchRegistryItem(name: string, signal: AbortSignal) {
 export function ComponentInstallation({ slug, command }: { slug: string; command: React.ReactNode }) {
   const { messages } = useLocale();
   const [ready, setReady] = React.useState(false);
+  const [tab, setTab] = React.useState<{ slug: string; value: string | null } | null>(null);
+  const [attempt, setAttempt] = React.useState(0);
   const [source, setSource] = React.useState<{ slug: string; bundle: ManualBundle | null; error: boolean } | null>(null);
+  const cachedBundles = React.useRef(new Map<string, ManualBundle>());
+  const selectedTab = tab?.slug === slug ? tab.value : "cli";
+  const manualOpen = selectedTab === "manual";
   const bundle = source?.slug === slug ? source.bundle : null;
   const error = source?.slug === slug && source.error;
 
   React.useEffect(() => setReady(true), []);
 
   React.useEffect(() => {
+    if (!manualOpen) return;
+    const cached = cachedBundles.current.get(slug);
+    if (cached) {
+      setSource({ slug, bundle: cached, error: false });
+      return;
+    }
+
     const controller = new AbortController();
+    setSource({ slug, bundle: null, error: false });
 
     async function loadSource() {
       try {
@@ -143,7 +156,11 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
         await visit("neumorphism-ui");
         for (const dependency of item.registryDependencies ?? []) await visit(getDependencySlug(dependency));
 
-        if (!controller.signal.aborted) setSource({ slug, bundle: { dependencies, item }, error: false });
+        if (!controller.signal.aborted) {
+          const nextBundle = { dependencies, item };
+          cachedBundles.current.set(slug, nextBundle);
+          setSource({ slug, bundle: nextBundle, error: false });
+        }
       } catch (sourceError) {
         if (
           sourceError instanceof DOMException &&
@@ -159,12 +176,12 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
     void loadSource();
 
     return () => controller.abort();
-  }, [slug]);
+  }, [manualOpen, slug, attempt]);
 
   const packages = Array.from(new Set([...(bundle?.dependencies ?? []), ...(bundle ? [bundle.item] : [])].flatMap(item => item.dependencies ?? [])));
 
   return (
-    <Tabs className="component-installation" defaultValue="cli" aria-busy={!ready}>
+    <Tabs className="component-installation" value={selectedTab} onValueChange={(value) => setTab({ slug, value })} aria-busy={!ready}>
       <TabsList aria-label={messages.installationPanel.methodsLabel}>
         <TabsTrigger value="cli" disabled={!ready}>CLI</TabsTrigger>
         <TabsTrigger value="manual" disabled={!ready}>
@@ -177,8 +194,11 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
       </TabsContent>
       <TabsContent className="component-installation-panel" value="manual">
         {error ? (
-          <div className="component-source-status" role="alert">
-            {messages.installationPanel.loadError}
+          <div className="component-source-status">
+            <p role="alert">{messages.installationPanel.loadError}</p>
+            <button className="copy-button" type="button" onClick={() => setAttempt(value => value + 1)}>
+              {messages.installationPanel.retry}
+            </button>
           </div>
         ) : bundle ? (
           <div className="component-manual-install">
@@ -258,6 +278,20 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
                 </section>
               ))}
 
+            <section className="component-manual-step">
+              <div className="component-manual-step-heading">
+                <span>03</span>
+                <div>
+                  <h3>{messages.installationPanel.fontStyles}</h3>
+                  <p>{messages.installationPanel.fontStylesBody}</p>
+                </div>
+              </div>
+              <DynamicCode lang="tsx"
+                code={'import "pretendard/dist/web/variable/pretendardvariable.css";'}
+                label={messages.installationPanel.fontStyles}
+              />
+            </section>
+
             {bundle.dependencies
               .filter((dependency) => dependency.type !== "registry:base")
               .flatMap((dependency) =>
@@ -267,7 +301,7 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
                     key={`${dependency.name}-${file.path}`}
                   >
                     <div className="component-manual-step-heading">
-                      <span>03</span>
+                      <span>04</span>
                       <div>
                         <h3>{dependency.name}</h3>
                         <p>
@@ -293,7 +327,7 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
             {(bundle.item.files ?? []).map((file) => (
               <section className="component-manual-step" key={file.path}>
                 <div className="component-manual-step-heading">
-                  <span>04</span>
+                  <span>05</span>
                   <div>
                     <h3>{slug}</h3>
                     <p>{messages.installationPanel.componentSourceBody}</p>

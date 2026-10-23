@@ -36,6 +36,7 @@ type ThemeModeTokens = {
   mutedForeground: string;
   primary: string;
   primaryForeground: string;
+  accentInk?: string;
   destructive: string;
   border: string;
   input: string;
@@ -112,8 +113,9 @@ export const themePresets: readonly ThemePreset[] = [
       secondary: "#2a2e3a",
       foreground: "#e9f0fa",
       mutedForeground: "#aab4c8",
-      primary: "#5aa2ff",
+      primary: "#237bff",
       primaryForeground: "#07111f",
+      accentInk: "#68a8ff",
       destructive: "#ff7685",
       border: "rgb(255 255 255 / 0.10)",
       input: "rgb(255 255 255 / 0.12)",
@@ -458,6 +460,9 @@ export function buildThemeVariables(
   const primaryForeground = settings.accent
     ? readableForeground(settings.accent)
     : tokens.primaryForeground;
+  const accentInk = settings.accent
+    ? readableAccent(primary, tokens.surface, tokens.foreground)
+    : tokens.accentInk ?? readableAccent(primary, tokens.surface, tokens.foreground);
   const profile = depthProfiles[settings.depth];
   const [x, y] = directionVectors[settings.lightDirection];
   const insetOffset = Math.max(2, Math.round(profile.smallOffset * 0.7));
@@ -510,7 +515,7 @@ export function buildThemeVariables(
     "--muted-foreground": tokens.mutedForeground,
     "--neu-select-arrow": `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${tokens.mutedForeground}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`)}")`,
     "--accent": tokens.surfaceSoft,
-    "--accent-foreground": primary,
+    "--accent-foreground": !settings.accent && tokens.accentInk ? accentInk : primary,
     "--destructive": tokens.destructive,
     "--destructive-foreground": readableForeground(tokens.destructive),
     "--success": mode === "light" ? "#0a9b78" : "#40d6ad",
@@ -576,7 +581,7 @@ export function buildThemeVariables(
       mode === "light" ? "rgb(15 23 42 / 0.28)" : "rgb(0 0 0 / 0.55)",
     "--neu-radius-control": controlRadius,
     "--neu-radius-small": "4px",
-    "--neu-accent-ink": readableAccent(primary, tokens.surface, tokens.foreground),
+    "--neu-accent-ink": accentInk,
     "--neu-radius-surface": `${settings.surfaceRadius}px`,
     "--neu-radius-overlay": `${settings.surfaceRadius}px`,
     "--neu-duration": `${settings.motion}ms`,

@@ -10,6 +10,18 @@ function luminance(hex) {
 }
 function contrast(a, b) { const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (light + 0.05) / (dark + 0.05); }
 const tokenNames = Object.keys(buildThemeVariables(defaultThemeSettings, "light")).sort();
+
+test("Air dark mode separates Frontron blue control faces from readable accent lettering", () => {
+  const dark = buildThemeVariables(defaultThemeSettings, "dark");
+  assert.equal(dark["--primary"], "#237bff");
+  assert.equal(dark["--neu-accent-ink"], "#68a8ff");
+  assert.equal(dark["--accent-foreground"], dark["--neu-accent-ink"]);
+  assert.ok(contrast(dark["--primary-foreground"], dark["--primary"]) >= 4.5);
+  assert.ok(contrast(dark["--neu-accent-ink"], dark["--neu-surface"]) >= 4.5);
+  const custom = buildThemeVariables({ ...defaultThemeSettings, accent: "#ff00ff" }, "dark");
+  assert.equal(custom["--primary"], "#ff00ff");
+  assert.notEqual(custom["--neu-accent-ink"], dark["--neu-accent-ink"]);
+});
 test("all presets expose one semantic token contract for documentation, CSS, and registry", () => {
   const registry = makeRegistry();
   for (const preset of themePresets) {

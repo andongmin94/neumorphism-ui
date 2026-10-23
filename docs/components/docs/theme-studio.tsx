@@ -12,15 +12,15 @@ import {
   buildThemeCss,
   clearThemeSettings,
   defaultThemeSettings,
+  getPreferredThemeSettings,
   getThemePreset,
-  parseThemeSettings,
+  savePreferredThemeSettings,
   type ThemeControlShape,
   type ThemeDepth,
   type ThemeLightDirection,
   type ThemeMotion,
   type ThemeSettings,
   themePresets,
-  THEME_STORAGE_KEY,
 } from "@/components/docs/theme-config";
 
 
@@ -30,6 +30,13 @@ import { ToggleGroup, ToggleGroupItem } from "@neumorphism-ui/registry/ui/toggle
 import styles from "./theme-studio.module.css";
 
 type PreviewMode = "light" | "dark";
+
+const sectionNavigationLabel = {
+  ko: "테마 작업 영역",
+  en: "Theme sections",
+  ja: "テーマの作業領域",
+  zh: "主题工作区",
+} as const;
 
 function ControlGroup({
   children,
@@ -106,8 +113,7 @@ export function ThemeStudio() {
 
   React.useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      const stored = parseThemeSettings(localStorage.getItem(THEME_STORAGE_KEY));
-      setSettings(stored ?? defaultThemeSettings);
+      setSettings(getPreferredThemeSettings());
       setReady(true);
     });
 
@@ -121,12 +127,12 @@ export function ThemeStudio() {
 
   function updateSettings(patch: Partial<ThemeSettings>) {
     const nextSettings = { ...settings, ...patch };
-    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(nextSettings));
+    savePreferredThemeSettings(nextSettings);
     setSettings(nextSettings);
   }
 
   function resetTheme() {
-    localStorage.removeItem(THEME_STORAGE_KEY);
+    savePreferredThemeSettings(null);
     clearThemeSettings();
     applyThemeSettings(defaultThemeSettings);
     setSettings(defaultThemeSettings);
@@ -137,9 +143,14 @@ export function ThemeStudio() {
   }
 
   return (
-    <div className="theme-studio">
+    <div className={`theme-studio ${styles.studio}`}>
+      <nav className={styles.sectionNavigation} aria-label={sectionNavigationLabel[locale]}>
+        <a href="#theme-settings">{copy.settings}</a>
+        <a href="#theme-preview">{copy.preview}</a>
+        <a href="#theme-output">{copy.output}</a>
+      </nav>
       <aside
-        className="theme-studio-controls"
+        className={`theme-studio-controls ${styles.controls}`}
         aria-label={copy.settings}
         aria-busy={!ready}
         id="theme-settings"
@@ -162,7 +173,7 @@ export function ThemeStudio() {
         </div>
 
         <ControlGroup label={copy.preset}>
-          <div className="theme-preset-grid">
+          <div className={`theme-preset-grid ${styles.presets}`}>
             {themePresets.map((item) => (
               <button
                 aria-pressed={settings.presetId === item.id}
@@ -279,7 +290,7 @@ export function ThemeStudio() {
         </ControlGroup>
       </aside>
 
-      <div className="theme-studio-workbench" id="theme-preview">
+      <div className={`theme-studio-workbench ${styles.workbench}`} id="theme-preview">
         <div className="theme-preview-toolbar">
           <div className="theme-preview-title">
             <strong>{copy.preview}</strong>
@@ -297,7 +308,7 @@ export function ThemeStudio() {
 
         <ThemePreview copy={copy} locale={locale} previewMode={previewMode} style={previewStyle} />
 
-        <Tabs className="theme-output" defaultValue="css" id="theme-output">
+        <Tabs className={`theme-output ${styles.output}`} defaultValue="css" id="theme-output">
           <div className={`theme-output-heading ${styles.outputHeading}`}>
             <h2>{copy.output}</h2>
             <TabsList aria-label={copy.outputFormat}>

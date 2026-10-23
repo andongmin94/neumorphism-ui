@@ -5,6 +5,7 @@ import { useRouter } from "fumapress/client";
 import { localeHref } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-provider";
 import { formatMessage } from "@/i18n/messages";
+import { getReferenceSearchEntries } from "@/i18n/reference-search-copy";
 import { templateCopy } from "./template-copy";
 import {
   Dialog, DialogClose, DialogContent, DialogDescription,
@@ -16,10 +17,10 @@ import {
 import styles from "./docs-search.module.css";
 
 const referenceCopy = {
-  ko: { search: "검색", tokens: "디자인 토큰", registry: "Registry 구조", resources: "리소스", accessibility: "접근성", verification: "검증과 릴리스", credits: "Credits & dependencies", charts: "차트", navigate: "탐색" },
-  en: { search: "Search", tokens: "Design tokens", registry: "Registry architecture", resources: "Resources", accessibility: "Accessibility", verification: "Verification & release", credits: "Credits & dependencies", charts: "Charts", navigate: "Navigate" },
-  ja: { search: "検索", tokens: "デザイントークン", registry: "Registry 構造", resources: "リソース", accessibility: "アクセシビリティ", verification: "検証とリリース", credits: "Credits & dependencies", charts: "チャート", navigate: "移動" },
-  zh: { search: "搜索", tokens: "设计令牌", registry: "Registry 架构", resources: "资源", accessibility: "无障碍", verification: "验证与发布", credits: "Credits & dependencies", charts: "图表", navigate: "导航" },
+  ko: { search: "검색", charts: "차트", chartKeywords: "Recharts 매출 전환율 운영 지표 CSV", navigate: "탐색" },
+  en: { search: "Search", charts: "Charts", chartKeywords: "Recharts revenue conversion operational charts CSV", navigate: "Navigate" },
+  ja: { search: "検索", charts: "チャート", chartKeywords: "Recharts 売上 転換率 運用 指標 CSV", navigate: "移動" },
+  zh: { search: "搜索", charts: "图表", chartKeywords: "Recharts 收入 转化率 运营 指标 CSV", navigate: "导航" },
 } as const;
 
 function SearchIcon() {
@@ -40,17 +41,17 @@ export function DocsSearch() {
         title: item.title, summary: item.summary, category: category.label,
       })),
     );
-    const reference = [
-      ["design-tokens", copy.tokens, "semantic surface depth light shape motion"],
-      ["registry", copy.registry, "source ownership generated endpoints"],
-      ["resources", copy.resources, "components templates charts verification"],
-      ["accessibility", copy.accessibility, "keyboard focus semantics reduced motion"],
-      ["verification", copy.verification, "source generation consumers browsers release"],
-      ["credits", copy.credits, "license dependencies external packages ownership"],
-    ].map(([key, title, summary]) => ({
-      href: localeHref(locale, `/docs/${key}`), key: `docs-${key}`, title, summary,
+    const referencePages = getReferenceSearchEntries(locale);
+    const reference = referencePages.map(({ slug, title, summary }) => ({
+      href: localeHref(locale, `/docs/${slug}`), key: `docs-${slug}`, title, summary,
       category: messages.search.gettingStarted,
     }));
+    const referenceSections = referencePages.flatMap(({ slug, title: category, sections }) =>
+      sections.map(({ id, title }) => ({
+        href: `${localeHref(locale, `/docs/${slug}`)}#${id}`,
+        key: `docs-${slug}-${id}`, title, summary: "", category,
+      })),
+    );
     const screens = [
       ["dashboard", templates.dashboard, templates.dashboardBody],
       ["settings", templates.settings, templates.settingsBody],
@@ -67,11 +68,11 @@ export function DocsSearch() {
     return [
       { href: localeHref(locale, "/docs"), key: "introduction", title: messages.navigation.introduction, summary: messages.search.introSummary, category: messages.search.gettingStarted },
       { href: localeHref(locale, "/docs/installation"), key: "installation", title: messages.navigation.installation, summary: messages.search.installSummary, category: messages.search.gettingStarted },
-      { href: localeHref(locale), key: "components", title: messages.navigation.components, summary: messages.search.componentsSummary, category: messages.navigation.components },
+      { href: localeHref(locale, "/components"), key: "components", title: messages.navigation.components, summary: messages.search.componentsSummary, category: messages.navigation.components },
       { href: localeHref(locale, "/customize"), key: "theme-studio", title: messages.navigation.themeStudio, summary: messages.search.themeSummary, category: messages.search.customization },
-      { href: localeHref(locale, "/charts"), key: "charts", title: copy.charts, summary: "Recharts revenue conversion operational charts CSV", category: messages.navigation.components },
+      { href: localeHref(locale, "/charts"), key: "charts", title: copy.charts, summary: copy.chartKeywords, category: messages.navigation.components },
       { href: localeHref(locale, "/templates"), key: "templates", title: templates.title, summary: templates.intro, category: templates.title },
-      ...reference, ...componentDocs, ...screens,
+      ...reference, ...componentDocs, ...screens, ...referenceSections,
     ];
   }, [componentDocGroups, locale, messages, copy, templates]);
 

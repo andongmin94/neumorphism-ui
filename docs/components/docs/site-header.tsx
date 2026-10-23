@@ -98,7 +98,7 @@ export function SiteHeader() {
   const templatesHref = localeHref(locale, "/templates");
 
   const links = [
-    { href: docsHref, label: copy.docs, active: pathname === docsHref || pathname.startsWith(docsHref + "/") || pathname.startsWith(componentsHref + "/") },
+    { href: docsHref, label: copy.docs, active: pathname === docsHref || pathname.startsWith(docsHref + "/") || pathname === componentsHref || pathname.startsWith(componentsHref + "/") },
     { href: customizeHref, label: copy.theme, active: pathname === customizeHref || pathname.startsWith(customizeHref + "/") },
     { href: chartsHref, label: copy.charts, active: pathname === chartsHref || pathname.startsWith(chartsHref + "/") },
     { href: templatesHref, label: copy.templates, active: pathname === templatesHref || pathname.startsWith(templatesHref + "/") },

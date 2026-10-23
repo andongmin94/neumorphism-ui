@@ -46,7 +46,8 @@ for (const locale of ["en","ko","ja","zh"] as const) {
     await page.reload();await expect(page.locator('#theme-settings')).toHaveAttribute('aria-busy','false');
     await expect(motion.getByRole('button').last()).toHaveAttribute('aria-pressed','true');
     const output=page.locator('#theme-output');
-    await expect(output.locator('pre.shiki')).toContainText('260ms');
+    const cssOutput=output.getByRole('tabpanel',{name:'CSS',exact:true}).locator('pre.shiki');
+    await expect(cssOutput).toContainText('260ms');
     await expect(output.getByRole('heading')).toHaveCSS('font-weight','700');
     for(const width of [page.viewportSize()!.width,320]) {
       await page.setViewportSize({width,height:1000});
@@ -60,7 +61,7 @@ for (const locale of ["en","ko","ja","zh"] as const) {
     await expect(page.locator('[data-theme-price-preview]')).toHaveAttribute('data-preview-mode','dark');
     await page.locator('.theme-studio-panel-heading > button').click();
     await output.getByRole('tab',{name:'CSS',exact:true}).click();
-    await expect(output.locator('pre.shiki')).toContainText('180ms');
+    await expect(cssOutput).toContainText('180ms');
   });
 
   test(`dashboard demo controls follow the product and still restore data: ${locale}`,async({page},info)=>{

@@ -68,6 +68,9 @@ const ko = {
     copy: "복사",
     copied: "복사됨",
     copiedAnnouncement: "클립보드에 복사했습니다.",
+    copyFailed: "복사 실패",
+    manualCopyHint: "클립보드에 복사하지 못했습니다. 아래 내용을 선택해 직접 복사하세요.",
+    manualCopyLabel: "직접 복사할 내용",
     code: "코드",
     copyCommand: "명령 복사",
     toggleTheme: "색상 테마 전환",
@@ -185,9 +188,10 @@ const ko = {
   installationPanel: {
     methodsLabel: "설치 방법",
     cli:
-      "CLI가 npm 의존성, base 토큰, utils와 컴포넌트 소스를 순서대로 확인하고 설치합니다.",
+      "공통 base를 한 번 설치한 뒤 CLI로 필요한 컴포넌트와 의존성을 추가합니다.",
     loadError:
       "소스를 불러오지 못했습니다. 우측 상단 Registry JSON 링크에서 원본을 확인하세요.",
+    retry: "소스 다시 불러오기",
     manualIntro:
       "아래 단계를 순서대로 적용해야 동일하게 동작합니다. 컴포넌트 파일만 복사하면 utils import와 뉴모피즘 토큰이 빠집니다.",
     packages: "외부 패키지",
@@ -195,6 +199,8 @@ const ko = {
     noPackages: "추가 npm 패키지가 필요하지 않습니다.",
     baseTokens: "Base 토큰",
     baseTokensBody: "기존 globals.css에 아래 토큰과 utility layer를 병합합니다.",
+    fontStyles: "폰트 스타일시트",
+    fontStylesBody: "Next.js의 app/layout.tsx 또는 src/app/layout.tsx, Vite의 src/main.tsx에서 아래 CSS를 한 번 가져옵니다.",
     localDependencies: "로컬 의존성",
     localDependenciesBody: "Registry 컴포넌트가 공유하는 로컬 의존성입니다.",
     componentSource: "컴포넌트 소스",
@@ -233,7 +239,7 @@ const ko = {
     targetPrice: "목표가",
     save: "저장",
     currentPrice: "현재가 $188.32",
-    targetProgress: "목표까지 90%",
+    targetProgress: "목표 대비 진행률",
     viewChart: "차트 보기",
     deleteAlert: "알림 삭제",
     alertConditions: "알림 조건",
@@ -338,6 +344,9 @@ const en: Messages = {
     copy: "Copy",
     copied: "Copied",
     copiedAnnouncement: "Copied to the clipboard.",
+    copyFailed: "Copy failed",
+    manualCopyHint: "Could not copy to the clipboard. Select the text below and copy it manually.",
+    manualCopyLabel: "Text to copy manually",
     code: "Code",
     copyCommand: "Copy command",
     toggleTheme: "Toggle color theme",
@@ -456,9 +465,10 @@ const en: Messages = {
   installationPanel: {
     methodsLabel: "Installation method",
     cli:
-      "The CLI resolves npm dependencies, base tokens, utilities, and component source in order.",
+      "Install the shared base once, then add components and their dependencies with the CLI.",
     loadError:
       "Could not load the source. Open the Registry JSON link above to inspect the original.",
+    retry: "Reload source",
     manualIntro:
       "Apply these steps in order for the same result. Copying only the component file omits utility imports and neumorphism tokens.",
     packages: "External packages",
@@ -467,6 +477,8 @@ const en: Messages = {
     baseTokens: "Base tokens",
     baseTokensBody:
       "Merge these tokens and utility layers into your existing globals.css.",
+    fontStyles: "Font stylesheet",
+    fontStylesBody: "Import this CSS once in app/layout.tsx or src/app/layout.tsx for Next.js, or src/main.tsx for Vite.",
     localDependencies: "Local dependencies",
     localDependenciesBody:
       "Local dependencies shared by Registry components.",
@@ -506,7 +518,7 @@ const en: Messages = {
     targetPrice: "Target price",
     save: "Save",
     currentPrice: "Current price $188.32",
-    targetProgress: "90% to target",
+    targetProgress: "Progress toward target",
     viewChart: "View chart",
     deleteAlert: "Delete alert",
     alertConditions: "Alert conditions",
@@ -600,6 +612,9 @@ const zh: Messages = {
     copy: "复制",
     copied: "已复制",
     copiedAnnouncement: "已复制到剪贴板。",
+    copyFailed: "复制失败",
+    manualCopyHint: "无法复制到剪贴板。请选择下方文本并手动复制。",
+    manualCopyLabel: "手动复制的文本",
     code: "代码",
     copyCommand: "复制命令",
     toggleTheme: "切换配色主题",
@@ -710,8 +725,9 @@ const zh: Messages = {
   },
   installationPanel: {
     methodsLabel: "安装方式",
-    cli: "CLI 会依次处理 npm 依赖、base token、utils 和组件源码。",
+    cli: "先安装一次共享 base，然后使用 CLI 添加组件及其依赖。",
     loadError: "无法加载源码。请通过上方 Registry JSON 链接查看原始内容。",
+    retry: "重新加载源码",
     manualIntro:
       "请按顺序完成以下步骤。只复制组件文件会缺少 utils import 和新拟态 token。",
     packages: "外部包",
@@ -719,6 +735,8 @@ const zh: Messages = {
     noPackages: "无需额外 npm 包。",
     baseTokens: "Base token",
     baseTokensBody: "将以下 token 和 utility layer 合并到现有 globals.css。",
+    fontStyles: "字体样式表",
+    fontStylesBody: "在 Next.js 的 app/layout.tsx 或 src/app/layout.tsx，或 Vite 的 src/main.tsx 中导入一次此 CSS。",
     localDependencies: "本地依赖",
     localDependenciesBody: "Registry 组件共享的本地依赖。",
     componentSource: "组件源码",
@@ -756,7 +774,7 @@ const zh: Messages = {
     targetPrice: "目标价",
     save: "保存",
     currentPrice: "当前价 $188.32",
-    targetProgress: "距目标 90%",
+    targetProgress: "目标进度",
     viewChart: "查看图表",
     deleteAlert: "删除提醒",
     alertConditions: "提醒条件",
@@ -851,6 +869,9 @@ const ja: Messages = {
     copy: "コピー",
     copied: "コピー済み",
     copiedAnnouncement: "クリップボードにコピーしました。",
+    copyFailed: "コピーに失敗",
+    manualCopyHint: "クリップボードにコピーできませんでした。下のテキストを選択して手動でコピーしてください。",
+    manualCopyLabel: "手動でコピーするテキスト",
     code: "コード",
     copyCommand: "コマンドをコピー",
     toggleTheme: "カラーテーマを切り替え",
@@ -969,9 +990,10 @@ const ja: Messages = {
   installationPanel: {
     methodsLabel: "インストール方法",
     cli:
-      "CLI が npm 依存関係、base token、utils、コンポーネントソースを順番に処理します。",
+      "共有 base を一度導入した後、CLI でコンポーネントと依存関係を追加します。",
     loadError:
       "ソースを読み込めませんでした。上部の Registry JSON リンクから原本を確認してください。",
+    retry: "ソースを再読み込み",
     manualIntro:
       "同じ動作にするには、以下の手順を順番に適用してください。コンポーネントファイルだけでは utils import とニューモーフィズム token が不足します。",
     packages: "外部パッケージ",
@@ -981,6 +1003,8 @@ const ja: Messages = {
     baseTokens: "Base token",
     baseTokensBody:
       "以下の token と utility layer を既存の globals.css に統合します。",
+    fontStyles: "フォントスタイルシート",
+    fontStylesBody: "Next.js の app/layout.tsx または src/app/layout.tsx、Vite の src/main.tsx でこの CSS を一度読み込みます。",
     localDependencies: "ローカル依存関係",
     localDependenciesBody: "Registry コンポーネントが共有するローカル依存関係です。",
     componentSource: "コンポーネントソース",
@@ -1019,7 +1043,7 @@ const ja: Messages = {
     targetPrice: "目標価格",
     save: "保存",
     currentPrice: "現在価格 $188.32",
-    targetProgress: "目標まで 90%",
+    targetProgress: "目標に対する進捗",
     viewChart: "チャートを見る",
     deleteAlert: "アラートを削除",
     alertConditions: "アラート条件",
