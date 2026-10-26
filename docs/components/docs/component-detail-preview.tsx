@@ -1,10 +1,12 @@
 "use client";
-import { ChartPreview } from "./chart-preview";
-import { NavigationPreview } from "./navigation-preview";
-
 import * as React from "react";
-import { WorkflowComponentPreview, workflowSlugs, type WorkflowSlug } from "./workflow-component-preview";
-import { ExpandedComponentPreview, expandedSlugs, type ExpandedSlug } from "./expanded-component-preview";
+import { workflowSlugs, expandedSlugs, type WorkflowSlug, type ExpandedSlug } from "./component-preview-slugs";
+import { PreviewBoundary } from "./preview-boundary";
+
+const ChartPreview = React.lazy(() => import("./chart-preview").then(module => ({ default: module.ChartPreview })));
+const NavigationPreview = React.lazy(() => import("./navigation-preview").then(module => ({ default: module.NavigationPreview })));
+const WorkflowComponentPreview = React.lazy(() => import("./workflow-component-preview").then(module => ({ default: module.WorkflowComponentPreview })));
+const ExpandedComponentPreview = React.lazy(() => import("./expanded-component-preview").then(module => ({ default: module.ExpandedComponentPreview })));
 
 import { localeHref, type Locale } from "@/i18n/config";
 import type { ComponentPreviewMessages } from "@/i18n/component-preview-messages";
@@ -195,10 +197,12 @@ export function ComponentDetailPreview({
   const [sliderValue, setSliderValue] = React.useState([32, 72]);
   const [switchValue, setSwitchValue] = React.useState(true);
 
-  if (workflowSlugs.includes(slug as WorkflowSlug)) return <WorkflowComponentPreview slug={slug as WorkflowSlug} locale={locale} />;
-  if (slug === "chart") return <ChartPreview locale={locale} />;
-  if (slug === "navigation-menu" || slug === "menubar") return <NavigationPreview slug={slug} locale={locale} />;
-  if (expandedSlugs.includes(slug as ExpandedSlug)) return <ExpandedComponentPreview slug={slug as ExpandedSlug} locale={locale} />;
+  let deferredPreview: React.ReactNode;
+  if (workflowSlugs.includes(slug as WorkflowSlug)) deferredPreview = <WorkflowComponentPreview slug={slug as WorkflowSlug} locale={locale} />;
+  else if (slug === "chart") deferredPreview = <ChartPreview locale={locale} />;
+  else if (slug === "navigation-menu" || slug === "menubar") deferredPreview = <NavigationPreview slug={slug} locale={locale} />;
+  else if (expandedSlugs.includes(slug as ExpandedSlug)) deferredPreview = <ExpandedComponentPreview slug={slug as ExpandedSlug} locale={locale} />;
+  if (deferredPreview) return <PreviewBoundary key={slug} locale={locale}>{deferredPreview}</PreviewBoundary>;
 
   switch (slug) {
     case "accordion":

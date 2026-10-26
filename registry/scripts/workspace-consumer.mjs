@@ -5,13 +5,25 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const workspaceItems = ["navigation-menu", "menubar", "template-settings", "template-data-manager"];
+export const workspaceItems = ["navigation-menu", "menubar", "template-settings", "template-data-manager", "template-cms"];
 
 export function decorateWorkspaceFixture(directory) {
+  fs.writeFileSync(path.join(directory, "src/cms-save-fixture.tsx"), `"use client";
+import * as React from "react";
+import { CmsWorkspace } from "@/design-system/blocks/cms";
+import { Button } from "@/design-system/ui/button";
+export function CmsSaveFixture() {
+  const complete = React.useRef<(() => void) | null>(null);
+  return <section data-workspace="cms" className="mt-16 grid min-w-0 gap-4 border-t border-[var(--border)] pt-10">
+    <CmsWorkspace initialPosts={[{ id: "saved-post", title: "Saved post", summary: "Saved summary", body: "Saved body", status: "draft" }]} onSave={() => new Promise<void>(resolve => { complete.current = resolve; })} />
+    <Button onClick={() => complete.current?.()}>Complete pending save</Button>
+  </section>;
+}
+`);
   const file = path.join(directory, "src/consumer.tsx"); let source = fs.readFileSync(file, "utf8");
-  source = source.replace('export default function Consumer()', 'import { SettingsExample } from "@/design-system/blocks/settings-panel";\nimport { DataManagerExample } from "@/design-system/blocks/data-manager";\nexport default function Consumer()');
+  source = source.replace('export default function Consumer()', 'import { SettingsExample } from "@/design-system/blocks/settings-panel";\nimport { DataManagerExample } from "@/design-system/blocks/data-manager";\nimport { CmsSaveFixture } from "./cms-save-fixture";\nexport default function Consumer()');
   assert.ok(source.includes('  </main>;'));
-  source = source.replace('  </main>;', '<section data-workspace="settings" className="mt-16 border-t border-[var(--border)] pt-10"><SettingsExample /></section><section data-workspace="records" className="mt-16 border-t border-[var(--border)] pt-10"><DataManagerExample /></section>\n  </main>;');
+  source = source.replace('  </main>;', '<section data-workspace="settings" className="mt-16 border-t border-[var(--border)] pt-10"><SettingsExample /></section><section data-workspace="records" className="mt-16 border-t border-[var(--border)] pt-10"><DataManagerExample /></section><CmsSaveFixture />\n  </main>;');
   fs.writeFileSync(file, source);
 }
 export async function exerciseWorkspaces(page, { target, scenario, engineName, mode, evidenceRoot }) {
@@ -90,4 +102,21 @@ export async function exerciseWorkspaces(page, { target, scenario, engineName, m
   await manager.getByRole('button', { name: 'Reset filters', exact: true }).click();
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'workspace causes page-level horizontal overflow');
   await shot('data-manager', manager);
+
+  const cms = page.locator('[data-workspace="cms"]');
+  const cmsTitle = cms.getByRole('textbox', { name: 'Title', exact: true });
+  await cmsTitle.fill('Installed saved snapshot');
+  await cms.getByRole('button', { name: 'Save', exact: true }).click();
+  for (const field of [cmsTitle, cms.getByRole('textbox', { name: 'Summary', exact: true }), cms.getByRole('textbox', { name: 'Content', exact: true }), cms.getByRole('switch', { name: 'Published', exact: true })]) await expect(field).toBeDisabled();
+  await cms.getByRole('button', { name: 'Complete pending save', exact: true }).click();
+  await expect(cms.getByRole('status')).toHaveText('Saved.');
+  await expect(cmsTitle).toHaveValue('Installed saved snapshot');
+  await expect(cmsTitle).toBeEnabled();
+  await cms.getByRole('button', { name: 'New post', exact: true }).click();
+  await cmsTitle.fill('Discard this unsaved post');
+  await cms.getByRole('button', { name: 'Discard', exact: true }).click();
+  await expect(cmsTitle).toHaveValue('Installed saved snapshot');
+  await expect(cms.getByRole('status')).toHaveText('Discarded the unsaved post.');
+  await expect(cms.locator('[data-slot="workspace-metrics"] dd')).toHaveText(['1', '0', '0']);
+  await shot('cms', cms);
 }

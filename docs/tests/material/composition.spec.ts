@@ -1,4 +1,99 @@
 import { expect, test, type Locator } from "@playwright/test";
+
+for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) {
+  test.describe(`runtime regressions ${mode} ${width}`, () => {
+    test.use({ viewport: { width, height: 900 } });
+    test.beforeEach(async ({ page }) => {
+      await page.goto(`/runtime-controls.html?mode=${mode}`);
+      await expect(page.getByRole("heading", { name: "Runtime composition regressions" })).toBeVisible();
+    });
+
+    test("CMS freezes editable fields until the saved snapshot is settled", async ({ page }) => {
+      const cms = page.getByTestId("cms-fixture");
+      const title = cms.getByRole("textbox", { name: "Title", exact: true });
+      const summary = cms.getByRole("textbox", { name: "Summary", exact: true });
+      const body = cms.getByRole("textbox", { name: "Content", exact: true });
+      const published = cms.getByRole("switch", { name: "Published", exact: true });
+      await title.fill("Snapshot to persist");
+      await summary.fill("Snapshot summary");
+      await body.fill("Snapshot body");
+      await cms.getByRole("button", { name: "Save", exact: true }).click();
+      for (const field of [title, summary, body, published]) await expect(field).toBeDisabled();
+      await expect(cms.locator("form")).toHaveAttribute("aria-busy", "true");
+      await cms.getByRole("button", { name: "Complete pending save", exact: true }).click();
+      await expect(cms.getByRole("status").first()).toHaveText("Saved.");
+      await expect(cms.getByTestId("persisted-title")).toHaveText("Snapshot to persist");
+      await expect(title).toHaveValue("Snapshot to persist");
+      for (const field of [title, summary, body, published]) await expect(field).toBeEnabled();
+      await title.fill("Next edit after save");
+      await expect(cms.getByRole("button", { name: "Save", exact: true })).toBeEnabled();
+    });
+
+    test("CMS discards a new post and supports an empty remaining collection", async ({ page }) => {
+      let cms = page.getByTestId("cms-fixture");
+      await cms.getByRole("button", { name: "New post", exact: true }).click();
+      await cms.getByRole("textbox", { name: "Title", exact: true }).fill("Throwaway draft");
+      await cms.getByRole("button", { name: "Discard", exact: true }).click();
+      await expect(cms.getByRole("textbox", { name: "Title", exact: true })).toHaveValue("Saved post");
+      await expect(cms.getByText("Throwaway draft", { exact: true })).toHaveCount(0);
+      await expect(cms.getByRole("status").first()).toHaveText("Discarded the unsaved post.");
+      await expect(cms.locator('[data-slot="workspace-metrics"] dd')).toHaveText(["1", "0", "0"]);
+
+      await page.goto(`/runtime-controls.html?mode=${mode}&empty=1`);
+      cms = page.getByTestId("cms-fixture");
+      await cms.getByRole("button", { name: "New post", exact: true }).first().click();
+      await cms.getByRole("textbox", { name: "Title", exact: true }).fill("Only draft");
+      await cms.getByRole("button", { name: "Discard", exact: true }).click();
+      await expect(cms.getByRole("textbox", { name: "Title", exact: true })).toHaveCount(0);
+      await expect(cms.locator('[data-slot="workspace-metrics"] dd')).toHaveText(["0", "0", "0"]);
+      await cms.getByRole("button", { name: "New post", exact: true }).first().click();
+      await expect(cms.getByRole("textbox", { name: "Title", exact: true })).toBeVisible();
+    });
+
+    test("Carousel leaves editing, slider and nested carousel keys with their owner", async ({ page }) => {
+      const fixture = page.getByTestId("carousel-horizontal");
+      const current = fixture.getByRole("status", { name: "Current slide", exact: true });
+      for (const name of ["Slide input", "Slide notes"]) {
+        const field = fixture.getByRole("textbox", { name, exact: true });
+        await field.fill("ABCDE");
+        await field.press("ArrowLeft");
+        expect(await field.evaluate(element => (element as HTMLInputElement).selectionStart)).toBe(4);
+        await expect(current).toHaveText("0");
+      }
+      const editable = fixture.getByRole("textbox", { name: "Editable slide text", exact: true });
+      await editable.press("Home");
+      await editable.press("ArrowRight");
+      expect(await editable.evaluate(() => window.getSelection()?.anchorOffset)).toBe(1);
+      const slider = fixture.getByRole("slider", { name: "Slide amount", exact: true });
+      await slider.press("ArrowRight");
+      await expect(slider).toHaveAttribute("aria-valuenow", "26");
+      const nested = fixture.getByRole("region", { name: "Nested slides", exact: true });
+      await nested.press("ArrowRight");
+      await expect(nested.getByRole("button", { name: "Nested previous", exact: true })).toBeEnabled();
+      await expect(current).toHaveText("0");
+    });
+
+    test("Carousel honors caller cancellation, composition and both orientation keys", async ({ page }) => {
+      for (const orientation of ["horizontal", "vertical"] as const) {
+        const fixture = page.getByTestId(`carousel-${orientation}`);
+        const carousel = fixture.getByRole("region", { name: `${orientation} workspace`, exact: true });
+        const current = fixture.getByRole("status", { name: "Current slide", exact: true });
+        const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+        await fixture.getByRole("checkbox", { name: "Prevent carousel navigation", exact: true }).check();
+        await carousel.press(nextKey);
+        await expect(current).toHaveText("0");
+        await fixture.getByRole("checkbox", { name: "Prevent carousel navigation", exact: true }).uncheck();
+        await carousel.evaluate((element, key) => element.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true, isComposing: true })), nextKey);
+        await expect(current).toHaveText("0");
+        await carousel.press(nextKey);
+        await expect(current).toHaveText("1");
+        await carousel.press(orientation === "horizontal" ? "ArrowLeft" : "ArrowUp");
+        await expect(current).toHaveText("0");
+      }
+    });
+  });
+}
+
 test.setTimeout(20000);
 const phase = process.env.MATERIAL_PHASE ?? "after";
 async function fits(locator: Locator) {

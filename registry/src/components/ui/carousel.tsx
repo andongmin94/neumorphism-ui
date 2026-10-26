@@ -42,6 +42,7 @@ function Carousel({
   plugins,
   className,
   children,
+  onKeyDown,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
@@ -77,6 +78,15 @@ function Carousel({
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement;
+      if (
+        event.defaultPrevented ||
+        event.nativeEvent.isComposing ||
+        target.closest('[data-slot="carousel"]') !== event.currentTarget ||
+        (target !== event.currentTarget &&
+          !target.matches('[data-slot="carousel-previous"], [data-slot="carousel-next"]'))
+      ) return;
+
       const previousKey = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
       const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
       if (event.key === previousKey) {
@@ -109,7 +119,10 @@ function Carousel({
         data-slot="carousel"
         role="region"
         aria-roledescription="carousel"
-        onKeyDownCapture={handleKeyDown}
+        onKeyDown={(event) => {
+          onKeyDown?.(event);
+          handleKeyDown(event);
+        }}
         className={cn("relative min-w-0", className)}
         {...props}
       >

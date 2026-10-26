@@ -6,14 +6,31 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { expect } = createRequire(path.join(root, "../docs/package.json"))("@playwright/test");
-export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable", "sidebar", "image-card", "marquee"];
+export const expandedItems = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable", "sidebar", "image-card", "marquee", "slider"];
 
 export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
   fs.writeFileSync(path.join(directory, "src/expanded-preview.tsx"), source.replaceAll("@neumorphism-ui/registry/ui/", "@/design-system/ui/"));
+  fs.copyFileSync(path.join(root, "../docs/components/docs/component-preview-slugs.ts"), path.join(directory, "src/component-preview-slugs.ts"));
+  fs.writeFileSync(path.join(directory, "src/carousel-keyboard-fixture.tsx"), `"use client";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/design-system/ui/carousel";
+import { Input } from "@/design-system/ui/input";
+import { Slider } from "@/design-system/ui/slider";
+export function CarouselKeyboardFixture() {
+  return <section data-example="carousel-keyboard" className="min-w-0 p-12">
+    <Carousel aria-label="Editable carousel" className="mx-auto w-full max-w-sm">
+      <CarouselContent>
+        <CarouselItem><div className="grid gap-6 p-3"><Input aria-label="Carousel note" defaultValue="ABCDE" /><Slider defaultValue={[25]} thumbLabels={["Carousel amount"]} /></div></CarouselItem>
+        <CarouselItem><p className="p-3">Second editable workspace</p></CarouselItem>
+      </CarouselContent>
+      <CarouselPrevious /><CarouselNext />
+    </Carousel>
+  </section>;
+}
+`);
   const file = path.join(directory, "src/consumer.tsx");
   let consumer = fs.readFileSync(file, "utf8");
-  consumer = consumer.replace('export default function Consumer()', 'import { ExpandedComponentPreview, expandedSlugs } from "./expanded-preview";\nexport default function Consumer()');
+  consumer = consumer.replace('export default function Consumer()', 'import { ExpandedComponentPreview } from "./expanded-preview";\nimport { expandedSlugs } from "./component-preview-slugs";\nimport { CarouselKeyboardFixture } from "./carousel-keyboard-fixture";\nexport default function Consumer()');
   consumer = consumer.replace('maxWidth: 800', 'maxWidth: 1120');
   consumer = consumer.replace('  </main>;', `
     <section className="mt-12 grid gap-6" aria-label="Interaction collection">
@@ -28,6 +45,7 @@ export function decorateFixture(directory) {
           <div className="flex min-w-0 flex-1 items-center"><ExpandedComponentPreview slug={slug} /></div>
         </section>)}
       </div>
+      <CarouselKeyboardFixture />
     </section>
   </main>;`);
   fs.writeFileSync(file, consumer);
@@ -130,6 +148,18 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await nextSlide.click();
   await expect.poll(async () => carouselTrack.evaluate((element) => getComputedStyle(element).transform)).not.toBe(transformBefore);
   await expect(carousel.getByRole("button", { name: "Previous slide" })).toBeEnabled();
+
+  const keyboardCarousel = card("carousel-keyboard");
+  const carouselNote = keyboardCarousel.getByRole("textbox", { name: "Carousel note", exact: true });
+  await carouselNote.fill("ABCDE");
+  await carouselNote.press("ArrowLeft");
+  assert.equal(await carouselNote.evaluate(element => element.selectionStart), 4, "Carousel must preserve text cursor navigation");
+  const carouselAmount = keyboardCarousel.getByRole("slider", { name: "Carousel amount", exact: true });
+  await carouselAmount.press("ArrowRight");
+  await expect(carouselAmount).toHaveAttribute("aria-valuenow", "26");
+  await expect(keyboardCarousel.getByRole("button", { name: "Previous slide", exact: true })).toBeDisabled();
+  await keyboardCarousel.getByRole("button", { name: "Next slide", exact: true }).press("ArrowRight");
+  await expect(keyboardCarousel.getByRole("button", { name: "Previous slide", exact: true })).toBeEnabled();
 
   const resizable = card("resizable");
   const separator = resizable.getByRole("separator");

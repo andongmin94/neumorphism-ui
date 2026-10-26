@@ -14,6 +14,13 @@ failed-save recovery, dirty-state discard, search/filter/sort/paging, stable-ID
 selection, column visibility, create/edit, confirmed deletion and asynchronous
 application-owned persistence callbacks. Link Hub adds a data-driven creator/team profile with grouped destinations, explicit external-link behavior and contact-copy recovery. Portfolio adds a static, data-driven case-study surface with native disclosure and contact links. Blog adds a data-driven archive with local search/topic/sort state. Blog Post adds a static article renderer with section and list semantics, while CMS adds an application-owned persistence boundary around local editing, dirty-state recovery and preview.
 
+CMS editing controls are disabled while the application-owned save callback is
+pending, so completing an older snapshot cannot overwrite later input. Discarding
+a saved post restores that snapshot; discarding a new unsaved post removes it and
+selects a remaining post or the empty state. Carousel navigation leaves descendant
+text editing, sliders, nested carousels, composition and cancelled events with
+their owning controls.
+
 The analytics layer adds:
 
 - `chart`: a reusable Recharts container with linked title/description, tooltip,
@@ -94,23 +101,25 @@ IME-composition test, and Linux does not establish native Consolas rendering.
 
 Aggregate installation remains a separate signal from the independent-item matrix. `verify-independent-items.mjs` derives every file-bearing catalog item, installs it into fresh projects, checks templates in Next.js and other items in both Next.js and Vite, and is sharded in CI. The published domain and deployed registry endpoints are still separate from the local generated endpoints used by CI.
 
-## Remaining release work
+## Release requirements
 
-As of 2026-10-20, the npm-generated lockfiles have been refreshed within the
-existing dependency ranges. The full audit reports **0 critical vulnerabilities**,
-**7 related high findings in registry** and **0 findings in docs**. The seven
-registry entries trace through `shadcn → fast-glob/ts-morph → micromatch → braces`
-(including `@shadcn/registry` and `@ts-morph/common`), rather than seven
-independent root vulnerabilities. The remaining root advisory is
-[GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm);
-it lists `braces <=3.0.3` without a patched release. The release gate still
-fails on these high findings, including development tools. The historical clean
-result below is not the current full-audit result. Do not remove the CLI,
-suppress the audit or downgrade to an obsolete shadcn version merely to make
-that gate pass.
+Run the full dependency audit for both registry and docs, including development
+tools. The blocking CI gate must retain failures at the configured severity.
+Use audit artifacts for the exact source commit as evidence; historical results
+and advisory status must not be treated as the current release state. Do not
+remove the CLI, suppress the audit or downgrade to an obsolete shadcn version
+merely to make that gate pass.
 
-The installable registry production audit is clean in the analytics materialization
-run. The documentation runtime now uses Fumapress and Vite; the obsolete Vinext, Next.js routing, Cloudflare Vite plugin and Wrangler development chain are removed. Verify the static Fumapress output and deployed registry endpoints before release.
+Documentation uses Fumapress and Vite to generate static output. Wrangler provides
+local Cloudflare emulation and deployment of that output; it is not a
+documentation routing layer. Verify generated output, the exact deployed commit
+and the bounded production smoke checks before release.
+
+Component pages defer the chart, workflow, navigation and expanded preview groups
+until that group is requested. The rendered controls and localized examples keep
+the same source and design. Preview loading failures offer a localized page reload
+action, and the emitted initial-asset budget guards simple pages against unrelated
+preview dependencies.
 
 Before shadcn directory submission, also verify the live domain/deployed commit and full README initialization path. Directory metadata and individual-item installation coverage are now source-controlled and automated. License/attribution remains a separate legal release gate and must not be invented from repository ownership.
 

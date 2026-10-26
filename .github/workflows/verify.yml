@@ -54,7 +54,9 @@ jobs:
         run: npx playwright install --with-deps firefox webkit
       - name: Hydrated documentation, theme output, and source recovery
         working-directory: docs
-        run: npm run test:browser
+        run: |
+          npm run test:browser
+          npx playwright test --config=playwright.material.config.ts composition.spec.ts --grep="runtime regressions"
       - name: Installed components and rendered interaction states
         if: ${{ !inputs.comprehensive }}
         run: npm run consumer:verify --prefix registry -- --smoke

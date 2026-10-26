@@ -62,6 +62,37 @@ test('CMS documentation preserves edits through a failed save', async ({ page })
   await expect(preview.getByRole('status')).toHaveText('Saved.');
 });
 
+test('CMS documentation disables editing while saving and allows the next edit afterward', async ({ page }) => {
+  await page.goto('/en/templates/cms');
+  const preview = page.locator('[data-template="cms"]');
+  const title = preview.getByLabel('Title', { exact: true });
+  await title.fill('Saved snapshot');
+  await page.clock.install();
+  await page.clock.pauseAt(Date.now() + 1000);
+  await preview.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(title).toBeDisabled();
+  await expect(preview.getByRole('textbox', { name: 'Summary', exact: true })).toBeDisabled();
+  await expect(preview.getByRole('textbox', { name: 'Content', exact: true })).toBeDisabled();
+  await expect(preview.getByRole('switch', { name: 'Published', exact: true })).toBeDisabled();
+  await page.clock.runFor(250);
+  await expect(preview.getByRole('status')).toHaveText('Saved.');
+  await expect(title).toHaveValue('Saved snapshot');
+  await title.fill('Next edit');
+  await expect(preview.getByRole('button', { name: 'Save', exact: true })).toBeEnabled();
+});
+
+test('CMS documentation removes an unsaved new post when discarded', async ({ page }) => {
+  await page.goto('/en/templates/cms');
+  const preview = page.locator('[data-template="cms"]');
+  await preview.getByRole('button', { name: 'New post', exact: true }).click();
+  await preview.getByLabel('Title', { exact: true }).fill('Throwaway draft');
+  await preview.getByRole('button', { name: 'Discard', exact: true }).click();
+  await expect(preview.getByLabel('Title', { exact: true })).toHaveValue('September editor update');
+  await expect(preview.getByText('Throwaway draft', { exact: true })).toHaveCount(0);
+  await expect(preview.getByRole('status')).toHaveText('Discarded the unsaved post.');
+  await expect(preview.locator('[data-slot="workspace-metrics"] dd')).toHaveText(['3', '2', '0']);
+});
+
 test('portfolio documentation exposes case study detail', async ({ page }) => {
   await page.goto('/en/templates/portfolio');
   const preview = page.locator('[data-template="portfolio"]');

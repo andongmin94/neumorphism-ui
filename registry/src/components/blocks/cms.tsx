@@ -63,6 +63,7 @@ const copy = {
     saveRecovery: "편집 내용은 유지됩니다. 다시 저장하거나 변경 취소로 마지막 저장 상태를 복원하세요.",
     saved: "저장했습니다.",
     restored: "마지막 저장 상태를 복원했습니다.",
+    discarded: "저장하지 않은 글을 삭제했습니다.",
     untitled: "제목 없는 글",
   },
   en: {
@@ -94,6 +95,7 @@ const copy = {
     saveRecovery: "Your edits are still here. Try again or discard to restore the last saved version.",
     saved: "Saved.",
     restored: "Restored the last saved version.",
+    discarded: "Discarded the unsaved post.",
     untitled: "Untitled post",
   },
   ja: {
@@ -125,6 +127,7 @@ const copy = {
     saveRecovery: "編集内容は残っています。再試行するか、破棄して最後の保存状態に戻してください。",
     saved: "保存しました。",
     restored: "最後の保存状態に戻しました。",
+    discarded: "未保存の記事を破棄しました。",
     untitled: "無題の記事",
   },
   zh: {
@@ -156,6 +159,7 @@ const copy = {
     saveRecovery: "编辑内容仍然保留。请重试，或放弃更改以恢复上次保存的版本。",
     saved: "已保存。",
     restored: "已恢复上次保存的版本。",
+    discarded: "已放弃未保存的文章。",
     untitled: "无标题文章",
   },
 } as const;
@@ -193,7 +197,7 @@ export function CmsWorkspace({
   const selected = posts.find((post) => post.id === selectedId);
 
   function updateSelected(changes: Partial<Pick<CmsPost, "title" | "summary" | "body" | "status">>) {
-    if (!selected) return;
+    if (!selected || pending) return;
     const snapshot = saved.find((post) => post.id === selected.id);
     setFailure(false);
     setFeedback("");
@@ -241,12 +245,16 @@ export function CmsWorkspace({
   function discardSelected() {
     if (!selected || pending) return;
     const snapshot = saved.find((post) => post.id === selected.id);
-    if (!snapshot) return;
-    setPosts((current) =>
-      current.map((post) => post.id === selected.id ? { ...snapshot, dirty: false } : post),
-    );
+    if (snapshot) {
+      setPosts((current) =>
+        current.map((post) => post.id === selected.id ? { ...snapshot, dirty: false } : post),
+      );
+    } else {
+      setPosts((current) => current.filter((post) => post.id !== selected.id));
+      setSelectedId(posts.find((post) => post.id !== selected.id)?.id ?? "");
+    }
     setFailure(false);
-    setFeedback(t.restored);
+    setFeedback(snapshot ? t.restored : t.discarded);
   }
 
   function createPost() {
@@ -369,6 +377,7 @@ export function CmsWorkspace({
           {selected ? (
             <form
               className="grid min-h-[28rem] grid-rows-[auto_1fr]"
+              aria-busy={pending}
               onSubmit={(event) => { event.preventDefault(); void saveSelected(); }}
             >
               <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] bg-[var(--neu-surface-soft)] p-4">
@@ -387,15 +396,15 @@ export function CmsWorkspace({
               <div className="grid content-start gap-5 p-4 sm:p-5">
                 <label className="grid gap-2 text-sm font-semibold">
                   {t.titleField}
-                  <Input required value={selected.title} onChange={(event) => updateSelected({ title: event.target.value })} />
+                  <Input required disabled={pending} value={selected.title} onChange={(event) => updateSelected({ title: event.target.value })} />
                 </label>
                 <label className="grid gap-2 text-sm font-semibold">
                   {t.summary}
-                  <Textarea value={selected.summary} onChange={(event) => updateSelected({ summary: event.target.value })} />
+                  <Textarea disabled={pending} value={selected.summary} onChange={(event) => updateSelected({ summary: event.target.value })} />
                 </label>
                 <label className="grid gap-2 text-sm font-semibold">
                   {t.content}
-                  <Textarea className="min-h-44" value={selected.body} onChange={(event) => updateSelected({ body: event.target.value })} />
+                  <Textarea disabled={pending} className="min-h-44" value={selected.body} onChange={(event) => updateSelected({ body: event.target.value })} />
                 </label>
 
                 <details className="rounded-[var(--neu-radius-surface)] border border-[var(--border)] bg-[var(--neu-surface-soft)] p-4">
@@ -414,6 +423,7 @@ export function CmsWorkspace({
                   <label htmlFor={"cms-published-" + selected.id} className="text-sm font-semibold">{t.publish}</label>
                   <Switch
                     id={"cms-published-" + selected.id}
+                    disabled={pending}
                     checked={selected.status === "published"}
                     onCheckedChange={(checked) => updateSelected({ status: checked ? "published" : "draft" })}
                   />

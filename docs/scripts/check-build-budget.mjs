@@ -8,11 +8,11 @@ const docsRoot = fileURLToPath(new URL("../", import.meta.url));
 const origin = "https://neumorphism-ui.andongmin.com";
 const kibibyte = 1024;
 
-// Baseline JS gzip KiB: 178.8 / 491.1 / 196.7 / 424.8; CSS: 124.7–126.1.
+// Baseline JS gzip KiB: 178.9 / 250.2 / 197.7 / 430.3; CSS: 124.7–126.2.
 // Leave about 13–20% room for minor updates without counting lazy syntax grammars.
 export const pageBudgets = {
   "/en": { javascript: 210 * kibibyte, stylesheet: 145 * kibibyte },
-  "/en/components/button": { javascript: 560 * kibibyte, stylesheet: 145 * kibibyte },
+  "/en/components/button": { javascript: 290 * kibibyte, stylesheet: 145 * kibibyte },
   "/en/customize": { javascript: 235 * kibibyte, stylesheet: 145 * kibibyte },
   "/en/templates/cms": { javascript: 480 * kibibyte, stylesheet: 145 * kibibyte },
 };
