@@ -114,8 +114,8 @@ test("static RSC navigation and client-side search hydrate without a server runt
   await page.goto("/en");
   await expect(page).toHaveTitle("Neumorphic UI for React | Neumorphism UI");
   await page.locator('.primary-nav a[href="/en/docs"]').click();
-  await expect(page.getByRole("heading", { level: 1, name: "Documentation", exact: true })).toBeVisible();
-  await expect(page).toHaveTitle("Documentation | Neumorphism UI");
+  await expect(page.getByRole("heading", { level: 1, name: "Introduction", exact: true })).toBeVisible();
+  await expect(page).toHaveTitle("Introduction | Neumorphism UI");
   await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute("href", `${canonicalOrigin}/en/docs`);
   await page.getByRole("link", { name: "Button", exact: true }).first().click();
   await expect(page.getByRole("heading", { level: 1, name: "Button", exact: true })).toBeVisible();

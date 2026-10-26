@@ -1,0 +1,56 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories:
+      - /docs
+      - /registry
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Seoul
+    open-pull-requests-limit: 3
+    groups:
+      react:
+        patterns:
+          - react
+          - react-dom
+          - react-is
+          - "@types/react*"
+      fumadocs:
+        patterns:
+          - "fumadocs*"
+          - "@fumadocs/*"
+          - fumapress
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - tailwind-merge
+        update-types: [minor, patch]
+      ui:
+        patterns:
+          - "@base-ui/*"
+          - "@daypicker/*"
+          - "@tanstack/*"
+          - cmdk
+          - "embla-carousel*"
+          - input-otp
+          - react-resizable-panels
+          - recharts
+        update-types: [minor, patch]
+      tools:
+        dependency-type: development
+        patterns: ["*"]
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Seoul
+    open-pull-requests-limit: 1
+    groups:
+      actions:
+        patterns: ["*"]

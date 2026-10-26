@@ -6,21 +6,11 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
+import { consumerVersions as versions } from "./consumer-versions.mjs";
 
 const root = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
 const docsRoot = path.resolve(root, "../docs");
 const registry = JSON.parse(fs.readFileSync(path.join(root, "public/r/registry.json"), "utf8"));
-const registryPackage = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
-const docsPackage = JSON.parse(fs.readFileSync(path.join(docsRoot, "package.json"), "utf8"));
-const versions = {
-  ...registryPackage.dependencies,
-  ...registryPackage.devDependencies,
-  ...docsPackage.dependencies,
-  ...docsPackage.devDependencies,
-  next: "16.4.2",
-  "@vitejs/plugin-react": "6.0.2",
-  "@tailwindcss/postcss": "^4.3.3",
-};
 
 const { values } = parseArgs({
   options: { shard: { type: "string", default: "1/1" } },

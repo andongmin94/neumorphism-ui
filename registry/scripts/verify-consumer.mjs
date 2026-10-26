@@ -1,6 +1,7 @@
 import { decorateAnalyticsFixture, exerciseAnalytics } from "./analytics-consumer.mjs";
 import { decorateWorkspaceFixture, workspaceItems, exerciseWorkspaces } from "./workspace-consumer.mjs";
 import { run } from "./consumer-command.mjs";
+import { consumerVersions as versions } from "./consumer-versions.mjs";
 import { decorateWorkflowFixture, workflowItems, exerciseWorkflow } from "./workflow-consumer.mjs";
 import { decorateFixture, expandedItems, assertExpandedFiles, exerciseExpanded } from "./expanded-consumer.mjs";
 import assert from "node:assert/strict";
@@ -17,14 +18,6 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const docsRoot = path.resolve(root, "../docs");
 const requireDocs = createRequire(path.join(docsRoot, "package.json"));
 const { chromium, firefox, webkit, expect } = requireDocs("@playwright/test");
-const docsPackage = JSON.parse(fs.readFileSync(path.join(docsRoot, "package.json"), "utf8"));
-const versions = {
-  ...docsPackage.dependencies,
-  ...docsPackage.devDependencies,
-  next: "16.4.2",
-  "@vitejs/plugin-react": "6.0.2",
-  "@tailwindcss/postcss": "^4.3.3",
-};
 const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "neumorphism-consumer-"));
 const evidenceRoot = path.join(docsRoot, "test-results/installed-consumers");
 const cli = path.join(root, "node_modules/shadcn/dist/index.js");

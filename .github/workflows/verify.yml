@@ -40,10 +40,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          node --test docs/scripts/verify-deployment.test.mjs
+          node --test docs/scripts/verify-deployment.test.mjs docs/scripts/check-build-budget.test.mjs
           npm run lint --prefix docs
           npm run typecheck:site --prefix docs
           npm run build:site --prefix docs
+          node docs/scripts/check-build-budget.mjs
       - name: Browser engines
         working-directory: docs
         run: npx playwright install --with-deps chromium
