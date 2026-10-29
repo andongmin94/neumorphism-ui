@@ -171,6 +171,27 @@ function Sidebar({
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   const { mobileWidth } = React.useContext(SidebarPresentationContext);
   const collapsed = state === "collapsed";
+  const offcanvasHidden = !isMobile && collapsed && collapsible === "offcanvas";
+  const desktopContentRef = React.useRef<HTMLDivElement>(null);
+
+  React.useLayoutEffect(() => {
+    const panel = desktopContentRef.current?.parentElement;
+    if (!offcanvasHidden || !panel?.contains(panel.ownerDocument.activeElement)) return;
+
+    // Restore only this panel's focus, before the hidden subtree loses it.
+    // Internal, nested-provider and unavailable triggers are not return targets.
+    const wrapper = panel.closest('[data-slot="sidebar-wrapper"]');
+    const trigger = Array.from(
+      wrapper?.querySelectorAll<HTMLElement>('[data-slot="sidebar-trigger"]') ?? [],
+    ).find(element =>
+      element.closest('[data-slot="sidebar-wrapper"]') === wrapper &&
+      !panel.contains(element) &&
+      !element.matches(":disabled, [aria-disabled='true']") &&
+      !element.closest("[inert]") && element.checkVisibility(),
+    );
+    trigger?.focus({ preventScroll: true });
+  }, [offcanvasHidden]);
+
   const content = (
     <SidebarPresentationContext.Provider value={{ iconCollapsed: !isMobile && collapsed && collapsible === "icon", mobileWidth }}>
       {children}
@@ -231,12 +252,14 @@ function Sidebar({
       ref={ref}
       className={cn(
         "group/sidebar hidden min-h-0 shrink-0 overflow-hidden transition-[width,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none md:flex",
-        collapsed && collapsible === "offcanvas" && "pointer-events-none opacity-0",
+        offcanvasHidden && "pointer-events-none opacity-0",
         className,
       )}
       {...props}
+      inert={offcanvasHidden || props.inert}
     >
       <div
+        ref={desktopContentRef}
         data-slot="sidebar-inner"
         className={cn(
           "flex h-full min-h-0 shrink-0 flex-col overflow-hidden text-[var(--foreground)]",

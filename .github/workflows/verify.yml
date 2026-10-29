@@ -52,11 +52,17 @@ jobs:
         if: ${{ inputs.comprehensive }}
         working-directory: docs
         run: npx playwright install --with-deps firefox webkit
+      - name: Component runtime regressions
+        working-directory: docs
+        run: npx playwright test --config=playwright.material.config.ts composition.spec.ts cms-ref-regressions.spec.ts sidebar-regressions.spec.ts --grep="runtime regressions"
+      - name: Cloudflare static hosting
+        working-directory: docs
+        env:
+          WRANGLER_SEND_METRICS: "false"
+        run: npm run test:cloudflare
       - name: Hydrated documentation, theme output, and source recovery
         working-directory: docs
-        run: |
-          npm run test:browser
-          npx playwright test --config=playwright.material.config.ts composition.spec.ts cms-ref-regressions.spec.ts sidebar-regressions.spec.ts --grep="runtime regressions"
+        run: npm run test:browser
       - name: Installed components and rendered interaction states
         if: ${{ !inputs.comprehensive }}
         run: npm run consumer:verify --prefix registry -- --smoke
