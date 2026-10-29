@@ -77,6 +77,11 @@ use shared tokens. Reduced motion is separate from depth styling.
 Calendar uses DayPicker v10. Data Table renders a caller-owned TanStack Table
 instance. Toast and interactive overlays use the existing Base UI primitives.
 
+Fully collapsed desktop offcanvas Sidebars are inert. If focus is inside when a
+panel closes, it returns to an available outside SidebarTrigger in the same
+provider. Icon and none modes remain interactive; mobile Sheets retain their
+own focus handling. Collapsing the desktop panel preserves mounted form state.
+
 ## Installable workspaces
 
 ```bash
@@ -155,11 +160,15 @@ npx playwright install --with-deps chromium firefox webkit
 cd ..
 npm run consumer:verify --prefix registry
 npm run test:browser --prefix docs
+npm run test:cloudflare --prefix docs
 ```
 
 Pushes and pull requests run source contracts, lint, types, a documentation build,
-the Chromium desktop/mobile browser suite and fresh Vite/Next installation smoke
-checks for the base, button, input and dialog. Dependency audits remain blocking.
+the Chromium desktop/mobile browser suite, component runtime regressions, the
+local Wrangler Cloudflare suite and fresh Vite/Next installation smoke checks
+for the base, button, input and dialog. The Cloudflare suite checks static routing,
+response headers, missing routes and hydrated navigation against Wrangler,
+not the Node preview server. Dependency audits remain blocking.
 The material/detail presentation suites, all-item installation shards and full
 installed-consumer matrix run when manually dispatching `Verify` with
 `comprehensive` enabled. The duplicate presentation/browser invocation is removed.
