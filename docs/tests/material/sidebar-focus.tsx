@@ -29,6 +29,11 @@ function Workspace({ name }: { name: string }) {
     <SidebarProvider defaultOpen={!parameters.has("closed")}
       open={parameters.has("controlled") ? open : undefined}
       onOpenChange={setOpen} className="min-h-64">
+      {parameters.has("unavailableTriggers") && <>
+        <SidebarTrigger label={`${name} disabled toggle`} disabled />
+        <SidebarTrigger label={`${name} hidden toggle`} style={{ visibility: "hidden" }} />
+        <SidebarTrigger label={`${name} transparent toggle`} style={{ opacity: 0 }} />
+      </>}
       <SidebarTrigger label={`${name} toggle`} />
       <Sidebar collapsible={collapsible} data-testid={`${name}-sidebar`}
         ref={panelRef} inert={parameters.has("callerInert")}

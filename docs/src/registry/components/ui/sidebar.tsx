@@ -187,7 +187,8 @@ function Sidebar({
       element.closest('[data-slot="sidebar-wrapper"]') === wrapper &&
       !panel.contains(element) &&
       !element.matches(":disabled, [aria-disabled='true']") &&
-      !element.closest("[inert]") && element.checkVisibility(),
+      !element.closest("[inert]") &&
+      element.checkVisibility({ visibilityProperty: true, opacityProperty: true }),
     );
     trigger?.focus({ preventScroll: true });
   }, [offcanvasHidden]);

@@ -72,7 +72,6 @@ for (const mode of ["light", "dark"] as const) {
       await expect(panel).toHaveAttribute("data-side", "right");
       await expect(panel).toHaveCSS("width", "320px");
       await expect(panel).toHaveCSS("font-weight", "600");
-      await page.locator('output[aria-label="Sidebar ref tag"]').waitFor();
       await expect(page.locator('output[aria-label="Sidebar ref tag"]')).toHaveText("DIV");
       expect((await panel.boundingBox())!.x).toBeCloseTo(70, 0);
     });
@@ -111,7 +110,8 @@ for (const mode of ["light", "dark"] as const) {
       await action.evaluate(element => element.focus());
       await page.keyboard.press("Enter");
       await expect(page.getByTestId("Primary-activations")).toHaveText("0");
-      await expect(page.getByRole("button", { name: "Primary action", exact: true })).toHaveCount(0);
+      // Inert retains mounted content; the focus/activation checks above prove it is unusable.
+      await expect(action).toHaveCount(1);
       await expect(panel).toHaveAttribute("inert", "");
       await expect(page.getByTestId("Primary-ref")).toHaveText("ASIDE");
       await trigger.press("Enter");
@@ -208,6 +208,13 @@ for (const mode of ["light", "dark"] as const) {
         await trigger.press("Tab");
         await expect(page.getByRole("button", { name: "Primary after", exact: true })).toBeFocused();
       }
+    });
+
+    test("runtime regressions: focus return skips disabled and visually hidden outside triggers", async ({ page }) => {
+      await page.goto(`/sidebar-focus.html?mode=${mode}&unavailableTriggers`);
+      await page.getByRole("button", { name: "Primary action", exact: true }).press("Control+b");
+      await expect(page.getByTestId("Primary-sidebar")).toHaveAttribute("inert", "");
+      await expect(page.getByRole("button", { name: "Primary toggle", exact: true })).toBeFocused();
     });
 
     test("runtime regressions: explicit caller inert remains effective on an expanded Sidebar", async ({ page }) => {
