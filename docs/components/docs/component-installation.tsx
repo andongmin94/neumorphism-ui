@@ -46,7 +46,8 @@ function getManualTarget(file: RegistryFile, itemSlug: string) {
   if (file.target) {
     return file.target
       .replace(/^@\//, "")
-      .replace(/^@lib\//, "lib/");
+      .replace(/^@lib\//, "lib/")
+      .replace(/^@hooks\//, "hooks/");
   }
 
   return itemSlug === "utils"

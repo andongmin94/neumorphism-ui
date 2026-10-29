@@ -34,6 +34,10 @@ type SidebarContextValue = {
 };
 
 const SidebarContext = React.createContext<SidebarContextValue | null>(null);
+const SidebarPresentationContext = React.createContext({
+  iconCollapsed: false,
+  mobileWidth: SIDEBAR_WIDTH_MOBILE as string | number,
+});
 
 function useSidebar() {
   const context = React.useContext(SidebarContext);
@@ -75,6 +79,15 @@ function SidebarProvider({
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (
+        event.defaultPrevented ||
+        event.isComposing ||
+        (target instanceof HTMLElement &&
+          (target.isContentEditable || target.closest("input, textarea, select")))
+      ) {
+        return;
+      }
       if (
         event.key.toLowerCase() === SIDEBAR_SHORTCUT &&
         (event.metaKey || event.ctrlKey)
@@ -121,7 +134,12 @@ function SidebarProvider({
           )}
           {...props}
         >
-          {children}
+          <SidebarPresentationContext.Provider value={{
+            iconCollapsed: false,
+            mobileWidth: (style as React.CSSProperties & { "--sidebar-width-mobile"?: string | number })?.["--sidebar-width-mobile"] ?? SIDEBAR_WIDTH_MOBILE,
+          }}>
+            {children}
+          </SidebarPresentationContext.Provider>
         </div>
       </TooltipProvider>
     </SidebarContext.Provider>
@@ -146,11 +164,18 @@ function Sidebar({
   closeLabel = "Close sidebar",
   className,
   style,
+  ref,
   children,
   ...props
 }: SidebarProps) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+  const { mobileWidth } = React.useContext(SidebarPresentationContext);
   const collapsed = state === "collapsed";
+  const content = (
+    <SidebarPresentationContext.Provider value={{ iconCollapsed: !isMobile && collapsed && collapsible === "icon", mobileWidth }}>
+      {children}
+    </SidebarPresentationContext.Provider>
+  );
 
   if (isMobile) {
     return (
@@ -160,17 +185,20 @@ function Sidebar({
           data-mobile="true"
           side={side}
           closeLabel={closeLabel}
+          ref={ref as React.Ref<HTMLDivElement>}
+          style={{ "--sidebar-width-mobile": mobileWidth, ...style } as React.CSSProperties}
           className={cn(
             "w-[min(var(--sidebar-width-mobile),calc(100vw-1rem))] gap-0 p-0 pt-0",
             className,
           )}
+          {...props}
         >
           <div className="sr-only">
             <SheetTitle>{mobileTitle}</SheetTitle>
             <SheetDescription>{mobileDescription}</SheetDescription>
           </div>
           <div className="flex h-full min-h-0 flex-col bg-[var(--neu-surface)]">
-            {children}
+            {content}
           </div>
         </SheetContent>
       </Sheet>
@@ -200,6 +228,7 @@ function Sidebar({
       data-variant={variant}
       data-collapsible={collapsible}
       style={{ width, ...style }}
+      ref={ref}
       className={cn(
         "group/sidebar hidden min-h-0 shrink-0 overflow-hidden transition-[width,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none md:flex",
         collapsed && collapsible === "offcanvas" && "pointer-events-none opacity-0",
@@ -217,7 +246,7 @@ function Sidebar({
           innerClass,
         )}
       >
-        {children}
+        {content}
       </div>
     </aside>
   );
@@ -311,13 +340,13 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<"section">) 
 }
 
 function SidebarGroupLabel({ className, ...props }: React.ComponentProps<"h3">) {
-  const { state } = useSidebar();
+  const { iconCollapsed: collapsed } = React.useContext(SidebarPresentationContext);
   return (
     <h3
       data-slot="sidebar-group-label"
       className={cn(
         "px-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted-foreground)]",
-        state === "collapsed" && "sr-only",
+        collapsed && "sr-only",
         className,
       )}
       {...props}
@@ -381,8 +410,7 @@ function SidebarMenuButton({
   isActive?: boolean;
   tooltip?: string;
 }) {
-  const { state, isMobile } = useSidebar();
-  const collapsed = state === "collapsed" && !isMobile;
+  const { iconCollapsed: collapsed } = React.useContext(SidebarPresentationContext);
   const element = (
     <button
       type="button"
@@ -416,8 +444,7 @@ function SidebarMenuLink({
   isActive?: boolean;
   tooltip?: string;
 }) {
-  const { state, isMobile } = useSidebar();
-  const collapsed = state === "collapsed" && !isMobile;
+  const { iconCollapsed: collapsed } = React.useContext(SidebarPresentationContext);
   const element = (
     <a
       data-slot="sidebar-menu-link"

@@ -199,7 +199,7 @@ try {
     const cssPath = path.join(directory, "src/globals.css"); const buttonPath = path.join(directory, "src/design-system/ui/button.tsx");
     if (scenario === "existing") { fs.appendFileSync(cssPath, "\n:root, .dark { --radius: 23px; }\n.consumer-owned { border-top: 7px solid currentColor; }\n"); fs.appendFileSync(buttonPath, "\n// Application-owned customization must survive later installs.\n"); }
     const beforeCss = fs.readFileSync(cssPath, "utf8"); const beforeButton = fs.readFileSync(buttonPath, "utf8"); const beforeApp = fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8");
-    await add("input", "dialog", ...(smoke ? [] : [...expandedItems, ...workflowItems, ...workspaceItems, "template-analytics", "checkbox"]));
+    await add("input", "dialog", ...(smoke ? [] : [...expandedItems, ...workflowItems, ...workspaceItems, "template-analytics", "checkbox", "radio-group"]));
     if (!smoke) assertExpandedFiles(directory);
     assert.equal(fs.readFileSync(cssPath, "utf8"), beforeCss, "adding UI changed theme or custom CSS"); assert.equal(fs.readFileSync(buttonPath, "utf8"), beforeButton, "adding UI overwrote a customized button"); assert.equal(fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8"), beforeApp);
     await run(process.execPath, [npm, "run", "build"], directory); await browserChecks(directory, target, scenario);

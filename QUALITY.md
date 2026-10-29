@@ -20,6 +20,12 @@ a saved post restores that snapshot; discarding a new unsaved post removes it an
 selects a remaining post or the empty state. Carousel navigation leaves descendant
 text editing, sliders, nested carousels, composition and cancelled events with
 their owning controls.
+CMS creates unique post IDs when a draft is added, including after persisted posts
+are loaded into a new workspace. Checkbox and RadioGroup forward React callback-ref
+cleanup when refs change or controls unmount. Sidebar shortcuts leave editable,
+composing and cancelled events with their controls; mobile Sheet width and child
+labels follow the actual panel mode. Manual source instructions resolve hook
+targets to the paths used by their imports.
 
 The analytics layer adds:
 

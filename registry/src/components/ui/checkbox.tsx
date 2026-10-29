@@ -40,11 +40,15 @@ function Checkbox({
     (node: HTMLInputElement | null) => {
       inputRef.current = node;
 
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
+      const cleanup = typeof ref === "function" ? ref(node) : undefined;
+      if (ref && typeof ref !== "function") ref.current = node;
+
+      return () => {
+        inputRef.current = null;
+        if (typeof cleanup === "function") cleanup();
+        else if (typeof ref === "function") ref(null);
+        else if (ref) ref.current = null;
+      };
     },
     [ref],
   );

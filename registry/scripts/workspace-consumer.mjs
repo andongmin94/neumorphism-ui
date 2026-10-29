@@ -10,13 +10,18 @@ export const workspaceItems = ["navigation-menu", "menubar", "template-settings"
 export function decorateWorkspaceFixture(directory) {
   fs.writeFileSync(path.join(directory, "src/cms-save-fixture.tsx"), `"use client";
 import * as React from "react";
-import { CmsWorkspace } from "@/design-system/blocks/cms";
+import { CmsWorkspace, type CmsPost } from "@/design-system/blocks/cms";
 import { Button } from "@/design-system/ui/button";
 export function CmsSaveFixture() {
   const complete = React.useRef<(() => void) | null>(null);
+  const [persisted, setPersisted] = React.useState<CmsPost[]>([{ id: "local-post-1", title: "Saved post", summary: "Saved summary", body: "Saved body", status: "draft" }]);
+  const [generation, setGeneration] = React.useState(0);
   return <section data-workspace="cms" className="mt-16 grid min-w-0 gap-4 border-t border-[var(--border)] pt-10">
-    <CmsWorkspace initialPosts={[{ id: "saved-post", title: "Saved post", summary: "Saved summary", body: "Saved body", status: "draft" }]} onSave={() => new Promise<void>(resolve => { complete.current = resolve; })} />
+    <CmsWorkspace key={generation} initialPosts={persisted} onSave={post => new Promise<void>(resolve => {
+      complete.current = () => { setPersisted(current => [{ ...post }, ...current.filter(item => item.id !== post.id)]); resolve(); };
+    })} />
     <Button onClick={() => complete.current?.()}>Complete pending save</Button>
+    <Button onClick={() => setGeneration(current => current + 1)}>Reload persisted CMS</Button>
   </section>;
 }
 `);
@@ -118,5 +123,18 @@ export async function exerciseWorkspaces(page, { target, scenario, engineName, m
   await expect(cmsTitle).toHaveValue('Installed saved snapshot');
   await expect(cms.getByRole('status')).toHaveText('Discarded the unsaved post.');
   await expect(cms.locator('[data-slot="workspace-metrics"] dd')).toHaveText(['1', '0', '0']);
+  await cms.getByRole('button', { name: 'New post', exact: true }).click();
+  await cmsTitle.fill('Persisted consumer draft');
+  await cms.getByRole('button', { name: 'Save', exact: true }).click();
+  await cms.getByRole('button', { name: 'Complete pending save', exact: true }).click();
+  await expect(cms.getByRole('status')).toHaveText('Saved.');
+  await cms.getByRole('button', { name: 'Reload persisted CMS', exact: true }).click();
+  await expect(cmsTitle).toHaveValue('Persisted consumer draft');
+  await cms.getByRole('button', { name: 'New post', exact: true }).click();
+  await cmsTitle.fill('Independent consumer draft');
+  await expect(cms.getByText('Persisted consumer draft', { exact: true })).toBeVisible();
+  await expect(cms.getByText('Installed saved snapshot', { exact: true })).toBeVisible();
+  await cms.getByRole('button', { name: 'Discard', exact: true }).click();
+  await expect(cmsTitle).toHaveValue('Persisted consumer draft');
   await shot('cms', cms);
 }

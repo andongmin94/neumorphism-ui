@@ -20,6 +20,26 @@ test("manual source loads on demand and reuses the loaded dependency bundle", as
   expect(requests).toHaveLength(3);
 });
 
+test("manual Sidebar source resolves the hook path used by its component", async ({ page }) => {
+  await page.goto("/en/components/sidebar");
+  const installation = page.locator("#installation");
+  await installation.getByRole("tab", { name: "Component source", exact: true }).click();
+  await expect(installation.locator(".component-manual-meta")).toBeVisible();
+
+  const targets = installation.locator(".component-source-file-heading > span");
+  await expect(targets).toContainText([
+    "lib/utils.ts",
+    "components/ui/sidebar.tsx",
+    "hooks/use-mobile.ts",
+  ]);
+  expect(await targets.allTextContents()).not.toEqual(expect.arrayContaining([
+    expect.stringMatching(/^@/),
+  ]));
+  await expect(installation.locator(".component-source-file").filter({
+    has: page.locator(".component-source-file-heading > span", { hasText: /^components\/ui\/sidebar\.tsx$/ }),
+  }).locator("pre")).toContainText('@/hooks/use-mobile');
+});
+
 test("a failed source request can be retried on the same component page", async ({ page }) => {
   let attempts = 0;
   await page.route("**/r/field.json", route => {

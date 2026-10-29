@@ -38,7 +38,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     description: "SidebarProvider が desktop・mobile 状態と Ctrl/Cmd+B を管理します。デスクトップでは offcanvas または icon 幅に折りたたみ、モバイルでは既存の Sheet を再利用します。メニュー、tooltip、focus は既存のニューモーフィズム token を使います。",
     props: [
       "デスクトップ sidebar の初期または controlled 開閉状態を管理します。",
-      "折りたたみ時に完全に隠すか icon 幅で残すか指定します。",
+      "デスクトップでは offcanvas は折りたたむと非表示になり、icon はアイコン幅を維持します。none は全幅とメニューの文字を維持します。",
       "配置する側と surface 表現を選びます。",
       "折りたたみボタンのアクセシブル名をローカライズします。",
       "現在位置の表示と icon 折りたたみ時の tooltip を提供します。",
@@ -46,7 +46,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     accessibility: [
       "ナビゲーションリンクには実際の移動先と読み取れる名前を与え、現在位置には isActive を使用します。",
       "icon 幅に折りたたんでもアクセシブル名を維持し、tooltip は名前の代替ではなく補助にします。",
-      "モバイル Sidebar は modal Sheet として Escape で閉じ、デスクトップでは Ctrl または Command+B でも切り替えられます。",
+      "モバイル Sidebar は modal Sheet として Escape で閉じます。Ctrl または Command+B は入力欄、文字変換中、処理済みのキーイベントでは動作しません。",
     ],
   },
   carousel: {

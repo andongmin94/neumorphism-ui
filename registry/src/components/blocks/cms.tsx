@@ -187,7 +187,6 @@ export function CmsWorkspace({
   const [pending, setPending] = React.useState(false);
   const [failure, setFailure] = React.useState(false);
   const [feedback, setFeedback] = React.useState("");
-  const nextId = React.useRef(1);
 
   const filtered = posts.filter((post) => {
     const text = (post.title + " " + post.summary).toLowerCase();
@@ -259,7 +258,7 @@ export function CmsWorkspace({
 
   function createPost() {
     if (pending) return;
-    const id = "local-post-" + nextId.current++;
+    const id = crypto.randomUUID();
     const post: EditablePost = {
       id,
       title: t.untitled,

@@ -12,6 +12,34 @@ export function decorateFixture(directory) {
   const source = fs.readFileSync(path.join(root, "../docs/components/docs/expanded-component-preview.tsx"), "utf8");
   fs.writeFileSync(path.join(directory, "src/expanded-preview.tsx"), source.replaceAll("@neumorphism-ui/registry/ui/", "@/design-system/ui/"));
   fs.copyFileSync(path.join(root, "../docs/components/docs/component-preview-slugs.ts"), path.join(directory, "src/component-preview-slugs.ts"));
+  fs.writeFileSync(path.join(directory, "src/ref-cleanup-fixture.tsx"), `"use client";
+import * as React from "react";
+import { Button } from "@/design-system/ui/button";
+import { Checkbox } from "@/design-system/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/design-system/ui/radio-group";
+export function RefCleanupFixture() {
+  const [mounted, setMounted] = React.useState(true);
+  const [cleanups, setCleanups] = React.useState({ checkbox: 0, radio: 0 });
+  const checkboxRef = React.useCallback<React.RefCallback<HTMLInputElement>>(node => {
+    if (node) return () => setCleanups(current => ({ ...current, checkbox: current.checkbox + 1 }));
+  }, []);
+  const radioRef = React.useCallback<React.RefCallback<HTMLDivElement>>(node => {
+    if (node) return () => setCleanups(current => ({ ...current, radio: current.radio + 1 }));
+  }, []);
+  return <section data-example="ref-cleanup" className="grid gap-4 p-5">
+    <h3>Installed ref cleanup</h3>
+    <Button onClick={() => setMounted(current => !current)}>{mounted ? "Unmount ref controls" : "Mount ref controls"}</Button>
+    <output aria-label="Ref cleanup counts">{cleanups.checkbox} / {cleanups.radio}</output>
+    {mounted ? <>
+      <label><Checkbox ref={checkboxRef} />Ref checkbox</label>
+      <RadioGroup ref={radioRef} defaultValue="a" aria-label="Ref choices">
+        <label><RadioGroupItem value="a" />Ref option A</label>
+        <label><RadioGroupItem value="b" />Ref option B</label>
+      </RadioGroup>
+    </> : null}
+  </section>;
+}
+`);
   fs.writeFileSync(path.join(directory, "src/carousel-keyboard-fixture.tsx"), `"use client";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/design-system/ui/carousel";
 import { Input } from "@/design-system/ui/input";
@@ -30,7 +58,7 @@ export function CarouselKeyboardFixture() {
 `);
   const file = path.join(directory, "src/consumer.tsx");
   let consumer = fs.readFileSync(file, "utf8");
-  consumer = consumer.replace('export default function Consumer()', 'import { ExpandedComponentPreview } from "./expanded-preview";\nimport { expandedSlugs } from "./component-preview-slugs";\nimport { CarouselKeyboardFixture } from "./carousel-keyboard-fixture";\nexport default function Consumer()');
+  consumer = consumer.replace('export default function Consumer()', 'import { ExpandedComponentPreview } from "./expanded-preview";\nimport { expandedSlugs } from "./component-preview-slugs";\nimport { CarouselKeyboardFixture } from "./carousel-keyboard-fixture";\nimport { RefCleanupFixture } from "./ref-cleanup-fixture";\nexport default function Consumer()');
   consumer = consumer.replace('maxWidth: 800', 'maxWidth: 1120');
   consumer = consumer.replace('  </main>;', `
     <section className="mt-12 grid gap-6" aria-label="Interaction collection">
@@ -46,6 +74,7 @@ export function CarouselKeyboardFixture() {
         </section>)}
       </div>
       <CarouselKeyboardFixture />
+      <RefCleanupFixture />
     </section>
   </main>;`);
   fs.writeFileSync(file, consumer);
@@ -174,6 +203,8 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
     await sidebarTrigger.click();
     const mobileSidebar = page.locator('[data-sidebar="sidebar"][data-mobile="true"]');
     await mobileSidebar.waitFor();
+    await expect(mobileSidebar).toHaveCSS("width", "288px");
+    await expect(mobileSidebar.locator('[data-slot="sidebar-group-label"]')).not.toHaveClass(/sr-only/);
     await page.keyboard.press("Escape");
     await mobileSidebar.waitFor({ state: "hidden" });
     await expect(sidebarTrigger).toBeFocused();
@@ -187,6 +218,16 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
     await sidebarTrigger.click();
     await expect(sidebarTrigger).toHaveAttribute("aria-expanded", "true");
   }
+
+  const refs = card("ref-cleanup");
+  await refs.getByRole("checkbox", { name: "Ref checkbox", exact: true }).check();
+  await expect(refs.getByRole("checkbox", { name: "Ref checkbox", exact: true })).toBeChecked();
+  await refs.getByRole("radio", { name: "Ref option B", exact: true }).check();
+  await expect(refs.getByRole("radio", { name: "Ref option B", exact: true })).toBeChecked();
+  await refs.getByRole("button", { name: "Unmount ref controls", exact: true }).click();
+  await expect(refs.getByRole("status", { name: "Ref cleanup counts", exact: true })).toHaveText("1 / 1");
+  await expect(refs.getByRole("checkbox")).toHaveCount(0);
+  await expect(refs.getByRole("radiogroup")).toHaveCount(0);
 
   const imageCard = card("image-card");
   await expect(imageCard.getByRole("img")).toHaveAttribute("alt", /gradient/i);

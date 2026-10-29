@@ -44,11 +44,15 @@ function RadioGroup({
   const groupRef = React.useRef<HTMLDivElement>(null);
   const setRef = React.useCallback((node: HTMLDivElement | null) => {
     groupRef.current = node;
-    if (typeof ref === "function") {
-      ref(node);
-    } else if (ref) {
-      ref.current = node;
-    }
+    const cleanup = typeof ref === "function" ? ref(node) : undefined;
+    if (ref && typeof ref !== "function") ref.current = node;
+
+    return () => {
+      groupRef.current = null;
+      if (typeof cleanup === "function") cleanup();
+      else if (typeof ref === "function") ref(null);
+      else if (ref) ref.current = null;
+    };
   }, [ref]);
 
   React.useEffect(() => {
