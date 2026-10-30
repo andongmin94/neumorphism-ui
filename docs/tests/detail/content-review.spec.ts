@@ -131,7 +131,8 @@ for (const locale of ["en", "ko", "ja", "zh"] as const) {
     await expect(shell.locator("pre.shiki")).toBeVisible();
     await expect(shell).toHaveCSS("background-color", "rgb(30, 30, 30)");
     await shell.locator(".copy-button").click();
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(source.files[0].content);
+    // Windows clipboard reads normalize LF source text to CRLF.
+    expect((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n")).toBe(source.files[0].content);
     await cards.first().screenshot({ path: info.outputPath("chart-source.png") });
     await page.setViewportSize({ width: 320, height: 1000 });
     await fits(page);

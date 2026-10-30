@@ -48,6 +48,7 @@ function run(command, args, cwd, log, timeout = 240_000) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       cwd,
+      shell: process.platform === "win32" && command === npm,
       env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" },
       stdio: ["ignore", log, log],
     });

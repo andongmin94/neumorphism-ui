@@ -30,7 +30,7 @@ export default function CreditsPage({ lang }: { lang: string }) {
           </table>
         </section>
         <section className="docs-content-section" id="licenses">
-          <h2>{t.sections.licenses}</h2><p className="docs-section-note">{t.note}</p>
+          <h2>{t.sections.licenses}</h2><p>{t.note}</p>
         </section>
       </article>
       <DocsToc items={toc} />

@@ -92,6 +92,6 @@ test("the actual registry button source and the displayed dialog example share t
     await page.goto(`/${locale}/components/dialog`);
     const preview = page.locator(".component-example");
     await preview.getByRole("tab").nth(1).click();
-    await expect(preview.locator("pre.shiki")).toContainText('DialogClose render={<Button variant="soft" />}');
+    await expect(preview.locator("pre.shiki")).toContainText('DialogClose render={<Button variant="soft"/>}');
   }
 });

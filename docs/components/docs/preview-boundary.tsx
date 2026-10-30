@@ -11,7 +11,7 @@ const copy = {
   zh: { loading: "正在加载预览。", failed: "无法加载预览。", reload: "刷新页面" },
 } as const;
 
-export class PreviewBoundary extends Component<{ children: ReactNode; locale: Locale }, { failed: boolean }> {
+export class PreviewBoundary extends Component<{ children: ReactNode; locale: Locale; suspense?: boolean }, { failed: boolean }> {
   state = { failed: false };
 
   static getDerivedStateFromError() {
@@ -28,6 +28,7 @@ export class PreviewBoundary extends Component<{ children: ReactNode; locale: Lo
         </div>
       );
     }
+    if (this.props.suspense === false) return this.props.children;
     return <Suspense fallback={<p role="status" className="text-sm text-[var(--muted-foreground)]">{t.loading}</p>}>{this.props.children}</Suspense>;
   }
 }

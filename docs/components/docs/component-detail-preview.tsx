@@ -202,7 +202,8 @@ export function ComponentDetailPreview({
   else if (slug === "chart") deferredPreview = <ChartPreview locale={locale} />;
   else if (slug === "navigation-menu" || slug === "menubar") deferredPreview = <NavigationPreview slug={slug} locale={locale} />;
   else if (expandedSlugs.includes(slug as ExpandedSlug)) deferredPreview = <ExpandedComponentPreview slug={slug as ExpandedSlug} locale={locale} />;
-  if (deferredPreview) return <PreviewBoundary key={slug} locale={locale}>{deferredPreview}</PreviewBoundary>;
+  // Chart's native data table must be included in the initial SSR document.
+  if (deferredPreview) return <PreviewBoundary key={slug} locale={locale} suspense={slug !== "chart"}>{deferredPreview}</PreviewBoundary>;
 
   switch (slug) {
     case "accordion":
