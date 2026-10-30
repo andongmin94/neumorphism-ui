@@ -1,9 +1,65 @@
 import { expect, test } from "@playwright/test";
+import { getGitHubStars } from "../../components/docs/github-stars";
+
+const githubStarsUrl = "https://api.github.com/repos/andongmin94/neumorphism-ui";
+const starsCacheKey = "neumorphism-ui-github-stars";
+const starsCacheDuration = 60 * 60 * 1000;
+const githubApiHeaders = { "Access-Control-Allow-Origin": "*" };
+
+test("GitHub cache shares concurrent requests, expires at one hour and permits recovery", async () => {
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
+  const originalFetch = globalThis.fetch;
+  const originalNow = Date.now;
+  let now = 2_000_000_000_000;
+  let requests = 0;
+  let stored: string | null = null;
+  let finish!: (response: Response) => void;
+  const response = new Promise<Response>(resolve => { finish = resolve; });
+  try {
+    Reflect.deleteProperty(globalThis, "window");
+    globalThis.fetch = async () => { requests++; return response; };
+    expect(await getGitHubStars()).toBeNull();
+    expect(requests).toBe(0);
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: { localStorage: {
+        getItem: () => stored,
+        setItem: (_key: string, value: string) => { stored = value; },
+      } },
+    });
+    Date.now = () => now;
+    const first = getGitHubStars();
+    const second = getGitHubStars();
+    expect(first).toBe(second);
+    expect(requests).toBe(1);
+    finish(Response.json({ stargazers_count: 1287 }));
+    expect(await Promise.all([first, second])).toEqual([1287, 1287]);
+    expect(JSON.parse(stored!)).toEqual({ count: 1287, fetchedAt: now });
+    now += starsCacheDuration - 1;
+    expect(await getGitHubStars()).toBe(1287);
+    expect(requests).toBe(1);
+    now++;
+    globalThis.fetch = async () => { requests++; return new Response(null, { status: 403 }); };
+    expect(await getGitHubStars()).toBe(1287);
+    expect(requests).toBe(2);
+    expect(JSON.parse(stored!).fetchedAt).toBe(now - starsCacheDuration);
+    globalThis.fetch = async () => { requests++; return Response.json({ stargazers_count: 1288 }); };
+    expect(await getGitHubStars()).toBe(1288);
+    expect(requests).toBe(3);
+    expect(JSON.parse(stored!)).toEqual({ count: 1288, fetchedAt: now });
+  } finally {
+    Date.now = originalNow;
+    globalThis.fetch = originalFetch;
+    if (originalWindow) Object.defineProperty(globalThis, "window", originalWindow);
+    else Reflect.deleteProperty(globalThis, "window");
+  }
+});
 
 for (const [count, displayed] of [[0, "0"], [1287, "1.3K"]] as const) {
   test(`GitHub action renders ${count} actual stars without hiding the mobile count`, async ({ page }) => {
-    await page.route("**/api/github-stars", route => route.fulfill({
-      json: { count, fetchedAt: "2026-09-26T00:00:00.000Z" },
+    await page.route(githubStarsUrl, route => route.fulfill({
+      headers: githubApiHeaders,
+      json: { stargazers_count: count },
     }));
     await page.goto("/en");
     const link = page.locator("[data-github-repository]");
@@ -23,9 +79,9 @@ for (const [count, displayed] of [[0, "0"], [1287, "1.3K"]] as const) {
   });
 }
 
-for (const data of [{ count: null, fetchedAt: null }, { count: -1, fetchedAt: "2026-09-26" }]) {
-  test(`GitHub unavailable count remains honest: ${data.count}`, async ({ page }) => {
-    await page.route("**/api/github-stars", route => route.fulfill({ json: data }));
+for (const count of [null, -1]) {
+  test(`GitHub unavailable count remains honest: ${count}`, async ({ page }) => {
+    await page.route(githubStarsUrl, route => route.fulfill({ headers: githubApiHeaders, json: { stargazers_count: count } }));
     await page.goto("/en");
     const link = page.locator("[data-github-repository]");
     await expect(link).toHaveAttribute("data-state", "unavailable");
@@ -35,17 +91,70 @@ for (const data of [{ count: null, fetchedAt: null }, { count: -1, fetchedAt: "2
   });
 }
 
-test("static GitHub endpoint exposes only a count and its observation time", async ({ request }) => {
-  const response = await request.get("/api/github-stars");
-  expect(response.ok()).toBe(true);
-  const data = await response.json();
-  expect(Object.keys(data).sort()).toEqual(["count", "fetchedAt"]);
-  if (data.count === null) expect(data.fetchedAt).toBeNull();
-  else {
-    expect(Number.isSafeInteger(data.count)).toBe(true);
-    expect(data.count).toBeGreaterThanOrEqual(0);
-    expect(Number.isFinite(Date.parse(data.fetchedAt))).toBe(true);
-  }
+test("GitHub count is cached for a reload without another upstream request", async ({ page }) => {
+  let requests = 0;
+  await page.route(githubStarsUrl, route => {
+    requests++;
+    return route.fulfill({ headers: githubApiHeaders, json: { stargazers_count: 1287 } });
+  });
+  await page.goto("/en");
+  const link = page.locator("[data-github-repository]");
+  await expect(link).toHaveAccessibleName(/1,287 stars/);
+  const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), starsCacheKey);
+  expect(stored.count).toBe(1287);
+  expect(Date.now() - stored.fetchedAt).toBeLessThan(starsCacheDuration);
+  await page.reload();
+  await expect(link).toHaveAccessibleName(/1,287 stars/);
+  await expect(link.locator("[data-github-stars]")).toHaveText("1.3K");
+  expect(requests).toBe(1);
+});
+
+test("GitHub count refreshes an expired persisted cache", async ({ page }) => {
+  await page.addInitScript(({ key, duration }) => {
+    localStorage.setItem(key, JSON.stringify({ count: 12, fetchedAt: Date.now() - duration - 1000 }));
+  }, { key: starsCacheKey, duration: starsCacheDuration });
+  let requests = 0;
+  await page.route(githubStarsUrl, route => {
+    requests++;
+    return route.fulfill({ headers: githubApiHeaders, json: { stargazers_count: 1287 } });
+  });
+  await page.goto("/en");
+  await expect(page.locator("[data-github-repository]")).toHaveAccessibleName(/1,287 stars/);
+  const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), starsCacheKey);
+  expect(stored.count).toBe(1287);
+  expect(Date.now() - stored.fetchedAt).toBeLessThan(starsCacheDuration);
+  expect(requests).toBe(1);
+});
+
+for (const failure of ["http", "network"] as const) {
+  test(`GitHub ${failure} failure keeps the expired last success and repository link`, async ({ page }) => {
+    await page.addInitScript(({ key, duration }) => {
+      localStorage.setItem(key, JSON.stringify({ count: 1287, fetchedAt: Date.now() - duration - 1000 }));
+    }, { key: starsCacheKey, duration: starsCacheDuration });
+    await page.route(githubStarsUrl, route => failure === "http"
+      ? route.fulfill({ status: 403, headers: githubApiHeaders, json: { message: "API rate limit exceeded" } })
+      : route.abort("failed"));
+    await page.goto("/en");
+    const link = page.locator("[data-github-repository]");
+    await expect(link).toHaveAttribute("data-state", "ready");
+    await expect(link).toHaveAccessibleName(/1,287 stars/);
+    await expect(link.locator("[data-github-stars]")).toHaveText("1.3K");
+    await expect(link).toHaveAttribute("href", "https://github.com/andongmin94/neumorphism-ui");
+    const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), starsCacheKey);
+    expect(stored.count).toBe(1287);
+    expect(Date.now() - stored.fetchedAt).toBeGreaterThanOrEqual(starsCacheDuration);
+  });
+}
+
+test("GitHub failure without a cached success stays unavailable", async ({ page }) => {
+  await page.route(githubStarsUrl, route => route.abort("failed"));
+  await page.goto("/en");
+  const link = page.locator("[data-github-repository]");
+  await expect(link).toHaveAttribute("data-state", "unavailable");
+  await expect(link.locator("[data-github-stars]")).toHaveText("—");
+  await expect(link).toHaveAccessibleName(/Star count unavailable/);
+  await expect(link).toHaveAttribute("href", "https://github.com/andongmin94/neumorphism-ui");
+  expect(await page.evaluate(key => localStorage.getItem(key), starsCacheKey)).toBeNull();
 });
 
 test("home uses installable controls and saves or resets the same workspace", async ({ page }, info) => {

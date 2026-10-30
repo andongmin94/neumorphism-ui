@@ -57,3 +57,38 @@ test("verification distinguishes default, comprehensive and deployed checks", as
   await expect(page.locator("#comprehensive")).toContainText("Firefox/WebKit");
   await expect(page.locator("#deployed")).toContainText("three Chromium smoke scenarios and three representative registry endpoints");
 });
+
+test("page contents keeps anchor position, current section and compact navigation", async ({ page }, info) => {
+  for (const locale of ["en", "ko", "ja", "zh"]) {
+    await page.goto(`/${locale}/components/button#api-reference`);
+    const toc = page.locator(".docs-toc");
+    const compact = page.locator(".component-doc-quicknav");
+    if (info.project.name === "desktop-light") {
+      await expect(toc).toBeVisible();
+      await expect(compact).toBeHidden();
+      await expect(toc.locator('a[href="#api-reference"]')).toHaveAttribute("aria-current", "location");
+      const usage = toc.locator('a[href="#usage"]');
+      await usage.focus();
+      await page.keyboard.press("Enter");
+      await expect(page).toHaveURL(url => url.hash === "#usage");
+      await expect(usage).toHaveAttribute("aria-current", "location");
+      const last = toc.locator('a[href="#accessibility"]');
+      await last.click();
+      await expect(last).toHaveAttribute("aria-current", "location");
+      await page.locator("#installation").evaluate(element => element.scrollIntoView());
+      await expect(toc.locator('a[href="#installation"]')).toHaveAttribute("aria-current", "location");
+      await expect(toc.locator('[aria-current="location"]')).toHaveCount(1);
+    } else {
+      await expect(toc).toBeHidden();
+      await expect(compact).toBeVisible();
+      await compact.locator('a[href="#usage"]').click();
+      await expect(page).toHaveURL(url => url.hash === "#usage");
+    }
+    const heading = await page.locator("#usage h2").boundingBox();
+    if (info.project.name !== "desktop-light") {
+      const header = (await page.locator(".site-header").boundingBox())!;
+      expect(heading!.y).toBeGreaterThanOrEqual(header.y + header.height);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  }
+});

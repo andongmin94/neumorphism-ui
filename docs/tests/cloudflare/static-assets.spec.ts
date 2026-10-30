@@ -79,11 +79,10 @@ test("localized deep links and RSC payloads are served as static assets", async 
   }
 });
 
-test("static JSON API, build marker and missing routes keep their HTTP semantics", async ({ request }) => {
+test("removed star snapshot, build marker and missing routes keep their HTTP semantics", async ({ request }) => {
   const stars = await request.get("/api/github-stars");
-  expect(stars.status()).toBe(200);
-  expect(stars.headers()["content-type"]).toContain("application/json");
-  expect(await stars.json()).toHaveProperty("count");
+  expect(stars.status()).toBe(404);
+  expect(stars.headers()["content-type"]).toContain("text/html");
   const marker = await request.get("/build-info.json");
   expect(marker.status()).toBe(200);
   expect((await marker.json()).commit).toMatch(/^[\da-f]{40}$/);

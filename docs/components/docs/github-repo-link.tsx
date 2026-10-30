@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getGitHubStars } from "./github-stars";
 import styles from "./github-repo-link.module.css";
 
 type Stars =
   | { status: "loading" | "unavailable" }
-  | { status: "ready"; count: number; fetchedAt: string };
+  | { status: "ready"; count: number };
 
 const compactNumber = new Intl.NumberFormat("en-US", {
   notation: "compact",
@@ -16,37 +17,17 @@ export function GitHubRepoLink() {
   const [stars, setStars] = useState<Stars>({ status: "loading" });
 
   useEffect(() => {
-    const controller = new AbortController();
     let active = true;
-    const timeout = window.setTimeout(() => controller.abort(), 8000);
-
-    async function load() {
-      try {
-        const response = await fetch("/api/github-stars", { signal: controller.signal });
-        if (!response.ok) throw new Error("Star snapshot unavailable");
-        const data = await response.json();
-        if (
-          typeof data?.count !== "number" || !Number.isSafeInteger(data.count) || data.count < 0 ||
-          typeof data.fetchedAt !== "string" || !Number.isFinite(Date.parse(data.fetchedAt))
-        ) throw new Error("Invalid star snapshot");
-        if (active) setStars({ status: "ready", count: data.count, fetchedAt: data.fetchedAt });
-      } catch {
-        if (active) setStars({ status: "unavailable" });
-      } finally {
-        window.clearTimeout(timeout);
-      }
-    }
-
-    void load();
+    void getGitHubStars().then(count => {
+      if (active) setStars(count === null ? { status: "unavailable" } : { status: "ready", count });
+    });
     return () => {
       active = false;
-      controller.abort();
-      window.clearTimeout(timeout);
     };
   }, []);
 
   const detail = stars.status === "ready"
-    ? `${stars.count.toLocaleString("en-US")} stars; build snapshot ${stars.fetchedAt}`
+    ? `${stars.count.toLocaleString("en-US")} stars`
     : stars.status === "loading" ? "Loading star count" : "Star count unavailable";
 
   return (

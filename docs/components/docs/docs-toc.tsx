@@ -24,22 +24,36 @@ export function DocsToc({
     const sections = items
       .map((item) => document.getElementById(item.href.replace(/^#/, "")))
       .filter((section): section is HTMLElement => Boolean(section));
+    if (!sections.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-        if (visible[0]) {
-          setActiveHref(`#${visible[0].target.id}`);
-        }
-      },
-      { rootMargin: "-96px 0px -65% 0px" },
-    );
+    // Native anchors include document padding as well as the section margin.
+    const scrollOffset = Number.parseFloat(
+      getComputedStyle(document.documentElement).scrollPaddingTop,
+    ) + Number.parseFloat(getComputedStyle(sections[0]).scrollMarginTop) + 1;
+    const updateActive = () => {
+      let current = sections[0];
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top > scrollOffset) break;
+        current = section;
+      }
+      const last = sections[sections.length - 1];
+      if (
+        window.location.hash === `#${last.id}` &&
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1
+      ) current = last;
+      if (current) setActiveHref(`#${current.id}`);
+    };
+    const observer = new IntersectionObserver(updateActive, {
+      rootMargin: `-${scrollOffset}px 0px 0px`,
+    });
 
     sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    window.addEventListener("hashchange", updateActive);
+    updateActive();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("hashchange", updateActive);
+    };
   }, [items]);
 
   return (
