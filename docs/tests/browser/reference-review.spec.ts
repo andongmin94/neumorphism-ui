@@ -2,10 +2,10 @@ import { expect, test } from "@playwright/test";
 
 const pageSlugs = ["design-tokens", "registry", "resources", "accessibility", "verification", "credits"] as const;
 const localizedEvidence = {
-  en: { keyboard: "Keyboard and focus", bodies: ["Components consume them instead of hard-coded palette values.", "Its presence does not imply directory submission or approval.", "See Verification & release", "Visible focus rings are retained", "Only three Chromium smoke scenarios", "Each package retains its own license"] },
-  ko: { keyboard: "키보드와 포커스", bodies: ["고정 색상 대신 이 토큰을 참조합니다.", "디렉터리 제출이나 승인이 완료된 것은 아닙니다.", "소비자·브라우저 검사", "포커스 표시를 제거하지 않습니다.", "Chromium 핵심 시나리오 세 개", "각 패키지는 자체 라이선스"] },
-  ja: { keyboard: "キーボードとフォーカス", bodies: ["固定色の代わりにこのトークンを参照します。", "ディレクトリへの申請や承認を意味しません。", "利用側・ブラウザの検査", "フォーカス表示を削除しません。", "Chromiumの主要シナリオ三つ", "各パッケージはそれぞれのライセンス"] },
-  zh: { keyboard: "键盘与焦点", bodies: ["而不是硬编码颜色。", "不代表已经提交目录或获得批准。", "使用方与浏览器检查", "移除可见焦点指示", "三个Chromium核心场景", "每个包保留自身的许可证"] },
+  en: { keyboard: "Keyboard and focus", bodies: ["Components consume them instead of hard-coded palette values.", "Its presence does not imply directory submission or approval.", "See Verification & release", "Visible focus rings are retained", "Only three Chromium smoke scenarios", "Project-authored code is MIT licensed, Copyright (c) 2026 andongmin94. Third-party code and assets retain their own licenses and copyright notices."] },
+  ko: { keyboard: "키보드와 포커스", bodies: ["고정 색상 대신 이 토큰을 참조합니다.", "디렉터리 제출이나 승인이 완료된 것은 아닙니다.", "소비자·브라우저 검사", "포커스 표시를 제거하지 않습니다.", "Chromium 핵심 시나리오 세 개", "프로젝트 자체 코드는 MIT 라이선스를 적용하며 저작권 표시는 Copyright (c) 2026 andongmin94입니다. 외부 코드와 자산은 원래 라이선스와 저작권 고지를 유지합니다."] },
+  ja: { keyboard: "キーボードとフォーカス", bodies: ["固定色の代わりにこのトークンを参照します。", "ディレクトリへの申請や承認を意味しません。", "利用側・ブラウザの検査", "フォーカス表示を削除しません。", "Chromiumの主要シナリオ三つ", "プロジェクト独自のコードはMITライセンスで提供し、著作権表示はCopyright (c) 2026 andongmin94です。外部コードとアセットは元のライセンスと著作権表示を維持します。"] },
+  zh: { keyboard: "键盘与焦点", bodies: ["而不是硬编码颜色。", "不代表已经提交目录或获得批准。", "使用方与浏览器检查", "移除可见焦点指示", "三个Chromium核心场景", "项目自有代码采用MIT许可证，版权声明为Copyright (c) 2026 andongmin94。第三方代码与资源保留原有许可证和版权声明。"] },
 } as const;
 
 for (const [locale, copy] of Object.entries(localizedEvidence)) {
