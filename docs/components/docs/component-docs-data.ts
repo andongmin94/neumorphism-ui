@@ -1000,8 +1000,8 @@ export const componentDocs = [
       {
         component: "Slider",
         name: "value / defaultValue",
-        type: "number[]",
-        defaultValue: "[min]",
+        type: "number | readonly number[]",
+        defaultValue: "min",
         description: "thumb별 controlled 또는 초기 uncontrolled 값입니다.",
       },
       {
@@ -1035,8 +1035,8 @@ export const componentDocs = [
       {
         component: "Slider",
         name: "onValueChange / onValueCommitted",
-        type: "(value: number | number[]) => void",
-        description: "조정 중 또는 조정이 끝났을 때 배열 값을 전달합니다.",
+        type: "(value: number | readonly number[]) => void",
+        description: "조정 중 또는 조정이 끝났을 때 단일 숫자 또는 배열 값을 전달합니다.",
       },
       {
         component: "Slider",
@@ -2180,7 +2180,7 @@ export const componentDocs = [
     importCode: "\"use client\";\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from \"@/components/ui/resizable\";",
     usageCode: "export default function Example() {\n  return <div className=\"h-48 max-w-lg\"><ResizablePanelGroup orientation=\"horizontal\">\n    <ResizablePanel defaultSize=\"40%\" minSize=\"25%\"><div className=\"grid h-full place-items-center p-4\">목록</div></ResizablePanel>\n    <ResizableHandle withHandle />\n    <ResizablePanel defaultSize=\"60%\" minSize=\"30%\"><div className=\"grid h-full place-items-center p-4\">세부 정보</div></ResizablePanel>\n  </ResizablePanelGroup></div>;\n}",
     props: [
-      { component: "ResizablePanelGroup", name: "orientation", type: '"horizontal" | "vertical"', required: true, description: "패널 분할 방향을 지정합니다." },
+      { component: "ResizablePanelGroup", name: "orientation", type: '"horizontal" | "vertical"', defaultValue: '"horizontal"', description: "패널 분할 방향을 지정합니다." },
       { component: "ResizablePanel", name: "defaultSize", type: "number | string", description: "초기 패널 크기를 지정합니다." },
       { component: "ResizablePanel", name: "minSize / maxSize", type: "number | string", description: "패널이 줄거나 늘어날 수 있는 범위를 제한합니다." },
       { component: "ResizableHandle", name: "withHandle", type: "boolean", defaultValue: "false", description: "separator 중앙에 시각적 grip을 표시합니다." },

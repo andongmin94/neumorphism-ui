@@ -489,7 +489,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "键盘和指针调整的步长。",
       "设置 track 方向和键盘操作轴。",
       "按值的顺序传给每个真实 thumb input 的无障碍名称。",
-      "在调整过程中或调整结束时传递值数组。",
+      "在调整过程中或调整结束时传递单个数值或值数组。",
       "禁用所有 thumb 的交互。",
     ],
     accessibility: [

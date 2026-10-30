@@ -510,7 +510,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "The increment used for keyboard and pointer adjustment.",
       "Sets the track direction and keyboard axis.",
       "Accessible names passed to the actual thumb inputs in value order.",
-      "Provides the array of values while adjustment occurs or when it finishes.",
+      "Provides a single number or an array of values while adjustment occurs or when it finishes.",
       "Disables interaction for every thumb.",
     ],
     accessibility: [
