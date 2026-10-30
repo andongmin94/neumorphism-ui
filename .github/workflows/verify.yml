@@ -55,6 +55,22 @@ jobs:
       - name: Component runtime regressions
         working-directory: docs
         run: npx playwright test --config=playwright.material.config.ts composition.spec.ts cms-ref-regressions.spec.ts sidebar-regressions.spec.ts --grep="runtime regressions"
+      - name: Sidebar focus regressions (Firefox and WebKit)
+        if: ${{ inputs.comprehensive }}
+        working-directory: docs
+        run: |
+          # Preserve Chromium evidence before the material reporter is reused.
+          if test -f test-results/material-report.json; then
+            mv test-results/material-report.json test-results/runtime-regressions-report.json
+          fi
+          result=0
+          for browser in firefox webkit; do
+            MATERIAL_PHASE="sidebar-$browser" npx playwright test --config=playwright.material.config.ts sidebar-regressions.spec.ts --browser="$browser" --grep="runtime regressions" || result=1
+            if test -f test-results/material-report.json; then
+              mv test-results/material-report.json "test-results/sidebar-$browser-report.json"
+            fi
+          done
+          exit "$result"
       - name: Cloudflare static hosting
         working-directory: docs
         env:

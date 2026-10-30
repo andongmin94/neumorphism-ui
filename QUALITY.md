@@ -175,3 +175,55 @@ The material micro-finish suite exercises installed-source geometry without docs
 the documentation suite checks all four localized previews. Generated example
 fixtures now follow the displayed English snippets automatically. Registry metadata,
 source contracts and public JSON equality must pass on the same final commit.
+
+## Sidebar cross-browser coverage and dependency audit — 2026-10-30
+
+The `82c4360832aa376403c7ff2c153c1b28755f99ae` baseline passed Verify run
+[40893665546](https://github.com/andongmin94/neumorphism-ui/actions/runs/40893665546)
+and Published registry run
+[40893665480](https://github.com/andongmin94/neumorphism-ui/actions/runs/40893665480).
+The default Verify job exercised the Sidebar runtime regressions in Chromium;
+it did not run the same suite in Firefox or WebKit. The manually dispatched
+platform workflow covers documentation/platform review but does not substitute
+for running `sidebar-regressions.spec.ts` against those engines.
+
+To preserve the lightweight default CI, the existing Sidebar runtime regression
+suite runs in Firefox and WebKit only when Verify is dispatched with
+`comprehensive=true`. That mode already installs both browser engines and runs
+the broader material/detail and independent-installation checks; the Sidebar
+steps reuse that installation rather than downloading additional browsers on
+every push. The default push/PR path remains Chromium-only for this suite.
+Treat Firefox/WebKit coverage as verified only when those conditional steps pass
+on the exact commit. Reports and traces are retained separately for each engine;
+both engines are attempted and either failure fails the step.
+
+The audit artifact from Verify run `40893665546` reports Registry **3 Low, 0
+Moderate, 0 High, 0 Critical** and Docs **0** vulnerabilities. The Registry lock
+resolves `deepmerge@4.3.1` only as a development dependency through
+`shadcn@4.22.1` and `@shadcn/registry@0.2.0`; it is not declared as an
+installable component runtime dependency. This narrows the exposure to CLI and
+development/verification operations, but does not make the finding harmless.
+The advisory describes prototype poisoning in `mergeObject()` for versions
+4.2.0–4.3.1 in that historical report
+([GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4)).
+
+The audit output suggests a major `shadcn` version change, but that suggestion
+alone does not prove the vulnerable transitive package is removed or patched.
+Do not force a major CLI upgrade or override `deepmerge` blindly. Reassess the
+resolved dependency graph and exercise registry generation, source contracts,
+and fresh Vite/Next installations before accepting a remediation. Keep the Low
+finding visible until a verifiable safe resolution is available.
+
+### Follow-up: repeated second-provider round trips
+
+`sidebar-regressions.spec.ts` adds one scenario in each existing light/dark group:
+two independent providers stay mounted while the second provider repeatedly
+opens/closes on desktop and traverses 1440 -> 320/390 -> 1440 widths without a
+reload. It checks the second trigger's actual return focus, hidden-content Tab
+exclusion, mobile Sheet isolation, action counts, and restored desktop state.
+This is a test-coverage addition, not evidence of a confirmed product defect.
+The preparation checks covered source/syntax/patch integrity only. For runtime,
+installation and audit outcomes, inspect the exact pushed commit's Verify run;
+a passing default run does not establish comprehensive browser coverage. Default
+CI adds two Chromium cases; Firefox/WebKit stay comprehensive-only. Existing
+timeout/retry budgets and product/fixture source remain unchanged.

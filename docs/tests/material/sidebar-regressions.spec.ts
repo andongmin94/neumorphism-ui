@@ -210,6 +210,63 @@ for (const mode of ["light", "dark"] as const) {
       }
     });
 
+    test("runtime regressions: second Sidebar keeps focus ownership through repeated desktop-mobile round trips", async ({ page }) => {
+      // One mounted pair: reloading between widths would hide stale portal/focus state.
+      await page.goto(`/sidebar-focus.html?mode=${mode}&two&closed`);
+      const primaryPanel = page.locator('aside[data-testid="Primary-sidebar"]');
+      const secondaryPanel = page.locator('aside[data-testid="Secondary-sidebar"]');
+      const primaryTrigger = page.getByRole("button", { name: "Primary toggle", exact: true });
+      const secondaryTrigger = page.getByRole("button", { name: "Secondary toggle", exact: true });
+      const secondaryAfter = page.getByRole("button", { name: "Secondary after", exact: true });
+      const secondarySheet = page.getByRole("dialog", { name: "Secondary navigation", exact: true });
+      await expect(primaryPanel).toHaveAttribute("inert", "");
+      await expect(secondaryPanel).toHaveAttribute("inert", "");
+
+      for (const [cycle, width] of [320, 390, 320].entries()) {
+        await secondaryTrigger.press("Enter");
+        await expect(secondaryPanel).toHaveAttribute("data-state", "expanded");
+        await expect(secondaryPanel).not.toHaveAttribute("inert");
+        await expect(primaryPanel).toHaveAttribute("inert", "");
+        await secondaryPanel.getByRole("button", { name: "Secondary inside toggle", exact: true }).press("Enter");
+        await expect(secondaryPanel).toHaveAttribute("inert", "");
+        // Assert the real return target before sending keys; do not repair it with focus().
+        await expect(secondaryTrigger).toBeFocused();
+        await expect(primaryTrigger).not.toBeFocused();
+        await page.keyboard.press("Tab");
+        await expect(secondaryAfter).toBeFocused();
+        await page.keyboard.press("Shift+Tab");
+        await expect(secondaryTrigger).toBeFocused();
+
+        await page.setViewportSize({ width, height: 844 });
+        // Wait for both media-query subscriptions, not only the CSS breakpoint.
+        await expect(primaryPanel).toHaveCount(0);
+        await expect(secondaryPanel).toHaveCount(0);
+        await secondaryTrigger.click();
+        await expect(secondarySheet).toBeVisible();
+        await expect(secondarySheet).not.toHaveAttribute("inert");
+        await expect(page.getByRole("dialog")).toHaveCount(1);
+        await expect(page.getByRole("dialog", { name: "Primary navigation", exact: true })).toBeHidden();
+        await secondarySheet.getByRole("button", { name: "Secondary action", exact: true }).click();
+        await expect(page.getByTestId("Secondary-activations")).toHaveText(String(cycle + 1));
+        await expect(page.getByTestId("Primary-activations")).toHaveText("0");
+        await expect(page.getByTestId("Secondary-ref")).toHaveText("DIV");
+        await page.keyboard.press("Escape");
+        await expect(secondarySheet).toBeHidden();
+        await expect(page.getByRole("dialog")).toHaveCount(0);
+        await expect(secondaryTrigger).toBeFocused();
+        await expect(primaryTrigger).not.toBeFocused();
+        await expect(secondaryTrigger).toHaveAttribute("aria-expanded", "false");
+        await expect(primaryTrigger).toHaveAttribute("aria-expanded", "false");
+
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await expect(primaryPanel).toHaveAttribute("inert", "");
+        await expect(secondaryPanel).toHaveAttribute("inert", "");
+        await expect(secondaryPanel).toHaveAttribute("data-state", "collapsed");
+        await expect(page.getByTestId("Secondary-ref")).toHaveText("ASIDE");
+        await expect(secondaryTrigger).toBeFocused();
+      }
+    });
+
     test("runtime regressions: focus return skips disabled and visually hidden outside triggers", async ({ page }) => {
       await page.goto(`/sidebar-focus.html?mode=${mode}&unavailableTriggers`);
       await page.getByRole("button", { name: "Primary action", exact: true }).press("Control+b");
