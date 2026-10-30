@@ -63,7 +63,8 @@ export const referenceDocCopy = {
       ...referenceSearchCopy.en["credits"],
       package: "Package", role: "Role",
       roles: ["Accessible interaction primitives and state machines", "Registry schema, CLI installation and source distribution", "Documentation routing, layouts and internationalization", "Chart rendering", "Caller-owned table state model", "Calendar and date selection", "Command palette filtering and keyboard navigation", "One-time-code input behavior", "Carousel scrolling and drag state", "Resizable panel sizing and separator semantics", "Bundled UI font", "Self-hosted Japanese language-menu labels (OFL-1.1)", "Self-hosted Chinese language-menu labels, weight 500 (OFL-1.1)"],
-      note: "Each package retains its own license and copyright terms. This page documents dependencies; it does not substitute for the project's own LICENSE.",
+      thirdPartyLicenses: "Third-party licenses",
+      note: "Project-authored code is MIT licensed, Copyright (c) 2026 andongmin94. Third-party code and assets retain their own licenses and copyright notices.",
     },
   },
   ko: {
@@ -116,7 +117,8 @@ export const referenceDocCopy = {
       ...referenceSearchCopy.ko["credits"],
       package: "패키지", role: "역할",
       roles: ["접근성 상호작용 기본 요소와 상태 관리", "레지스트리 스키마, CLI 설치와 소스 배포", "문서 라우팅, 레이아웃과 다국어 기반", "차트 렌더링", "호출 애플리케이션이 관리하는 표 상태 모델", "달력과 날짜 선택", "명령 팔레트 필터링과 키보드 탐색", "일회용 코드 입력 동작", "캐러셀 스크롤과 드래그 상태", "패널 크기 조절과 구분선 의미", "앱과 함께 제공하는 UI 폰트", "자체 호스팅 일본어 언어 메뉴 레이블 (OFL-1.1)", "자체 호스팅 중국어 언어 메뉴 레이블, 굵기 500 (OFL-1.1)"],
-      note: "각 패키지는 자체 라이선스와 저작권 조건을 유지합니다. 이 페이지는 의존성 안내이며 프로젝트 자체 LICENSE를 대신하지 않습니다.",
+      thirdPartyLicenses: "외부 라이선스",
+      note: "프로젝트 자체 코드는 MIT 라이선스를 적용하며 저작권 표시는 Copyright (c) 2026 andongmin94입니다. 외부 코드와 자산은 원래 라이선스와 저작권 고지를 유지합니다.",
     },
   },
   ja: {
@@ -169,7 +171,8 @@ export const referenceDocCopy = {
       ...referenceSearchCopy.ja["credits"],
       package: "パッケージ", role: "役割",
       roles: ["アクセシブルな操作の基本要素と状態管理", "レジストリのスキーマ、CLI導入とソース配布", "文書のルーティング、レイアウトと多言語基盤", "チャートの描画", "呼び出すアプリが管理する表の状態モデル", "カレンダーと日付選択", "コマンドパレットの絞り込みとキーボード操作", "ワンタイムコードの入力動作", "カルーセルのスクロールとドラッグ状態", "パネルのサイズ変更と区切り線の意味", "アプリに同梱するUIフォント", "自己ホストの日本語言語メニューラベル (OFL-1.1)", "自己ホストの中国語言語メニューラベル、太さ500 (OFL-1.1)"],
-      note: "各パッケージはそれぞれのライセンスと著作権条件を維持します。このページは依存関係の案内であり、プロジェクト自身のLICENSEの代わりではありません。",
+      thirdPartyLicenses: "サードパーティーのライセンス",
+      note: "プロジェクト独自のコードはMITライセンスで提供し、著作権表示はCopyright (c) 2026 andongmin94です。外部コードとアセットは元のライセンスと著作権表示を維持します。",
     },
   },
   zh: {
@@ -222,7 +225,8 @@ export const referenceDocCopy = {
       ...referenceSearchCopy.zh["credits"],
       package: "软件包", role: "职责",
       roles: ["无障碍交互基础组件与状态管理", "注册表模式、CLI安装与源码分发", "文档路由、布局与国际化基础", "图表渲染", "由调用应用管理的表格状态模型", "日历与日期选择", "命令面板过滤与键盘导航", "一次性验证码输入行为", "轮播滚动与拖动状态", "面板尺寸调整与分隔线语义", "随应用提供的UI字体", "自行托管的日语语言菜单标签 (OFL-1.1)", "自行托管的中文语言菜单标签，字重500 (OFL-1.1)"],
-      note: "每个包保留自身的许可证与版权条款。本页用于说明依赖关系，不能替代项目自身的LICENSE。",
+      thirdPartyLicenses: "第三方许可证",
+      note: "项目自有代码采用MIT许可证，版权声明为Copyright (c) 2026 andongmin94。第三方代码与资源保留原有许可证和版权声明。",
     },
   },
 } as const;

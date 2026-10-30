@@ -31,6 +31,18 @@ export default function CreditsPage({ lang }: { lang: string }) {
         </section>
         <section className="docs-content-section" id="licenses">
           <h2>{t.sections.licenses}</h2><p>{t.note}</p>
+          <ul>
+            <li><a href="https://github.com/andongmin94/neumorphism-ui/blob/main/LICENSE">Neumorphism UI (MIT)</a></li>
+            <li><a href="/third-party-licenses.md">{t.thirdPartyLicenses}</a></li>
+            <li><a href="/shadcn-LICENSE.txt">shadcn/ui (MIT)</a></li>
+            <li><a href="/embla-LICENSE.txt">Embla Carousel (MIT)</a></li>
+            <li><a href="/vite-plugin-rsc-LICENSE.txt">@vitejs/plugin-rsc (MIT)</a></li>
+            <li><a href="/victory-vendor-LICENSE.txt">victory-vendor</a></li>
+            <li><a href="/octicons-LICENSE.txt">GitHub Octicons (MIT)</a></li>
+            <li><a href="/pretendard-font-LICENSE.txt">Pretendard (OFL-1.1)</a></li>
+            <li><a href="/pretendard-jp-font-LICENSE.txt">Pretendard JP (OFL-1.1)</a></li>
+            <li><a href="/noto-sans-sc-font-LICENSE.txt">Noto Sans SC (OFL-1.1)</a></li>
+          </ul>
         </section>
       </article>
       <DocsToc items={toc} />

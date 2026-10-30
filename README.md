@@ -232,3 +232,24 @@ until that preview passes.
 `registry/registry.json`, both `public/r` directories, `docs/src/theme.css`
 and the theme bootstrap module are generated. Do not edit generated output by
 hand. See [AGENTS.md](AGENTS.md) for branch, typography and source-ownership rules.
+
+## License
+
+Project-authored code is available under the [MIT License](LICENSE),
+Copyright (c) 2026 andongmin94. Adapted shadcn/ui portions retain their original
+[shadcn MIT notice](docs/public/shadcn-LICENSE.txt) in the installable source.
+Third-party code and assets retain their
+own licenses; the documentation build emits `third-party-licenses.md` for its
+bundled dependencies.
+
+Additional bundled-package notices preserve the original terms for
+[Embla Carousel](docs/public/embla-LICENSE.txt),
+[@vitejs/plugin-rsc and its vendored React code](docs/public/vite-plugin-rsc-LICENSE.txt),
+and [Victory's vendored libraries](docs/public/victory-vendor-LICENSE.txt).
+
+The [GitHub Octicons MIT notice](docs/public/octicons-LICENSE.txt) is preserved.
+Bundled fonts remain under the SIL Open Font License 1.1 with their original
+copyright and Reserved Font Name notices:
+[Pretendard](docs/public/pretendard-font-LICENSE.txt),
+[Pretendard JP](docs/public/pretendard-jp-font-LICENSE.txt), and
+[Noto Sans SC](docs/public/noto-sans-sc-font-LICENSE.txt).
