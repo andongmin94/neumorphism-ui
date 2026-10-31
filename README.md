@@ -8,8 +8,11 @@ light/dark presets**. The registry contains 80 items in total: 56 UI components,
 sixteen blocks, five presets, one base and two shared libraries. Documentation and
 live examples are available in English, Korean, Japanese and Chinese through Fumapress.
 
-This project is being prepared for the shadcn registry directory. `registry/directory-entry.json` contains the current directory metadata, but the project has not been submitted or approved. See [QUALITY.md](QUALITY.md) for verification scope and
-remaining release work.
+This project has been submitted to the shadcn registry directory in
+[PR #12535](https://github.com/shadcn-ui/ui/pull/12535) and is awaiting review
+and approval. `registry/directory-entry.json` contains the submitted directory
+metadata. See [QUALITY.md](QUALITY.md) for verification scope and remaining
+release work.
 
 ## First installation
 
