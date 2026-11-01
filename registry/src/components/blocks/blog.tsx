@@ -113,27 +113,28 @@ export function Blog({
 }: BlogProps) {
   const t = copy[locale];
   const [query, setQuery] = React.useState("");
-  const [topic, setTopic] = React.useState<string>(t.all);
+  const [topic, setTopic] = React.useState<string | null>(null);
   const [sort, setSort] = React.useState<"newest" | "oldest" | "shortest">("newest");
   // Server-rendered filters cannot accept edits before the client owns their state.
   const [hydrated, setHydrated] = React.useState(false);
   React.useEffect(() => setHydrated(true), []);
+  const searchId = React.useId();
   const searchRef = React.useRef<HTMLInputElement>(null);
 
   const topics = React.useMemo(
-    () => [t.all, ...Array.from(new Set(posts.map((post) => post.topic)))],
-    [posts, t.all],
+    () => Array.from(new Set(posts.map((post) => post.topic))),
+    [posts],
   );
 
   React.useEffect(() => {
-    if (!topics.includes(topic)) setTopic(t.all);
-  }, [topic, topics, t.all]);
+    if (topic !== null && !topics.includes(topic)) setTopic(null);
+  }, [topic, topics]);
 
   const filteredPosts = React.useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     return posts
       .filter((post) => {
-        const matchesTopic = topic === t.all || post.topic === topic;
+        const matchesTopic = topic === null || post.topic === topic;
         const text = [post.title, post.summary, post.topic].join(" ").toLowerCase();
         return matchesTopic && text.includes(normalizedQuery);
       })
@@ -146,11 +147,11 @@ export function Blog({
           ? a.publishedAt.localeCompare(b.publishedAt)
           : b.publishedAt.localeCompare(a.publishedAt);
       });
-  }, [posts, query, sort, t.all, topic]);
+  }, [posts, query, sort, topic]);
 
   function resetFilters() {
     setQuery("");
-    setTopic(t.all);
+    setTopic(null);
     setSort("newest");
     searchRef.current?.focus();
   }
@@ -169,13 +170,13 @@ export function Blog({
 
       <section aria-busy={!hydrated} className="grid gap-4 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-transparent py-4 shadow-none">
         <div className="grid gap-2">
-          <label htmlFor="blog-search" className="text-xs font-semibold">
+          <label htmlFor={searchId} className="text-xs font-semibold">
             {t.search}
           </label>
           <div className="flex gap-2">
             <Input
               ref={searchRef}
-              id="blog-search"
+              id={searchId}
               type="search"
               role="searchbox"
               disabled={!hydrated}
@@ -193,6 +194,16 @@ export function Blog({
 
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div role="group" aria-label={t.filter} className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              size="sm"
+              disabled={!hydrated}
+              variant={topic === null ? "primary" : "ghost"}
+              aria-pressed={topic === null}
+              onClick={() => setTopic(null)}
+            >
+              {t.all}
+            </Button>
             {topics.map((item) => (
               <Button
                 key={item}

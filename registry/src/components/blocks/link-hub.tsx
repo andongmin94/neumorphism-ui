@@ -91,18 +91,18 @@ function LinkHub({
 }: LinkHubProps) {
   const t = copy[locale];
   const groups = React.useMemo(
-    () => [t.all, ...Array.from(new Set(links.map((link) => link.group)))],
-    [links, t.all],
+    () => Array.from(new Set(links.map((link) => link.group))),
+    [links],
   );
-  const [group, setGroup] = React.useState<string>(t.all);
+  const [group, setGroup] = React.useState<string | null>(null);
   const [copyState, setCopyState] = React.useState("");
 
   React.useEffect(() => {
-    if (!groups.includes(group)) setGroup(t.all);
-  }, [group, groups, t.all]);
+    if (group !== null && !groups.includes(group)) setGroup(null);
+  }, [group, groups]);
 
   const filteredLinks = links.filter(
-    (link) => group === t.all || link.group === group,
+    (link) => group === null || link.group === group,
   );
 
   async function copyEmail() {
@@ -151,6 +151,15 @@ function LinkHub({
           {t.destinations}
         </h3>
         <div role="group" aria-label={t.filter} className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant={group === null ? "primary" : "ghost"}
+            aria-pressed={group === null}
+            onClick={() => setGroup(null)}
+          >
+            {t.all}
+          </Button>
           {groups.map((item) => (
             <Button
               key={item}

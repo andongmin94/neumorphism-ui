@@ -532,7 +532,7 @@ export const componentDocs = [
       {
         component: "DropdownMenuCheckboxItem",
         name: "checked",
-        type: 'boolean | "indeterminate"',
+        type: "boolean",
         description: "checkbox item의 controlled 상태입니다.",
       },
       {
@@ -833,7 +833,7 @@ export const componentDocs = [
     category: "data-feedback",
     summary: "브라우저의 native scrolling을 유지하는 테마형 overflow 표면.",
     description:
-      "overflow-auto와 native scrollbar를 사용해 휠, 터치, 키보드, 브라우저 접근성을 그대로 유지합니다. ScrollBar export는 shadcn 조합 호환을 위한 숨겨진 placeholder입니다.",
+      "overflow-auto와 native scrollbar를 사용해 휠, 터치, 키보드, 브라우저 접근성을 그대로 유지합니다.",
     importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { ScrollArea } from \"@/components/ui/scroll-area\";",
     usageCode: "export default function Example() {\n    const copy = {\n        \"scrollArea\": {\n            \"label\": \"컴포넌트 상태 목록\",\n            \"categories\": {\n                \"accessibility\": \"접근성\",\n                \"overlay\": \"오버레이\",\n                \"data\": \"데이터\",\n                \"input\": \"입력\",\n                \"composite\": \"복합\"\n            },\n            \"statuses\": {\n                \"ready\": \"준비됨\",\n                \"review\": \"검토\",\n                \"planned\": \"예정\"\n            }\n        }\n    };\n    return (<ScrollArea aria-label={copy.scrollArea.label} className=\"h-[280px] w-full max-w-[580px] p-2.5\">\n          {[\n            [\n                \"NVDA\",\n                copy.scrollArea.categories.accessibility,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Dialog\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Data table\",\n                copy.scrollArea.categories.data,\n                copy.scrollArea.statuses.review,\n                \"review\",\n            ],\n            [\n                \"Slider\",\n                copy.scrollArea.categories.input,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Tooltip\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Calendar\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n            [\n                \"Command\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n        ].map(([name, category, state, stateId]) => (<div className=\"flex items-center justify-between gap-4 border-b border-[var(--border)] p-3.5 last:border-0 [&>span]:grid [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" key={name}>\n              <span><strong>{name}</strong><small>{category}</small></span>\n              <Badge variant={stateId === \"ready\" ? \"primary\" : \"soft\"}>\n                {state}\n              </Badge>\n            </div>))}\n        </ScrollArea>);\n}",
     props: [
@@ -855,18 +855,10 @@ export const componentDocs = [
         type: "string",
         description: "독립적으로 탐색할 영역이면 콘텐츠 이름을 제공합니다.",
       },
-      {
-        component: "ScrollBar",
-        name: "orientation",
-        type: '"horizontal" | "vertical"',
-        defaultValue: '"vertical"',
-        description: "호환용 placeholder의 방향 데이터 속성입니다.",
-      },
     ],
     accessibility: [
       "native overflow를 사용하므로 화면 읽기 도구와 터치 스크롤을 가로채지 않습니다.",
       "내부에 링크나 버튼이 전혀 없다면 tabIndex=0으로 키보드 사용자가 영역에 진입하게 합니다.",
-      "ScrollBar는 시각적으로 숨겨진 호환 placeholder이며 실제 스크롤은 브라우저 scrollbar가 담당합니다.",
     ],
   },
   {

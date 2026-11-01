@@ -123,6 +123,26 @@ and advisory status must not be treated as the current release state. Do not
 remove the CLI, suppress the audit or downgrade to an obsolete shadcn version
 merely to make that gate pass.
 
+**Current dependency audit — 2026-11-01.** The local post-update audit, including
+development tools, reports Registry **4 Moderate, 2 Low, 0 High, 0 Critical**
+and Docs **0** vulnerabilities. These are the current local results; the older
+dated counts below describe historical runs. Final CI verification still requires
+the audit artifacts for the exact pushed commit.
+
+The six affected-package entries propagate from two underlying advisories:
+[minimatch](https://github.com/advisories/GHSA-g3hv-75wg-m249) and
+[deepmerge](https://github.com/advisories/GHSA-gcqx-w48m-w2h4). The development-tool
+chain `ts-morph@26.0.0 -> @ts-morph/common@0.27.0 -> minimatch@10.2.5` already
+existed before this update. The patched minimatch version, `11.0.1`, is outside
+common's `^10.0.1` requirement; a fix within declared ranges needs upstream
+ts-morph/shadcn support. No patched deepmerge version is published. Keep both
+findings visible and the existing audit gate unchanged.
+
+The same review confirmed shared Base UI **1.9.0** is latest. Resizable is updated
+to **4.16.0**, shadcn to **4.23.0**, and Wrangler to **4.156.0**. The old Miniflare
+override is removed because Wrangler's new Miniflare dependency directly requires
+Undici **7.30.1**. These version changes do not resolve the two advisories above.
+
 Documentation uses Fumapress and Vite to generate static output. Wrangler provides
 local Cloudflare emulation and deployment of that output; it is not a
 documentation routing layer. Verify generated output, the exact deployed commit

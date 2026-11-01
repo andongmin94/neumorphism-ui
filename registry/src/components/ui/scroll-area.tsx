@@ -18,22 +18,4 @@ function ScrollArea({
   );
 }
 
-function ScrollBar({
-  orientation = "vertical",
-  className,
-  ...props
-}: React.ComponentProps<"div"> & {
-  orientation?: "horizontal" | "vertical";
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      data-slot="scroll-bar"
-      data-orientation={orientation}
-      className={cn("hidden", className)}
-      {...props}
-    />
-  );
-}
-
-export { ScrollArea, ScrollBar };
+export { ScrollArea };

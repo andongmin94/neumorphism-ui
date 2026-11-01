@@ -603,7 +603,7 @@ export default function Example() {
 }`,
   "scroll-area": `"use client";
 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Example() {
   return (
@@ -611,7 +611,6 @@ export default function Example() {
       <ul className="grid gap-3 p-4">
         {Array.from({ length: 12 }, (_, index) => <li key={index}>Activity {index + 1}</li>)}
       </ul>
-      <ScrollBar orientation="vertical" />
     </ScrollArea>
   );
 }`,

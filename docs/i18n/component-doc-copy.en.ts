@@ -437,17 +437,15 @@ export const componentDocCopyEn = defineComponentDocCopy({
     summary:
       "A themed overflow surface that preserves native browser scrolling.",
     description:
-      "Uses overflow-auto and the native scrollbar to preserve wheel, touch, keyboard, and browser accessibility behavior. The ScrollBar export is a hidden placeholder for shadcn composition compatibility.",
+      "Uses overflow-auto and the native scrollbar to preserve wheel, touch, keyboard, and browser accessibility behavior.",
     props: [
       "Constrains height or width to create an overflow region.",
       "Provides a keyboard scrolling entry point when no focusable child is present.",
       "Names the content when it is an independently navigable region.",
-      "A direction data attribute for the compatibility placeholder.",
     ],
     accessibility: [
       "Native overflow does not intercept screen-reader or touch scrolling behavior.",
       "If the region contains no links or buttons, use tabIndex=0 so keyboard users can enter it.",
-      "ScrollBar is a visually hidden compatibility placeholder; the browser scrollbar performs the actual scrolling.",
     ],
   },
   select: {

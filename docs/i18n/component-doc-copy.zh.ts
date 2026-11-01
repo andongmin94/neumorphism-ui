@@ -420,17 +420,15 @@ export const componentDocCopyZh = defineComponentDocCopy({
   "scroll-area": {
     summary: "保留浏览器原生 scrolling 的主题化 overflow 表面。",
     description:
-      "使用 overflow-auto 和原生 scrollbar，完整保留滚轮、触控、键盘以及浏览器无障碍行为。ScrollBar export 是为兼容 shadcn 组合方式而保留的隐藏 placeholder。",
+      "使用 overflow-auto 和原生 scrollbar，完整保留滚轮、触控、键盘以及浏览器无障碍行为。",
     props: [
       "限制高度或宽度以形成 overflow 区域。",
       "当内部没有 focusable 元素时，提供键盘滚动入口。",
       "当该区域可独立浏览时，为其内容提供名称。",
-      "兼容性 placeholder 的方向数据属性。",
     ],
     accessibility: [
       "使用原生 overflow，不会拦截屏幕阅读器和触控滚动。",
       "如果内部完全没有链接或按钮，可设置 tabIndex=0，让键盘用户进入该区域。",
-      "ScrollBar 是视觉隐藏的兼容性 placeholder，实际滚动由浏览器 scrollbar 负责。",
     ],
   },
   select: {

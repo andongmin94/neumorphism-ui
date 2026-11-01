@@ -7,6 +7,46 @@ const labels = {
   zh: { group: "指南", all: "全部", copy: "复制邮箱", success: "邮箱地址已复制。", failure: "复制失败" },
 };
 
+test("runtime regressions: caller All categories and Blog label targets remain independent", async ({ page }) => {
+  await page.goto("/link-hub.html?scenario=filters");
+  const firstBlog = page.locator("[data-first-blog]");
+  const secondBlog = page.locator("[data-second-blog]");
+  const hub = page.locator("[data-filter-hub]");
+  await expect(firstBlog.locator("article")).toHaveCount(2);
+  await expect(hub.getByRole("link")).toHaveCount(2);
+
+  // The first All control means every category; the second is caller data.
+  for (const surface of [firstBlog, hub]) {
+    const all = surface.getByRole("button", { name: "All", exact: true });
+    await expect(all).toHaveCount(2);
+    await all.nth(1).click();
+    await expect(all.nth(0)).toHaveAttribute("aria-pressed", "false");
+    await expect(all.nth(1)).toHaveAttribute("aria-pressed", "true");
+  }
+  await expect(firstBlog.locator("article")).toHaveCount(1);
+  await expect(firstBlog.getByRole("link", { name: "All category post" })).toBeVisible();
+  await expect(hub.getByRole("link")).toHaveCount(1);
+  await expect(hub.getByRole("link", { name: "All category link" })).toBeVisible();
+
+  // Changing UI language must preserve the selected caller category.
+  await page.getByRole("button", { name: "Switch locale" }).click();
+  await expect(firstBlog.locator("article")).toHaveCount(1);
+  await expect(hub.getByRole("link")).toHaveCount(1);
+  for (const surface of [firstBlog, hub]) {
+    await expect(surface.getByRole("button", { name: "All", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await surface.getByRole("button", { name: "전체", exact: true }).click();
+  }
+  await expect(firstBlog.locator("article")).toHaveCount(2);
+  await expect(hub.getByRole("link")).toHaveCount(2);
+
+  const firstSearch = firstBlog.getByRole("searchbox");
+  const secondSearch = secondBlog.getByRole("searchbox");
+  expect(await firstSearch.getAttribute("id")).not.toBe(await secondSearch.getAttribute("id"));
+  await secondBlog.locator("label[for]").click();
+  await expect(secondSearch).toBeFocused();
+  await expect(firstSearch).not.toBeFocused();
+});
+
 for (const width of [320, 390, 1440]) for (const mode of ["light", "dark"]) {
   test(`link content, filters and clipboard without docs CSS: ${width} ${mode}`, async ({ page, context }, info) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);

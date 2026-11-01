@@ -437,17 +437,15 @@ export const componentDocCopyJa = defineComponentDocCopy({
     summary:
       "ブラウザーの native scrolling を維持する、テーマ対応の overflow サーフェス。",
     description:
-      "overflow-auto と native scrollbar を使用し、wheel、touch、keyboard、ブラウザー標準のアクセシビリティ動作を維持します。ScrollBar export は shadcn の組み合わせ互換性のための非表示 placeholder です。",
+      "overflow-auto と native scrollbar を使用し、wheel、touch、keyboard、ブラウザー標準のアクセシビリティ動作を維持します。",
     props: [
       "高さまたは幅を制限して overflow 領域を作ります。",
       "focusable な子要素がない場合に、キーボードスクロールの入口を提供します。",
       "独立して移動できる領域である場合にコンテンツ名を指定します。",
-      "互換用 placeholder の向きを示す data 属性です。",
     ],
     accessibility: [
       "native overflow は screen reader や touch によるスクロール動作を妨げません。",
       "領域内に link や button がない場合は、tabIndex=0 を指定してキーボード利用者が領域に入れるようにしてください。",
-      "ScrollBar は視覚的に非表示の互換用 placeholder であり、実際のスクロールはブラウザーの scrollbar が担います。",
     ],
   },
   select: {

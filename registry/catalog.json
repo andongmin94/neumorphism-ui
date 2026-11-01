@@ -1210,7 +1210,7 @@
         "navigation-disclosure"
       ],
       "dependencies": [
-        "react-resizable-panels@^4.15.0"
+        "react-resizable-panels@^4.16.0"
       ],
       "registryDependencies": [
         "@neumorphism-ui/utils"
