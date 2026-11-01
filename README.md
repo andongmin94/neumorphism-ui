@@ -1,249 +1,156 @@
 # Neumorphism UI
 
-Source-owned React components with soft surfaces, clear actions and visible focus.
-Install components with the shadcn CLI and edit their source in your application.
+**Neumorphic React components, charts, and templates.**
 
-The collection includes **56 UI components, sixteen installable blocks and five
-light/dark presets**. The registry contains 80 items in total: 56 UI components,
-sixteen blocks, five presets, one base and two shared libraries. Documentation and
-live examples are available in English, Korean, Japanese and Chinese through Fumapress.
+Build dashboards, settings screens, content tools, and personal sites with soft
+shadows, raised surfaces, and tactile controls. Install the pieces you need with
+the shadcn CLI, then customize their React source directly in your application.
 
-This project has been submitted to the shadcn registry directory in
-[PR #12535](https://github.com/shadcn-ui/ui/pull/12535) and is awaiting review
-and approval. `registry/directory-entry.json` contains the submitted directory
-metadata. See [QUALITY.md](QUALITY.md) for verification scope and remaining
-release work.
+[Live demo](https://neumorphism-ui.andongmin.com/en) ·
+[Components](https://neumorphism-ui.andongmin.com/en/components) ·
+[Templates](https://neumorphism-ui.andongmin.com/en/templates) ·
+[Theme Studio](https://neumorphism-ui.andongmin.com/en/customize) ·
+[Get started](#quick-start)
 
-## First installation
+[![Neumorphism UI — soft surfaces and tactile controls](docs/public/og.png)](https://neumorphism-ui.andongmin.com/en)
 
-The registry uses the repository's configured homepage,
-`https://neumorphism-ui.andongmin.com`. On a main push, `Published registry`
-waits for that commit's build marker, then runs three smoke tests: registry index/base/button JSON,
-the home/search UI and one component dialog. Complete endpoint comparisons,
-independent installations and browser/platform suites use local servers in CI.
-See [QUALITY.md](QUALITY.md#published-registry-observation--2026-09-28) for scope.
+**56 components · 8 templates · 8 chart blocks · 5 themes · Light and dark mode**
 
-Use React 19, Tailwind CSS 4 and an initialized shadcn project. Select Base UI:
+## Why Neumorphism UI?
+
+- **A consistent sense of depth.** Buttons rise from the surface and press inward.
+  Inputs and selections use inset surfaces, with shared lighting, shadows, and
+  visible keyboard focus across the collection.
+- **Source you can customize.** Components are copied into your project through
+  shadcn. Change their markup, styles, and behavior alongside your application code.
+- **Themes you can shape visually.** Start with a preset, then adjust color,
+  depth, lighting, shape, and motion in Theme Studio and export the CSS.
+- **Useful screens to start from.** Templates bring together forms, tables,
+  charts, and navigation so you can begin with a working interface and connect
+  your own data.
+
+Built with **React 19, TypeScript, and Tailwind CSS 4**, with Base UI primitives
+for interactive controls and overlays. Use it in **Next.js or Vite** projects.
+
+## What can you build?
+
+The [component collection](https://neumorphism-ui.andongmin.com/en/components)
+covers everyday controls such as Button, Input, Select, and Switch, plus Date
+Picker, Data Table, Dialog, Drawer, Command, Sidebar, and more.
+
+For a larger starting point, install one of the eight templates:
+
+| Template | What it gives you |
+| --- | --- |
+| [Analytics dashboard](https://neumorphism-ui.andongmin.com/en/templates/dashboard) | KPI cards, revenue and conversion charts, date/channel filters, and CSV export. |
+| [Settings](https://neumorphism-ui.andongmin.com/en/templates/settings) | Profile editing, validation, notification preferences, and a live preview. |
+| [Data Manager](https://neumorphism-ui.andongmin.com/en/templates/data-manager) | Search, filters, sorting, pagination, row selection, and create/edit forms. |
+| [Link Hub](https://neumorphism-ui.andongmin.com/en/templates/link-hub) | A profile page with grouped links, local filtering, and contact details. |
+| [Portfolio](https://neumorphism-ui.andongmin.com/en/templates/portfolio) | A personal profile and project case studies. |
+| [Blog](https://neumorphism-ui.andongmin.com/en/templates/blog) | A post archive with search, topic filters, and sorting. |
+| [Blog Post](https://neumorphism-ui.andongmin.com/en/templates/blog-post) | An article layout with structured sections and lists. |
+| [CMS](https://neumorphism-ui.andongmin.com/en/templates/cms) | A content editor with previews, unsaved-change handling, and a save callback. |
+
+Templates provide the interface and local interaction state. Connect your own
+data, authentication, and persistence through their props and callbacks.
+
+The [eight chart blocks](https://neumorphism-ui.andongmin.com/en/charts) cover
+revenue, acquisition channels, conversion, build duration, service latency,
+release activity, delivery capacity, and installation timing. Built on Recharts,
+they pair each visualization with an exact-data table.
+
+## Quick start
+
+Start inside a **React 19 + Tailwind CSS 4** project. If shadcn is already
+configured, skip `init`. Choose **Base UI** if the CLI asks for a component library.
 
 ```bash
 npx shadcn@latest init
 npx shadcn@latest registry add @neumorphism-ui=https://neumorphism-ui.andongmin.com/r/{name}.json
 npx shadcn@latest add @neumorphism-ui/neumorphism-ui
-npx shadcn@latest add @neumorphism-ui/button --overwrite
+npx shadcn@latest add @neumorphism-ui/button
 ```
 
-The shared base changes project-wide tokens and CSS. Commit existing work first.
-`--overwrite` is for replacing the initially scaffolded button; review and commit
-an already customized button before replacing it. Later component installation
-does not reinstall the base or selected theme.
+The base installs shared styles and the default Air theme once. Later component
+installs keep your selected theme.
 
-The base installs Pretendard. Import its stylesheet **once** from your application
-entry: `app/layout.tsx` or `src/app/layout.tsx` for Next.js, or `src/main.tsx`
-for Vite. Component installation does not rewrite your layout.
+**Using an existing app?** The base updates global CSS. Commit your current work
+and review the proposed changes. If `init` created a default Button, replace that
+file when prompted; review customized components before replacing them.
+
+Import the bundled font once in your application entry:
+`app/layout.tsx` or `src/app/layout.tsx` for Next.js, or `src/main.tsx` for Vite.
 
 ```tsx
 import "pretendard/dist/web/variable/pretendardvariable.css";
 ```
 
-Body and controls use Pretendard Variable. Code blocks, inline code and keyboard
-labels use `Consolas, monospace`. Consolas is not redistributed; systems without
-it use their generic monospace font.
+Then render your first component:
 
-## Components
+```tsx
+import { Button } from "@/components/ui/button";
 
-The core collection covers forms, overlays, navigation, selection, feedback,
-dates, data tables and analytical display. Examples:
+export default function Example() {
+  return <Button variant="primary">Get started</Button>;
+}
+```
+
+Each component and template page includes its installation command, live preview,
+and source. See the [installation guide](https://neumorphism-ui.andongmin.com/en/docs/installation)
+for existing projects, manual registry setup, and updates.
+
+## Make it yours
+
+Every preset includes light and dark tokens:
+
+| Theme | Character |
+| --- | --- |
+| **Air** — default | Cool gray surfaces with a blue accent. |
+| **Lavender** | Violet tones, subtle depth, and pill-shaped controls. |
+| **Sage** | Muted green surfaces and gentle shadows. |
+| **Clay** | Warm beige surfaces with a coral accent. |
+| **Graphite** | Neutral grays, deeper shadows, and compact corners. |
+
+After installing the base, choose a preset:
 
 ```bash
-npx shadcn@latest add @neumorphism-ui/calendar
-npx shadcn@latest add @neumorphism-ui/date-picker
-npx shadcn@latest add @neumorphism-ui/data-table
-npx shadcn@latest add @neumorphism-ui/toast
-npx shadcn@latest add @neumorphism-ui/navigation-menu
-npx shadcn@latest add @neumorphism-ui/menubar
-npx shadcn@latest add @neumorphism-ui/command
-npx shadcn@latest add @neumorphism-ui/context-menu
-npx shadcn@latest add @neumorphism-ui/drawer
-npx shadcn@latest add @neumorphism-ui/input-otp
-npx shadcn@latest add @neumorphism-ui/carousel
-npx shadcn@latest add @neumorphism-ui/resizable
-npx shadcn@latest add @neumorphism-ui/sidebar
-npx shadcn@latest add @neumorphism-ui/image-card
-npx shadcn@latest add @neumorphism-ui/marquee
 npx shadcn@latest add @neumorphism-ui/style-sage
 ```
 
-Raised actions press inward. Persistent selections remain inset after pointer exit.
-Directional highlights, hover elevation, overlay shadows and visible keyboard focus
-use shared tokens. Reduced motion is separate from depth styling.
+Use `style-air`, `style-lavender`, `style-clay`, or `style-graphite` for the
+other presets. Your application's `.dark` class selects dark mode.
 
-Calendar uses DayPicker v10. Data Table renders a caller-owned TanStack Table
-instance. Toast and interactive overlays use the existing Base UI primitives.
+For a custom look, open [Theme Studio](https://neumorphism-ui.andongmin.com/en/customize).
+Adjust the accent color, shadow depth, light direction, corner radius, control
+shape, and motion timing against live components, then copy the generated CSS
+into your project.
 
-Fully collapsed desktop offcanvas Sidebars are inert. If focus is inside when a
-panel closes, it returns to an available outside SidebarTrigger in the same
-provider. Icon and none modes remain interactive; mobile Sheets retain their
-own focus handling. Collapsing the desktop panel preserves mounted form state.
+## Documentation
 
-## Installable workspaces
+Explore live examples, component APIs, source, and installation instructions:
 
-```bash
-npx shadcn@latest add @neumorphism-ui/template-settings
-npx shadcn@latest add @neumorphism-ui/template-data-manager
-npx shadcn@latest add @neumorphism-ui/template-link-hub
-npx shadcn@latest add @neumorphism-ui/template-portfolio
-npx shadcn@latest add @neumorphism-ui/template-blog
-npx shadcn@latest add @neumorphism-ui/template-blog-post
-npx shadcn@latest add @neumorphism-ui/template-cms
-```
+[English](https://neumorphism-ui.andongmin.com/en/docs) ·
+[한국어](https://neumorphism-ui.andongmin.com/ko/docs) ·
+[日本語](https://neumorphism-ui.andongmin.com/ja/docs) ·
+[简体中文](https://neumorphism-ui.andongmin.com/zh/docs)
 
-The settings workspace combines profile validation, live preview, notification
-preferences, unsaved-change detection, failed-save recovery and discard. The data
-workspace combines search, status filters, sorting, pagination, stable-ID selection,
-column visibility, create/edit forms and confirmed deletion.
+## Contributing
 
-The Link Hub, Portfolio, Blog and Blog Post templates are data-driven presentation blocks. Link Hub owns only local filtering and clipboard feedback; Portfolio is fully static and uses native disclosure; Blog owns only archive search/filter/sort state. The CMS workspace is a local editor shell with dirty-state recovery and an application-owned onSave callback.
-
-The Settings and Data Manager blocks accept application-owned asynchronous callbacks. Rejected operations
-retain edits and original data; resolved operations update the local saved snapshot.
-Applications must provide authenticated persistence and server-side authorization.
-The bundled examples are local demonstrations and reset on reload.
-
-## Analytical charts and dashboard
-
-Eight chart blocks and one dashboard block are installable source, not
-documentation-only mockups:
-
-```bash
-npx shadcn@latest add @neumorphism-ui/chart-revenue
-npx shadcn@latest add @neumorphism-ui/chart-channel
-npx shadcn@latest add @neumorphism-ui/chart-conversion
-npx shadcn@latest add @neumorphism-ui/chart-build-duration
-npx shadcn@latest add @neumorphism-ui/chart-service-latency
-npx shadcn@latest add @neumorphism-ui/chart-release-activity
-npx shadcn@latest add @neumorphism-ui/chart-delivery-capacity
-npx shadcn@latest add @neumorphism-ui/chart-install-diagnostics
-npx shadcn@latest add @neumorphism-ui/template-analytics
-```
-
-The shared `chart` primitive uses Recharts and keeps the data marks flat and
-legible while the surrounding panel follows the neumorphic surface system.
-Each chart exposes an exact-data table for verification and accessible fallback.
-
-The five operational recipes cover build duration, p50/p95 latency, release activity, planned-versus-delivered capacity and sequential installation timing. They accept caller-owned data and keep exact tables beside the chart.
-
-The analytics dashboard links 7/14/30-day range controls and channel filters to
-its KPI cards, revenue/goal chart, channel chart, conversion chart, exact table
-and CSV export. Conversion is calculated from total conversions divided by total
-visits for the active filter rather than averaging daily percentages. Missing
-values are not silently converted into zero.
-
-## Development
-
-Work on **`main` only**. Do not create additional branches. Use Node.js 24 or newer and npm.
-
-```bash
-npm ci --prefix registry
-npm ci --prefix docs
-npm run build --prefix registry
-npm run sync:docs --prefix registry
-npm test --prefix registry
-npm run lint --prefix docs
-npm run typecheck --prefix docs
-npm run build --prefix docs
-npm run check:generated --prefix registry
-node registry/scripts/verify-independent-items.mjs --shard=1/1
-```
-
-For browser verification:
-
-```bash
-cd docs
-npx playwright install --with-deps chromium firefox webkit
-cd ..
-npm run consumer:verify --prefix registry
-npm run test:browser --prefix docs
-npm run test:cloudflare --prefix docs
-```
-
-Pushes and pull requests run source contracts, lint, types, a documentation build,
-the Chromium desktop/mobile browser suite, component runtime regressions, the
-local Wrangler Cloudflare suite and fresh Vite/Next installation smoke checks
-for the base, button, input and dialog. The Cloudflare suite checks static routing,
-response headers, missing routes and hydrated navigation against Wrangler,
-not the Node preview server. Dependency audits remain blocking.
-The material/detail presentation suites, all-item installation shards and full
-installed-consumer matrix run when manually dispatching `Verify` with
-`comprehensive` enabled. The duplicate presentation/browser invocation is removed.
-
-The manually dispatched `Local platform and accessibility` workflow retains its
-six-platform matrix, including full Chromium, Firefox and WebKit catalog passes.
-Every check builds and serves locally. To run a platform
-check locally, use `npx playwright test --config=playwright.platform.config.ts`
-from `docs` (set `PLATFORM_FULL_CATALOG=true` for the catalog pass).
-
-`npm run test:smoke --prefix docs` is the bounded production check. To validate
-it against a local build, start the documentation server and set `DOCS_TEST_URL`
-to that server's origin. The smoke suite uses one Chromium browser, two page
-navigations and three registry JSON requests, without retries or catalog crawls.
-
-Independent Next.js/Vite applications install the actual registry JSON, retain
-custom aliases and application-owned CSS/source, build and run without docs CSS.
-Documentation checks exercise hydrated previews, theme output, forms, date-only
-serialization, data management and analytical filtering/export.
-
-The official Cloudflare Web Analytics beacon loads once on the canonical
-production hostname. Development, preview hosts, localhost and automated
-browsers do not load it. The token identifies this public site and is not a
-credential; the app does not emit custom analytics events.
-
-## Cloudflare deployment
-
-The site uses Fumapress `mode: "static"`. Deploy only `docs/dist/public` with
-Workers Static Assets; no Worker runtime, SSR function or SPA fallback is needed.
-`docs/wrangler.jsonc` preserves extensionless page URLs and real 404 responses,
-and `docs/public/_headers` defines RSC/API MIME types and caches hashed assets.
-
-```bash
-npm ci --prefix docs
-npm run build --prefix docs
-npm run test:cloudflare --prefix docs
-npm run deploy:cloudflare --prefix docs
-```
-
-For Workers Builds, choose `docs` as the root directory, `npm run build` as the
-build command and `npm run deploy:cloudflare` as the deploy command. The native
-Cloudflare adapter is detected there; local and GitHub CI builds keep the Node
-adapter for `npm run start`. Set the Workers Builds variable `NODE_VERSION=24`
-to match this project's engine requirement. No API token is stored in the repository.
-
-Each build writes an ignored `public/build-info.json` marker from its source
-commit. The production smoke workflow waits up to five minutes for the expected
-marker before testing the canonical domain. Validate a workers.dev preview with
-`DOCS_TEST_URL` before moving the custom domain; retain the existing deployment
-until that preview passes.
-
-## Source ownership
-
-- `registry/src/components/ui`: installable UI primitives.
-- `registry/src/components/blocks`: workspaces, charts and dashboard blocks.
-- `registry/src/lib`: shared utilities and analytical data model/copy.
-- `registry/src/theme.ts`: presets, settings validation and token generation.
-- `registry/catalog.json`: registry metadata and dependency declarations.
-- `docs`: Fumapress documentation; registry source is synchronized into its ignored `src/registry` build input.
-
-`registry/registry.json`, both `public/r` directories, `docs/src/theme.css`
-and the theme bootstrap module are generated. Do not edit generated output by
-hand. See [AGENTS.md](AGENTS.md) for branch, typography and source-ownership rules.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local development, verification,
+deployment, and source layout. [QUALITY.md](QUALITY.md) records verification
+scope and release requirements.
 
 ## License
 
 Project-authored code is available under the [MIT License](LICENSE),
-Copyright (c) 2026 andongmin94. Adapted shadcn/ui portions retain their original
+Copyright (c) 2026 andongmin94. Third-party code and assets retain their own licenses.
+
+<details>
+<summary>Third-party notices</summary>
+
+Adapted shadcn/ui portions retain their original
 [shadcn MIT notice](docs/public/shadcn-LICENSE.txt) in the installable source.
-Third-party code and assets retain their
-own licenses; the documentation build emits `third-party-licenses.md` for its
-bundled dependencies.
+The documentation build emits `third-party-licenses.md` for its bundled dependencies.
 
 Additional bundled-package notices preserve the original terms for
 [Embla Carousel](docs/public/embla-LICENSE.txt),
@@ -256,3 +163,5 @@ copyright and Reserved Font Name notices:
 [Pretendard](docs/public/pretendard-font-LICENSE.txt),
 [Pretendard JP](docs/public/pretendard-jp-font-LICENSE.txt), and
 [Noto Sans SC](docs/public/noto-sans-sc-font-LICENSE.txt).
+
+</details>
