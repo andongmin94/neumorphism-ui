@@ -74,9 +74,12 @@ npx shadcn@latest add @neumorphism-ui/button
 The base installs shared styles and the default Air theme once. Later component
 installs keep your selected theme.
 
+If `init` created `utils.ts` or `button.tsx`, accept the replacement prompt for
+those default files when adding the base and Button.
+
 **Using an existing app?** The base updates global CSS. Commit your current work
-and review the proposed changes. If `init` created a default Button, replace that
-file when prompted; review customized components before replacing them.
+and review the proposed changes. Compare and merge any customized utilities or
+components before replacing them.
 
 Import the bundled font once in your application entry:
 `app/layout.tsx` or `src/app/layout.tsx` for Next.js, or `src/main.tsx` for Vite.
@@ -98,6 +101,10 @@ export default function Example() {
 Each component and template page includes its installation command, live preview,
 and source. See the [installation guide](https://neumorphism-ui.andongmin.com/en/docs/installation)
 for existing projects, manual registry setup, and updates.
+
+Installed files belong to your app and do not update automatically. Check the
+[release notes](https://github.com/andongmin94/neumorphism-ui/releases) for affected
+components, API changes, and update instructions before replacing your copies.
 
 ## Make it yours
 

@@ -80,9 +80,9 @@ export function CarouselKeyboardFixture() {
   fs.writeFileSync(file, consumer);
 }
 
-export function assertExpandedFiles(directory) {
-  for (const name of expandedItems) assert.ok(fs.existsSync(path.join(directory, `src/design-system/ui/${name}.tsx`)), `Installation did not finish: missing ${name}`);
-  assert.ok(fs.existsSync(path.join(directory, "src/shared/hooks/use-mobile.ts")), "Installation did not finish: missing sidebar mobile hook");
+export function assertExpandedFiles(directory, aliases) {
+  for (const name of expandedItems) assert.ok(fs.existsSync(path.join(directory, aliases.ui.replace(/^@\//, "src/"), `${name}.tsx`)), `Installation did not finish: missing ${name}`);
+  assert.ok(fs.existsSync(path.join(directory, aliases.hooks.replace(/^@\//, "src/"), "use-mobile.ts")), "Installation did not finish: missing sidebar mobile hook");
 }
 
 export async function exerciseExpanded(page, { target, scenario, engineName, mode, evidenceRoot }) {

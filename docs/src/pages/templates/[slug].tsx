@@ -93,6 +93,8 @@ function templateNote(slug: TemplateSlug, locale: Locale) {
       return t.blogPostNote;
     case "cms":
       return t.cmsNote;
+    case "data-manager":
+      return `${t.note} ${t.recordsNote}`;
     default:
       return t.note;
   }
@@ -144,7 +146,7 @@ import { DataManager, type ManagedRecord } from "@/components/blocks/data-manage
 
 export function Example({ records, saveRecord, deleteRecords }: {
   records: ManagedRecord[];
-  saveRecord: (record: ManagedRecord) => Promise<void>;
+  saveRecord: (record: ManagedRecord) => Promise<ManagedRecord>;
   deleteRecords: (ids: string[]) => Promise<void>;
 }) {
   return <DataManager initialRecords={records} onSave={saveRecord} onDelete={deleteRecords} locale="${locale}" />;

@@ -21,9 +21,11 @@ const { chromium, firefox, webkit, expect } = requireDocs("@playwright/test");
 const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "neumorphism-consumer-"));
 const evidenceRoot = path.join(docsRoot, "test-results/installed-consumers");
 const cli = path.join(root, "node_modules/shadcn/dist/index.js");
+const cliVersion = readJson(path.join(root, "node_modules/shadcn/package.json")).version;
 const npm = process.env.npm_execpath;
 assert.ok(npm, "Run this check with npm run consumer:verify");
-const results = [];
+const results = { cliVersion, installations: [], browsers: [] };
+const fixtureAliases = { components: "@/design-system", ui: "@/design-system/ui", lib: "@/shared", utils: "@/shared/utils", hooks: "@/shared/hooks" };
 function write(directory, file, content) { const destination = path.join(directory, file); fs.mkdirSync(path.dirname(destination), { recursive: true }); fs.writeFileSync(destination, content); }
 function writeJson(directory, file, content) { write(directory, file, JSON.stringify(content, null, 2) + "\n"); }
 function readJson(file) { return JSON.parse(fs.readFileSync(file, "utf8")); }
@@ -62,34 +64,54 @@ export default function Consumer() {
   </main>;
 }`;
 }
-function fixture(directory, target, registryOrigin) {
-  const dependencies = Object.fromEntries(["react", "react-dom"].map((name) => [name, versions[name]]));
-  const devDependencies = Object.fromEntries(["@types/react", "@types/react-dom", "@types/node", "tailwindcss", "@tailwindcss/postcss"].map((name) => [name, versions[name]]));
-  devDependencies.typescript = versions.typescript;
+function fixture(directory, target, registryOrigin, readme) {
   const next = target === "next";
+  const dependencies = Object.fromEntries(["react", "react-dom"].map((name) => [name, versions[name]]));
+  const devDependencies = Object.fromEntries(["@types/react", "@types/react-dom", "@types/node", "tailwindcss", next ? "@tailwindcss/postcss" : "@tailwindcss/vite"].map((name) => [name, versions[name]]));
+  devDependencies.typescript = versions.typescript;
   if (next) dependencies.next = versions.next;
   else { devDependencies.vite = versions.vite; devDependencies["@vitejs/plugin-react"] = versions["@vitejs/plugin-react"]; }
   writeJson(directory, "package.json", { private: true, type: "module", dependencies, devDependencies, scripts: { build: next ? "next build" : "tsc --noEmit && vite build" } });
   writeJson(directory, "tsconfig.json", { compilerOptions: { target: "ES2022", lib: ["DOM", "DOM.Iterable", "ES2022"], strict: true, noEmit: true, skipLibCheck: true, esModuleInterop: true, module: "ESNext", moduleResolution: "Bundler", resolveJsonModule: true, jsx: next ? "preserve" : "react-jsx", allowJs: true, paths: { "@/*": ["./src/*"] }, ...(next ? { plugins: [{ name: "next" }] } : {}) }, include: ["src", ...(next ? ["next-env.d.ts", ".next/types/**/*.ts"] : [])], exclude: ["node_modules"] });
-  writeJson(directory, "components.json", { $schema: "https://ui.shadcn.com/schema.json", style: "base-nova", rsc: next, tsx: true, tailwind: { config: "", css: "src/globals.css", baseColor: "neutral", cssVariables: true }, iconLibrary: "lucide", aliases: { components: "@/design-system", ui: "@/design-system/ui", lib: "@/shared", utils: "@/shared/utils", hooks: "@/shared/hooks" }, registries: { "@neumorphism-ui": `${registryOrigin}/r/{name}.json` } });
-  write(directory, "postcss.config.mjs", 'export default { plugins: { "@tailwindcss/postcss": {} } };\n');
-  write(directory, "src/globals.css", '@import "tailwindcss";\n@custom-variant dark (&:is(.dark *));\n');
+  if (!readme) writeJson(directory, "components.json", { $schema: "https://ui.shadcn.com/schema.json", style: "base-nova", rsc: next, tsx: true, tailwind: { config: "", css: "src/globals.css", baseColor: "neutral", cssVariables: true }, iconLibrary: "lucide", aliases: fixtureAliases, registries: { "@neumorphism-ui": `${registryOrigin}/r/{name}.json` } });
+  if (next) write(directory, "postcss.config.mjs", 'export default { plugins: { "@tailwindcss/postcss": {} } };\n');
+  write(directory, "src/globals.css", '@import "tailwindcss";\n' + (readme ? "" : '@custom-variant dark (&:is(.dark *));\n'));
   write(directory, "src/consumer.tsx", application());
   if (!smoke) decorateFixture(directory);
   if (next) {
-    write(directory, "src/app/layout.tsx", 'import "../globals.css"; export default function Layout({ children }: {children: React.ReactNode}) { return <html lang="en"><body>{children}</body></html>; }');
+    write(directory, "src/app/layout.tsx", 'import "pretendard/dist/web/variable/pretendardvariable.css"; import "../globals.css"; export default function Layout({ children }: {children: React.ReactNode}) { return <html lang="en"><body>{children}</body></html>; }');
     write(directory, "src/app/page.tsx", 'export { default } from "../consumer";');
   } else {
     write(directory, "index.html", '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Installed consumer</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>');
     write(directory, "src/vite-env.d.ts", '/// <reference types="vite/client" />\\n');
-    write(directory, "src/main.tsx", 'import {createRoot} from "react-dom/client"; import Consumer from "./consumer"; import "./globals.css"; createRoot(document.getElementById("root")!).render(<Consumer/>);');
-    write(directory, "vite.config.ts", 'import {defineConfig} from "vite"; import react from "@vitejs/plugin-react"; import {fileURLToPath, URL} from "node:url"; export default defineConfig({plugins:[react()],resolve:{alias:{"@":fileURLToPath(new URL("./src",import.meta.url))}}});');
+    write(directory, "src/main.tsx", 'import {createRoot} from "react-dom/client"; import Consumer from "./consumer"; import "pretendard/dist/web/variable/pretendardvariable.css"; import "./globals.css"; createRoot(document.getElementById("root")!).render(<Consumer/>);');
+    write(directory, "vite.config.ts", 'import {defineConfig} from "vite"; import react from "@vitejs/plugin-react"; import tailwindcss from "@tailwindcss/vite"; import {fileURLToPath, URL} from "node:url"; export default defineConfig({plugins:[react(),tailwindcss()],resolve:{alias:{"@":fileURLToPath(new URL("./src",import.meta.url))}}});');
   }
   if (!smoke) {
     decorateWorkflowFixture(directory);
     decorateWorkspaceFixture(directory);
     decorateAnalyticsFixture(directory);
   }
+  return fs.readdirSync(path.join(directory, "src"), { recursive: true }).filter(file => /\.tsx?$/.test(file)).map(file => path.join(directory, "src", file));
+}
+function useInitializedAliases(files, aliases) {
+  const replacements = Object.entries(fixtureAliases).sort((left, right) => right[1].length - left[1].length);
+  for (const file of files) {
+    let source = fs.readFileSync(file, "utf8");
+    for (const [name, alias] of replacements) source = source.replaceAll(alias, aliases[name]);
+    fs.writeFileSync(file, source);
+  }
+}
+function installedDependencies(directory) {
+  const manifest = readJson(path.join(directory, "package.json"));
+  const lock = readJson(path.join(directory, "package-lock.json"));
+  return Object.fromEntries(["dependencies", "devDependencies"].map(section => [section,
+    Object.fromEntries(Object.keys(manifest[section] ?? {}).sort().map(name => {
+      const version = lock.packages[`node_modules/${name}`]?.version;
+      assert.ok(version, `Missing installed version for ${name}`);
+      return [name, version];
+    })),
+  ]));
 }
 async function waitForServer(origin, processRef) {
   const end = Date.now() + 60_000;
@@ -166,7 +188,7 @@ async function browserChecks(directory, target, scenario) {
             }
             assert.deepEqual(errors, []);
             const file = path.join(evidenceRoot, `${target}-${scenario}-${engineName}-${mode}.png`); fs.mkdirSync(evidenceRoot, { recursive: true }); await page.screenshot({ path: file, fullPage: true });
-            results.push({ target, scenario, engine: engineName, mode, metrics, errors });
+            results.browsers.push({ target, scenario, engine: engineName, mode, metrics, errors });
           } catch (error) {
             releaseScripts();
             fs.mkdirSync(evidenceRoot, { recursive: true });
@@ -191,18 +213,48 @@ try {
   const registryOrigin = `http://127.0.0.1:${await listen(registryServer)}`;
   for (const target of ["vite", "next"]) for (const scenario of ["fresh", "existing"]) {
     if (smoke && scenario !== "fresh") continue;
-    const directory = path.join(temporaryRoot, `${target}-${scenario}`); fixture(directory, target, registryOrigin); await run(process.execPath, [npm, "install", "--no-audit", "--no-fund"], directory);
-    const add = (...names) => run(process.execPath, [cli, "add", "--yes", "--cwd", directory, ...names.map((name) => `@neumorphism-ui/${name}`)], root, 300_000, scenario === "existing" && names.includes("alert-dialog") ? "button.tsx" : null);
-    const aliases = readJson(path.join(directory, "components.json")).aliases;
+    const readme = target === "vite" && scenario === "fresh";
+    const directory = path.join(temporaryRoot, `${target}-${scenario}`);
+    const fixtureFiles = fixture(directory, target, registryOrigin, readme);
+    await run(process.execPath, [npm, "install", "--no-audit", "--no-fund"], directory);
+    if (readme) {
+      console.log(`Checking README initialization with shadcn ${cliVersion}.`);
+      await run(process.execPath, [cli, "init", "--defaults", "--template", "vite", "--base", "base", "--no-monorepo", "--cwd", directory], root);
+      assert.ok(fs.existsSync(path.join(directory, "components.json")), "shadcn init must create components.json");
+      await run(process.execPath, [cli, "registry", "add", `@neumorphism-ui=${registryOrigin}/r/{name}.json`, "--cwd", directory], root);
+    }
+    const config = readJson(path.join(directory, "components.json"));
+    const aliases = config.aliases;
+    const cssPath = path.join(directory, config.tailwind.css);
+    const buttonPath = path.join(directory, aliases.ui.replace(/^@\//, "src/"), "button.tsx");
+    if (readme) {
+      assert.equal(config.registries["@neumorphism-ui"], `${registryOrigin}/r/{name}.json`);
+      // Only init-created scaffolds may be replaced; the existing-app scenario
+      // still declines replacement of its customized Button.
+      for (const file of [path.join(directory, aliases.utils.replace(/^@\//, "src/") + ".ts"), buttonPath]) {
+        assert.ok(!fixtureFiles.includes(file) && fs.existsSync(file), `Expected an init-created scaffold: ${file}`);
+      }
+      useInitializedAliases(fixtureFiles, aliases);
+    }
+    const add = (...names) => {
+      const overwrite = readme && names.length === 1 && names[0] === "neumorphism-ui" ? { file: "utils.ts", allow: true }
+        : readme && names.length === 1 && names[0] === "button" ? { file: "button.tsx", allow: true }
+        : scenario === "existing" && names.includes("alert-dialog") ? { file: "button.tsx", allow: false } : null;
+      return run(process.execPath, [cli, "add", "--yes", "--cwd", directory, ...names.map((name) => `@neumorphism-ui/${name}`)], root, 300_000, overwrite);
+    };
     await add("neumorphism-ui"); assert.deepEqual(readJson(path.join(directory, "components.json")).aliases, aliases, "base reset custom aliases");
     await add("button"); if (scenario === "existing") await add("style-sage");
-    const cssPath = path.join(directory, "src/globals.css"); const buttonPath = path.join(directory, "src/design-system/ui/button.tsx");
     if (scenario === "existing") { fs.appendFileSync(cssPath, "\n:root, .dark { --radius: 23px; }\n.consumer-owned { border-top: 7px solid currentColor; }\n"); fs.appendFileSync(buttonPath, "\n// Application-owned customization must survive later installs.\n"); }
     const beforeCss = fs.readFileSync(cssPath, "utf8"); const beforeButton = fs.readFileSync(buttonPath, "utf8"); const beforeApp = fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8");
     await add("input", "dialog", ...(smoke ? [] : [...expandedItems, ...workflowItems, ...workspaceItems, "template-analytics", "checkbox", "radio-group"]));
-    if (!smoke) assertExpandedFiles(directory);
+    if (!smoke) assertExpandedFiles(directory, aliases);
     assert.equal(fs.readFileSync(cssPath, "utf8"), beforeCss, "adding UI changed theme or custom CSS"); assert.equal(fs.readFileSync(buttonPath, "utf8"), beforeButton, "adding UI overwrote a customized button"); assert.equal(fs.readFileSync(path.join(directory, "src/consumer.tsx"), "utf8"), beforeApp);
-    await run(process.execPath, [npm, "run", "build"], directory); await browserChecks(directory, target, scenario);
+    const dependencies = installedDependencies(directory);
+    const installation = { target, scenario, setup: readme ? "readme" : "configured", ...dependencies, build: false };
+    results.installations.push(installation);
+    console.log(`Installed ${target}/${scenario} with shadcn ${cliVersion}: ${JSON.stringify(dependencies)}`);
+    await run(process.execPath, [npm, "run", "build"], directory); installation.build = true;
+    await browserChecks(directory, target, scenario);
     console.log(`PASS ${target}/${scenario}: install, preservation, build, and ${smoke ? "Chromium/light core interactions" : "three browser engines"}.`);
   }
 } finally {

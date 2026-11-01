@@ -26,7 +26,7 @@ const copy = {
     manualBody: "아래 registries 항목을 기존 components.json에 병합하세요. 기존 별칭과 설정은 유지하세요.",
     setupBody: "공통 스타일은 한 번 설치한 뒤, 필요한 컴포넌트를 추가합니다. 공통 스타일에는 라이트·다크 색상, 그림자, 반경과 유틸리티가 들어 있습니다.",
     font: "Next.js의 app/layout.tsx 또는 src/app/layout.tsx, Vite의 src/main.tsx에서 폰트 CSS를 한 번 가져오세요. 앱 번들러가 폰트 파일을 함께 제공합니다.",
-    replacement: "shadcn init이 만든 Button이 이미 있다면 CLI의 변경 내용을 확인하고 기본 파일만 교체하세요. 직접 수정한 Button이나 전역 CSS를 무조건 덮어쓰지 마세요. 아래 ‘기존 프로젝트’에서 먼저 변경 사항을 확인할 수 있습니다.",
+    replacement: "shadcn init이 만든 utils.ts와 button.tsx가 있다면 공통 스타일과 Button 설치 중 해당 기본 파일의 교체 질문에 동의하세요. 직접 수정한 유틸리티나 컴포넌트는 아래 ‘기존 프로젝트’에서 차이를 확인하고 필요한 변경을 병합하세요.",
     check: "첫 버튼 확인",
     checkBody: "페이지에서 설치한 Button을 렌더링하세요.",
     button: "시작하기",
@@ -40,6 +40,7 @@ const copy = {
     themeNote: "라이트·다크 토큰이 함께 제공되며 앱의 .dark 클래스로 모드를 선택합니다. Theme Studio에서 색상·깊이·광원·형태를 조절하고 CSS를 복사할 수도 있습니다.",
     updates: "수동 설치와 업데이트",
     updatesBody: "컴포넌트 페이지의 ‘컴포넌트 소스’ 탭에서 파일과 필요한 패키지를 확인할 수 있습니다. 설치한 파일은 앱에 속하며 자동 업데이트되지 않습니다. 업데이트 전에 dry run으로 직접 수정한 코드와 비교하세요.",
+    releases: "GitHub Releases에서 변경된 컴포넌트, API와 업데이트 방법 확인하기",
     next: "컴포넌트 살펴보기",
   },
   en: {
@@ -53,7 +54,7 @@ const copy = {
     manualBody: "Merge the registries entry below into your existing components.json. Keep your current aliases and other settings.",
     setupBody: "Install the shared styles once, then add your first component. The base provides light and dark colors, shadows, radii and utilities.",
     font: "Import the font CSS once in app/layout.tsx or src/app/layout.tsx (Next.js), or src/main.tsx (Vite). Your bundler serves the font files with your application.",
-    replacement: "If shadcn init created a Button, review the CLI changes and replace only that default file. Do not blindly overwrite a customized Button or global CSS. Use the existing-project review below to inspect changes first.",
+    replacement: "If shadcn init created utils.ts and button.tsx, accept the replacement prompts for those default files when installing the base and Button. For customized utilities or components, use the existing-project review below to compare and merge your changes.",
     check: "Check that it works",
     checkBody: "Render the installed Button in one of your pages.",
     button: "Get started",
@@ -67,6 +68,7 @@ const copy = {
     themeNote: "Both light and dark tokens are included; your application's .dark class selects the mode. You can also adjust color, depth, light and shape in Theme Studio and copy the CSS.",
     updates: "Manual installation and updates",
     updatesBody: "The Component source tab on each component page shows the files and required packages. Installed files belong to your application and do not update automatically. Run a dry run and compare your customizations before updating.",
+    releases: "See affected components, API changes and update instructions in GitHub Releases",
     next: "Browse components",
   },
   ja: {
@@ -80,7 +82,7 @@ const copy = {
     manualBody: "以下の registries 項目を既存の components.json に追加してください。現在のエイリアスや他の設定は残してください。",
     setupBody: "共有スタイルを一度導入し、最初のコンポーネントを追加します。基盤にはライト・ダークの色、影、半径、ユーティリティが含まれます。",
     font: "Next.js の app/layout.tsx または src/app/layout.tsx、Vite の src/main.tsx でフォント CSS を一度読み込みます。フォントファイルはアプリのバンドラーから配信されます。",
-    replacement: "shadcn init が Button を作成済みの場合は CLI の変更を確認し、その初期ファイルだけを置き換えてください。独自の Button やグローバル CSS を一括上書きせず、以下の既存プロジェクト向け手順で差分を確認してください。",
+    replacement: "shadcn init が utils.ts と button.tsx を作成した場合は、基盤と Button の導入時にその初期ファイルの置き換えに同意してください。独自に変更したユーティリティやコンポーネントは、以下の既存プロジェクト向け手順で差分を確認して変更を統合してください。",
     check: "最初のボタンを確認する",
     checkBody: "ページで導入した Button を表示してください。",
     button: "はじめる",
@@ -94,6 +96,7 @@ const copy = {
     themeNote: "ライト・ダークのトークンを含み、アプリの .dark クラスでモードを選択します。Theme Studio で色・深さ・光源・形を調整し、CSS をコピーすることもできます。",
     updates: "手動インストールと更新",
     updatesBody: "各コンポーネントページの「コンポーネントソース」タブでファイルと必要なパッケージを確認できます。導入したファイルはアプリのコードであり、自動更新されません。更新前に dry run で独自の変更と比較してください。",
+    releases: "変更されたコンポーネント、API と更新手順を GitHub Releases で確認する",
     next: "コンポーネントを見る",
   },
   zh: {
@@ -107,7 +110,7 @@ const copy = {
     manualBody: "将以下 registries 项合并到已有的 components.json，保留当前别名及其他设置。",
     setupBody: "安装一次共享样式，再添加第一个组件。基础样式包含明暗颜色、阴影、圆角和工具函数。",
     font: "在 Next.js 的 app/layout.tsx 或 src/app/layout.tsx，或 Vite 的 src/main.tsx 中导入一次字体 CSS。应用打包工具会同时提供字体文件。",
-    replacement: "如果 shadcn init 已创建 Button，请检查 CLI 的更改，只替换该初始文件。不要直接覆盖定制过的 Button 或全局 CSS。可先按下方现有项目的步骤查看差异。",
+    replacement: "如果 shadcn init 已创建 utils.ts 和 button.tsx，请在安装基础样式和 Button 时同意替换这些初始文件。对于定制过的工具函数或组件，请按下方现有项目的步骤比较并合并更改。",
     check: "确认第一个按钮",
     checkBody: "在页面中渲染已安装的 Button。",
     button: "开始使用",
@@ -121,6 +124,7 @@ const copy = {
     themeNote: "同时包含明暗令牌，由应用的 .dark 类选择模式。也可以在 Theme Studio 调整颜色、深度、光源和形状，再复制 CSS。",
     updates: "手动安装与更新",
     updatesBody: "在各组件页面的“组件源码”标签页查看文件和依赖包。安装的文件属于应用，不会自动更新。更新前使用 dry run，与已有定制进行比较。",
+    releases: "在 GitHub Releases 查看变更组件、API 和更新说明",
     next: "浏览组件",
   },
 } as const;
@@ -208,6 +212,7 @@ export default async function InstallationPage({ lang }: { lang: string }) {
         <section className="docs-content-section" id="updates">
           <h2>{t.updates}</h2>
           <p>{t.updatesBody}</p>
+          <p><a href="https://github.com/andongmin94/neumorphism-ui/releases">{t.releases}</a></p>
           <CopyableCode lang="bash" code={getInstallCommand("button") + " --dry-run"} label={`${t.updates}: --dry-run`} />
         </section>
 

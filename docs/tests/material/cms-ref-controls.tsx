@@ -1,6 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { CmsWorkspace, type CmsPost } from "../../src/registry/components/blocks/cms";
+import { DataManager, type ManagedRecord } from "../../src/registry/components/blocks/data-manager";
 import { Checkbox, type CheckedState } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,23 @@ function PersistedCms() {
     }} />
     <Button onClick={() => setMount(current => current + 1)}>Reload persisted posts</Button>
     <pre data-testid="persisted-posts">{JSON.stringify(persisted)}</pre>
+  </section>;
+}
+
+function SavedDataManager() {
+  const [savedRequest, setSavedRequest] = React.useState<ManagedRecord | null>(null);
+  const [deletedIds, setDeletedIds] = React.useState<string[]>([]);
+  return <section data-testid="saved-data-manager" className="grid gap-4">
+    <DataManager
+      initialRecords={[{ id: "client-record", title: "Local draft", owner: "Alex", status: "draft", dueDate: "" }]}
+      onSave={async record => {
+        setSavedRequest(record);
+        return { ...record, id: "server-record", title: record.title.replace(/\s+/g, " ").trim() };
+      }}
+      onDelete={async ids => { setDeletedIds(ids); }}
+    />
+    <output data-testid="saved-record-request">{JSON.stringify(savedRequest)}</output>
+    <output data-testid="deleted-record-ids">{JSON.stringify(deletedIds)}</output>
   </section>;
 }
 
@@ -91,6 +109,7 @@ function CmsRefControls() {
     <h1>CMS persistence and ref regressions</h1>
     <PersistedCms />
     <RefControls />
+    <SavedDataManager />
   </main>;
 }
 

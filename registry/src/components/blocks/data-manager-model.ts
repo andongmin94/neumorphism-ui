@@ -12,8 +12,8 @@ export function formatRecordDate(value: Date | undefined): string {
   if (!value || !Number.isFinite(value.getTime())) return "";
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
 }
-export function upsertRecord(records: readonly ManagedRecord[], record: ManagedRecord): ManagedRecord[] {
-  return records.some(item => item.id === record.id) ? records.map(item => item.id === record.id ? { ...record } : item) : [{ ...record }, ...records];
+export function upsertRecord(records: readonly ManagedRecord[], record: ManagedRecord, requestedId: string): ManagedRecord[] {
+  return records.some(item => item.id === requestedId) ? records.map(item => item.id === requestedId ? { ...record } : item) : [{ ...record }, ...records];
 }
 export function removeRecords(records: readonly ManagedRecord[], ids: readonly string[]): ManagedRecord[] {
   const selected = new Set(ids);

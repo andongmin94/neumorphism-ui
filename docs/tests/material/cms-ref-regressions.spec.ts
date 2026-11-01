@@ -1,5 +1,49 @@
 import { expect, test } from "@playwright/test";
 
+test("runtime regressions: DataManager applies server fields and uses the returned ID for editing and deletion", async ({ page }) => {
+  await page.goto("/cms-ref-controls.html?mode=light");
+  const manager = page.getByTestId("saved-data-manager");
+  await manager.getByRole("button", { name: "Edit Local draft", exact: true }).click();
+  const editor = page.locator('[data-slot="sheet-content"]');
+  const title = editor.getByRole("textbox", { name: "Title", exact: true });
+  await title.fill("Canonical   title");
+  await editor.getByRole("button", { name: "Save record", exact: true }).click();
+  await expect(editor).toBeHidden();
+  await expect(manager.getByRole("row")).toHaveCount(2);
+  await expect(manager.getByRole("cell", { name: "Canonical title", exact: true })).toBeVisible();
+  await expect(manager.getByRole("cell", { name: "Local draft", exact: true })).toHaveCount(0);
+  await expect(manager.getByRole("region", { name: "Recent activity", exact: true })).toContainText("Record saved: Canonical title");
+  const notification = page.locator('[data-slot="toast"]').filter({ hasText: "Record saved" });
+  await expect(notification).toContainText("Canonical title");
+  await notification.hover();
+  await notification.getByRole("button", { name: "Dismiss notification", exact: true }).click();
+  await expect(notification).toBeHidden();
+
+  await manager.getByRole("button", { name: "Edit Canonical title", exact: true }).click();
+  await expect(title).toHaveValue("Canonical title");
+  await title.fill("Canonical title revised");
+  await editor.getByRole("button", { name: "Save record", exact: true }).click();
+  await expect(editor).toBeHidden();
+  await expect(manager.getByTestId("saved-record-request")).toHaveText(JSON.stringify({
+    id: "server-record", title: "Canonical title revised", owner: "Alex", status: "draft", dueDate: "",
+  }));
+  await expect(manager.getByRole("row")).toHaveCount(2);
+  await expect(manager.getByRole("cell", { name: "Canonical title revised", exact: true })).toBeVisible();
+  await expect(notification).toContainText("Canonical title revised");
+  await notification.hover();
+  await notification.getByRole("button", { name: "Dismiss notification", exact: true }).click();
+  await expect(notification).toBeHidden();
+
+  await manager.getByRole("checkbox", { name: "Select Canonical title revised", exact: true }).check();
+  await manager.locator('[data-slot="menubar-trigger"]').filter({ hasText: /^Records$/ }).press("ArrowDown");
+  await page.getByRole("menuitem", { name: /^Delete selected/ }).click();
+  const confirmation = page.getByRole("alertdialog");
+  await confirmation.getByRole("button", { name: "Delete selected", exact: true }).click();
+  await expect(confirmation).toBeHidden();
+  await expect(manager.getByTestId("deleted-record-ids")).toHaveText('["server-record"]');
+  await expect(manager.getByText("No matching records. Change or reset your filters.", { exact: true })).toBeVisible();
+});
+
 for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) {
   test.describe(`runtime regressions: CMS and refs ${mode} ${width}`, () => {
     test.use({ viewport: { width, height: 900 } });
