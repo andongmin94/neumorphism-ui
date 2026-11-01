@@ -28,6 +28,7 @@ function Workspace({ name }: { name: string }) {
     <button type="button" onClick={() => setOpen(false)}>Close {name} externally</button>
     <SidebarProvider defaultOpen={!parameters.has("closed")}
       open={parameters.has("controlled") ? open : undefined}
+      onKeyDown={event => { if (parameters.has("cancelShortcut")) event.preventDefault(); }}
       onOpenChange={setOpen} className="min-h-64">
       {parameters.has("unavailableTriggers") && <>
         <SidebarTrigger label={`${name} disabled toggle`} disabled />

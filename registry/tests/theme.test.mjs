@@ -58,6 +58,23 @@ test("malformed and obsolete saved settings are rejected instead of migrated", (
 test("custom accent colors always receive readable foreground text", () => {
   for (const accent of ["#000000", "#ffffff", "#777777", "#888888", "#12abcf", "#ff7685"]) { const tokens = buildThemeVariables({ ...defaultThemeSettings, accent }, "light"); assert.ok(contrast(tokens["--primary-foreground"], accent) >= 4.5); }
 });
+test("custom focus rings contrast with the adjoining material surfaces without changing the accent", () => {
+  const surfaces = ["--background", "--neu-surface", "--neu-surface-soft", "--neu-surface-low", "--popover", "--secondary"];
+  for (const preset of themePresets) for (const mode of ["light", "dark"]) {
+    const settings = { ...defaultThemeSettings, ...preset.defaults, presetId: preset.id };
+    const baseline = buildThemeVariables(settings, mode);
+    assert.equal(baseline["--ring"], preset[mode].primary);
+    const accents = new Set(["#000000", "#ffffff", "#ffff00", "#ff00ff", "#777777", "#12abcf", ...surfaces.map(surface => baseline[surface])]);
+    for (const accent of accents) {
+      const tokens = buildThemeVariables({ ...settings, accent }, mode);
+      assert.equal(tokens["--primary"], accent);
+      for (const surface of surfaces) {
+        const ratio = contrast(tokens["--ring"], tokens[surface]);
+        assert.ok(ratio >= 3, `${preset.id}/${mode}/${accent}: ring on ${surface} = ${ratio.toFixed(3)}`);
+      }
+    }
+  }
+});
 function bootstrap(settings, mode, blockedStorage = false) {
   const module = makeBootstrapModule();
   const script = JSON.parse(module.slice(module.indexOf(" = ") + 3).trim().replace(/;$/, ""));

@@ -179,6 +179,7 @@ export function CmsWorkspace({
   className,
 }: CmsWorkspaceProps) {
   const t = copy[locale];
+  const publishId = React.useId();
   const [posts, setPosts] = React.useState<EditablePost[]>(() => editable(initialPosts));
   const [saved, setSaved] = React.useState<CmsPost[]>(() => initialPosts.map((post) => ({ ...post })));
   const [selectedId, setSelectedId] = React.useState(initialPosts[0]?.id ?? "");
@@ -419,9 +420,9 @@ export function CmsWorkspace({
                 </details>
 
                 <div className="flex items-center justify-between gap-4 border-t border-[var(--border)] pt-4">
-                  <label htmlFor={"cms-published-" + selected.id} className="text-sm font-semibold">{t.publish}</label>
+                  <label htmlFor={publishId} className="text-sm font-semibold">{t.publish}</label>
                   <Switch
-                    id={"cms-published-" + selected.id}
+                    id={publishId}
                     disabled={pending}
                     checked={selected.status === "published"}
                     onCheckedChange={(checked) => updateSelected({ status: checked ? "published" : "draft" })}

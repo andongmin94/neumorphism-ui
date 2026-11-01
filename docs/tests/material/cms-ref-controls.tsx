@@ -4,6 +4,7 @@ import { CmsWorkspace, type CmsPost } from "../../src/registry/components/blocks
 import { DataManager, type ManagedRecord } from "../../src/registry/components/blocks/data-manager";
 import { Checkbox, type CheckedState } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { buildThemeVariables, defaultThemeSettings } from "../../src/registry/theme";
 import "./styles.css";
@@ -39,6 +40,20 @@ function SavedDataManager() {
     />
     <output data-testid="saved-record-request">{JSON.stringify(savedRequest)}</output>
     <output data-testid="deleted-record-ids">{JSON.stringify(deletedIds)}</output>
+  </section>;
+}
+
+function EmptyCommand() {
+  const [loaded, setLoaded] = React.useState(false);
+  return <section data-testid="empty-command" className="grid gap-4">
+    <Button onClick={() => setLoaded(value => !value)}>{loaded ? "Clear commands" : "Load commands"}</Button>
+    <Command>
+      <CommandInput aria-label="Find commands" />
+      <CommandList>
+        <CommandEmpty>No commands available.</CommandEmpty>
+        {loaded && <CommandItem value="Open project">Open project</CommandItem>}
+      </CommandList>
+    </Command>
   </section>;
 }
 
@@ -108,8 +123,10 @@ function CmsRefControls() {
   return <main className="mx-auto grid max-w-5xl gap-12 p-5">
     <h1>CMS persistence and ref regressions</h1>
     <PersistedCms />
+    <section data-testid="second-cms"><CmsWorkspace initialPosts={[existingPost]} /></section>
     <RefControls />
     <SavedDataManager />
+    <EmptyCommand />
   </main>;
 }
 

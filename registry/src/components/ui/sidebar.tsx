@@ -28,6 +28,7 @@
 "use client";
 
 import * as React from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -104,28 +105,26 @@ function SidebarProvider({
     else setOpen((value) => !value);
   }, [isMobile, setOpen]);
 
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const target = event.target;
-      if (
-        event.defaultPrevented ||
-        event.isComposing ||
-        (target instanceof HTMLElement &&
-          (target.isContentEditable || target.closest("input, textarea, select")))
-      ) {
-        return;
-      }
-      if (
-        event.key.toLowerCase() === SIDEBAR_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault();
-        toggleSidebar();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggleSidebar]);
+  // React bubbling keeps the shortcut with this provider, including its mobile sheet.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (
+      event.defaultPrevented ||
+      event.isPropagationStopped() ||
+      event.nativeEvent.isComposing ||
+      (target instanceof HTMLElement &&
+        (target.isContentEditable || target.closest("input, textarea, select")))
+    ) {
+      return;
+    }
+    if (
+      event.key.toLowerCase() === SIDEBAR_SHORTCUT &&
+      (event.metaKey || event.ctrlKey)
+    ) {
+      event.preventDefault();
+      toggleSidebar();
+    }
+  };
 
   const state: SidebarContextValue["state"] = open ? "expanded" : "collapsed";
   const contextValue = React.useMemo(
@@ -159,7 +158,7 @@ function SidebarProvider({
             "flex min-h-0 w-full min-w-0 bg-[var(--background)] text-[var(--foreground)]",
             className,
           )}
-          {...props}
+          {...mergeProps<"div">({ onKeyDown: handleKeyDown }, props)}
         >
           <SidebarPresentationContext.Provider value={{
             iconCollapsed: false,

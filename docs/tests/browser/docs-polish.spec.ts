@@ -240,6 +240,38 @@ test("search includes templates and recovers from an empty query result", async 
   await expect(dialog).toHaveCount(0);
 });
 
+test("search ranks API properties and opens the matching documentation section", async ({ page }) => {
+  await page.goto("/en");
+  await page.locator(".docs-search-trigger").click();
+  const dialog = page.getByRole("dialog");
+  const input = dialog.getByRole("combobox");
+  await input.fill("onValueChange");
+  await expect(dialog.getByRole("option").first()).toHaveAttribute("data-href", /#api-reference$/);
+  await expect(dialog.getByRole("option").first()).toContainText("onValueChange");
+  await input.fill("keepMounted");
+  const accordion = dialog.locator('[data-href="/en/components/accordion#api-reference"]');
+  await expect(accordion).toBeVisible();
+  await accordion.click();
+  await expect(page).toHaveURL(url => url.pathname === "/en/components/accordion" && url.hash === "#api-reference");
+  await expect(page.locator("#api-reference")).toBeInViewport();
+
+  await page.locator(".docs-search-trigger").click();
+  await input.fill("focusableWhenDisabled");
+  await dialog.locator('[data-href="/en/components/toolbar#accessibility"]').click();
+  await expect(page).toHaveURL(url => url.pathname === "/en/components/toolbar" && url.hash === "#accessibility");
+  await expect(page.locator("#accessibility")).toBeInViewport();
+});
+
+test("search includes localized documentation prose", async ({ page }) => {
+  await page.goto("/ko");
+  await page.locator(".docs-search-trigger").click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("combobox").fill("비활성 항목도 기본적으로");
+  await dialog.locator('[data-href="/ko/components/toolbar#accessibility"]').click();
+  await expect(page).toHaveURL(url => url.pathname === "/ko/components/toolbar" && url.hash === "#accessibility");
+  await expect(page.locator("#accessibility")).toBeInViewport();
+});
+
 test("header and showcase reflow at four widths in both modes", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop-light", "matrix uses explicit viewports and modes");
   for (const width of [390, 820, 1024, 1440]) {

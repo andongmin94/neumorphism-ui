@@ -21,9 +21,9 @@ const copy = {
     projectBody: "React 19와 Tailwind CSS v4를 사용하는 프로젝트가 필요합니다. 컴포넌트는 Next.js와 Vite에서 사용할 수 있습니다. 아직 shadcn을 설정하지 않았다면 프로젝트 폴더에서 실행하세요.",
     projectNote: "CLI에서 컴포넌트 라이브러리를 묻는 경우 Base UI를 선택하세요.",
     setup: "빠른 설치",
-    registryBody: "먼저 Registry를 한 번 등록합니다. 이후 컴포넌트와 그 구성 요소를 짧은 이름으로 설치할 수 있습니다.",
-    manual: "components.json을 직접 설정하는 경우",
-    manualBody: "아래 registries 항목을 기존 components.json에 병합하세요. 기존 별칭과 설정은 유지하세요.",
+    registryBody: "@neumorphism-ui는 공식 shadcn 디렉터리에 등록되어 있습니다. CLI가 주소를 자동으로 찾으므로 별도 Registry 등록 없이 아래 명령을 실행하세요.",
+    manual: "포크나 로컬 레지스트리 주소를 사용하는 경우",
+    manualBody: "공식 주소 대신 다른 레지스트리를 사용하려면 아래 주소를 해당 엔드포인트로 바꾸세요. CLI로 등록하거나 registries 항목을 components.json에 병합하고 기존 별칭과 설정은 유지하세요.",
     setupBody: "공통 스타일은 한 번 설치한 뒤, 필요한 컴포넌트를 추가합니다. 공통 스타일에는 라이트·다크 색상, 그림자, 반경과 유틸리티가 들어 있습니다.",
     font: "Next.js의 app/layout.tsx 또는 src/app/layout.tsx, Vite의 src/main.tsx에서 폰트 CSS를 한 번 가져오세요. 앱 번들러가 폰트 파일을 함께 제공합니다.",
     replacement: "shadcn init이 만든 utils.ts와 button.tsx가 있다면 공통 스타일과 Button 설치 중 해당 기본 파일의 교체 질문에 동의하세요. 직접 수정한 유틸리티나 컴포넌트는 아래 ‘기존 프로젝트’에서 차이를 확인하고 필요한 변경을 병합하세요.",
@@ -49,9 +49,9 @@ const copy = {
     projectBody: "You need a React 19 project with Tailwind CSS v4. Components work with Next.js and Vite. Run this from your project folder if shadcn is not initialized yet.",
     projectNote: "Choose Base UI if the CLI asks which component library to use.",
     setup: "Fastest setup",
-    registryBody: "Register the registry once so the CLI can resolve components and their supporting files using short names.",
-    manual: "Configure components.json manually",
-    manualBody: "Merge the registries entry below into your existing components.json. Keep your current aliases and other settings.",
+    registryBody: "@neumorphism-ui is listed in the official shadcn directory. The CLI resolves its address automatically, so run the commands below without a separate registry registration.",
+    manual: "Use a fork or local registry address",
+    manualBody: "To use another registry instead of the official address, replace the endpoint below. Register it with the CLI or merge the registries entry into components.json, keeping your existing aliases and settings.",
     setupBody: "Install the shared styles once, then add your first component. The base provides light and dark colors, shadows, radii and utilities.",
     font: "Import the font CSS once in app/layout.tsx or src/app/layout.tsx (Next.js), or src/main.tsx (Vite). Your bundler serves the font files with your application.",
     replacement: "If shadcn init created utils.ts and button.tsx, accept the replacement prompts for those default files when installing the base and Button. For customized utilities or components, use the existing-project review below to compare and merge your changes.",
@@ -77,9 +77,9 @@ const copy = {
     projectBody: "React 19 と Tailwind CSS v4 のプロジェクトが必要です。コンポーネントは Next.js と Vite で使えます。shadcn をまだ設定していない場合はプロジェクトフォルダーで実行してください。",
     projectNote: "CLI がコンポーネントライブラリを尋ねた場合は Base UI を選んでください。",
     setup: "最短のセットアップ",
-    registryBody: "最初に Registry を一度登録します。コンポーネントとその依存ファイルを短い名前で導入できるようになります。",
-    manual: "components.json を手動で設定する場合",
-    manualBody: "以下の registries 項目を既存の components.json に追加してください。現在のエイリアスや他の設定は残してください。",
+    registryBody: "@neumorphism-ui は公式 shadcn ディレクトリに登録されています。CLI がアドレスを自動解決するため、Registry を別途登録せず以下のコマンドを実行できます。",
+    manual: "フォークやローカル Registry のアドレスを使う場合",
+    manualBody: "公式アドレス以外を使う場合は、以下のエンドポイントを変更してください。CLI で登録するか registries を components.json に追加し、現在のエイリアスや設定は維持してください。",
     setupBody: "共有スタイルを一度導入し、最初のコンポーネントを追加します。基盤にはライト・ダークの色、影、半径、ユーティリティが含まれます。",
     font: "Next.js の app/layout.tsx または src/app/layout.tsx、Vite の src/main.tsx でフォント CSS を一度読み込みます。フォントファイルはアプリのバンドラーから配信されます。",
     replacement: "shadcn init が utils.ts と button.tsx を作成した場合は、基盤と Button の導入時にその初期ファイルの置き換えに同意してください。独自に変更したユーティリティやコンポーネントは、以下の既存プロジェクト向け手順で差分を確認して変更を統合してください。",
@@ -105,9 +105,9 @@ const copy = {
     projectBody: "需要 React 19 与 Tailwind CSS v4 项目。组件支持 Next.js 和 Vite。如果尚未初始化 shadcn，请在项目目录中运行。",
     projectNote: "如果 CLI 询问组件库，请选择 Base UI。",
     setup: "快速安装",
-    registryBody: "先注册一次 Registry，以便 CLI 通过短名称解析组件及其依赖文件。",
-    manual: "手动配置 components.json",
-    manualBody: "将以下 registries 项合并到已有的 components.json，保留当前别名及其他设置。",
+    registryBody: "@neumorphism-ui 已收录于官方 shadcn 目录。CLI 会自动解析地址，无需单独注册 Registry 即可运行以下命令。",
+    manual: "使用分支项目或本地 Registry 地址",
+    manualBody: "若要使用官方地址以外的 Registry，请替换以下端点。通过 CLI 注册，或将 registries 项合并到 components.json，并保留现有别名和设置。",
     setupBody: "安装一次共享样式，再添加第一个组件。基础样式包含明暗颜色、阴影、圆角和工具函数。",
     font: "在 Next.js 的 app/layout.tsx 或 src/app/layout.tsx，或 Vite 的 src/main.tsx 中导入一次字体 CSS。应用打包工具会同时提供字体文件。",
     replacement: "如果 shadcn init 已创建 utils.ts 和 button.tsx，请在安装基础样式和 Button 时同意替换这些初始文件。对于定制过的工具函数或组件，请按下方现有项目的步骤比较并合并更改。",
@@ -165,7 +165,6 @@ export default async function InstallationPage({ lang }: { lang: string }) {
         <section className="docs-content-section" id="component">
           <h2>{t.setup}</h2>
           <p>{t.registryBody}</p>
-          <CopyableCode lang="bash" code={getRegistryAddCommand(requestOrigin)} label={messages.installationPage.registryCommandLabel} />
           <p>{t.setupBody}</p>
           <InstallCommand locale={locale} name="neumorphism-ui" />
           <p>{t.font}</p>
@@ -175,6 +174,7 @@ export default async function InstallationPage({ lang }: { lang: string }) {
           <details className="docs-disclosure" id="configure">
             <summary>{t.manual}</summary>
             <p>{t.manualBody}</p>
+            <CopyableCode lang="bash" code={getRegistryAddCommand(requestOrigin)} label={messages.installationPage.registryCommandLabel} />
             <CopyableCode lang="json" code={getComponentsJsonRegistry(requestOrigin)} label={messages.installationPage.configLabel} multiline />
           </details>
         </section>

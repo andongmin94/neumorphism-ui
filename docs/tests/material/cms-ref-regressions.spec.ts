@@ -1,5 +1,36 @@
 import { expect, test } from "@playwright/test";
 
+test("runtime regressions: CMS labels control their own instance when post IDs are shared", async ({ page }) => {
+  await page.goto("/cms-ref-controls.html?mode=light");
+  const first = page.getByTestId("persisted-cms");
+  const second = page.getByTestId("second-cms");
+  await expect(first.getByRole("switch")).not.toBeChecked();
+  await expect(second.getByRole("switch")).not.toBeChecked();
+  await second.locator("label").filter({ hasText: /^Published$/ }).click();
+  await expect(second.getByRole("switch")).toBeChecked();
+  await expect(first.getByRole("switch")).not.toBeChecked();
+  await expect(second.getByRole("switch")).toBeFocused();
+});
+
+test("runtime regressions: CommandEmpty reports initially empty and refreshed empty collections", async ({ page }) => {
+  await page.goto("/cms-ref-controls.html?mode=light");
+  const command = page.getByTestId("empty-command");
+  const input = command.getByRole("combobox", { name: "Find commands", exact: true });
+  const empty = command.getByText("No commands available.", { exact: true });
+  await expect(input).toHaveValue("");
+  await expect(empty).toBeVisible();
+  await command.getByRole("button", { name: "Load commands", exact: true }).click();
+  await expect(command.getByRole("option", { name: "Open project", exact: true })).toBeVisible();
+  await expect(empty).toHaveCount(0);
+  await input.fill("missing");
+  await expect(empty).toBeVisible();
+  await input.clear();
+  await expect(empty).toHaveCount(0);
+  await command.getByRole("button", { name: "Clear commands", exact: true }).click();
+  await expect(input).toHaveValue("");
+  await expect(empty).toBeVisible();
+});
+
 test("runtime regressions: DataManager applies server fields and uses the returned ID for editing and deletion", async ({ page }) => {
   await page.goto("/cms-ref-controls.html?mode=light");
   const manager = page.getByTestId("saved-data-manager");

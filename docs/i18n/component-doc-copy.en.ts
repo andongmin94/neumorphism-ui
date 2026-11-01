@@ -35,7 +35,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
   },
   sidebar: {
     summary: "Application navigation with desktop collapse and a mobile Sheet.",
-    description: "SidebarProvider owns desktop and mobile state plus the Ctrl/Cmd+B shortcut. Desktop can collapse off-canvas or to icon width, while mobile reuses the existing Sheet. Menus, tooltips, and focus states stay on the existing neumorphic token system.",
+    description: "SidebarProvider owns desktop and mobile state. Ctrl/Cmd+B toggles its Sidebar while focus is within its content, including its mobile Sheet. Desktop can collapse off-canvas or to icon width, while mobile reuses the existing Sheet. Menus, tooltips, and focus states stay on the existing neumorphic token system.",
     props: [
       "Controls the initial or controlled desktop open state.",
       "On desktop, offcanvas hides a collapsed sidebar; icon retains icon width. none keeps the full width and menu labels.",
@@ -46,7 +46,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
     accessibility: [
       "Navigation links need real destinations and readable names; use isActive for the current location.",
       "Icon-collapsed items retain accessible names, and tooltips supplement rather than replace those names.",
-      "The mobile Sidebar behaves as a modal Sheet and closes with Escape. Ctrl or Command+B leaves editable fields, composition and already handled key events unchanged.",
+      "The mobile Sidebar behaves as a modal Sheet and closes with Escape. Ctrl or Command+B applies only while its provider content or mobile Sheet has focus, and leaves editable fields, composition and already handled key events unchanged.",
     ],
   },
   carousel: {

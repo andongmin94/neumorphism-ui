@@ -35,7 +35,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
   },
   sidebar: {
     summary: "同时支持桌面折叠和移动端 Sheet 的应用导航。",
-    description: "SidebarProvider 管理桌面、移动状态以及 Ctrl/Cmd+B 快捷键。桌面可完全收起或保留图标宽度，移动端复用现有 Sheet。菜单、提示和焦点状态继续使用现有新拟态 token。",
+    description: "SidebarProvider 管理桌面和移动状态。焦点位于该 Provider 的内容（包括其移动端 Sheet）中时，Ctrl/Cmd+B 切换对应的 Sidebar。桌面可完全收起或保留图标宽度，移动端复用现有 Sheet。菜单、提示和焦点状态继续使用现有新拟态 token。",
     props: [
       "管理桌面侧边栏的初始或受控打开状态。",
       "桌面端的 offcanvas 在折叠后隐藏，icon 保留图标宽度；none 保持完整宽度和菜单文字。",
@@ -46,7 +46,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     accessibility: [
       "导航链接应有真实目标和可读名称，并用 isActive 表示当前位置。",
       "图标折叠后仍保留无障碍名称，tooltip 只是补充而不是唯一名称。",
-      "移动端 Sidebar 使用 modal Sheet，可按 Escape 关闭。Ctrl 或 Command+B 不会接管输入区域、输入法组合或已处理的键盘事件。",
+      "移动端 Sidebar 使用 modal Sheet，可按 Escape 关闭。Ctrl 或 Command+B 只在该 Provider 的内容或其移动端 Sheet 获得焦点时生效，并保留输入区域、输入法组合及已处理的键盘事件。",
     ],
   },
   carousel: {

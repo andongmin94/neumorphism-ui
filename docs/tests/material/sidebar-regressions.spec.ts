@@ -1,5 +1,32 @@
 import { expect, test } from "@playwright/test";
 
+test("runtime regressions: shortcuts follow the focused provider and its mobile portal", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/sidebar-focus.html?mode=light&two&closed");
+    const primaryTrigger = page.locator('[data-slot="sidebar-trigger"][aria-label="Primary toggle"]');
+    const secondaryTrigger = page.locator('[data-slot="sidebar-trigger"][aria-label="Secondary toggle"]');
+    await expect(primaryTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(secondaryTrigger).toHaveAttribute("aria-expanded", "false");
+    await page.getByRole("button", { name: "Secondary after", exact: true }).press("Control+b");
+    await expect(secondaryTrigger).toHaveAttribute("aria-expanded", "true");
+    await expect(primaryTrigger).toHaveAttribute("aria-expanded", "false");
+
+    const panel = width < 768
+      ? page.getByRole("dialog", { name: "Secondary navigation", exact: true })
+      : page.getByTestId("Secondary-sidebar");
+    await panel.getByRole("button", { name: "Secondary action", exact: true }).press("Meta+b");
+    await expect(secondaryTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(primaryTrigger).toHaveAttribute("aria-expanded", "false");
+    if (width < 768) await expect(panel).toBeHidden();
+
+    await page.goto("/sidebar-focus.html?mode=light&two&closed&cancelShortcut");
+    await page.getByRole("button", { name: "Secondary after", exact: true }).press("Control+b");
+    await expect(secondaryTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(primaryTrigger).toHaveAttribute("aria-expanded", "false");
+  }
+});
+
 for (const mode of ["light", "dark"] as const) {
   test.describe(`Sidebar regressions ${mode}`, () => {
     test.use({ viewport: { width: 1440, height: 900 } });

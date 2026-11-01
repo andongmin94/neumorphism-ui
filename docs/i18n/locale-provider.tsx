@@ -17,6 +17,11 @@ export type ComponentCatalogGroup = {
     title: string;
     category: ComponentDocCategory;
     summary: string;
+    search: {
+      description: string;
+      props: readonly { name: string; description: string }[];
+      accessibility: readonly string[];
+    };
   }[];
 };
 

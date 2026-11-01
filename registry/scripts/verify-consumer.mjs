@@ -221,6 +221,7 @@ try {
       console.log(`Checking README initialization with shadcn ${cliVersion}.`);
       await run(process.execPath, [cli, "init", "--defaults", "--template", "vite", "--base", "base", "--no-monorepo", "--cwd", directory], root);
       assert.ok(fs.existsSync(path.join(directory, "components.json")), "shadcn init must create components.json");
+      // Test-only local endpoint override: verify this checkout instead of the published registry.
       await run(process.execPath, [cli, "registry", "add", `@neumorphism-ui=${registryOrigin}/r/{name}.json`, "--cwd", directory], root);
     }
     const config = readJson(path.join(directory, "components.json"));

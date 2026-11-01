@@ -521,7 +521,7 @@ export function buildThemeVariables(
     "--success": mode === "light" ? "#0a9b78" : "#40d6ad",
     "--border": tokens.border,
     "--input": tokens.input,
-    "--ring": primary,
+    "--ring": settings.accent ? accentInk : primary,
     "--radius": `${settings.surfaceRadius}px`,
     "--neu-surface": tokens.surface,
     "--neu-surface-soft": tokens.surfaceSoft,

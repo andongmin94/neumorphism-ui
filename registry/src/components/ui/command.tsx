@@ -28,7 +28,7 @@
 "use client";
 
 import * as React from "react";
-import { Command as CommandPrimitive, useCommandState } from "cmdk";
+import { Command as CommandPrimitive } from "cmdk";
 
 import { cn } from "@/lib/utils";
 import {
@@ -122,8 +122,6 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
 }
 
 function CommandEmpty({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
-  const search = useCommandState((state) => state.search);
-  if (!search) return null;
   return (
     <CommandPrimitive.Empty
       data-slot="command-empty"

@@ -2189,7 +2189,7 @@ export const componentDocs = [
     title: "Sidebar",
     category: "navigation-disclosure",
     summary: "데스크톱 축소와 모바일 Sheet를 함께 제공하는 애플리케이션 내비게이션.",
-    description: "SidebarProvider가 desktop·mobile 상태와 Ctrl/Cmd+B 단축키를 관리합니다. 데스크톱에서는 offcanvas 또는 icon 크기로 접고, 모바일에서는 기존 Sheet를 재사용합니다. 메뉴·툴팁·포커스 상태는 기존 뉴모피즘 토큰을 그대로 사용합니다.",
+    description: "SidebarProvider가 desktop·mobile 상태를 관리하고, 해당 콘텐츠(모바일 Sheet 포함)에 포커스가 있을 때 Ctrl/Cmd+B로 사이드바를 전환합니다. 데스크톱에서는 offcanvas 또는 icon 크기로 접고, 모바일에서는 기존 Sheet를 재사용합니다. 메뉴·툴팁·포커스 상태는 기존 뉴모피즘 토큰을 그대로 사용합니다.",
     importCode: "\"use client\";\n\nimport { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from \"@/components/ui/sidebar\";",
     usageCode: "export default function Example() {\n    const text = {\n        \"close\": \"닫기\"\n    };\n    const sidebar = {\n        \"workspace\": \"워크스페이스\",\n        \"navigation\": \"탐색\",\n        \"overview\": \"개요\",\n        \"settings\": \"설정\",\n        \"toggle\": \"사이드바 전환\",\n        \"body\": \"현재 프로젝트의 주요 정보를 확인합니다.\"\n    };\n    return <SidebarProvider className=\"h-56 w-full max-w-lg overflow-hidden rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] [box-shadow:var(--neu-shadow-inset)]\"><Sidebar collapsible=\"icon\" mobileTitle={sidebar.workspace} mobileDescription={sidebar.navigation} closeLabel={text.close}><SidebarHeader><strong className=\"truncate text-sm\">{sidebar.workspace}</strong></SidebarHeader><SidebarContent><SidebarGroup><SidebarGroupLabel>{sidebar.navigation}</SidebarGroupLabel><SidebarGroupContent><SidebarMenu><SidebarMenuItem><SidebarMenuButton isActive tooltip={sidebar.overview}><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m3 10 9-7 9 7v10H3Z\"/><path d=\"M9 20v-7h6v7\"/></svg><span>{sidebar.overview}</span></SidebarMenuButton></SidebarMenuItem><SidebarMenuItem><SidebarMenuButton tooltip={sidebar.settings}><svg aria-hidden=\"true\" className=\"size-4 shrink-0\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg><span>{sidebar.settings}</span></SidebarMenuButton></SidebarMenuItem></SidebarMenu></SidebarGroupContent></SidebarGroup></SidebarContent></Sidebar><SidebarInset><header className=\"flex items-center gap-2 border-b border-[var(--border)] p-2\"><SidebarTrigger label={sidebar.toggle}/><strong className=\"text-sm\">{sidebar.overview}</strong></header><div className=\"p-4 text-sm text-[var(--muted-foreground)]\">{sidebar.body}</div></SidebarInset></SidebarProvider>;\n}",
     props: [
@@ -2202,7 +2202,7 @@ export const componentDocs = [
     accessibility: [
       "내비게이션 링크에는 실제 목적지와 읽을 수 있는 이름을 제공하고 현재 위치에는 isActive를 사용합니다.",
       "icon 크기로 접힌 항목도 접근 가능한 이름을 유지하며 tooltip은 보조 설명일 뿐 유일한 이름이 아닙니다.",
-      "모바일 Sidebar는 modal Sheet로 동작하고 Escape로 닫힙니다. Ctrl 또는 Command+B 단축키는 입력 영역, 조합 입력, 이미 처리된 키 이벤트에서는 동작하지 않습니다.",
+      "모바일 Sidebar는 modal Sheet로 동작하고 Escape로 닫힙니다. Ctrl 또는 Command+B는 해당 Provider의 콘텐츠(모바일 Sheet 포함)에 포커스가 있을 때만 동작하며, 입력 영역·조합 입력·이미 처리된 키 이벤트는 그대로 둡니다.",
     ],
   },
   {

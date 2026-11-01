@@ -55,8 +55,9 @@ const config = defineConfig({
     const messages = getMessages(locale);
     const componentDocGroups = getLocalizedComponentDocGroups(locale).map(({ category, items }) => ({
       category: { id: category.id, label: category.label, description: category.description },
-      items: items.map(({ category: itemCategory, slug, summary, title }) => ({
+      items: items.map(({ category: itemCategory, slug, summary, title, description, props, accessibility }) => ({
         category: itemCategory, slug, summary, title,
+        search: { description, props: props.map(({ name, description }) => ({ name, description })), accessibility },
       })),
     }));
     return (

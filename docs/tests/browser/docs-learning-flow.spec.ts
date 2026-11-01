@@ -10,7 +10,7 @@ for (const locale of ["en", "ko", "ja", "zh"]) {
     await page.locator(`.docs-guide-article a[href="/${locale}/docs/installation"]`).first().click();
     await expect(page).toHaveURL(url => url.pathname === `/${locale}/docs/installation`);
     const setup = page.locator("#component");
-    await expect(setup).toContainText("registry add @neumorphism-ui=https://neumorphism-ui.andongmin.com/r/{name}.json");
+    await expect(setup.locator("#configure")).not.toHaveAttribute("open");
     await expect(setup).toContainText("npx shadcn@latest add @neumorphism-ui/neumorphism-ui");
     await expect(setup).toContainText("npx shadcn@latest add @neumorphism-ui/button");
     await expect(page.locator("#usage pre")).toContainText('from "@/components/ui/button"');

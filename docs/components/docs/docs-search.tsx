@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "fumapress/client";
 import { localeHref } from "@/i18n/config";
-import { useLocale } from "@/i18n/locale-provider";
+import { useLocale, type ComponentCatalogGroup } from "@/i18n/locale-provider";
 import { formatMessage } from "@/i18n/messages";
 import { getReferenceSearchEntries } from "@/i18n/reference-search-copy";
 import { templateCopy } from "./template-copy";
@@ -23,6 +23,15 @@ const referenceCopy = {
   zh: { search: "搜索", charts: "图表", chartKeywords: "Recharts 收入 转化率 运营 指标 CSV", navigate: "导航" },
 } as const;
 
+type SearchEntry = {
+  href: string;
+  key: string;
+  title: string;
+  summary: string;
+  category: string;
+  search?: ComponentCatalogGroup["items"][number]["search"];
+};
+
 function SearchIcon() {
   return <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg>;
 }
@@ -36,11 +45,11 @@ export function DocsSearch() {
   React.useEffect(() => setReady(true), []);
   const copy = referenceCopy[locale];
   const templates = templateCopy[locale];
-  const entries = React.useMemo(() => {
+  const entries = React.useMemo<SearchEntry[]>(() => {
     const componentDocs = componentDocGroups.flatMap(({ category, items }) =>
       items.map(item => ({
         href: localeHref(locale, `/components/${item.slug}`), key: item.slug,
-        title: item.title, summary: item.summary, category: category.label,
+        title: item.title, summary: item.summary, category: category.label, search: item.search,
       })),
     );
     const referencePages = getReferenceSearchEntries(locale);
@@ -102,7 +111,30 @@ export function DocsSearch() {
 
   const normalized = query.trim().toLocaleLowerCase(locale);
   const results = normalized
-    ? entries.filter(entry => [entry.title, entry.key, entry.summary, entry.category].some(value => value.toLocaleLowerCase(locale).includes(normalized)))
+    ? entries.flatMap(entry => {
+      const lower = (value: string) => value.toLocaleLowerCase(locale);
+      const names = [entry.title, entry.key].map(lower);
+      const nameScore = names.includes(normalized) ? 6 : names.some(value => value.includes(normalized)) ? 4 : 0;
+      const matchedProp = entry.search?.props.find(prop => prop.name.split(" / ").some(name => lower(name) === normalized))
+        ?? entry.search?.props.find(prop => lower(prop.name).includes(normalized));
+      const propScore = matchedProp
+        ? matchedProp.name.split(" / ").some(name => lower(name) === normalized) ? 5 : 3
+        : 0;
+      if (matchedProp && propScore > nameScore) return [{ score: propScore, entry: {
+        ...entry, href: `${entry.href}#api-reference`, title: `${entry.title} · ${matchedProp.name}`,
+      } }];
+      if (nameScore) return [{ score: nameScore, entry }];
+      if (entry.search?.props.some(prop => lower(prop.description).includes(normalized))) {
+        return [{ score: 2, entry: { ...entry, href: `${entry.href}#api-reference`, title: `${entry.title} · ${messages.common.apiReference}` } }];
+      }
+      if (entry.search?.accessibility.some(value => lower(value).includes(normalized))) {
+        return [{ score: 2, entry: { ...entry, href: `${entry.href}#accessibility`, title: `${entry.title} · ${messages.common.accessibility}` } }];
+      }
+      if (entry.search && lower(entry.search.description).includes(normalized)) {
+        return [{ score: 2, entry: { ...entry, href: `${entry.href}#api-reference`, title: `${entry.title} · ${messages.common.apiReference}` } }];
+      }
+      return [entry.summary, entry.category].some(value => lower(value).includes(normalized)) ? [{ score: 1, entry }] : [];
+    }).sort((a, b) => b.score - a.score).map(result => result.entry)
     : entries.slice(0, 12);
 
   return (

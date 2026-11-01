@@ -66,10 +66,12 @@ configured, skip `init`. Choose **Base UI** if the CLI asks for a component libr
 
 ```bash
 npx shadcn@latest init
-npx shadcn@latest registry add @neumorphism-ui=https://neumorphism-ui.andongmin.com/r/{name}.json
 npx shadcn@latest add @neumorphism-ui/neumorphism-ui
 npx shadcn@latest add @neumorphism-ui/button
 ```
+
+`@neumorphism-ui` is listed in the [shadcn registry directory](https://ui.shadcn.com/docs/directory).
+The CLI resolves the namespace automatically; no separate registry registration is needed.
 
 The base installs shared styles and the default Air theme once. Later component
 installs keep your selected theme.
