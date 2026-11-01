@@ -201,6 +201,7 @@ function CarouselPrevious({
   label = "Previous slide",
   variant = "soft",
   size = "icon",
+  onClick,
   ...props
 }: CarouselButtonProps) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
@@ -218,7 +219,10 @@ function CarouselPrevious({
         className,
       )}
       disabled={!canScrollPrev}
-      onClick={scrollPrev}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) scrollPrev();
+      }}
       {...props}
     >
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m14 6-6 6 6 6" : "m6 14 6-6 6 6"} /></svg>
@@ -231,6 +235,7 @@ function CarouselNext({
   label = "Next slide",
   variant = "soft",
   size = "icon",
+  onClick,
   ...props
 }: CarouselButtonProps) {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
@@ -248,7 +253,10 @@ function CarouselNext({
         className,
       )}
       disabled={!canScrollNext}
-      onClick={scrollNext}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) scrollNext();
+      }}
       {...props}
     >
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m10 6 6 6-6 6" : "m6 10 6 6 6-6"} /></svg>

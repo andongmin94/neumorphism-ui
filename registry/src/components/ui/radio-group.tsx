@@ -57,7 +57,7 @@ function RadioGroup({
 
   React.useEffect(() => {
     if (value !== undefined) return;
-    const form = groupRef.current?.closest("form");
+    const form = groupRef.current?.querySelector<HTMLInputElement>('input[type="radio"]')?.form;
     if (!form) return;
     const restore = (event: Event) => {
       // React onReset may cancel later in event propagation.

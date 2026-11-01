@@ -1,5 +1,34 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+test("runtime regressions: Carousel buttons compose caller clicks and honor cancellation", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  for (const orientation of ["horizontal", "vertical"] as const) {
+    const fixture = page.getByTestId(`carousel-${orientation}`);
+    const current = fixture.getByRole("status", { name: "Current slide", exact: true });
+    const clicks = fixture.getByRole("status", { name: "Navigation clicks", exact: true });
+    const previous = fixture.getByRole("button", { name: "Previous slide", exact: true });
+    const next = fixture.getByRole("button", { name: "Next slide", exact: true });
+    const cancel = fixture.getByRole("checkbox", { name: "Prevent carousel navigation", exact: true });
+    await expect(previous).toBeDisabled();
+    await next.click();
+    await expect(current).toHaveText("1");
+    await expect(clicks).toHaveText('{"previous":0,"next":1}');
+    await expect(next).toBeDisabled();
+    await cancel.check();
+    await previous.click();
+    await expect(current).toHaveText("1");
+    await expect(clicks).toHaveText('{"previous":1,"next":1}');
+    await cancel.uncheck();
+    await previous.click();
+    await expect(current).toHaveText("0");
+    await expect(clicks).toHaveText('{"previous":2,"next":1}');
+    await cancel.check();
+    await next.click();
+    await expect(current).toHaveText("0");
+    await expect(clicks).toHaveText('{"previous":2,"next":2}');
+  }
+});
+
 for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) {
   test.describe(`runtime regressions ${mode} ${width}`, () => {
     test.use({ viewport: { width, height: 900 } });

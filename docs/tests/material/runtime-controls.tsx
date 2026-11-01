@@ -29,6 +29,11 @@ function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertic
   const [api, setApi] = React.useState<CarouselApi>();
   const [index, setIndex] = React.useState(0);
   const [preventNavigation, setPreventNavigation] = React.useState(false);
+  const [clicks, setClicks] = React.useState({ previous: 0, next: 0 });
+  const recordClick = (event: React.MouseEvent<HTMLButtonElement>, direction: "previous" | "next") => {
+    setClicks(current => ({ ...current, [direction]: current[direction] + 1 }));
+    if (preventNavigation) event.preventDefault();
+  };
   React.useEffect(() => {
     if (!api) return;
     const update = () => setIndex(api.selectedScrollSnap());
@@ -38,6 +43,7 @@ function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertic
   return <section data-testid={`carousel-${orientation}`} className="grid min-w-0 gap-4">
     <label><input type="checkbox" checked={preventNavigation} onChange={event => setPreventNavigation(event.target.checked)} />Prevent carousel navigation</label>
     <output aria-label="Current slide">{index}</output>
+    <output aria-label="Navigation clicks">{JSON.stringify(clicks)}</output>
     <Carousel aria-label={`${orientation} workspace`} tabIndex={0} orientation={orientation} setApi={setApi} onKeyDown={event => { if (preventNavigation) event.preventDefault(); }} className={orientation === "vertical" ? "h-[32rem]" : "w-full"}>
       <CarouselContent className={orientation === "vertical" ? "h-[32rem]" : ""}>
         <CarouselItem><div className="grid min-w-0 gap-6 p-12">
@@ -52,7 +58,7 @@ function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertic
         </div></CarouselItem>
         <CarouselItem><p className="p-12">Second slide</p></CarouselItem>
       </CarouselContent>
-      <CarouselPrevious /><CarouselNext />
+      <CarouselPrevious onClick={event => recordClick(event, "previous")} /><CarouselNext onClick={event => recordClick(event, "next")} />
     </Carousel>
   </section>;
 }

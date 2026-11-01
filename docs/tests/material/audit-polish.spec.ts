@@ -1,5 +1,22 @@
 import { expect, test } from "@playwright/test";
 
+test("runtime regressions: ChartLegend respects caller formatter and content", async ({ page }) => {
+  await page.goto("/audit-polish.html?mode=light&legend");
+  const fixture = page.getByTestId("legend-customization");
+  const renderer = fixture.getByRole("combobox", { name: "Legend renderer" });
+  const legend = fixture.locator('[data-slot="chart-legend"]');
+  await expect(legend.locator("li")).toHaveText(["Visits", "Budget"]);
+  await renderer.selectOption("formatter");
+  await expect(legend.locator("li")).toHaveText(["Localized Visits", "Localized Budget"]);
+  await renderer.selectOption("element");
+  await expect(fixture.getByText("Custom legend element", { exact: true })).toBeVisible();
+  await expect(legend).toHaveCount(0);
+  await renderer.selectOption("function");
+  await expect(fixture.getByText("Custom function: Visits", { exact: true })).toBeVisible();
+  await renderer.selectOption("default");
+  await expect(legend.locator("li")).toHaveText(["Visits", "Budget"]);
+});
+
 const labels = {
   en: ["Build duration", "Service latency", "Release activity", "Delivery capacity", "Installation diagnostics"],
   ko: ["빌드 시간", "서비스 지연 시간", "릴리스 활동", "계획·완료 수량", "설치 단계 진단"],

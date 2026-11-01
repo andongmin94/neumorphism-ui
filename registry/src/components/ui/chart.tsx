@@ -77,17 +77,17 @@ export function ChartTooltip(props: React.ComponentProps<typeof Tooltip>) {
 
 
 /** Recharts owns series discovery and legend measurement, including wrapped labels. */
-export function ChartLegend({ reference, ...props }: React.ComponentProps<typeof Legend> & {
+export function ChartLegend({ reference, content, ...props }: React.ComponentProps<typeof Legend> & {
   reference?: { value: string; color: string; dashArray?: string };
 }) {
   return <Legend align="left" verticalAlign="top" iconSize={20} {...props}
-    content={(legend) => <div data-slot="chart-legend" className="pb-3 text-xs leading-6">
+    content={content ?? ((legend) => <div data-slot="chart-legend" className="pb-3 text-xs leading-6">
       <DefaultLegendContent {...legend}
-        formatter={(value) => <span className="text-[var(--foreground)]">{value}</span>}
+        formatter={legend.formatter ?? ((value) => <span className="text-[var(--foreground)]">{value}</span>)}
         payload={[
           ...(legend.payload ?? []),
           ...(reference ? [{ value: reference.value, type: "plainline" as const,
             color: reference.color, payload: { strokeDasharray: reference.dashArray } }] : []),
         ]} />
-    </div>} />;
+    </div>)} />;
 }
