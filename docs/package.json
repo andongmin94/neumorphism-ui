@@ -33,7 +33,7 @@
     "@tanstack/react-table": "^9.3.1",
     "cmdk": "^1.1.1",
     "embla-carousel-react": "^8.6.0",
-    "fumadocs-core": "16.17.8",
+    "fumadocs-core": "16.17.9",
     "fumadocs-ui": "npm:@fumadocs/base-ui@16.17.8",
     "fumapress": "1.6.2",
     "input-otp": "^1.5.0",
