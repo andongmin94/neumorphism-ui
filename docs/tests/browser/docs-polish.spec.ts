@@ -210,7 +210,14 @@ test("directory slash and global search have one shortcut owner", async ({ page 
   await input.press("Enter");
   await expect(page).toHaveURL(/\/en\/components\/button$/);
   await expect(dialog).toHaveCount(0);
+  await expect(page.locator("#main-content")).toBeFocused();
   const trigger = page.getByRole("button", { name: /Search documentation/i });
+  // Selecting the current page must also leave the closed dialog at the content.
+  await trigger.click();
+  await input.fill("button");
+  await input.press("Enter");
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator("#main-content")).toBeFocused();
   await trigger.click();
   await input.fill("date");
   const selected = dialog.locator('[data-slot="command-item"][aria-selected="true"]');
@@ -253,12 +260,14 @@ test("search ranks API properties and opens the matching documentation section",
   await expect(accordion).toBeVisible();
   await accordion.click();
   await expect(page).toHaveURL(url => url.pathname === "/en/components/accordion" && url.hash === "#api-reference");
+  await expect(page.locator("#main-content")).toBeFocused();
   await expect(page.locator("#api-reference")).toBeInViewport();
 
   await page.locator(".docs-search-trigger").click();
   await input.fill("focusableWhenDisabled");
   await dialog.locator('[data-href="/en/components/toolbar#accessibility"]').click();
   await expect(page).toHaveURL(url => url.pathname === "/en/components/toolbar" && url.hash === "#accessibility");
+  await expect(page.locator("#main-content")).toBeFocused();
   await expect(page.locator("#accessibility")).toBeInViewport();
 });
 

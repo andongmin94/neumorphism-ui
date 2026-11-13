@@ -42,6 +42,7 @@ export function DocsSearch() {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [ready, setReady] = React.useState(false);
+  const selectedResult = React.useRef(false);
   React.useEffect(() => setReady(true), []);
   const copy = referenceCopy[locale];
   const templates = templateCopy[locale];
@@ -88,6 +89,7 @@ export function DocsSearch() {
   }, [componentDocGroups, locale, messages, copy, templates]);
 
   const handleOpenChange = React.useCallback((value: boolean) => {
+    if (value) selectedResult.current = false;
     setOpen(value);
     if (!value) setQuery("");
   }, []);
@@ -144,7 +146,17 @@ export function DocsSearch() {
         <span>{copy.search}</span>
         <kbd>Ctrl K</kbd>
       </DialogTrigger>
-      <DialogContent className={`docs-search-dialog ${styles.dialog}`} showCloseButton={false}>
+      <DialogContent
+        className={`docs-search-dialog ${styles.dialog}`}
+        showCloseButton={false}
+        finalFocus={() => {
+          if (!selectedResult.current) return true;
+          // Focus the persistent main landmark after the dialog releases focus,
+          // without moving the router's scroll position for section results.
+          queueMicrotask(() => document.getElementById("main-content")?.focus({ preventScroll: true }));
+          return false;
+        }}
+      >
         <DialogHeader className="sr-only">
           <DialogTitle>{messages.search.title}</DialogTitle>
           <DialogDescription>{messages.search.description}</DialogDescription>
@@ -182,6 +194,7 @@ export function DocsSearch() {
                 value={entry.key}
                 data-href={entry.href}
                 onSelect={() => {
+                  selectedResult.current = true;
                   handleOpenChange(false);
                   void router.push(entry.href);
                 }}
