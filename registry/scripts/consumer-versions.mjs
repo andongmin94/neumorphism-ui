@@ -10,7 +10,7 @@ export const consumerVersions = {
   ...registry.devDependencies,
   ...docs.dependencies,
   ...docs.devDependencies,
-  next: "16.4.3",
-  "@vitejs/plugin-react": "6.1.2",
+  next: "16.4.6",
+  "@vitejs/plugin-react": "6.3.0",
   "@tailwindcss/postcss": docs.devDependencies.tailwindcss,
 };

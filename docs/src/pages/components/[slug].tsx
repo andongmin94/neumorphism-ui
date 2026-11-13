@@ -1,4 +1,4 @@
-import type { RouteConfig } from "fumapress";
+import type { WakuRouteConfig } from "fumapress";
 import { PageMetadata } from "@/components/docs/page-metadata";
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
@@ -20,7 +20,7 @@ import {
 import { getMessages } from "@/i18n/messages";
 
 export async function getConfig() {
-  return { staticPaths: componentDocs.map(({ slug }) => slug) } satisfies RouteConfig;
+  return { staticPaths: componentDocs.map(({ slug }) => slug) } satisfies WakuRouteConfig;
 }
 
 export default function ComponentDetailPage({ lang, slug }: { lang: string; slug: string }) {

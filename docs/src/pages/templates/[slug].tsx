@@ -1,4 +1,4 @@
-import type { RouteConfig } from "fumapress";
+import type { WakuRouteConfig } from "fumapress";
 import { PageMetadata } from "@/components/docs/page-metadata";
 import { Link } from "fumapress/client";
 import { notFound } from "fumapress/router";
@@ -201,7 +201,7 @@ export function Example({
 }
 
 export async function getConfig() {
-  return { staticPaths: [...templateSlugs] } satisfies RouteConfig;
+  return { staticPaths: [...templateSlugs] } satisfies WakuRouteConfig;
 }
 
 export default function TemplatePage({

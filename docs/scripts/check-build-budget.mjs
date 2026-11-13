@@ -8,13 +8,14 @@ const docsRoot = fileURLToPath(new URL("../", import.meta.url));
 const origin = "https://neumorphism-ui.andongmin.com";
 const kibibyte = 1024;
 
-// Baseline JS gzip KiB: 178.9 / 250.2 / 197.7 / 430.3; CSS: 124.7–126.2.
-// Leave about 13–20% room for minor updates without counting lazy syntax grammars.
+// Fumapress 2 baseline JS gzip KiB: 254.9 / 308.4 / 270.0 / 480.1; CSS: 124.6–126.0.
+// Its public client entry includes the shared docs layout. Keep about 10% room
+// above the measured runtime without counting lazy syntax grammars.
 export const pageBudgets = {
-  "/en": { javascript: 210 * kibibyte, stylesheet: 145 * kibibyte },
-  "/en/components/button": { javascript: 290 * kibibyte, stylesheet: 145 * kibibyte },
-  "/en/customize": { javascript: 235 * kibibyte, stylesheet: 145 * kibibyte },
-  "/en/templates/cms": { javascript: 480 * kibibyte, stylesheet: 145 * kibibyte },
+  "/en": { javascript: 280 * kibibyte, stylesheet: 145 * kibibyte },
+  "/en/components/button": { javascript: 340 * kibibyte, stylesheet: 145 * kibibyte },
+  "/en/customize": { javascript: 300 * kibibyte, stylesheet: 145 * kibibyte },
+  "/en/templates/cms": { javascript: 530 * kibibyte, stylesheet: 145 * kibibyte },
 };
 
 export function initialAssets(html, route) {
