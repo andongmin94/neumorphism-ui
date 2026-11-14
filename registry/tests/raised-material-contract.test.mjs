@@ -26,7 +26,6 @@ test("raised compact controls do not mix an outlined perimeter with their shadow
     ["calendar", "button_next:"],
     ["pagination", 'isActive\n          ? "border-transparent'],
     ["toast", "<Primitive.Action"],
-    ["marquee", 'data-slot="marquee-toggle"'],
     ["avatar", "group/avatar relative"],
     ["chart", 'data-slot="chart"'],
   ];
@@ -38,4 +37,8 @@ test("raised compact controls do not mix an outlined perimeter with their shadow
     assert.match(near, /border-transparent/, `${name}: the raised control regained a perimeter stroke`);
     assert.doesNotMatch(near.slice(0, near.indexOf("border-transparent")), /border-\[color:var\(--neu-edge\)\]/);
   }
+  const marqueeToggle = read("marquee").match(/<button\b[\s\S]*?data-slot="marquee-toggle"[\s\S]*?className="([^"]+)"/)?.[1];
+  assert.ok(marqueeToggle, "marquee: missing motion control button");
+  assert.match(marqueeToggle, /border-transparent/, "marquee: the raised control regained a perimeter stroke");
+  assert.doesNotMatch(marqueeToggle, /border-\[color:var\(--neu-edge\)\]/);
 });
