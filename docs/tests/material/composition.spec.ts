@@ -1,5 +1,16 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+test("runtime regressions: ResizableHandle preserves custom children and the optional default grip", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  for (const withHandle of [false, true]) for (const custom of [false, true]) {
+    const handle = page.getByTestId(`resizable-${withHandle}-${custom}`).getByRole("separator");
+    await expect(handle).toBeVisible();
+    if (custom) await expect(handle.getByTestId("custom-handle")).toHaveText("↔");
+    else await expect(handle.getByTestId("custom-handle")).toHaveCount(0);
+    await expect(handle.locator("svg")).toHaveCount(!custom && withHandle ? 1 : 0);
+  }
+});
+
 for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right"] as const) {
   test(`runtime regressions: ${dir} menus respect ${side} placement and keyboard direction`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });

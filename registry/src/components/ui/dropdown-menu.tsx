@@ -13,7 +13,7 @@ type DropdownMenuPositionerProps = Pick<
 type DropdownMenuContentProps = DropdownMenuPrimitive.Popup.Props &
   DropdownMenuPositionerProps;
 
-function DropdownMenu(props: DropdownMenuPrimitive.Root.Props) {
+function DropdownMenu<Payload>(props: DropdownMenuPrimitive.Root.Props<Payload>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
 }
 
@@ -21,7 +21,7 @@ function DropdownMenuPortal(props: DropdownMenuPrimitive.Portal.Props) {
   return <DropdownMenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />;
 }
 
-function DropdownMenuTrigger(props: DropdownMenuPrimitive.Trigger.Props) {
+function DropdownMenuTrigger<Payload>(props: DropdownMenuPrimitive.Trigger.Props<Payload>) {
   return <DropdownMenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />;
 }
 

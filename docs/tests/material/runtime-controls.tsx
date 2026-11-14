@@ -4,6 +4,7 @@ import { CmsWorkspace, type CmsPost } from "../../src/registry/components/blocks
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "../../src/registry/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { buildThemeVariables, defaultThemeSettings } from "../../src/registry/theme";
@@ -68,13 +69,27 @@ function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertic
   </section>;
 }
 
+function ResizableHandles() {
+  return <section className="grid gap-4">
+    {[false, true].flatMap(withHandle => [false, true].map(custom => (
+      <ResizablePanelGroup key={`${withHandle}-${custom}`} data-testid={`resizable-${withHandle}-${custom}`} className="h-24">
+        <ResizablePanel defaultSize="50%">List</ResizablePanel>
+        <ResizableHandle aria-label="Resize panels" withHandle={withHandle}>
+          {custom ? <span data-testid="custom-handle" aria-hidden="true">↔</span> : undefined}
+        </ResizableHandle>
+        <ResizablePanel defaultSize="50%">Details</ResizablePanel>
+      </ResizablePanelGroup>
+    )))}
+  </section>;
+}
+
 function RuntimeControls() {
   React.useLayoutEffect(() => {
     const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);

@@ -15,7 +15,7 @@ function Dialog<Payload = unknown>({ modal = true, ...props }: DialogPrimitive.R
   );
 }
 
-function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
+function DialogTrigger<Payload>(props: DialogPrimitive.Trigger.Props<Payload>) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 

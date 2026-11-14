@@ -2204,7 +2204,8 @@ export const componentDocs = [
       { component: "ResizablePanelGroup", name: "orientation", type: '"horizontal" | "vertical"', defaultValue: '"horizontal"', description: "패널 분할 방향을 지정합니다." },
       { component: "ResizablePanel", name: "defaultSize", type: "number | string", description: "초기 패널 크기를 지정합니다." },
       { component: "ResizablePanel", name: "minSize / maxSize", type: "number | string", description: "패널이 줄거나 늘어날 수 있는 범위를 제한합니다." },
-      { component: "ResizableHandle", name: "withHandle", type: "boolean", defaultValue: "false", description: "separator 중앙에 시각적 grip을 표시합니다." },
+      { component: "ResizableHandle", name: "withHandle", type: "boolean", defaultValue: "false", description: "children이 없을 때 separator 중앙에 기본 grip을 표시합니다." },
+      { component: "ResizableHandle", name: "children", type: "ReactNode", description: "기본 grip을 사용자 아이콘이나 텍스트로 대체합니다. 장식용 콘텐츠에는 aria-hidden을 지정하고 접근 가능한 이름은 handle에 지정합니다." },
       { component: "ResizableHandle", name: "disabled", type: "boolean", defaultValue: "false", description: "separator를 표시하되 크기 조절을 비활성화합니다." },
     ],
     accessibility: [

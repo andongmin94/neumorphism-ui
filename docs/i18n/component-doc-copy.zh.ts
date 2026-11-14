@@ -73,7 +73,8 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "设置面板分割方向。",
       "设置初始面板尺寸。",
       "限制面板缩小或扩大的范围。",
-      "在 separator 中间显示视觉 grip。",
+      "未提供 children 时，在 separator 中间显示默认 grip。",
+      "用自定义图标或文本替换默认 grip。为装饰内容设置 aria-hidden，并为 handle 提供无障碍名称。",
       "保留 separator 但禁用尺寸调整。",
     ],
     accessibility: [

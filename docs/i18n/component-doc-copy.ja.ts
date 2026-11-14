@@ -73,7 +73,8 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "パネルの分割方向を指定します。",
       "初期パネルサイズを指定します。",
       "パネルが縮小・拡大できる範囲を制限します。",
-      "separator 中央に視覚的な grip を表示します。",
+      "children がない場合、separator 中央に既定の grip を表示します。",
+      "既定の grip を独自のアイコンやテキストに置き換えます。装飾コンテンツには aria-hidden を指定し、handle にアクセシブル名を指定します。",
       "separator を表示したままリサイズを無効にします。",
     ],
     accessibility: [

@@ -73,7 +73,8 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Sets the panel split direction.",
       "Sets the initial panel size.",
       "Constrains how far a panel may shrink or grow.",
-      "Shows a visual grip in the middle of the separator.",
+      "Shows the default grip in the middle of the separator when children are not provided.",
+      "Replaces the default grip with a custom icon or text. Mark decorative content aria-hidden and give the handle an accessible name.",
       "Keeps the separator visible while disabling resizing.",
     ],
     accessibility: [

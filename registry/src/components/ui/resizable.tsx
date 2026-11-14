@@ -54,6 +54,7 @@ function ResizablePanel(props: React.ComponentProps<typeof ResizablePrimitive.Pa
 
 function ResizableHandle({
   withHandle = false,
+  children,
   className,
   ...props
 }: React.ComponentProps<typeof ResizablePrimitive.Separator> & {
@@ -68,14 +69,14 @@ function ResizableHandle({
       )}
       {...props}
     >
-      {withHandle ? (
+      {children ?? (withHandle ? (
         <span
           aria-hidden="true"
           className="z-10 grid min-h-8 min-w-5 group-aria-[orientation=horizontal]/resizable:rotate-90 place-items-center rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] text-xs text-[var(--muted-foreground)] [box-shadow:var(--neu-shadow-raised-sm)]"
         >
           <svg aria-hidden="true" className="h-4 w-3" viewBox="0 0 12 16" fill="currentColor"><circle cx="4" cy="4" r="1" /><circle cx="8" cy="4" r="1" /><circle cx="4" cy="8" r="1" /><circle cx="8" cy="8" r="1" /><circle cx="4" cy="12" r="1" /><circle cx="8" cy="12" r="1" /></svg>
         </span>
-      ) : null}
+      ) : null)}
     </ResizablePrimitive.Separator>
   );
 }
