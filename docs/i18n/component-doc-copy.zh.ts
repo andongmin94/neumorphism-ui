@@ -118,7 +118,8 @@ export const componentDocCopyZh = defineComponentDocCopy({
     description: "保留 Base UI 的指针锚定和键盘导航，并将弹层呈现为悬浮的新拟态表面。可组合普通、复选、单选、子菜单和危险操作项。",
     props: [
       "控制菜单的打开状态。",
-      "调整弹层相对指针锚点的位置和间距。",
+      "调整弹层相对指针锚点的位置和间距。默认遵循 dir 或 DirectionProvider，LTR 向右打开，RTL 向左打开。",
+      "子菜单也遵循阅读方向打开。可通过 side 更改首选方向。",
       "让项目保持可见但不可执行。",
       "控制可勾选菜单项的状态。",
       "控制互斥单选项的选择。",
@@ -307,6 +308,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "将 trigger 行为组合到按钮或链接上。",
       "相对于 trigger 设置 popup 的位置。",
       "设置 trigger 与 popup 之间的间距。",
+      "遵循 DirectionProvider，LTR 向右打开，RTL 向左打开。可通过 side 更改首选方向。",
       "选择普通操作或危险操作样式。",
       "对齐带 indicator 的行与文本起始位置。",
       "checkbox item 的受控选中状态。",

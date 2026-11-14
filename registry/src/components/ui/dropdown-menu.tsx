@@ -218,7 +218,7 @@ function DropdownMenuSubContent({
   className,
   align = "start",
   alignOffset = -4,
-  side = "right",
+  side = "inline-end",
   sideOffset = 8,
   ...props
 }: DropdownMenuContentProps) {

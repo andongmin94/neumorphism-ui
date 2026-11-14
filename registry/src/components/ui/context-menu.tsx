@@ -58,7 +58,7 @@ function ContextMenuContent({
   collisionPadding = 8,
   disableAnchorTracking,
   positionMethod,
-  side = "right",
+  side = "inline-end",
   sideOffset = 4,
   sticky,
   ...props
@@ -176,7 +176,6 @@ function ContextMenuSubContent({ className, ...props }: ContextMenuContentProps)
   return (
     <ContextMenuContent
       data-slot="context-menu-sub-content"
-      side="right"
       sideOffset={8}
       {...props}
       className={(state) =>

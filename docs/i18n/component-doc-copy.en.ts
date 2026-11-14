@@ -118,7 +118,8 @@ export const componentDocCopyEn = defineComponentDocCopy({
     description: "Preserves Base UI pointer anchoring and keyboard navigation while rendering the popup as a floating neumorphic surface. Compose ordinary, checkable, radio, submenu, and destructive items.",
     props: [
       "Controls the menu open state.",
-      "Adjusts popup placement and spacing relative to the pointer anchor.",
+      "Adjusts popup placement and spacing relative to the pointer anchor. By default, dir or DirectionProvider opens it to the right in LTR and the left in RTL.",
+      "Submenus also open in the reading direction. Set side to choose a different preferred side.",
       "Keeps an item visible while preventing execution.",
       "Controls the state of a checkable menu item.",
       "Controls the selection among mutually exclusive radio items.",
@@ -317,6 +318,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Composes trigger behavior onto a button or link.",
       "Positions the popup relative to the trigger.",
       "The distance between the trigger and popup.",
+      "Follows DirectionProvider: opens to the right in LTR and the left in RTL. Set side to choose a different preferred side.",
       "Selects the regular or destructive action style.",
       "Aligns text with rows that include an indicator.",
       "The controlled state of a checkbox item.",

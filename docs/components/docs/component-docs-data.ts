@@ -504,7 +504,7 @@ export const componentDocs = [
       {
         component: "DropdownMenuContent",
         name: "side / align",
-        type: '"top" | "right" | "bottom" | "left" / "start" | "center" | "end"',
+        type: '"top" | "right" | "bottom" | "left" | "inline-start" | "inline-end" / "start" | "center" | "end"',
         defaultValue: '"bottom" / "start"',
         description: "trigger를 기준으로 popup 위치를 정합니다.",
       },
@@ -514,6 +514,13 @@ export const componentDocs = [
         type: "number",
         defaultValue: "8",
         description: "trigger와 popup 사이의 간격입니다.",
+      },
+      {
+        component: "DropdownMenuSubContent",
+        name: "side",
+        type: "Positioner side",
+        defaultValue: '"inline-end"',
+        description: "DirectionProvider의 방향을 따라 LTR에서는 오른쪽, RTL에서는 왼쪽으로 열립니다. side로 기본 방향을 바꿀 수 있습니다.",
       },
       {
         component: "DropdownMenuItem",
@@ -2072,7 +2079,15 @@ export const componentDocs = [
         component: "ContextMenuContent",
         name: "side / align / sideOffset",
         type: "Positioner props",
-        description: "포인터 기준 팝업 위치와 간격을 조절합니다.",
+        defaultValue: '"inline-end" / "start" / 4',
+        description: "포인터 기준 팝업 위치와 간격을 조절합니다. 기본 방향은 dir 또는 DirectionProvider에 따라 LTR에서 오른쪽, RTL에서 왼쪽입니다.",
+      },
+      {
+        component: "ContextMenuSubContent",
+        name: "side / sideOffset",
+        type: "Positioner props",
+        defaultValue: '"inline-end" / 8',
+        description: "하위 메뉴도 읽기 방향을 따라 열립니다. side로 기본 방향을 바꿀 수 있습니다.",
       },
       {
         component: "ContextMenuItem",

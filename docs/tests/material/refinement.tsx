@@ -12,6 +12,7 @@ function Specimen() {
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") === "dark" ? "dark" : "light";
   const dir = query.get("dir") === "rtl" ? "rtl" : "ltr";
+  const menuSide = query.get("side") === "right" ? "right" : undefined;
   const preset = getThemePreset((query.get("preset") ?? "air") as ThemePresetId);
   const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 8, 15));
   const [density, setDensity] = React.useState("comfortable");
@@ -38,12 +39,12 @@ function Specimen() {
         <DropdownMenu><DropdownMenuTrigger render={<Button />}>Display options</DropdownMenuTrigger><DropdownMenuContent>
           <DropdownMenuRadioGroup value={density} onValueChange={setDensity}><DropdownMenuRadioItem value="compact">Compact</DropdownMenuRadioItem><DropdownMenuRadioItem value="comfortable">Comfortable</DropdownMenuRadioItem></DropdownMenuRadioGroup>
           <DropdownMenuCheckboxItem checked={checked} onCheckedChange={setChecked} closeOnClick={false}>Show status</DropdownMenuCheckboxItem>
-          <DropdownMenuSub><DropdownMenuSubTrigger>More options</DropdownMenuSubTrigger><DropdownMenuSubContent><DropdownMenuItem onClick={() => setAction("Copied")}>Copy link</DropdownMenuItem><DropdownMenuItem variant="destructive">Remove</DropdownMenuItem></DropdownMenuSubContent></DropdownMenuSub>
+          <DropdownMenuSub><DropdownMenuSubTrigger>More options</DropdownMenuSubTrigger><DropdownMenuSubContent side={menuSide}><DropdownMenuItem onClick={() => setAction("Copied")}>Copy link</DropdownMenuItem><DropdownMenuItem variant="destructive">Remove</DropdownMenuItem></DropdownMenuSubContent></DropdownMenuSub>
         </DropdownMenuContent></DropdownMenu>
         <output data-testid="menu-value" className="text-sm">{density} / {action}</output>
-        <ContextMenu dir={dir}><ContextMenuTrigger className="grid min-h-20 place-items-center rounded-[var(--neu-radius-control)] border border-[var(--border)] text-sm">Context options</ContextMenuTrigger><ContextMenuContent>
+        <ContextMenu dir={dir}><ContextMenuTrigger className="grid min-h-20 place-items-center rounded-[var(--neu-radius-control)] border border-[var(--border)] text-sm">Context options</ContextMenuTrigger><ContextMenuContent side={menuSide}>
           <ContextMenuRadioGroup value={density} onValueChange={setDensity}><ContextMenuRadioItem value="compact">Compact</ContextMenuRadioItem><ContextMenuRadioItem value="comfortable">Comfortable</ContextMenuRadioItem></ContextMenuRadioGroup>
-          <ContextMenuSub><ContextMenuSubTrigger>More options</ContextMenuSubTrigger><ContextMenuSubContent><ContextMenuItem onClick={() => setAction("Copied")}>Copy link</ContextMenuItem></ContextMenuSubContent></ContextMenuSub>
+          <ContextMenuSub><ContextMenuSubTrigger>More options</ContextMenuSubTrigger><ContextMenuSubContent side={menuSide}><ContextMenuItem onClick={() => setAction("Copied")}>Copy link</ContextMenuItem></ContextMenuSubContent></ContextMenuSub>
         </ContextMenuContent></ContextMenu>
       </section>
       <section className="grid content-start gap-4"><h2 className="font-semibold">Combobox selected mark</h2>

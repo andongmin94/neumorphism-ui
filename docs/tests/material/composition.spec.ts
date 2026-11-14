@@ -1,5 +1,61 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right"] as const) {
+  test(`runtime regressions: ${dir} menus respect ${side} placement and keyboard direction`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto(`/refinement.html?dir=${dir}&side=${side}`);
+    const opensRight = side === "right" || dir === "ltr";
+    const dataSide = side === "right" ? "right" : "inline-end";
+    const openKey = dir === "rtl" ? "ArrowLeft" : "ArrowRight";
+    const closeKey = dir === "rtl" ? "ArrowRight" : "ArrowLeft";
+
+    for (const kind of ["dropdown", "context"] as const) {
+      const popup = page.locator(`[data-slot="${kind}-menu-content"]`);
+      if (kind === "dropdown") {
+        await page.getByRole("button", { name: "Display options", exact: true }).press("ArrowDown");
+      } else {
+        const trigger = page.getByText("Context options", { exact: true });
+        const bounds = (await trigger.boundingBox())!;
+        const pointerX = bounds.x + bounds.width / 2;
+        await trigger.click({ button: "right", position: { x: bounds.width / 2, y: bounds.height / 2 } });
+        await expect(popup).toBeVisible();
+        await expect(popup).toHaveAttribute("data-side", dataSide);
+        const menu = (await popup.boundingBox())!;
+        // Both sides fit, so collision handling cannot mask the preferred side.
+        expect(pointerX).toBeGreaterThan(menu.width + 16);
+        expect(1440 - pointerX).toBeGreaterThan(menu.width + 16);
+        if (opensRight) expect(menu.x).toBeGreaterThan(pointerX);
+        else expect(menu.x + menu.width).toBeLessThan(pointerX);
+      }
+
+      await expect(popup).toBeVisible();
+      const trigger = popup.getByRole("menuitem", { name: "More options", exact: true });
+      await trigger.focus();
+      await trigger.press(openKey);
+      const submenu = page.locator(`[data-slot="${kind}-menu-sub-content"]`);
+      await expect(submenu).toBeVisible();
+      await expect(submenu).toHaveAttribute("data-side", dataSide);
+      const anchor = (await trigger.boundingBox())!;
+      const menu = (await submenu.boundingBox())!;
+      expect(anchor.x).toBeGreaterThan(menu.width + 16);
+      expect(1440 - anchor.x - anchor.width).toBeGreaterThan(menu.width + 16);
+      if (opensRight) expect(menu.x).toBeGreaterThan(anchor.x + anchor.width);
+      else expect(menu.x + menu.width).toBeLessThan(anchor.x);
+
+      const item = submenu.getByRole("menuitem", { name: "Copy link", exact: true });
+      await expect(item).toBeFocused();
+      await item.press(closeKey);
+      await expect(submenu).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(popup).toBeVisible();
+      await trigger.press(openKey);
+      await item.press("Enter");
+      await expect(popup).toBeHidden();
+      await expect(page.getByTestId("menu-value")).toContainText("Copied");
+    }
+  });
+}
+
 test("runtime regressions: Carousel buttons compose caller clicks and honor cancellation", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   for (const orientation of ["horizontal", "vertical"] as const) {

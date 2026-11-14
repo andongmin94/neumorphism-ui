@@ -118,7 +118,8 @@ export const componentDocCopyJa = defineComponentDocCopy({
     description: "Base UI のポインターアンカーとキーボード操作を維持し、ポップアップを浮いたニューモーフィズム表面で表現します。通常項目、チェック、ラジオ、サブメニュー、破壊的操作を組み合わせられます。",
     props: [
       "メニューの開閉状態を制御します。",
-      "ポインター基準のポップアップ位置と間隔を調整します。",
+      "ポインター基準のポップアップ位置と間隔を調整します。既定では dir または DirectionProvider に従い、LTR では右、RTL では左に開きます。",
+      "サブメニューも読み方向に従って開きます。side で優先する方向を変更できます。",
       "項目を表示したまま実行できない状態にします。",
       "チェック可能な項目の状態を制御します。",
       "相互排他的なラジオ項目の選択を制御します。",
@@ -317,6 +318,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "button または link に trigger の動作を合成します。",
       "trigger を基準に popup を配置します。",
       "trigger と popup の間隔です。",
+      "DirectionProvider に従い、LTR では右、RTL では左に開きます。side で優先する方向を変更できます。",
       "通常または destructive action のスタイルを選択します。",
       "indicator を持つ行とテキストの開始位置を揃えます。",
       "checkbox item の制御状態です。",
