@@ -58,6 +58,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "向外部集成提供 Embla API 实例。",
       "放置单个幻灯片的真实内容。",
       "本地化前后导航按钮的无障碍名称。",
+      "用自定义图标或文本替换默认箭头。通过 label 或 aria-label 设置无障碍名称。",
     ],
     accessibility: [
       "为 Carousel 提供 aria-label 或 aria-labelledby 说明区域用途。",

@@ -2178,6 +2178,7 @@ export const componentDocs = [
       { component: "Carousel", name: "setApi", type: "(api: CarouselApi) => void", description: "외부에서 Embla API를 사용할 때 인스턴스를 전달받습니다." },
       { component: "CarouselItem", name: "children", type: "ReactNode", description: "한 개 slide의 실제 콘텐츠를 배치합니다." },
       { component: "CarouselPrevious / CarouselNext", name: "label", type: "string", description: "버튼의 접근 가능한 이름을 지역화합니다." },
+      { component: "CarouselPrevious / CarouselNext", name: "children", type: "ReactNode", description: "기본 방향 아이콘을 커스텀 아이콘이나 텍스트로 교체합니다. 접근 가능한 이름은 label 또는 aria-label로 지정합니다." },
     ],
     accessibility: [
       "Carousel에 aria-label 또는 aria-labelledby로 영역의 목적을 지정합니다.",

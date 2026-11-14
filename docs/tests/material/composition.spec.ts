@@ -56,7 +56,7 @@ for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right
   });
 }
 
-test("runtime regressions: Carousel buttons compose caller clicks and honor cancellation", async ({ page }) => {
+test("runtime regressions: Carousel buttons preserve caller children, compose clicks and honor cancellation", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   for (const orientation of ["horizontal", "vertical"] as const) {
     const fixture = page.getByTestId(`carousel-${orientation}`);
@@ -65,6 +65,15 @@ test("runtime regressions: Carousel buttons compose caller clicks and honor canc
     const previous = fixture.getByRole("button", { name: "Previous slide", exact: true });
     const next = fixture.getByRole("button", { name: "Next slide", exact: true });
     const cancel = fixture.getByRole("checkbox", { name: "Prevent carousel navigation", exact: true });
+    if (orientation === "horizontal") {
+      await expect(previous.getByTestId("custom-previous")).toHaveText("Back");
+      await expect(previous.locator("svg")).toHaveCount(0);
+      await expect(next.getByTestId("custom-next")).toBeVisible();
+      await expect(next.locator("svg")).toHaveCount(1);
+    } else {
+      await expect(previous.locator('svg[aria-hidden="true"]')).toHaveCount(1);
+      await expect(next.locator('svg[aria-hidden="true"]')).toHaveCount(1);
+    }
     await expect(previous).toBeDisabled();
     await next.click();
     await expect(current).toHaveText("1");

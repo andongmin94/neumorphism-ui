@@ -197,6 +197,7 @@ type CarouselButtonProps = React.ComponentProps<typeof Button> & {
 };
 
 function CarouselPrevious({
+  children,
   className,
   label = "Previous slide",
   variant = "soft",
@@ -225,12 +226,13 @@ function CarouselPrevious({
       }}
       {...props}
     >
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m14 6-6 6 6 6" : "m6 14 6-6 6 6"} /></svg>
+      {children ?? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m14 6-6 6 6 6" : "m6 14 6-6 6 6"} /></svg>}
     </Button>
   );
 }
 
 function CarouselNext({
+  children,
   className,
   label = "Next slide",
   variant = "soft",
@@ -259,7 +261,7 @@ function CarouselNext({
       }}
       {...props}
     >
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m10 6 6 6-6 6" : "m6 10 6 6 6-6"} /></svg>
+      {children ?? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m10 6 6 6-6 6" : "m6 10 6 6 6-6"} /></svg>}
     </Button>
   );
 }

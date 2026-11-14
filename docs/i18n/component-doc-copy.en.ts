@@ -58,6 +58,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Provides the Embla API instance for external integrations.",
       "Contains the real content of one slide.",
       "Localizes the accessible name of the previous and next buttons.",
+      "Replaces the default arrow with a custom icon or text. Set the accessible name with label or aria-label.",
     ],
     accessibility: [
       "Give Carousel an aria-label or aria-labelledby that identifies the region.",

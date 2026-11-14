@@ -58,7 +58,12 @@ function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertic
         </div></CarouselItem>
         <CarouselItem><p className="p-12">Second slide</p></CarouselItem>
       </CarouselContent>
-      <CarouselPrevious onClick={event => recordClick(event, "previous")} /><CarouselNext onClick={event => recordClick(event, "next")} />
+      <CarouselPrevious onClick={event => recordClick(event, "previous")}>
+        {orientation === "horizontal" ? <span data-testid="custom-previous" aria-hidden="true">Back</span> : undefined}
+      </CarouselPrevious>
+      <CarouselNext onClick={event => recordClick(event, "next")}>
+        {orientation === "horizontal" ? <svg data-testid="custom-next" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h16m-6-6 6 6-6 6" /></svg> : undefined}
+      </CarouselNext>
     </Carousel>
   </section>;
 }

@@ -58,6 +58,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "外部連携用に Embla API インスタンスを受け取ります。",
       "1つのスライドの実コンテンツを配置します。",
       "前後ボタンのアクセシブル名をローカライズします。",
+      "既定の矢印を独自のアイコンやテキストに置き換えます。アクセシブル名は label または aria-label で指定します。",
     ],
     accessibility: [
       "Carousel に aria-label または aria-labelledby で領域の目的を指定します。",
