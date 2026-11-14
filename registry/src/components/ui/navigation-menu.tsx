@@ -3,7 +3,7 @@
 import { NavigationMenu as Primitive } from "@base-ui/react/navigation-menu";
 import { mergeClassName } from "@/lib/utils";
 
-function NavigationMenu({ className, ...props }: Primitive.Root.Props) {
+function NavigationMenu<Value = any>({ className, ...props }: Primitive.Root.Props<Value>) {
   return <Primitive.Root data-slot="navigation-menu" className={mergeClassName<Primitive.Root.State>("relative isolate w-fit max-w-full font-sans", className)} {...props} />;
 }
 function NavigationMenuList({ className, ...props }: Primitive.List.Props) {

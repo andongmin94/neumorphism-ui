@@ -66,21 +66,20 @@ export const componentDocs = [
       {
         component: "Accordion",
         name: "value / defaultValue",
-        type: "string[]",
-        description: "열린 항목의 controlled 또는 초기 uncontrolled 값입니다.",
+        type: "Value[]",
+        description: "열린 항목의 controlled 또는 초기 uncontrolled 값 배열입니다. 원소 타입 Value를 콜백과 상태에 그대로 유지합니다.",
       },
       {
         component: "Accordion",
         name: "onValueChange",
-        type: "(value) => void",
-        description: "열린 항목이 바뀔 때 호출됩니다.",
+        type: "(value: Value[], eventDetails) => void",
+        description: "열린 항목이 바뀔 때 Value[]와 이벤트 정보를 전달합니다.",
       },
       {
         component: "AccordionItem",
         name: "value",
-        type: "string",
-        required: true,
-        description: "항목을 식별하는 고유 값입니다.",
+        type: "any",
+        description: "항목을 식별하는 고유 값입니다. 생략하면 ID를 자동 생성합니다. 제어값이나 초기 열림을 지정할 때는 루트 값과 일치시킵니다.",
       },
       {
         component: "AccordionItem",

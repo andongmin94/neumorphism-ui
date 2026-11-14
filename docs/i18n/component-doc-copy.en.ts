@@ -157,9 +157,9 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Preserves Base UI Accordion state management and accessibility relationships while rendering open items as inset surfaces. Supports both multiple selection and controlled or uncontrolled usage.",
     props: [
       "Allows multiple items to remain open at the same time.",
-      "The controlled value or initial uncontrolled value of the open items.",
-      "Called when the set of open items changes.",
-      "A unique value that identifies the item.",
+      "The controlled or initial uncontrolled array of open item values. Preserves the element type Value in callbacks and state.",
+      "Receives Value[] and event details when the set of open items changes.",
+      "A unique value that identifies the item. An ID is generated when omitted. Match the root values when controlling or initially opening items.",
       "Disables the item trigger.",
       "Keeps the panel in the DOM while it is closed.",
     ],

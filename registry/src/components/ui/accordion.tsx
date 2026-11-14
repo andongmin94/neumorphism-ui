@@ -5,14 +5,14 @@ import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 
 import { mergeClassName } from "@/lib/utils";
 
-function Accordion({
+function Accordion<Value = any>({
   className,
   ...props
-}: AccordionPrimitive.Root.Props) {
+}: AccordionPrimitive.Root.Props<Value>) {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={mergeClassName<AccordionPrimitive.Root.State>(
+      className={mergeClassName<AccordionPrimitive.Root.State<Value>>(
         "flex w-full flex-col",
         className,
       )}
