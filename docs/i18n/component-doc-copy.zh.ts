@@ -103,7 +103,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     props: [
       "设置打开、关闭和滑动方向。",
       "控制 Drawer 的打开状态。",
-      "按需配置中间停靠点。",
+      "设置纵向 Drawer 的停靠高度。0～1 的数字表示视口高度的比例，大于 1 的数字表示像素。字符串使用 px 或 rem，例如 '148px' 或 '30rem'。",
       "将现有 Button 或其他元素组合为触发器。",
       "在保留方向和手势行为的同时扩展面板样式。",
     ],

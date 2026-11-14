@@ -103,7 +103,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
     props: [
       "Sets the opening, closing, and swipe direction.",
       "Controls the Drawer open state.",
-      "Configures intermediate resting points when needed.",
+      "Sets resting heights for vertical drawers. Numbers from 0 to 1 are fractions of the viewport height; numbers greater than 1 are pixels. Strings use px or rem, such as '148px' or '30rem'.",
       "Composes an existing Button or other element as the trigger.",
       "Extends the panel styling while preserving direction and gesture behavior.",
     ],

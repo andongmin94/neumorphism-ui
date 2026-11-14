@@ -32,6 +32,9 @@ for (const locale of ["en", "ko", "ja", "zh"]) {
     expect(showcase).not.toBe(minimum);
     await expect(page.locator(".component-api-table thead th")).toHaveCount(5);
     await expect(page.locator(".component-api-table tbody tr")).toHaveCount(componentDocs.find(doc => doc.slug === "button")!.props.length);
+    const wrappedDefaults = await page.locator(".component-api-table tbody td:nth-child(4) code").evaluateAll(codes =>
+      codes.map(code => ({ value: code.textContent, lines: code.getClientRects().length })).filter(code => code.lines !== 1));
+    expect(wrappedDefaults, "API defaults must remain readable on one line").toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     expect(errors).toEqual([]);
   });

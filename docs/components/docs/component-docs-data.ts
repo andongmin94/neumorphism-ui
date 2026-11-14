@@ -2133,7 +2133,7 @@ export const componentDocs = [
     props: [
       { component: "Drawer", name: "swipeDirection", type: '"down" | "up" | "left" | "right"', defaultValue: '"down"', description: "패널이 열리고 닫히는 방향과 swipe 방향을 지정합니다." },
       { component: "Drawer", name: "open / onOpenChange", type: "boolean / (open: boolean) => void", description: "Drawer의 controlled 열림 상태를 관리합니다." },
-      { component: "Drawer", name: "snapPoints", type: "number[]", description: "필요할 때 중간 정지 지점을 구성합니다." },
+      { component: "Drawer", name: "snapPoints", type: "(number | string)[]", description: "세로 Drawer의 정지 높이입니다. 0~1 숫자는 뷰포트 높이 비율, 1보다 큰 숫자는 px로 해석합니다. 문자열은 '148px', '30rem'처럼 px/rem 단위를 사용합니다." },
       { component: "DrawerTrigger", name: "render", type: "ReactElement", description: "기존 Button이나 다른 요소를 trigger로 합성합니다." },
       { component: "DrawerContent", name: "className", type: "string | (state) => string", description: "기본 방향·gesture 동작을 유지하면서 패널 스타일을 확장합니다." },
     ],

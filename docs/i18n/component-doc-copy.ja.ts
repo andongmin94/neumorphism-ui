@@ -103,7 +103,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     props: [
       "開閉とスワイプの方向を指定します。",
       "Drawer の開閉状態を制御します。",
-      "必要に応じて中間の停止位置を構成します。",
+      "縦方向 Drawer の停止位置の高さです。0〜1 の数値はビューポートの高さの割合、1 を超える数値は px です。文字列には '148px' や '30rem' のように px/rem を指定します。",
       "既存の Button などを trigger として合成します。",
       "方向とジェスチャー動作を維持しながらパネルのスタイルを拡張します。",
     ],
