@@ -404,10 +404,11 @@ export const componentDocCopyEn = defineComponentDocCopy({
     summary:
       "Progress status rendered as a primary fill inside an inset track.",
     description:
-      "Uses Base UI Progress progressbar semantics. Normalizes valid max and value values, and exposes an indeterminate state when value is missing or invalid.",
+      "Uses Base UI Progress progressbar semantics. value is required; pass null for an indeterminate state. min and max define the range, and valid values are normalized within it.",
     props: [
-      "The current progress value, normalized between 0 and max.",
-      "The total range greater than 0; invalid values fall back to 100.",
+      "The current progress value, clamped between min and max. Pass null when progress is unknown.",
+      "The lower bound. Non-finite numbers are replaced with 0.",
+      "The upper bound, greater than min. A non-finite value or a value at or below min is replaced with Math.max(min + 100, 100).",
       "The accessible name of the task in progress.",
       "Creates aria-valuetext when a description beyond the numeric value is needed.",
     ],

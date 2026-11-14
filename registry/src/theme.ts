@@ -515,7 +515,11 @@ export function buildThemeVariables(
     "--muted-foreground": tokens.mutedForeground,
     "--neu-select-arrow": `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${tokens.mutedForeground}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`)}")`,
     "--accent": tokens.surfaceSoft,
-    "--accent-foreground": !settings.accent && tokens.accentInk ? accentInk : primary,
+    "--accent-foreground": readableAccent(
+      !settings.accent && tokens.accentInk ? tokens.accentInk : primary,
+      tokens.surfaceSoft,
+      tokens.foreground,
+    ),
     "--destructive": tokens.destructive,
     "--destructive-foreground": readableForeground(tokens.destructive),
     "--success": mode === "light" ? "#0a9b78" : "#40d6ad",

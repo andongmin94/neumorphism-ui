@@ -389,10 +389,11 @@ export const componentDocCopyZh = defineComponentDocCopy({
   progress: {
     summary: "以 inset 轨道和 primary 填充显示完成进度。",
     description:
-      "使用 Base UI Progress 的 progressbar 语义。会规范化有效的 max 和 value；当 value 缺失或无效时，以 indeterminate 状态呈现。",
+      "使用 Base UI Progress 的 progressbar 语义。value 为必填项，传入 null 表示 indeterminate 状态。min 和 max 定义范围，有效的 value 会被限制在此范围内。",
     props: [
-      "当前进度值，会被限制在 0 与 max 之间。",
-      "大于 0 的总范围；无效时使用 100。",
+      "当前进度值，会被限制在 min 与 max 之间。进度未知时传入 null。",
+      "范围的最小值。非有限数值会被替换为 0。",
+      "大于 min 的最大值。非有限数值或不大于 min 的值会被替换为 Math.max(min + 100, 100)。",
       "为进行中的任务提供无障碍名称。",
       "在数值之外需要额外说明时生成 aria-valuetext。",
     ],

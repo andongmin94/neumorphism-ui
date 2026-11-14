@@ -32,7 +32,7 @@ test("all presets expose one semantic token contract for documentation, CSS, and
       assert.deepEqual(Object.keys(tokens).sort(), tokenNames);
       assert.deepEqual(item.cssVars[mode], Object.fromEntries(Object.entries(tokens).map(([key, value]) => [key.slice(2), value])));
       for (const [key, value] of Object.entries(tokens)) { assert.ok(buildThemeCss(settings).includes(`${key}: ${value};`)); assert.ok(!key.startsWith("--docs-")); assert.ok(!/undefined|NaN/.test(value)); }
-      for (const [foreground, background] of [["--foreground", "--background"], ["--foreground", "--neu-surface"], ["--muted-foreground", "--neu-surface"], ["--muted-foreground", "--muted"], ["--primary-foreground", "--primary"], ["--destructive-foreground", "--destructive"]]) {
+      for (const [foreground, background] of [["--foreground", "--background"], ["--foreground", "--neu-surface"], ["--muted-foreground", "--neu-surface"], ["--muted-foreground", "--muted"], ["--primary-foreground", "--primary"], ["--accent-foreground", "--accent"], ["--destructive-foreground", "--destructive"]]) {
         const ratio = contrast(tokens[foreground], tokens[background]);
         assert.ok(ratio >= 4.5, `${preset.id}/${mode} ${foreground} on ${background}: ${ratio.toFixed(3)}`);
       }
@@ -98,10 +98,13 @@ test("UI additions do not reinstall global theme and actual controls opt out of 
   }
 });
 
-test("accent lettering is readable on the neutral material in every preset and custom accent", () => {
+test("accent lettering is readable on its surface in every preset and custom accent", () => {
   for (const preset of themePresets) for (const mode of ["light", "dark"]) for (const accent of [null, "#000000", "#ffffff", "#ffff00", "#ff00ff", "#12abcf", "#777777"]) {
     const tokens = buildThemeVariables({ ...defaultThemeSettings, ...preset.defaults, presetId: preset.id, accent }, mode);
-    assert.ok(contrast(tokens["--neu-accent-ink"], tokens["--neu-surface"]) >= 4.5, `${preset.id}/${mode}/${accent}`);
+    for (const [foreground, background] of [["--neu-accent-ink", "--neu-surface"], ["--accent-foreground", "--accent"]]) {
+      const ratio = contrast(tokens[foreground], tokens[background]);
+      assert.ok(ratio >= 4.5, `${preset.id}/${mode}/${accent}: ${foreground} on ${background} = ${ratio.toFixed(3)}`);
+    }
     assert.ok(tokens["--neu-radius-small"]);
     assert.ok(tokens["--neu-radius-control"]);
   }

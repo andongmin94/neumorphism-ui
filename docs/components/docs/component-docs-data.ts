@@ -740,7 +740,7 @@ export const componentDocs = [
     category: "data-feedback",
     summary: "완료 정도를 inset track과 primary fill로 표시하는 진행 상태.",
     description:
-      "Base UI Progress의 progressbar 시맨틱을 사용합니다. 유효한 max와 value를 정규화하며 value가 없거나 유효하지 않으면 indeterminate 상태로 전달합니다.",
+      "Base UI Progress의 progressbar 시맨틱을 사용합니다. value는 필수이며 null을 전달하면 indeterminate 상태가 됩니다. min과 max로 범위를 정하고 유효한 value를 그 범위로 정규화합니다.",
     importCode: "\"use client\";\nimport * as React from \"react\";\nimport { Progress } from \"@/components/ui/progress\";",
     usageCode: "function PreviewStack({ children, compact = false }: {\n    children: React.ReactNode;\n    compact?: boolean;\n}) {\n    return <div className={compact ? \"mx-auto grid w-full max-w-[540px] gap-5\" : \"grid w-full gap-5\"}>{children}</div>;\n}\nexport default function Example() {\n    const copy = {\n        \"progress\": {\n            \"registryBuild\": \"Registry 빌드\",\n            \"themeTokens\": \"테마 토큰\",\n            \"waiting\": \"데이터 대기 중\"\n        }\n    };\n    return (<PreviewStack>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.progress.registryBuild}</span>\n              <strong>82%</strong>\n            </div>\n            <Progress aria-label={copy.progress.registryBuild} value={82}/>\n          </div>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.progress.themeTokens}</span>\n              <strong>12 / 16</strong>\n            </div>\n            <Progress aria-label={copy.progress.themeTokens} max={16} value={12}/>\n          </div>\n          <div className=\"grid gap-3 border-b border-[var(--border)] py-3.5 [&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-4 [&>div]:text-sm\">\n            <div>\n              <span>{copy.progress.waiting}</span>\n              <strong>—</strong>\n            </div>\n            <Progress aria-label={copy.progress.waiting} value={null}/>\n          </div>\n        </PreviewStack>);\n}",
     props: [
@@ -748,15 +748,22 @@ export const componentDocs = [
         component: "Progress",
         name: "value",
         type: "number | null",
-        defaultValue: "null",
-        description: "현재 진행 값이며 0과 max 사이로 정규화됩니다.",
+        required: true,
+        description: "min과 max 사이로 제한되는 현재 진행 값입니다. 진행률을 알 수 없으면 null을 전달합니다.",
+      },
+      {
+        component: "Progress",
+        name: "min",
+        type: "number",
+        defaultValue: "0",
+        description: "범위의 최솟값입니다. 유한한 숫자가 아니면 0을 사용합니다.",
       },
       {
         component: "Progress",
         name: "max",
         type: "number",
         defaultValue: "100",
-        description: "0보다 큰 전체 범위입니다. 유효하지 않으면 100을 사용합니다.",
+        description: "min보다 큰 최댓값입니다. 유한한 숫자가 아니거나 min 이하이면 Math.max(min + 100, 100)을 사용합니다.",
       },
       {
         component: "Progress",
@@ -1521,7 +1528,7 @@ export const componentDocs = [
   "summary": "단일 또는 복수 선택을 묶는 키보드 탐색 토글 그룹.",
   "description": "단일 또는 복수 선택을 묶는 키보드 탐색 토글 그룹. 그룹의 aria-label과 각 항목 이름을 제공하세요. 방향키 이동과 선택 상태를 구분합니다.",
   "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";",
-  "usageCode": "export default function Example() {\n  const text = {\"open\":\"알림 설정\",\"title\":\"알림을 조절하세요\",\"body\":\"중요한 업데이트만 받아 집중을 유지하세요.\",\"close\":\"닫기\",\"discard\":\"초안 삭제\",\"confirm\":\"초안을 삭제할까요?\",\"warning\":\"이 작업은 되돌릴 수 없습니다. 계속하려면 직접 확인하세요.\",\"cancel\":\"돌아가기\",\"done\":\"초안을 삭제했습니다.\",\"profile\":\"프로필 미리보기\",\"person\":\"제품 디자이너 · 서울\",\"details\":\"세부 설정\",\"detailBody\":\"기본 동작은 그대로 두고 추가 설정만 펼칩니다.\",\"pin\":\"고정\",\"locked\":\"잠김\",\"align\":\"정렬\",\"left\":\"왼쪽\",\"center\":\"가운데\",\"right\":\"오른쪽\",\"tools\":\"문서 도구\",\"undo\":\"실행 취소\",\"redo\":\"다시 실행\",\"save\":\"변경 저장\",\"saved\":\"로컬 예제를 저장했습니다.\",\"name\":\"표시 이름\",\"hint\":\"프로필에 표시할 이름을 입력하세요.\",\"required\":\"이름을 입력하세요.\",\"settings\":\"프로필 설정\",\"quantity\":\"좌석 수\",\"increase\":\"좌석 늘리기\",\"decrease\":\"좌석 줄이기\",\"storage\":\"저장 공간\",\"city\":\"도시 검색\",\"empty\":\"일치하는 도시가 없습니다.\",\"reset\":\"초기화\",\"editing\":\"저장 전 변경 사항\",\"quiet\":\"저장된 상태\"};\n  const [alignment, setAlignment] = React.useState<string[]>([\"left\"]);\n  return (<div className=\"grid gap-3\"><ToggleGroup aria-label={\"정렬\"} value={alignment} onValueChange={setAlignment}><ToggleGroupItem value=\"left\">{\"왼쪽\"}</ToggleGroupItem><ToggleGroupItem value=\"center\">{\"가운데\"}</ToggleGroupItem><ToggleGroupItem value=\"right\">{\"오른쪽\"}</ToggleGroupItem></ToggleGroup><output className=\"text-sm text-[var(--muted-foreground)]\">{alignment.map(value => text[value as \"left\" | \"center\" | \"right\"]).join(\", \")}</output></div>);\n}",
+  "usageCode": "export default function Example() {\n  const text = {\"open\":\"알림 설정\",\"title\":\"알림을 조절하세요\",\"body\":\"중요한 업데이트만 받아 집중을 유지하세요.\",\"close\":\"닫기\",\"discard\":\"초안 삭제\",\"confirm\":\"초안을 삭제할까요?\",\"warning\":\"이 작업은 되돌릴 수 없습니다. 계속하려면 직접 확인하세요.\",\"cancel\":\"돌아가기\",\"done\":\"초안을 삭제했습니다.\",\"profile\":\"프로필 미리보기\",\"person\":\"제품 디자이너 · 서울\",\"details\":\"세부 설정\",\"detailBody\":\"기본 동작은 그대로 두고 추가 설정만 펼칩니다.\",\"pin\":\"고정\",\"locked\":\"잠김\",\"align\":\"정렬\",\"left\":\"왼쪽\",\"center\":\"가운데\",\"right\":\"오른쪽\",\"tools\":\"문서 도구\",\"undo\":\"실행 취소\",\"redo\":\"다시 실행\",\"save\":\"변경 저장\",\"saved\":\"로컬 예제를 저장했습니다.\",\"name\":\"표시 이름\",\"hint\":\"프로필에 표시할 이름을 입력하세요.\",\"required\":\"이름을 입력하세요.\",\"settings\":\"프로필 설정\",\"quantity\":\"좌석 수\",\"increase\":\"좌석 늘리기\",\"decrease\":\"좌석 줄이기\",\"storage\":\"저장 공간\",\"city\":\"도시 검색\",\"empty\":\"일치하는 도시가 없습니다.\",\"reset\":\"초기화\",\"editing\":\"저장 전 변경 사항\",\"quiet\":\"저장된 상태\"};\n  const [alignment, setAlignment] = React.useState<(\"left\" | \"center\" | \"right\")[]>([\"left\"]);\n  return (<div className=\"grid gap-3\"><ToggleGroup aria-label={\"정렬\"} value={alignment} onValueChange={setAlignment}><ToggleGroupItem value=\"left\">{\"왼쪽\"}</ToggleGroupItem><ToggleGroupItem value=\"center\">{\"가운데\"}</ToggleGroupItem><ToggleGroupItem value=\"right\">{\"오른쪽\"}</ToggleGroupItem></ToggleGroup><output className=\"text-sm text-[var(--muted-foreground)]\">{alignment.map(value => text[value]).join(\", \")}</output></div>);\n}",
   "props": [
     {
       "component": "ToggleGroup",

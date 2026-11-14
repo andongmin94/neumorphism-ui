@@ -404,10 +404,11 @@ export const componentDocCopyJa = defineComponentDocCopy({
     summary:
       "inset track 内の primary fill で進捗を示すステータス。",
     description:
-      "Base UI Progress の progressbar semantics を使用します。有効な max と value を正規化し、value が未指定または無効な場合は indeterminate 状態を公開します。",
+      "Base UI Progress の progressbar semantics を使用します。value は必須で、null を渡すと indeterminate 状態になります。min と max で範囲を指定し、有効な value をその範囲内に正規化します。",
     props: [
-      "0 から max の間に正規化される現在の進捗値です。",
-      "0より大きい全体範囲です。無効な値の場合は100を使用します。",
+      "min から max の範囲に制限される現在の進捗値です。進捗が不明な場合は null を渡します。",
+      "範囲の最小値です。有限の数値でない場合は 0 を使用します。",
+      "min より大きい最大値です。有限の数値でない場合や min 以下の場合は Math.max(min + 100, 100) を使用します。",
       "進行中のタスクを表すアクセシブルな名前です。",
       "数値以外の説明が必要な場合に aria-valuetext を生成します。",
     ],
