@@ -120,11 +120,11 @@ export const componentDocCopyJa = defineComponentDocCopy({
     description: "Base UI のポインターアンカーとキーボード操作を維持し、ポップアップを浮いたニューモーフィズム表面で表現します。通常項目、チェック、ラジオ、サブメニュー、破壊的操作を組み合わせられます。",
     props: [
       "メニューの開閉状態を制御します。",
-      "ポインター基準のポップアップ位置と間隔を調整します。既定では dir または DirectionProvider に従い、LTR では右、RTL では左に開きます。",
-      "サブメニューも読み方向に従って開きます。side で優先する方向を変更できます。",
+      "ポインターを基準に位置と間隔（px）を指定します。既定では dir または DirectionProvider に従い、LTR は右、RTL は左に開きます。sideOffset 関数は anchor・positioner の width と height、side、align を受け取り、間隔を返します。",
+      "サブメニューも読み方向に従って開き、side で優先方向を変更できます。sideOffset は間隔（px）で、関数の場合は anchor・positioner の width と height、side、align を受け取り、間隔を返します。",
       "項目を表示したまま実行できない状態にします。",
       "チェック可能な項目の状態を制御します。",
-      "相互排他的なラジオ項目の選択を制御します。",
+      "ContextMenuRadioItem.value と一致する値を使います。変更コールバックは値と eventDetails を受け取ります。",
     ],
     accessibility: [
       "ContextMenuTrigger はポインターとキーボードの両方で理解できる対象にします。",
@@ -149,7 +149,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     ],
   },
 "chart": {"summary": "レスポンシブなチャート表面、ツールチップと正確なデータ表。", "description": "Rechartsの軸と系列を直接組み合わせます。データは平面的に読みやすくし、周囲の表面に深度を付けます。", "props": ["読みやすいタイトルと説明。", "同じ元データの表と開閉ラベル。", "記録がない場合の表示。", "RechartsのTooltipオプションを渡します。"], "accessibility": ["accessibilityLayer、線の形、ラベル、元データの表を併用してください。", "例ではアニメーションを無効にします。独自の系列のモーションはアプリで管理します。"]},
-"navigation-menu": {"summary":"リンクとポップアップによるキーボード対応のサイトナビゲーション。","description":"Base UIの動作を保ち、開いた状態を inset で表します。ルート内に NavigationMenuViewport を一つ配置します。","props":["開いている項目と変更コールバック。","renderでフレームワークのリンクを使います。","ポップアップの位置と余白。"],"accessibility":["移動先には実際のhrefを使い、navに名前を付けてください。","Tab、方向キー、Escapeとフォーカス表示を確認してください。"]},
+"navigation-menu": {"summary":"リンクとポップアップによるキーボード対応のサイトナビゲーション。","description":"Base UIの動作を保ち、開いた状態を inset で表します。ルート内に NavigationMenuViewport を一つ配置します。","props":["value で開いている項目の値を制御し、defaultValue で初期値を指定します。null でメニューが閉じます。","開いている項目の値と eventDetails を受け取ります。メニューが閉じると値は null です。","renderでフレームワークのリンクを使います。","ポップアップの方向、配置、トリガーとの間隔（px）を指定します。sideOffset 関数は anchor・positioner の width と height、side、align を受け取り、間隔を返します。"],"accessibility":["移動先には実際のhrefを使い、navに名前を付けてください。","Tab、方向キー、Escapeとフォーカス表示を確認してください。"]},
 "menubar": {"summary":"方向キーで移動するアプリケーションのコマンドメニュー。","description":"Menubarがフォーカス移動を担当し、既存のDropdown Menu部品がポップアップを担当します。","props":["キーボード移動の方向。","トリガーを無効にします。","チェック項目の制御状態。"],"accessibility":["ページ移動ではなくコマンドに使用し、menubarに名前を付けます。","方向キーでメニューを移動します。無効な項目は実行できません。"]},
   accordion: {
     summary:
@@ -319,7 +319,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "menu の open 状態が変わったときに呼び出されます。",
       "button または link に trigger の動作を合成します。",
       "trigger を基準に popup を配置します。",
-      "trigger と popup の間隔です。",
+      "trigger と popup の間隔（px）です。関数は anchor・positioner の width と height、side、align を受け取り、間隔を返します。",
       "DirectionProvider に従い、LTR では右、RTL では左に開きます。side で優先する方向を変更できます。",
       "通常または destructive action のスタイルを選択します。",
       "indicator を持つ行とテキストの開始位置を揃えます。",
@@ -606,7 +606,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "open 状態が変わったときに呼び出されます。",
       "button または link に tooltip trigger の動作を合成します。",
       "trigger を基準に popup を配置します。",
-      "trigger と popup の間隔です。",
+      "trigger と popup の間隔（px）です。関数は anchor・positioner の width と height、side、align を受け取り、間隔を返します。",
     ],
     accessibility: [
       "Tooltip は trigger のアクセシブルな名前を置き換えないため、icon button には引き続き aria-label が必要です。",
@@ -615,9 +615,9 @@ export const componentDocCopyJa = defineComponentDocCopy({
     ],
   },
 "alert-dialog": {"summary":"取り消せない操作を明示的に確認するダイアログ。","description":"取り消せない操作を明示的に確認するダイアログ。 取消を先に配置してください。非同期処理では成功後に制御されたダイアログを閉じます。","props":["制御状態または初期状態を指定します。","開いた時のフォーカス対象を指定します。","同期確認を処理します。非同期処理では状態を制御します。"],"accessibility":["取消を先に配置してください。非同期処理では成功後に制御されたダイアログを閉じます。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
-"popover": {"summary":"ボタンに隣接して文脈を保つ設定パネル。","description":"ボタンに隣接して文脈を保つ設定パネル。 PopoverTitle と説明を提供し、キーボードで閉じられることを確認します。","props":["制御状態または初期状態を指定します。","画面境界を考慮した位置または間隔を設定します。","既存の要素、イベント、ref を合成します。"],"accessibility":["PopoverTitle と説明を提供し、キーボードで閉じられることを確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
+"popover": {"summary":"ボタンに隣接して文脈を保つ設定パネル。","description":"ボタンに隣接して文脈を保つ設定パネル。 PopoverTitle と説明を提供し、キーボードで閉じられることを確認します。","props":["制御状態または初期状態を指定します。","トリガーを基準にパネルの方向と配置を指定します。","既存の要素、イベント、ref を合成します。"],"accessibility":["PopoverTitle と説明を提供し、キーボードで閉じられることを確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "hover-card": {"summary":"リンク先を補足するプレビューカード。","description":"リンク先を補足するプレビューカード。 重要な情報や操作をホバーだけに置かず、元のリンクだけで目的が分かるようにします。","props":["制御状態または初期状態を指定します。","開閉の遅延時間（ミリ秒）です。","画面境界を考慮した位置または間隔を設定します。"],"accessibility":["重要な情報や操作をホバーだけに置かず、元のリンクだけで目的が分かるようにします。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
-"sheet": {"summary":"画面の端から開くスクロール可能な操作パネル。","description":"画面の端から開くスクロール可能な操作パネル。 SheetTitle と説明を含め、小さな画面でも閉じるボタンと最後の入力に到達できるようにします。","props":["画面境界を考慮した位置または間隔を設定します。","閉じるボタンのアクセス可能な名前です。","制御状態または初期状態を指定します。","true はフォーカスを閉じ込め、背景のポインター操作とスクロールを防ぎます。false は背景操作を許可し、trap-focus はフォーカスだけを閉じ込めます。"],"accessibility":["SheetTitle と説明を含め、小さな画面でも閉じるボタンと最後の入力に到達できるようにします。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
+"sheet": {"summary":"画面の端から開くスクロール可能な操作パネル。","description":"画面の端から開くスクロール可能な操作パネル。 SheetTitle と説明を含め、小さな画面でも閉じるボタンと最後の入力に到達できるようにします。","props":["パネルを表示する画面の端を選択します。","閉じるボタンのアクセス可能な名前です。","open で開閉状態を制御し、defaultOpen で初期の開閉状態を指定します。","開閉状態が変わると、新しい状態と eventDetails を受け取ります。","true はフォーカスを閉じ込め、背景のポインター操作とスクロールを防ぎます。false は背景操作を許可し、trap-focus はフォーカスだけを閉じ込めます。"],"accessibility":["SheetTitle と説明を含め、小さな画面でも閉じるボタンと最後の入力に到達できるようにします。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "collapsible": {"summary":"追加設定のグループを展開、折りたたみするコンテナー。","description":"追加設定のグループを展開、折りたたみするコンテナー。 内容を説明するトリガー名を付け、Enter と Space で展開を確認します。","props":["制御状態または初期状態を指定します。","ユーザー操作を無効にします。","閉じていてもパネルを DOM に保持します。"],"accessibility":["内容を説明するトリガー名を付け、Enter と Space で展開を確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "toggle": {"summary":"押下状態を保持する独立したトグルボタン。","description":"押下状態を保持する独立したトグルボタン。 アイコンのみのボタンにラベルを付け、色だけでなく凹面と境界で選択を示します。","props":["制御状態または初期状態を指定します。","コントロールのサイズを選びます。","ユーザー操作を無効にします。"],"accessibility":["アイコンのみのボタンにラベルを付け、色だけでなく凹面と境界で選択を示します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "toggle-group": {"summary":"単一、複数選択をまとめるキーボード操作可能なグループ。","description":"単一、複数選択をまとめるキーボード操作可能なグループ。 グループと各項目にラベルを付け、矢印キーのフォーカス移動と選択を区別します。","props":["制御状態または初期状態を指定します。","複数項目の選択を許可します。","配置とキーボード移動の方向を設定します。"],"accessibility":["グループと各項目にラベルを付け、矢印キーのフォーカス移動と選択を区別します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},

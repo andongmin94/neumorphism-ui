@@ -510,9 +510,9 @@ export const componentDocs = [
       {
         component: "DropdownMenuContent",
         name: "sideOffset",
-        type: "number",
+        type: "number | ((data) => number)",
         defaultValue: "8",
-        description: "trigger와 popup 사이의 간격입니다.",
+        description: "trigger와 popup 사이의 간격(px)입니다. 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다.",
       },
       {
         component: "DropdownMenuSubContent",
@@ -1297,16 +1297,16 @@ export const componentDocs = [
       {
         component: "TooltipContent",
         name: "side / align",
-        type: '"top" | "right" | "bottom" | "left" / "start" | "center" | "end"',
+        type: '"top" | "right" | "bottom" | "left" | "inline-start" | "inline-end" / "start" | "center" | "end"',
         defaultValue: '"top" / "center"',
         description: "trigger를 기준으로 popup 위치를 정합니다.",
       },
       {
         component: "TooltipContent",
         name: "sideOffset",
-        type: "number",
+        type: "number | ((data) => number)",
         defaultValue: "8",
-        description: "trigger와 popup 사이의 간격입니다.",
+        description: "trigger와 popup 사이의 간격(px)입니다. 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다.",
       },
     ],
     accessibility: [
@@ -1366,8 +1366,9 @@ export const componentDocs = [
     {
       "component": "PopoverContent",
       "name": "side / align",
-      "type": "Positioner.Props",
-      "description": "화면 경계를 고려한 패널 위치와 간격입니다."
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | \"inline-start\" | \"inline-end\" / \"start\" | \"center\" | \"end\"",
+      "defaultValue": "\"bottom\" / \"center\"",
+      "description": "트리거를 기준으로 패널의 방향과 정렬을 지정합니다."
     },
     {
       "component": "PopoverTrigger",
@@ -1427,7 +1428,8 @@ export const componentDocs = [
       "component": "SheetContent",
       "name": "side",
       "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
-      "description": "화면 경계를 고려한 패널 위치와 간격입니다."
+      "defaultValue": "\"right\"",
+      "description": "패널이 나타날 화면의 가장자리를 선택합니다."
     },
     {
       "component": "SheetContent",
@@ -1437,9 +1439,16 @@ export const componentDocs = [
     },
     {
       "component": "Sheet",
-      "name": "open / onOpenChange",
-      "type": "Dialog.Root.Props",
-      "description": "제어 상태 또는 최초 상태를 지정합니다."
+      "name": "open / defaultOpen",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "open으로 열림 상태를 제어하거나 defaultOpen으로 초기 열림 상태를 지정합니다."
+    },
+    {
+      "component": "Sheet",
+      "name": "onOpenChange",
+      "type": "(open: boolean, eventDetails) => void",
+      "description": "열림 상태가 바뀔 때 새 상태와 eventDetails를 받습니다."
     },
     {
       "component": "Sheet",
@@ -1932,9 +1941,16 @@ export const componentDocs = [
   "props": [
     {
       "component": "NavigationMenu",
-      "name": "value / onValueChange",
-      "type": "NavigationMenu.Root.Props",
-      "description": "현재 열린 항목과 변경 콜백입니다."
+      "name": "value / defaultValue",
+      "type": "Value | null",
+      "defaultValue": "null",
+      "description": "열린 항목의 값을 value로 제어하거나 defaultValue로 초기값을 지정합니다. null이면 메뉴가 닫힙니다."
+    },
+    {
+      "component": "NavigationMenu",
+      "name": "onValueChange",
+      "type": "(value: Value | null, eventDetails) => void",
+      "description": "열린 항목의 값과 eventDetails를 받습니다. 메뉴가 닫히면 값은 null입니다."
     },
     {
       "component": "NavigationMenuLink",
@@ -1945,8 +1961,9 @@ export const componentDocs = [
     {
       "component": "NavigationMenuViewport",
       "name": "side / align / sideOffset",
-      "type": "NavigationMenuViewportProps",
-      "description": "팝업의 위치와 여백을 지정합니다."
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | \"inline-start\" | \"inline-end\" / \"start\" | \"center\" | \"end\" / number | ((data) => number)",
+      "defaultValue": "\"bottom\" / \"start\" / 8",
+      "description": "팝업의 방향과 정렬, 트리거와의 간격(px)을 지정합니다. sideOffset 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다."
     }
   ],
   "accessibility": [
@@ -2098,16 +2115,16 @@ export const componentDocs = [
       {
         component: "ContextMenuContent",
         name: "side / align / sideOffset",
-        type: "Positioner props",
+        type: '"top" | "right" | "bottom" | "left" | "inline-start" | "inline-end" / "start" | "center" | "end" / number | ((data) => number)',
         defaultValue: '"inline-end" / "start" / 4',
-        description: "포인터 기준 팝업 위치와 간격을 조절합니다. 기본 방향은 dir 또는 DirectionProvider에 따라 LTR에서 오른쪽, RTL에서 왼쪽입니다.",
+        description: "포인터 기준 위치와 간격(px)을 정합니다. 기본 방향은 dir 또는 DirectionProvider에 따라 LTR에서 오른쪽, RTL에서 왼쪽입니다. sideOffset 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다.",
       },
       {
         component: "ContextMenuSubContent",
         name: "side / sideOffset",
-        type: "Positioner props",
+        type: '"top" | "right" | "bottom" | "left" | "inline-start" | "inline-end" / number | ((data) => number)',
         defaultValue: '"inline-end" / 8',
-        description: "하위 메뉴도 읽기 방향을 따라 열립니다. side로 기본 방향을 바꿀 수 있습니다.",
+        description: "하위 메뉴도 읽기 방향을 따라 열리며 side로 기본 방향을 바꿀 수 있습니다. sideOffset은 간격(px)이며, 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다.",
       },
       {
         component: "ContextMenuItem",
@@ -2125,8 +2142,8 @@ export const componentDocs = [
       {
         component: "ContextMenuRadioGroup",
         name: "value / onValueChange",
-        type: "string / (value: string) => void",
-        description: "상호 배타적인 라디오 항목의 선택을 제어합니다.",
+        type: "any / (value: any, eventDetails) => void",
+        description: "ContextMenuRadioItem.value와 일치하는 값을 사용하며, 변경 콜백은 값과 eventDetails를 받습니다.",
       },
     ],
     accessibility: [
