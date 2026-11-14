@@ -2,10 +2,10 @@
 
 import { Dialog as Primitive } from "@base-ui/react/dialog";
 import { Button } from "./button";
-import { DialogOverlay, DialogPortal, DialogTitle, DialogDescription, DialogHeader, DialogFooter } from "./dialog";
+import { Dialog, DialogOverlay, DialogPortal, DialogTitle, DialogDescription, DialogHeader, DialogFooter } from "./dialog";
 import { mergeClassName } from "@/lib/utils";
 
-const Sheet = Primitive.Root;
+const Sheet = Dialog;
 const SheetTrigger = Primitive.Trigger;
 const SheetClose = Primitive.Close;
 const SheetTitle = DialogTitle;

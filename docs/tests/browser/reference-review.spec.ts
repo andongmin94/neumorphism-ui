@@ -92,3 +92,33 @@ test("page contents keeps anchor position, current section and compact navigatio
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   }
 });
+
+test("language switching preserves query and the current native section link", async ({ page }, info) => {
+  await page.goto("/en/components/button?ref=language-switcher#api-reference");
+  const switcher = page.locator(".language-switcher");
+  const korean = switcher.locator('a[hreflang="ko"]');
+  await expect(korean).toHaveAttribute("href", "/ko/components/button?ref=language-switcher#api-reference");
+
+  const navigation = page.locator(info.project.name === "desktop-light" ? ".docs-toc" : ".component-doc-quicknav");
+  await navigation.locator('a[href="#usage"]').click();
+  await expect(page).toHaveURL(url => url.hash === "#usage");
+  await expect(korean).toHaveAttribute("href", "/ko/components/button?ref=language-switcher#usage");
+
+  await page.goBack();
+  await expect(korean).toHaveAttribute("href", "/ko/components/button?ref=language-switcher#api-reference");
+  await page.goForward();
+  await expect(korean).toHaveAttribute("href", "/ko/components/button?ref=language-switcher#usage");
+
+  await switcher.locator("summary").click();
+  for (const [locale, hrefLang] of [["en", "en"], ["ko", "ko"], ["ja", "ja"], ["zh", "zh-CN"]]) {
+    await expect(switcher.locator(`a[hreflang="${hrefLang}"]`)).toHaveAttribute("href", `/${locale}/components/button?ref=language-switcher#usage`);
+  }
+  await korean.click();
+  await expect(page).toHaveURL(url => url.pathname === "/ko/components/button" && url.search === "?ref=language-switcher" && url.hash === "#usage");
+  await expect(page.locator("#usage h2")).toBeInViewport();
+  await expect.poll(async () => {
+    const heading = (await page.locator("#usage h2").boundingBox())!;
+    const header = (await page.locator(".site-header").boundingBox())!;
+    return heading.y - header.y - header.height;
+  }).toBeGreaterThanOrEqual(0);
+});

@@ -5,8 +5,14 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 
 import { cn, mergeClassName } from "@/lib/utils";
 
-function Dialog(props: DialogPrimitive.Root.Props) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />;
+const DialogModalContext = React.createContext<DialogPrimitive.Root.Props["modal"]>(true);
+
+function Dialog<Payload = unknown>({ modal = true, ...props }: DialogPrimitive.Root.Props<Payload>) {
+  return (
+    <DialogModalContext.Provider value={modal}>
+      <DialogPrimitive.Root data-slot="dialog" modal={modal} {...props} />
+    </DialogModalContext.Provider>
+  );
 }
 
 function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
@@ -25,6 +31,8 @@ function DialogOverlay({
   className,
   ...props
 }: DialogPrimitive.Backdrop.Props) {
+  const modal = React.useContext(DialogModalContext);
+  if (modal !== true) return null;
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"

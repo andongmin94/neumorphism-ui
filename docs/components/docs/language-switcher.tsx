@@ -14,7 +14,7 @@ import {
 import { useLocale } from "@/i18n/locale-provider";
 
 export function LanguageSwitcher() {
-  const { path: pathname, query: routerQuery } = useRouter();
+  const { path: pathname, query: routerQuery, hash } = useRouter();
   const { locale, messages } = useLocale();
   const currentLocale = localeDetails[locale];
   const query = routerQuery ?? "";
@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
               aria-current={nextLocale === locale ? "page" : undefined}
               href={`${switchLocaleHref(pathname, nextLocale)}${
                 query ? `?${query}` : ""
-              }`}
+              }${hash}`}
               hrefLang={details.htmlLang}
               key={nextLocale}
               lang={details.htmlLang}

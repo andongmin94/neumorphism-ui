@@ -286,7 +286,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     props: [
       "受控的打开状态或非受控初始状态。",
       "打开状态变化时调用。",
-      "决定是否阻止背景交互并约束焦点。",
+      "true 会限制焦点并阻止背景指针操作和滚动。false 允许背景交互；trap-focus 仅限制焦点。",
       "将触发或关闭行为组合到按钮或链接上。",
       "显示右上角的默认关闭按钮。",
       "单独扩展 Backdrop 的颜色、模糊和过渡效果。",
@@ -588,7 +588,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
 "alert-dialog": {"summary":"对不可撤销操作进行明确确认的对话框。","description":"对不可撤销操作进行明确确认的对话框。 先放置取消按钮。异步操作成功后再关闭受控对话框。","props":["设置受控状态或初始状态。","选择打开时的焦点目标。","处理同步确认，异步操作应控制打开状态。"],"accessibility":["先放置取消按钮。异步操作成功后再关闭受控对话框。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "popover": {"summary":"依附按钮、保留上下文的设置面板。","description":"依附按钮、保留上下文的设置面板。 提供 PopoverTitle 和说明，并检查键盘关闭操作。","props":["设置受控状态或初始状态。","设置考虑视口边界的面板位置或间距。","组合现有元素、事件和 ref。"],"accessibility":["提供 PopoverTitle 和说明，并检查键盘关闭操作。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "hover-card": {"summary":"补充说明链接目标的预览卡片。","description":"补充说明链接目标的预览卡片。 不要把必要信息或操作只放在悬停内容中。原始链接仍应含义明确。","props":["设置受控状态或初始状态。","打开与关闭的延迟，单位为毫秒。","设置考虑视口边界的面板位置或间距。"],"accessibility":["不要把必要信息或操作只放在悬停内容中。原始链接仍应含义明确。","修改 render 或 className 时保留标签关联和可见焦点。"]},
-"sheet": {"summary":"从视口边缘打开的可滚动操作面板。","description":"从视口边缘打开的可滚动操作面板。 包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","props":["设置考虑视口边界的面板位置或间距。","关闭按钮的可访问名称。","设置受控状态或初始状态。"],"accessibility":["包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"sheet": {"summary":"从视口边缘打开的可滚动操作面板。","description":"从视口边缘打开的可滚动操作面板。 包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","props":["设置考虑视口边界的面板位置或间距。","关闭按钮的可访问名称。","设置受控状态或初始状态。","true 会限制焦点并阻止背景指针操作和滚动。false 允许背景交互；trap-focus 仅限制焦点。"],"accessibility":["包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "collapsible": {"summary":"展开或折叠一组可选设置的容器。","description":"展开或折叠一组可选设置的容器。 触发按钮名称应说明内容。检查 Enter 和 Space 展开操作。","props":["设置受控状态或初始状态。","禁用用户操作。","关闭时仍将面板保留在 DOM 中。"],"accessibility":["触发按钮名称应说明内容。检查 Enter 和 Space 展开操作。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "toggle": {"summary":"保持按下选择状态的独立切换按钮。","description":"保持按下选择状态的独立切换按钮。 为纯图标按钮提供标签。通过内凹表面和边框辅助表示选择，而非只用颜色。","props":["设置受控状态或初始状态。","选择控件尺寸。","禁用用户操作。"],"accessibility":["为纯图标按钮提供标签。通过内凹表面和边框辅助表示选择，而非只用颜色。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "toggle-group": {"summary":"可通过键盘导航的单选或多选切换组。","description":"可通过键盘导航的单选或多选切换组。 标记组和每个选项。区分方向键焦点移动与选择状态。","props":["设置受控状态或初始状态。","允许多项选择。","设置布局和键盘导航方向。"],"accessibility":["标记组和每个选项。区分方向键焦点移动与选择状态。","修改 render 或 className 时保留标签关联和可见焦点。"]},

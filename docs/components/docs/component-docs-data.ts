@@ -435,9 +435,9 @@ export const componentDocs = [
       {
         component: "Dialog",
         name: "modal",
-        type: "boolean",
+        type: 'boolean | "trap-focus"',
         defaultValue: "true",
-        description: "배경 상호작용과 focus trap 여부를 결정합니다.",
+        description: "true는 배경 조작과 스크롤을 막고 포커스를 가둡니다. false는 배경 조작을 허용하고, trap-focus는 포커스만 가둡니다.",
       },
       {
         component: "DialogTrigger / DialogClose",
@@ -1434,6 +1434,13 @@ export const componentDocs = [
       "name": "open / onOpenChange",
       "type": "Dialog.Root.Props",
       "description": "제어 상태 또는 최초 상태를 지정합니다."
+    },
+    {
+      "component": "Sheet",
+      "name": "modal",
+      "type": "boolean | \"trap-focus\"",
+      "defaultValue": "true",
+      "description": "true는 배경 조작과 스크롤을 막고 포커스를 가둡니다. false는 배경 조작을 허용하고, trap-focus는 포커스만 가둡니다."
     }
   ],
   "accessibility": [

@@ -31,7 +31,7 @@ test.beforeAll(async () => {
     // A fixed fixture graph lets Vite finish its cold-cache commit before listening.
     optimizeDeps: {
       noDiscovery: true,
-      include: ["react", "react-dom/client", "react/jsx-runtime", "react/jsx-dev-runtime", "@base-ui/react/drawer", "tailwind-merge"],
+      include: ["react", "react-dom/client", "react/jsx-runtime", "react/jsx-dev-runtime", "@base-ui/react/drawer", "@base-ui/react/dialog", "tailwind-merge"],
     },
   });
   server.middlewares.use((request, response, next) => {
@@ -53,40 +53,61 @@ test.afterAll(async () => {
   }
 });
 
-test("non-modal drawer leaves background controls clickable", async ({ page }) => {
-  await page.goto(`${origin}?modal=false`);
-  const trigger = page.getByRole("button", { name: "Open drawer", exact: true });
-  await trigger.click();
-  await expect(page.getByRole("dialog", { name: "Drawer modal behavior" })).toBeVisible();
-  const background = page.getByTestId("background-action");
-  if (test.info().project.use.hasTouch) await background.tap({ timeout: 2000 });
-  else await background.click({ timeout: 2000 });
-  await expect(page.locator('[data-slot="drawer-overlay"]')).toHaveCount(0);
-  await expect(page.getByTestId("background-count")).toHaveText("1");
-  await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await trigger.click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.getByRole("button", { name: "Close drawer", exact: true }).focus();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(trigger).toBeFocused();
-});
+for (const kind of ["drawer", "dialog", "sheet"] as const) {
+  test(`non-modal ${kind} leaves background controls clickable`, async ({ page }) => {
+    await page.goto(`${origin}?component=${kind}&modal=false`);
+    const trigger = page.getByRole("button", { name: `Open ${kind}`, exact: true });
+    await trigger.click();
+    await expect(page.getByRole("dialog", { name: "Overlay modal behavior" })).toBeVisible();
+    const background = page.getByTestId("background-action");
+    if (test.info().project.use.hasTouch) await background.tap({ timeout: 2000 });
+    else await background.click({ timeout: 2000 });
+    await expect(page.locator('[data-slot="drawer-overlay"], [data-slot="dialog-overlay"]')).toHaveCount(0);
+    await expect(page.getByTestId("background-count")).toHaveText("1");
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await trigger.click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.getByRole("button", { name: `Close ${kind}`, exact: true }).focus();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
 
-test("default modal drawer preserves its backdrop and focus return", async ({ page }) => {
-  await page.goto(origin);
-  const trigger = page.getByRole("button", { name: "Open drawer", exact: true });
-  await trigger.click();
-  await expect(page.getByRole("dialog", { name: "Drawer modal behavior" })).toBeVisible();
-  await expect(page.locator('[data-slot="drawer-overlay"]')).toBeVisible();
-  const background = page.getByTestId("background-action");
-  const point = await background.boundingBox();
-  expect(point).not.toBeNull();
-  const x = point!.x + point!.width / 2;
-  const y = point!.y + point!.height / 2;
-  if (test.info().project.use.hasTouch) await page.touchscreen.tap(x, y);
-  else await page.mouse.click(x, y);
-  await expect(page.getByTestId("background-count")).toHaveText("0");
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(trigger).toBeFocused();
-});
+  test(`default modal ${kind} preserves its backdrop and focus return`, async ({ page }) => {
+    await page.goto(`${origin}?component=${kind}`);
+    const trigger = page.getByRole("button", { name: `Open ${kind}`, exact: true });
+    await trigger.click();
+    await expect(page.getByRole("dialog", { name: "Overlay modal behavior" })).toBeVisible();
+    await expect(page.locator('[data-slot="drawer-overlay"], [data-slot="dialog-overlay"]')).toBeVisible();
+    const background = page.getByTestId("background-action");
+    const point = await background.boundingBox();
+    expect(point).not.toBeNull();
+    const x = point!.x + point!.width / 2;
+    const y = point!.y + point!.height / 2;
+    if (test.info().project.use.hasTouch) await page.touchscreen.tap(x, y);
+    else await page.mouse.click(x, y);
+    await expect(page.getByTestId("background-count")).toHaveText("0");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
+}
+
+for (const kind of ["dialog", "sheet"] as const) {
+  test(`trap-focus ${kind} keeps keyboard focus inside while allowing background pointers`, async ({ page }) => {
+    await page.goto(`${origin}?component=${kind}&modal=trap-focus`);
+    const trigger = page.getByRole("button", { name: `Open ${kind}`, exact: true });
+    await trigger.click();
+    const popup = page.getByRole("dialog", { name: "Overlay modal behavior" });
+    await expect(popup).toBeVisible();
+    await expect(page.locator('[data-slot="dialog-overlay"]')).toHaveCount(0);
+    await popup.getByRole("button").last().focus();
+    await page.keyboard.press("Tab");
+    await expect(popup.getByRole("button").first()).toBeFocused();
+    const background = page.getByTestId("background-action");
+    if (test.info().project.use.hasTouch) await background.tap({ timeout: 2000 });
+    else await background.click({ timeout: 2000 });
+    await expect(page.getByTestId("background-count")).toHaveText("1");
+    await expect(popup).toBeHidden();
+  });
+}
