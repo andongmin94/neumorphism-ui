@@ -607,7 +607,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Example() {
   return (
-    <ScrollArea className="h-40" tabIndex={0} aria-label="Recent activity">
+    <ScrollArea role="region" className="h-40" tabIndex={0} aria-label="Recent activity">
       <ul className="grid gap-3 p-4">
         {Array.from({ length: 12 }, (_, index) => <li key={index}>Activity {index + 1}</li>)}
       </ul>

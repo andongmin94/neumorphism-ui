@@ -429,7 +429,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     props: [
       "限制高度或宽度以形成 overflow 区域。",
       "当内部没有 focusable 元素时，提供键盘滚动入口。",
-      "当该区域可独立浏览时，为其内容提供名称。",
+      "作为可独立导航的区域时，配合 role=\"region\" 提供内容名称。",
     ],
     accessibility: [
       "使用原生 overflow，不会拦截屏幕阅读器和触控滚动。",
@@ -540,8 +540,8 @@ export const componentDocCopyZh = defineComponentDocCopy({
     description:
       "基于 Base UI Tabs，将 active trigger 呈现为 raised 表面，将 list 呈现为 inset track。支持受控与非受控值、自动或手动激活，以及横向和纵向排列。",
     props: [
-      "受控的 active tab 值或非受控初始值。",
-      "active tab 变化时调用。",
+      "通过 value 控制活动标签页，或通过 defaultValue 设置初始值。可使用字符串、数字等值；null 表示没有活动标签页。",
+      "接收新值和 eventDetails，也会通知非受控 Tabs 的自动选择变化。没有可激活的标签页时，值可能为 null。",
       "设置 list 方向和 Arrow 键导航轴。",
       "决定用 Arrow 键移动 focus 时是否同时激活 panel。",
       "与所关联 TabsContent 共享的唯一值。",
@@ -599,7 +599,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
 "field": {"summary":"把控件与标签、说明和验证错误关联起来。","description":"把控件与标签、说明和验证错误关联起来。 使用 FieldControl 或通过 render 组合输入。除了错误颜色，还应提供 FieldError 文本。","props":["关联表单值与外部错误的字段名称。","返回自定义验证结果。","选择执行验证的时机。"],"accessibility":["使用 FieldControl 或通过 render 组合输入。除了错误颜色，还应提供 FieldError 文本。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "fieldset": {"summary":"为相关控件提供共用标题和禁用状态的组。","description":"为相关控件提供共用标题和禁用状态的组。 用 FieldsetLegend 说明组的用途，同时保留各控件的标签。","props":["禁用用户操作。","为相关字段组命名。","扩展样式，也可使用状态回调。"],"accessibility":["用 FieldsetLegend 说明组的用途，同时保留各控件的标签。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "form": {"summary":"协调字段验证和提交错误的原生表单。","description":"协调字段验证和提交错误的原生表单。 区分保存与重置。示例只更新本地状态，不包含服务器持久化。","props":["接收验证后的值，并阻止原生提交。","按字段名称关联外部错误。","选择执行验证的时机。"],"accessibility":["区分保存与重置。示例只更新本地状态，不包含服务器持久化。","修改 render 或 className 时保留标签关联和可见焦点。"]},
-"number-field": {"summary":"支持范围、步长和本地化格式的数字输入。","description":"支持范围、步长和本地化格式的数字输入。 为增加和减少按钮分别命名。检查边界值以及直接输入。","props":["设置最小值与最大值。","按钮和键盘操作的增减步长。","配置本地化数字格式。"],"accessibility":["为增加和减少按钮分别命名。检查边界值以及直接输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"number-field": {"summary":"支持范围、步长和本地化格式的数字输入。","description":"支持范围、步长和本地化格式的数字输入。 为增加和减少按钮分别命名。检查边界值以及直接输入。","props":["设置最小值与最大值。","增减步长。\"any\" 关闭步长校验，基本增减量仍为 1；Alt 和 Shift 分别使用 smallStep 和 largeStep。","locale 接受语言标签、Intl.Locale 或它们的数组；format 接受数字格式选项。"],"accessibility":["为增加和减少按钮分别命名。检查边界值以及直接输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "meter": {"summary":"在已知范围内表示测量值的计量条。","description":"在已知范围内表示测量值的计量条。 任务完成进度请用 Progress。配合 MeterLabel 显示可见数值。","props":["范围内的当前测量值。","设置最小值与最大值。","配置本地化数字格式。"],"accessibility":["任务完成进度请用 Progress。配合 MeterLabel 显示可见数值。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "combobox": {"summary":"支持过滤、空结果及键盘选择的搜索输入。","description":"支持过滤、空结果及键盘选择的搜索输入。 提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","props":["用于过滤与选择的原始选项。","通过 value 控制选中值，或通过 defaultValue 设置初始值。单选接受 Value 或 null，多选接受 readonly Value[] 或 null。","接收选中值和 eventDetails。multiple=true 时值为 Value[]，否则为 Value 或 null。","允许选择多个项目，并以数组形式传递选中值。"],"accessibility":["提供 ComboboxLabel 和空结果提示。检查方向键、Enter、Escape 及真实 IME 输入。","修改 render 或 className 时保留标签关联和可见焦点。"]},"calendar": {"summary":"用于单日和范围选择的新拟态日历。","description":"使用 DayPicker v10 的日期计算和键盘导航。选中端点使用内凹效果，范围内部使用连续表面。","props":["指定选择模式。","连接选中值及更改回调。","设置禁用日期、语言及可导航月份。"],"accessibility":["用方向键移动，用 Enter 或 Space 选择。","保留起止日期、今天和禁用日期的无障碍标签。"]},
 "date-picker": {"summary":"在弹出层中选择并清除日期。","description":"由父组件管理选择值。设置 name 后，以本地 YYYY-MM-DD 提交隐藏字段，避免 UTC 转换改变日期。重置也由父状态处理。","props":["当前日期和更改回调，空值为undefined。","按钮名称、表单字段名和说明元素ID。","禁用日期及月份导航范围。"],"accessibility":["打开时聚焦日历，关闭时恢复触发器焦点。","在父表单验证必填值，使用invalid和describedBy关联错误。"]},

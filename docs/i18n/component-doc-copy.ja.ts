@@ -446,7 +446,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     props: [
       "高さまたは幅を制限して overflow 領域を作ります。",
       "focusable な子要素がない場合に、キーボードスクロールの入口を提供します。",
-      "独立して移動できる領域である場合にコンテンツ名を指定します。",
+      "独立して移動する領域に role=\"region\" とともに名前を付けます。",
     ],
     accessibility: [
       "native overflow は screen reader や touch によるスクロール動作を妨げません。",
@@ -564,8 +564,8 @@ export const componentDocCopyJa = defineComponentDocCopy({
     description:
       "Base UI Tabs を基盤に、active trigger を raised サーフェス、list を inset track として表示します。制御・非制御の値、自動・手動 activation、水平・垂直 orientation に対応します。",
     props: [
-      "制御された active tab の値、または非制御時の初期値です。",
-      "active tab が変わったときに呼び出されます。",
+      "value でアクティブなタブを制御し、defaultValue で初期値を指定します。文字列・数値などを使え、null の場合はどのタブもアクティブになりません。",
+      "新しい値と eventDetails を受け取ります。非制御 Tabs の自動選択変更も通知され、アクティブにできるタブがない場合は null になることがあります。",
       "list の向きと Arrow キーによる移動軸を設定します。",
       "Arrow キーで focus を移したときに panel も有効化するかを決定します。",
       "関連する TabsContent と共有する一意の値です。",
@@ -625,7 +625,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
 "field": {"summary":"入力とラベル、説明、検証エラーを関連付ける単位。","description":"入力とラベル、説明、検証エラーを関連付ける単位。 FieldControl または render で結合した入力を使い、色と FieldError テキストでエラーを示します。","props":["フォーム値と外部エラーを結ぶフィールド名です。","独自の検証結果を返します。","検証を行うタイミングを選びます。"],"accessibility":["FieldControl または render で結合した入力を使い、色と FieldError テキストでエラーを示します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "fieldset": {"summary":"関連する入力に共通の見出しと無効状態を与えるグループ。","description":"関連する入力に共通の見出しと無効状態を与えるグループ。 FieldsetLegend でグループの目的を説明し、各入力のラベルも維持します。","props":["ユーザー操作を無効にします。","関連するフィールド群の見出しです。","状態関数も使ってスタイルを拡張します。"],"accessibility":["FieldsetLegend でグループの目的を説明し、各入力のラベルも維持します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "form": {"summary":"フィールド検証と送信エラーを扱うネイティブフォーム。","description":"フィールド検証と送信エラーを扱うネイティブフォーム。 保存とリセットを区別します。例はローカル状態のみ更新し、サーバー保存は含みません。","props":["検証済みの値を受け取り、ネイティブ送信を防ぎます。","フィールド名に外部エラーを関連付けます。","検証を行うタイミングを選びます。"],"accessibility":["保存とリセットを区別します。例はローカル状態のみ更新し、サーバー保存は含みません。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
-"number-field": {"summary":"範囲、刻み幅、地域別表示を扱う数値入力。","description":"範囲、刻み幅、地域別表示を扱う数値入力。 増減ボタンに名前を付け、境界値と直接入力を確認します。","props":["最小値と最大値を指定します。","ボタンとキー操作の増減幅です。","地域に応じた数値の書式を設定します。"],"accessibility":["増減ボタンに名前を付け、境界値と直接入力を確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
+"number-field": {"summary":"範囲、刻み幅、地域別表示を扱う数値入力。","description":"範囲、刻み幅、地域別表示を扱う数値入力。 増減ボタンに名前を付け、境界値と直接入力を確認します。","props":["最小値と最大値を指定します。","増減の間隔です。\"any\" はステップ検証を無効にし、基本の増減幅は 1 になります。Alt と Shift はそれぞれ smallStep と largeStep を使います。","locale は言語タグ・Intl.Locale またはそれらの配列を受け取り、format は数値の書式設定オプションを受け取ります。"],"accessibility":["増減ボタンに名前を付け、境界値と直接入力を確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "meter": {"summary":"既知の範囲内で測定値を示すメーター。","description":"既知の範囲内で測定値を示すメーター。 処理の進行には Progress を使用し、MeterLabel と数値を併記します。","props":["範囲内の現在の測定値です。","最小値と最大値を指定します。","地域に応じた数値の書式を設定します。"],"accessibility":["処理の進行には Progress を使用し、MeterLabel と数値を併記します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "combobox": {"summary":"絞り込み、空の結果、キーボード選択を扱う検索入力。","description":"絞り込み、空の結果、キーボード選択を扱う検索入力。 ComboboxLabel と空結果のメッセージを用意し、矢印、Enter、Escape と実際の IME 入力を確認します。","props":["検索と選択の元になる項目です。","value で選択値を制御し、defaultValue で初期値を設定します。単一選択は Value または null、複数選択は readonly Value[] または null を受け取ります。","選択値と eventDetails を受け取ります。multiple=true の場合は Value[]、それ以外は Value または null が渡されます。","複数項目の選択を許可し、選択値を配列で渡します。"],"accessibility":["ComboboxLabel と空結果のメッセージを用意し、矢印、Enter、Escape と実際の IME 入力を確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},"calendar": {"summary":"日付と期間を選択するニューモーフィズムカレンダー。","description":"DayPicker v10の日付計算とキーボード操作を使用します。選択日は凹面、期間の中間日は連続した面で示します。","props":["選択モードを指定します。","選択値と変更コールバックを接続します。","無効な日付、言語、移動可能な月を指定します。"],"accessibility":["方向キーで移動し、EnterまたはSpaceで選択します。","開始・終了日、今日、無効な日付のアクセシブルなラベルを保持してください。"]},
 "date-picker": {"summary":"ポップオーバーで日付を選択・解除します。","description":"親が選択値を管理します。nameを指定するとUTC変換せず、現地日付をYYYY-MM-DDで送信します。リセットも親の状態を更新します。","props":["現在の日付と変更コールバック。空値はundefinedです。","ボタン名、フォーム名、説明要素のIDです。","無効な日付と移動可能な月の範囲です。"],"accessibility":["開くとカレンダーに、閉じるとトリガーにフォーカスが移ります。","必須値は親フォームで検証し、invalidとdescribedByでエラーを接続してください。"]},

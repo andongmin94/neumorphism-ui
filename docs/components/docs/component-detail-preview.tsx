@@ -659,6 +659,8 @@ export function ComponentDetailPreview({
     case "scroll-area":
       return (
         <ScrollArea
+          role="region"
+          tabIndex={0}
           aria-label={copy.scrollArea.label}
           className="component-preview-scroll-area"
         >

@@ -848,7 +848,7 @@ export const componentDocs = [
     description:
       "overflow-auto와 native scrollbar를 사용해 휠, 터치, 키보드, 브라우저 접근성을 그대로 유지합니다.",
     importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { ScrollArea } from \"@/components/ui/scroll-area\";",
-    usageCode: "export default function Example() {\n    const copy = {\n        \"scrollArea\": {\n            \"label\": \"컴포넌트 상태 목록\",\n            \"categories\": {\n                \"accessibility\": \"접근성\",\n                \"overlay\": \"오버레이\",\n                \"data\": \"데이터\",\n                \"input\": \"입력\",\n                \"composite\": \"복합\"\n            },\n            \"statuses\": {\n                \"ready\": \"준비됨\",\n                \"review\": \"검토\",\n                \"planned\": \"예정\"\n            }\n        }\n    };\n    return (<ScrollArea aria-label={copy.scrollArea.label} className=\"h-[280px] w-full max-w-[580px] p-2.5\">\n          {[\n            [\n                \"NVDA\",\n                copy.scrollArea.categories.accessibility,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Dialog\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Data table\",\n                copy.scrollArea.categories.data,\n                copy.scrollArea.statuses.review,\n                \"review\",\n            ],\n            [\n                \"Slider\",\n                copy.scrollArea.categories.input,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Tooltip\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Calendar\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n            [\n                \"Command\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n        ].map(([name, category, state, stateId]) => (<div className=\"flex items-center justify-between gap-4 border-b border-[var(--border)] p-3.5 last:border-0 [&>span]:grid [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" key={name}>\n              <span><strong>{name}</strong><small>{category}</small></span>\n              <Badge variant={stateId === \"ready\" ? \"primary\" : \"soft\"}>\n                {state}\n              </Badge>\n            </div>))}\n        </ScrollArea>);\n}",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"scrollArea\": {\n            \"label\": \"컴포넌트 상태 목록\",\n            \"categories\": {\n                \"accessibility\": \"접근성\",\n                \"overlay\": \"오버레이\",\n                \"data\": \"데이터\",\n                \"input\": \"입력\",\n                \"composite\": \"복합\"\n            },\n            \"statuses\": {\n                \"ready\": \"준비됨\",\n                \"review\": \"검토\",\n                \"planned\": \"예정\"\n            }\n        }\n    };\n    return (<ScrollArea role=\"region\" tabIndex={0} aria-label={copy.scrollArea.label} className=\"h-[280px] w-full max-w-[580px] p-2.5\">\n          {[\n            [\n                \"NVDA\",\n                copy.scrollArea.categories.accessibility,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Dialog\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Data table\",\n                copy.scrollArea.categories.data,\n                copy.scrollArea.statuses.review,\n                \"review\",\n            ],\n            [\n                \"Slider\",\n                copy.scrollArea.categories.input,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Tooltip\",\n                copy.scrollArea.categories.overlay,\n                copy.scrollArea.statuses.ready,\n                \"ready\",\n            ],\n            [\n                \"Calendar\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n            [\n                \"Command\",\n                copy.scrollArea.categories.composite,\n                copy.scrollArea.statuses.planned,\n                \"planned\",\n            ],\n        ].map(([name, category, state, stateId]) => (<div className=\"flex items-center justify-between gap-4 border-b border-[var(--border)] p-3.5 last:border-0 [&>span]:grid [&>span]:gap-1 [&_small]:text-[var(--muted-foreground)]\" key={name}>\n              <span><strong>{name}</strong><small>{category}</small></span>\n              <Badge variant={stateId === \"ready\" ? \"primary\" : \"soft\"}>\n                {state}\n              </Badge>\n            </div>))}\n        </ScrollArea>);\n}",
     props: [
       {
         component: "ScrollArea",
@@ -866,7 +866,7 @@ export const componentDocs = [
         component: "ScrollArea",
         name: "aria-label / aria-labelledby",
         type: "string",
-        description: "독립적으로 탐색할 영역이면 콘텐츠 이름을 제공합니다.",
+        description: "독립적으로 탐색할 영역이면 role=\"region\"과 함께 콘텐츠 이름을 제공합니다.",
       },
     ],
     accessibility: [
@@ -1166,14 +1166,15 @@ export const componentDocs = [
       {
         component: "Tabs",
         name: "value / defaultValue",
-        type: "string",
-        description: "controlled 또는 초기 uncontrolled 활성 tab 값입니다.",
+        type: "any | null",
+        defaultValue: "0",
+        description: "value로 활성 tab을 제어하거나 defaultValue로 초기값을 지정합니다. 문자열·숫자 등을 사용하며 null이면 활성 tab이 없습니다.",
       },
       {
         component: "Tabs",
         name: "onValueChange",
-        type: "(value: string) => void",
-        description: "활성 tab이 바뀔 때 호출됩니다.",
+        type: "(value: any | null, eventDetails) => void",
+        description: "새 값과 eventDetails를 받습니다. 비제어 Tabs의 자동 선택 변경도 알리며, 활성화할 tab이 없으면 null을 받을 수 있습니다.",
       },
       {
         component: "Tabs",
@@ -1192,14 +1193,14 @@ export const componentDocs = [
       {
         component: "TabsTrigger",
         name: "value",
-        type: "string",
+        type: "any | null",
         required: true,
         description: "연결할 TabsContent와 공유하는 고유 값입니다.",
       },
       {
         component: "TabsContent",
         name: "value",
-        type: "string",
+        type: "any | null",
         required: true,
         description: "해당 panel을 여는 trigger 값입니다.",
       },
@@ -1712,14 +1713,15 @@ export const componentDocs = [
     {
       "component": "NumberField",
       "name": "step",
-      "type": "number",
-      "description": "버튼과 키보드의 증감 간격입니다."
+      "type": "number | \"any\"",
+      "defaultValue": "1",
+      "description": "증감 간격입니다. \"any\"는 단계 배수 검증을 끄며 기본 증감은 1을 사용합니다. Alt와 Shift는 각각 smallStep과 largeStep을 사용합니다."
     },
     {
       "component": "NumberField",
       "name": "locale / format",
-      "type": "string | Intl.NumberFormatOptions",
-      "description": "숫자의 지역별 표시 형식을 설정합니다."
+      "type": "Intl.LocalesArgument / Intl.NumberFormatOptions",
+      "description": "locale은 언어 태그·Intl.Locale 또는 그 배열을, format은 숫자 서식 옵션을 받습니다."
     }
   ],
   "accessibility": [
@@ -1740,6 +1742,7 @@ export const componentDocs = [
       "component": "Meter",
       "name": "value",
       "type": "number",
+      "required": true,
       "description": "범위 안의 현재 측정값입니다."
     },
     {
