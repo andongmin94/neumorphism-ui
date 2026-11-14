@@ -29,8 +29,8 @@ export const componentDocCopyZh = defineComponentDocCopy({
     ],
     accessibility: [
       "第二份视觉副本使用 aria-hidden，避免屏幕阅读器重复朗读。",
-      "始终提供用户可控制的暂停按钮，并用 aria-pressed 暴露状态。",
-      "prefers-reduced-motion 会移除移动并隐藏重复项目集合。",
+      "启用动效时显示暂停/继续按钮，并用 aria-pressed 暴露状态。",
+      "prefers-reduced-motion 会将第一组项目换行以完整显示，停止动画，并隐藏副本和动效控制按钮。",
     ],
   },
   sidebar: {

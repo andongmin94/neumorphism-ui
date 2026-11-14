@@ -29,8 +29,8 @@ export const componentDocCopyEn = defineComponentDocCopy({
     ],
     accessibility: [
       "The second visual copy is aria-hidden so screen readers do not announce every item twice.",
-      "Always provide a user-controlled pause button and expose its state with aria-pressed.",
-      "prefers-reduced-motion removes the movement and hides the duplicate item set.",
+      "When motion is enabled, a pause/resume button exposes its state with aria-pressed.",
+      "prefers-reduced-motion wraps the first item set so every item is visible, stops the animation, and hides the duplicate and motion control button.",
     ],
   },
   sidebar: {

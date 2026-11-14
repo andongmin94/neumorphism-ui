@@ -55,17 +55,17 @@ function Marquee({
           [data-slot="marquee-copy"], [data-slot="marquee-toggle"] { display: none !important; }
         }
       `}</style>
-      <div data-slot="marquee-viewport" className="min-w-0 flex-1 overflow-hidden">
+      <div data-slot="marquee-viewport" className="min-w-0 flex-1 overflow-hidden [container-type:inline-size]">
         <div
           data-slot="marquee-track"
-          className="flex w-max min-w-full items-center will-change-transform"
+          className="flex w-max items-center will-change-transform"
           style={{
             animation: `neumorphism-marquee-scroll ${duration}s linear infinite`,
             animationPlayState: paused ? "paused" : "running",
           }}
         >
-          <div data-slot="marquee-items" className="flex shrink-0 items-center gap-3 pe-3">{itemNodes}</div>
-          <div data-slot="marquee-copy" aria-hidden="true" inert className="flex shrink-0 items-center gap-3 pe-3">{itemNodes}</div>
+          <div data-slot="marquee-items" className="flex min-w-[100cqw] shrink-0 items-center justify-around gap-3 pe-3">{itemNodes}</div>
+          <div data-slot="marquee-copy" aria-hidden="true" inert className="flex min-w-[100cqw] shrink-0 items-center justify-around gap-3 pe-3">{itemNodes}</div>
         </div>
       </div>
       <button

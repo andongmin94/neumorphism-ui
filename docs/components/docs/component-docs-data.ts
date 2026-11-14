@@ -2243,8 +2243,8 @@ export const componentDocs = [
     ],
     accessibility: [
       "두 번째 시각적 복사본은 aria-hidden으로 제외해 스크린 리더가 같은 항목을 두 번 읽지 않게 합니다.",
-      "사용자가 직접 일시 정지할 수 있는 버튼을 항상 제공하고 현재 상태를 aria-pressed로 노출합니다.",
-      "prefers-reduced-motion에서는 이동 애니메이션을 제거하고 첫 번째 항목 집합만 표시합니다.",
+      "모션이 활성화되어 있을 때 일시 정지/재개 버튼을 제공하고 현재 상태를 aria-pressed로 노출합니다.",
+      "prefers-reduced-motion에서는 첫 번째 항목 집합을 줄바꿈해 모두 표시하며, 애니메이션을 멈추고 복사본과 모션 제어 버튼을 숨깁니다.",
     ],
   },
 ] as const satisfies readonly ComponentDoc[];
