@@ -512,7 +512,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "キーボードとポインターで調整するときの増分です。",
       "track の向きとキーボード操作の軸を設定します。",
       "実際の thumb input に値の順序で渡すアクセシブルな名前です。",
-      "調整中または調整完了時に単一の数値または値の配列を渡します。",
+      "調整中または調整完了時に呼び出されます。value/defaultValue が数値なら number、配列ならその配列型を維持して渡します。",
       "すべての thumb の操作を無効にします。",
     ],
     accessibility: [

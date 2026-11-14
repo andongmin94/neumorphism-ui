@@ -806,11 +806,7 @@ export function ComponentDetailPreview({
                 copy.slider.maximumPrice,
               ]}
               value={sliderValue}
-              onValueChange={(nextValue) => {
-                setSliderValue(
-                  Array.isArray(nextValue) ? [...nextValue] : [nextValue],
-                );
-              }}
+              onValueChange={setSliderValue}
             />
           </div>
           <div className="component-preview-row component-preview-slider-vertical">

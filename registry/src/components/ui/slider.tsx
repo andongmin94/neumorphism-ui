@@ -5,7 +5,7 @@ import { Slider as SliderPrimitive } from "@base-ui/react/slider";
 
 import { mergeClassName } from "@/lib/utils";
 
-type SliderProps = SliderPrimitive.Root.Props & {
+type SliderProps<Value extends number | readonly number[] = number | readonly number[]> = SliderPrimitive.Root.Props<Value> & {
   /**
    * Accessible names applied to the thumb inputs in value order.
    * Provide one label for a single-value slider and one per thumb for a range.
@@ -13,7 +13,7 @@ type SliderProps = SliderPrimitive.Root.Props & {
   thumbLabels?: readonly string[];
 };
 
-function Slider({
+function Slider<Value extends number | readonly number[]>({
   className,
   defaultValue,
   min = 0,
@@ -22,7 +22,7 @@ function Slider({
   thumbLabels,
   value,
   ...props
-}: SliderProps) {
+}: SliderProps<Value>) {
   const values = React.useMemo(
     () =>
       Array.isArray(value)
