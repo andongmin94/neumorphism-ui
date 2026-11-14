@@ -12,7 +12,7 @@
   "files": [
     {
       "path": "src/components/ui/form.tsx",
-      "content": "\"use client\";\n\nimport { Form as Primitive } from \"@base-ui/react/form\";\nimport { mergeClassName } from \"@/lib/utils\";\n\ntype FormProps<Values extends Record<string, unknown> = Record<string, unknown>> = Primitive.Props<Values>;\nfunction Form<Values extends Record<string, unknown> = Record<string, unknown>>({ className, ...props }: FormProps<Values>) {\n  return <Primitive<Values> data-slot=\"form\" className={mergeClassName<Primitive.State>(\"grid min-w-0 gap-5\", className)} {...props} />;\n}\nexport { Form };\nexport type { FormProps };\n",
+      "content": "\"use client\";\n\nimport { Form as Primitive } from \"@base-ui/react/form\";\nimport { mergeClassName } from \"@/lib/utils\";\n\ntype FormProps<Values extends Primitive.Values = Record<string, unknown>> = Primitive.Props<Values>;\nfunction Form<Values extends Primitive.Values = Record<string, unknown>>({ className, ...props }: FormProps<Values>) {\n  return <Primitive<Values> data-slot=\"form\" className={mergeClassName<Primitive.State>(\"grid min-w-0 gap-5\", className)} {...props} />;\n}\nexport { Form };\nexport type { FormProps };\n",
       "type": "registry:ui"
     }
   ],
