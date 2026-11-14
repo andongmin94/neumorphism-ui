@@ -1768,15 +1768,22 @@ export const componentDocs = [
     },
     {
       "component": "Combobox",
-      "name": "value / onValueChange",
-      "type": "Combobox.Root.Props",
-      "description": "제어 상태 또는 최초 상태를 지정합니다."
+      "name": "value / defaultValue",
+      "type": "Value | readonly Value[] | null",
+      "description": "value로 선택 값을 제어하거나 defaultValue로 초기값을 지정합니다. 단일 선택은 Value 또는 null, 복수 선택은 readonly Value[] 또는 null을 받습니다."
+    },
+    {
+      "component": "Combobox",
+      "name": "onValueChange",
+      "type": "(value: Multiple extends true ? Value[] : Value | null, eventDetails) => void",
+      "description": "선택 값과 eventDetails를 받습니다. multiple=true이면 Value[]를, 그 외에는 Value 또는 null을 전달합니다."
     },
     {
       "component": "Combobox",
       "name": "multiple",
       "type": "boolean",
-      "description": "복수 항목 선택을 허용합니다."
+      "defaultValue": "false",
+      "description": "복수 항목 선택을 허용하고 선택 값을 배열로 전달합니다."
     }
   ],
   "accessibility": [
