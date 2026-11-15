@@ -1620,14 +1620,14 @@ export const componentDocs = [
     {
       "component": "Field",
       "name": "validate",
-      "type": "(value) => string | string[] | null | Promise",
-      "description": "사용자 정의 검증 결과를 반환합니다."
+      "type": "(value: unknown, formValues: Form.Values) => string | string[] | null | void | Promise<string | string[] | null | void>",
+      "description": "현재 값과 전체 폼 값을 받아 오류 문자열 또는 배열을 반환합니다. 반환하지 않거나 null·빈 문자열·빈 배열이면 유효합니다. 비동기 검증도 지원하지만 validationMode=\"onSubmit\"에서는 제출을 대기시키지 않습니다."
     },
     {
       "component": "Field",
       "name": "validationMode",
       "type": "\"onSubmit\" | \"onBlur\" | \"onChange\"",
-      "description": "검증을 실행할 시점을 선택합니다."
+      "description": "검증 시점을 지정하며 Form의 설정보다 우선합니다. 생략하면 Form의 설정을 따르고, Form도 지정하지 않으면 onSubmit입니다."
     }
   ],
   "accessibility": [

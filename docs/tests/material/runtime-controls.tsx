@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
+import { Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator } from "@/components/ui/toolbar";
 import { buildThemeVariables, defaultThemeSettings } from "../../src/registry/theme";
 import "./styles.css";
 
@@ -83,13 +84,28 @@ function ResizableHandles() {
   </section>;
 }
 
+function OrientedToolbars() {
+  return <section className="grid gap-4">
+    {(["horizontal", "vertical"] as const).map(orientation => (
+      <Toolbar key={orientation} orientation={orientation} aria-label={`${orientation} actions`}>
+        <ToolbarGroup>
+          <ToolbarButton>First action</ToolbarButton>
+          <ToolbarButton>Second action</ToolbarButton>
+        </ToolbarGroup>
+        <ToolbarSeparator />
+        <ToolbarButton>Third action</ToolbarButton>
+      </Toolbar>
+    ))}
+  </section>;
+}
+
 function RuntimeControls() {
   React.useLayoutEffect(() => {
     const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /><OrientedToolbars /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);

@@ -1,5 +1,36 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+test("runtime regressions: Toolbar groups align with their arrow-key navigation", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  for (const orientation of ["horizontal", "vertical"] as const) {
+    const toolbar = page.getByRole("toolbar", { name: `${orientation} actions` });
+    const first = toolbar.getByRole("button", { name: "First action", exact: true });
+    const second = toolbar.getByRole("button", { name: "Second action", exact: true });
+    const third = toolbar.getByRole("button", { name: "Third action", exact: true });
+    await expect(first).toBeVisible();
+    await expect(second).toBeVisible();
+    const firstBounds = (await first.boundingBox())!;
+    const secondBounds = (await second.boundingBox())!;
+    if (orientation === "vertical") {
+      expect(secondBounds.y).toBeGreaterThanOrEqual(firstBounds.y + firstBounds.height);
+      expect(Math.abs(secondBounds.x + secondBounds.width / 2 - firstBounds.x - firstBounds.width / 2)).toBeLessThan(1);
+    } else {
+      expect(secondBounds.x).toBeGreaterThanOrEqual(firstBounds.x + firstBounds.width);
+      expect(Math.abs(secondBounds.y - firstBounds.y)).toBeLessThan(1);
+    }
+
+    const nextKey = orientation === "vertical" ? "ArrowDown" : "ArrowRight";
+    const previousKey = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
+    await first.focus();
+    await first.press(nextKey);
+    await expect(second).toBeFocused();
+    await second.press(nextKey);
+    await expect(third).toBeFocused();
+    await third.press(previousKey);
+    await expect(second).toBeFocused();
+  }
+});
+
 test("runtime regressions: ResizableHandle preserves custom children and the optional default grip", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   for (const withHandle of [false, true]) for (const custom of [false, true]) {
