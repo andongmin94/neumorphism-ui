@@ -71,7 +71,6 @@ function Marquee({
       <button
         type="button"
         data-slot="marquee-toggle"
-        aria-pressed={paused}
         aria-label={paused ? resumeLabel : pauseLabel}
         onClick={() => setPaused(value => !value)}
         className="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:[box-shadow:var(--neu-shadow-inset)]"

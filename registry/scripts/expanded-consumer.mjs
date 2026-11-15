@@ -239,7 +239,8 @@ export async function exerciseExpanded(page, { target, scenario, engineName, mod
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(marqueeToggle).toHaveAccessibleName("Pause animation");
   await marqueeToggle.click();
-  await expect(marqueeToggle).toHaveAttribute("aria-pressed", "true");
+  await expect(marquee.locator('[data-slot="marquee-track"]')).toHaveCSS("animation-play-state", "paused");
+  await expect(marqueeToggle).not.toHaveAttribute("aria-pressed");
   await expect(marqueeToggle).toHaveAccessibleName("Resume animation");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(marqueeToggle).toBeHidden();
