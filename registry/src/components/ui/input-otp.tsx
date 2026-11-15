@@ -71,7 +71,7 @@ function InputOTPSlot({
   index: number;
 }) {
   const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
+  const { char, placeholderChar, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
 
   return (
     <div
@@ -83,7 +83,7 @@ function InputOTPSlot({
       )}
       {...props}
     >
-      {char}
+      {char ?? (placeholderChar && <span className="text-[var(--muted-foreground)]">{placeholderChar}</span>)}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="h-4 w-px animate-pulse bg-current motion-reduce:animate-none" />

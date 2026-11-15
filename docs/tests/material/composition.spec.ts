@@ -1,5 +1,20 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+test("runtime regressions: InputOTP shows its placeholder only while empty", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  const fixture = page.getByTestId("otp-placeholder");
+  const input = fixture.getByRole("textbox", { name: "Verification code" });
+  const slots = fixture.locator('[data-slot="input-otp-slot"]');
+  await expect(input).toHaveValue("");
+  await expect(input).toHaveAttribute("aria-placeholder", "1234");
+  await expect(slots).toHaveText(["1", "2", "3", "4"]);
+  await input.fill("98");
+  await expect(input).toHaveValue("98");
+  await expect(slots).toHaveText(["9", "8", "", ""]);
+  await input.fill("");
+  await expect(slots).toHaveText(["1", "2", "3", "4"]);
+});
+
 test("runtime regressions: Toolbar groups align with their arrow-key navigation", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   for (const orientation of ["horizontal", "vertical"] as const) {

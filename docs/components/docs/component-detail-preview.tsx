@@ -281,7 +281,7 @@ export function ComponentDetailPreview({
               <Avatar><AvatarFallback>AN</AvatarFallback></Avatar>
               <Avatar><AvatarFallback>DE</AvatarFallback></Avatar>
               <Avatar><AvatarFallback>SO</AvatarFallback></Avatar>
-              <AvatarGroupCount>+9</AvatarGroupCount>
+              <AvatarGroupCount><span aria-hidden="true">+9</span><span className="sr-only">{copy.avatar.remaining}</span></AvatarGroupCount>
             </AvatarGroup>
           </div>
         </PreviewStack>

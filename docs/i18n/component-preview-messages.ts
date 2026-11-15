@@ -30,6 +30,7 @@ const ko = {
   },
   avatar: {
     team: "팀",
+    remaining: "추가 팀원 9명",
   },
   breadcrumb: {
     label: "페이지 경로",
@@ -246,6 +247,7 @@ const en: ComponentPreviewMessages = {
   },
   avatar: {
     team: "Team",
+    remaining: "9 more team members",
   },
   breadcrumb: {
     label: "Breadcrumb",
@@ -451,6 +453,7 @@ const zh: ComponentPreviewMessages = {
   },
   avatar: {
     team: "团队",
+    remaining: "另有9位团队成员",
   },
   breadcrumb: {
     label: "面包屑导航",
@@ -657,6 +660,7 @@ const ja: ComponentPreviewMessages = {
   },
   avatar: {
     team: "チーム",
+    remaining: "ほか9人のチームメンバー",
   },
   breadcrumb: {
     label: "パンくずリスト",

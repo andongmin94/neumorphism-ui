@@ -4,6 +4,7 @@ import { CmsWorkspace, type CmsPost } from "../../src/registry/components/blocks
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "../../src/registry/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
@@ -99,13 +100,23 @@ function OrientedToolbars() {
   </section>;
 }
 
+function CodePlaceholder() {
+  return <section data-testid="otp-placeholder">
+    <InputOTP maxLength={4} placeholder="1234" aria-label="Verification code">
+      <InputOTPGroup>
+        {[0, 1, 2, 3].map(index => <InputOTPSlot key={index} index={index} />)}
+      </InputOTPGroup>
+    </InputOTP>
+  </section>;
+}
+
 function RuntimeControls() {
   React.useLayoutEffect(() => {
     const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /><OrientedToolbars /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);
