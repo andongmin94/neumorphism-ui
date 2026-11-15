@@ -34,6 +34,30 @@ for (const { locale, slug } of cases) {
   });
 }
 
+test("dropdown theme selection survives closing and reopening its menus", async ({ page }) => {
+  await page.goto("/en/components/dropdown-menu");
+  const trigger = page.locator("#preview").getByRole("button", { name: "Workspace menu", exact: true });
+  const menu = page.locator('[data-slot="dropdown-menu-content"]');
+  const theme = menu.getByRole("menuitem", { name: "Theme", exact: true });
+  const submenu = page.locator('[data-slot="dropdown-menu-sub-content"]');
+  const dark = submenu.getByRole("menuitemradio", { name: "Dark", exact: true });
+  const system = submenu.getByRole("menuitemradio", { name: "System", exact: true });
+  await trigger.click();
+  await theme.press("ArrowRight");
+  await expect(system).toHaveAttribute("aria-checked", "true");
+  await dark.click();
+  await expect(dark).toHaveAttribute("aria-checked", "true");
+  await dark.press("Escape");
+  await page.keyboard.press("Escape");
+  await expect(submenu).toHaveCount(0);
+  await expect(menu).toHaveCount(0);
+
+  await trigger.click();
+  await theme.press("ArrowRight");
+  await expect(dark).toHaveAttribute("aria-checked", "true");
+  await expect(system).toHaveAttribute("aria-checked", "false");
+});
+
 test("marquee fills each cycle without a blank tail and respects reduced motion", async ({ page }) => {
   await page.goto("/en/components/marquee");
   const marquee = page.locator('#preview [data-slot="marquee"]');

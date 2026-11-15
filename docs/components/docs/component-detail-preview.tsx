@@ -194,6 +194,7 @@ export function ComponentDetailPreview({
   const [paginationPage, setPaginationPage] = React.useState(2);
   const [mixed, setMixed] = React.useState<CheckedState>("indeterminate");
   const [showDepthGrid, setShowDepthGrid] = React.useState(true);
+  const [dropdownTheme, setDropdownTheme] = React.useState("system");
   const [sliderValue, setSliderValue] = React.useState([32, 72]);
   const [switchValue, setSwitchValue] = React.useState(true);
 
@@ -463,7 +464,7 @@ export function ComponentDetailPreview({
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>{copy.dropdown.theme}</DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
-                  <DropdownMenuRadioGroup defaultValue="system">
+                  <DropdownMenuRadioGroup value={dropdownTheme} onValueChange={setDropdownTheme}>
                     <DropdownMenuRadioItem value="light">
                       {copy.dropdown.light}
                     </DropdownMenuRadioItem>
