@@ -1113,7 +1113,7 @@ export const componentDocs = [
     description:
       "native table 요소와 caption, thead, tbody, tfoot, tr, th, td를 조합합니다. 외부 container가 overflow-x-auto와 뉴모피즘 raised 표면을 제공합니다.",
     importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from \"@/components/ui/table\";",
-    usageCode: "export default function Example() {\n    const copy = {\n        \"table\": {\n            \"caption\": \"관심 종목 · 10분 지연 데이터\",\n            \"symbol\": \"종목\",\n            \"price\": \"가격\",\n            \"change\": \"변동\",\n            \"status\": \"상태\",\n            \"open\": \"장중\",\n            \"selected\": \"선택됨\",\n            \"watch\": \"관심\"\n        }\n    };\n    return (<Table>\n          <TableCaption>{copy.table.caption}</TableCaption>\n          <TableHeader>\n            <TableRow>\n              <TableHead>{copy.table.symbol}</TableHead>\n              <TableHead>{copy.table.price}</TableHead>\n              <TableHead>{copy.table.change}</TableHead>\n              <TableHead>{copy.table.status}</TableHead>\n            </TableRow>\n          </TableHeader>\n          <TableBody>\n            <TableRow>\n              <TableCell><strong>NVDA</strong></TableCell>\n              <TableCell>$181.92</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+2.41%</TableCell>\n              <TableCell>\n                <Badge variant=\"primary\">{copy.table.open}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow data-state=\"selected\">\n              <TableCell><strong>005930</strong></TableCell>\n              <TableCell>₩72,400</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+1.08%</TableCell>\n              <TableCell>\n                <Badge variant=\"soft\">{copy.table.selected}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow>\n              <TableCell><strong>TSLA</strong></TableCell>\n              <TableCell>$318.27</TableCell>\n              <TableCell className=\"font-semibold text-[var(--destructive)]\">−0.64%</TableCell>\n              <TableCell>\n                <Badge variant=\"outline\">{copy.table.watch}</Badge>\n              </TableCell>\n            </TableRow>\n          </TableBody>\n        </Table>);\n}",
+    usageCode: "export default function Example() {\n    const copy = {\n        \"table\": {\n            \"caption\": \"관심 종목 · 10분 지연 데이터\",\n            \"symbol\": \"종목\",\n            \"price\": \"가격\",\n            \"change\": \"변동\",\n            \"status\": \"상태\",\n            \"open\": \"장중\",\n            \"selected\": \"선택됨\",\n            \"watch\": \"관심\"\n        }\n    };\n    return (<Table containerProps={{ role: \"region\", \"aria-label\": copy.table.caption, tabIndex: 0 }}>\n          <TableCaption>{copy.table.caption}</TableCaption>\n          <TableHeader>\n            <TableRow>\n              <TableHead>{copy.table.symbol}</TableHead>\n              <TableHead>{copy.table.price}</TableHead>\n              <TableHead>{copy.table.change}</TableHead>\n              <TableHead>{copy.table.status}</TableHead>\n            </TableRow>\n          </TableHeader>\n          <TableBody>\n            <TableRow>\n              <TableCell><strong>NVDA</strong></TableCell>\n              <TableCell>$181.92</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+2.41%</TableCell>\n              <TableCell>\n                <Badge variant=\"primary\">{copy.table.open}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow data-state=\"selected\">\n              <TableCell><strong>005930</strong></TableCell>\n              <TableCell>₩72,400</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+1.08%</TableCell>\n              <TableCell>\n                <Badge variant=\"soft\">{copy.table.selected}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow>\n              <TableCell><strong>TSLA</strong></TableCell>\n              <TableCell>$318.27</TableCell>\n              <TableCell className=\"font-semibold text-[var(--destructive)]\">−0.64%</TableCell>\n              <TableCell>\n                <Badge variant=\"outline\">{copy.table.watch}</Badge>\n              </TableCell>\n            </TableRow>\n          </TableBody>\n        </Table>);\n}",
     props: [
       {
         component: "Table",
@@ -1121,6 +1121,12 @@ export const componentDocs = [
         type: "React.ReactNode",
         required: true,
         description: "caption과 table section을 배치합니다.",
+      },
+      {
+        component: "Table",
+        name: "containerProps",
+        type: 'React.ComponentProps<"div">',
+        description: "바깥 스크롤 영역의 속성입니다. role=\"region\", 접근 가능한 이름, tabIndex=0을 지정해 키보드 스크롤 진입점을 제공합니다.",
       },
       {
         component: "TableCaption",
@@ -2275,7 +2281,7 @@ export const componentDocs = [
       { component: "ImageCard", name: "alt", type: "string", required: true, description: "이미지의 목적을 설명하는 대체 텍스트입니다." },
       { component: "ImageCard", name: "caption", type: "ReactNode", description: "선택적인 figcaption 콘텐츠입니다." },
       { component: "ImageCard", name: "imageClassName", type: "string", description: "기본 aspect와 object-fit 스타일을 확장합니다." },
-      { component: "ImageCard", name: "figure props", type: "React.ComponentProps<\"figure\">", description: "figure에 표준 HTML 속성을 전달합니다." },
+      { component: "ImageCard", name: "figure props", type: "React.ComponentProps<\"figure\">", description: "figure에 표준 HTML 속성을 전달합니다. children은 이미지 뒤, caption 앞에 표시합니다." },
     ],
     accessibility: [
       "정보를 전달하는 이미지에는 내용을 설명하는 alt를 제공하고 장식 이미지는 빈 alt를 사용합니다.",

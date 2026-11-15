@@ -717,7 +717,7 @@ export default function Example() {
 
 export default function Example() {
   return (
-    <Table>
+    <Table containerProps={{ role: "region", "aria-label": "Workspace projects", tabIndex: 0 }}>
       <TableCaption>Workspace projects</TableCaption>
       <TableHeader><TableRow><TableHead scope="col">Project</TableHead><TableHead scope="col">Seats</TableHead></TableRow></TableHeader>
       <TableBody><TableRow><TableCell>Atlas</TableCell><TableCell>12</TableCell></TableRow></TableBody>

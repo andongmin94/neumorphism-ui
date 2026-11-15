@@ -9,7 +9,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "画像の目的を説明する代替テキストです。",
       "任意の figcaption コンテンツです。",
       "既定の aspect と object-fit スタイルを拡張します。",
-      "figure に標準 HTML 属性を渡します。",
+      "figure に標準 HTML 属性を渡します。children は画像の後、caption の前に表示します。",
     ],
     accessibility: [
       "情報を伝える画像には意味のある alt を、装飾画像には空の alt を使用します。",
@@ -547,6 +547,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "native table、caption、thead、tbody、tfoot、tr、th、td を組み合わせます。外側の container が overflow-x-auto とニューモーフィックな raised サーフェスを提供します。",
     props: [
       "caption と table section を配置します。",
+      "外側のスクロール領域の props です。role=\"region\"、アクセシブルな名前、tabIndex=0 を指定してキーボードでスクロールできる入口を提供します。",
       "table の目的とデータ範囲を説明します。",
       "header が説明する cell の方向を指定します。",
       "選択された行の inset 状態を有効にします。",

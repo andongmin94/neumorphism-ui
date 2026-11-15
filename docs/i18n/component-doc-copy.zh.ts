@@ -9,7 +9,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "说明图片用途的替代文本。",
       "可选的 figcaption 内容。",
       "扩展默认的宽高比和 object-fit 样式。",
-      "向 figure 传递标准 HTML 属性。",
+      "向 figure 传递标准 HTML 属性；children 显示在图片之后、caption 之前。",
     ],
     accessibility: [
       "信息图片应提供有意义的 alt，装饰图片使用空 alt。",
@@ -524,6 +524,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "组合原生 table、caption、thead、tbody、tfoot、tr、th 和 td 元素。外层 container 提供 overflow-x-auto 与拟物 raised 表面。",
     props: [
       "排列 caption 和各个 table section。",
+      "外层滚动区域的属性。设置 role=\"region\"、无障碍名称和 tabIndex=0，为键盘滚动提供焦点入口。",
       "说明表格用途和数据范围。",
       "明确 header 所描述的 cell 方向。",
       "启用选中行的 inset 状态。",

@@ -13,6 +13,7 @@ function ImageCard({
   src,
   alt,
   caption,
+  children,
   imageClassName,
   className,
   ...props
@@ -32,6 +33,7 @@ function ImageCard({
         alt={alt}
         className={cn("aspect-[4/3] w-full object-cover", imageClassName)}
       />
+      {children}
       {caption !== undefined ? (
         <figcaption
           data-slot="image-card-caption"

@@ -856,7 +856,7 @@ export function ComponentDetailPreview({
 
     case "table":
       return (
-        <Table>
+        <Table containerProps={{ role: "region", "aria-label": copy.table.caption, tabIndex: 0 }}>
           <TableCaption>{copy.table.caption}</TableCaption>
           <TableHeader>
             <TableRow>

@@ -9,7 +9,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Alternative text that explains the image purpose.",
       "Optional figcaption content.",
       "Extends the default aspect and object-fit styling.",
-      "Passes standard HTML attributes to the figure.",
+      "Passes standard HTML attributes to the figure. children appear after the image and before the caption.",
     ],
     accessibility: [
       "Give informative images meaningful alt text and use an empty alt for decorative images.",
@@ -547,6 +547,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Composes native table, caption, thead, tbody, tfoot, tr, th, and td elements. An outer container provides overflow-x-auto and a neumorphic raised surface.",
     props: [
       "Arranges the caption and table sections.",
+      "Props for the outer scroll region. Set role=\"region\", an accessible name, and tabIndex=0 to provide a keyboard scrolling entry point.",
       "Describes the purpose and data scope of the table.",
       "Specifies the direction of cells described by the header.",
       "Enables the inset state for a selected row.",
