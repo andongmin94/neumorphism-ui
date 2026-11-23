@@ -114,8 +114,9 @@ function Carousel({
           !target.matches('[data-slot="carousel-previous"], [data-slot="carousel-next"]'))
       ) return;
 
-      const previousKey = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
-      const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+      const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
+      const previousKey = orientation === "horizontal" ? rtl ? "ArrowRight" : "ArrowLeft" : "ArrowUp";
+      const nextKey = orientation === "horizontal" ? rtl ? "ArrowLeft" : "ArrowRight" : "ArrowDown";
       if (event.key === previousKey) {
         event.preventDefault();
         scrollPrev();
@@ -166,7 +167,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
       <div
         className={cn(
           "flex",
-          orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
+          orientation === "horizontal" ? "-ms-4" : "-mt-4 flex-col",
           className,
         )}
         {...props}
@@ -184,7 +185,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       aria-roledescription="slide"
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
+        orientation === "horizontal" ? "ps-4" : "pt-4",
         className,
       )}
       {...props}
@@ -215,7 +216,7 @@ function CarouselPrevious({
       className={cn(
         "absolute z-10 size-10",
         orientation === "horizontal"
-          ? "left-2 top-1/2 -translate-y-1/2"
+          ? "start-2 top-1/2 -translate-y-1/2"
           : "top-2 left-1/2 -translate-x-1/2",
         className,
       )}
@@ -226,7 +227,7 @@ function CarouselPrevious({
       }}
       {...props}
     >
-      {children ?? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m14 6-6 6 6 6" : "m6 14 6-6 6 6"} /></svg>}
+      {children ?? <svg aria-hidden="true" className={orientation === "horizontal" ? "rtl:rotate-180" : undefined} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m14 6-6 6 6 6" : "m6 14 6-6 6 6"} /></svg>}
     </Button>
   );
 }
@@ -250,7 +251,7 @@ function CarouselNext({
       className={cn(
         "absolute z-10 size-10",
         orientation === "horizontal"
-          ? "right-2 top-1/2 -translate-y-1/2"
+          ? "end-2 top-1/2 -translate-y-1/2"
           : "bottom-2 left-1/2 -translate-x-1/2",
         className,
       )}
@@ -261,7 +262,7 @@ function CarouselNext({
       }}
       {...props}
     >
-      {children ?? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m10 6 6 6-6 6" : "m6 10 6 6 6-6"} /></svg>}
+      {children ?? <svg aria-hidden="true" className={orientation === "horizontal" ? "rtl:rotate-180" : undefined} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={orientation === "horizontal" ? "m10 6 6 6-6 6" : "m6 10 6 6 6-6"} /></svg>}
     </Button>
   );
 }

@@ -174,6 +174,56 @@ test("runtime regressions: Carousel buttons preserve caller children, compose cl
   }
 });
 
+test("runtime regressions: Carousel keeps RTL gutters, controls and slide boundaries aligned", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  for (const orientation of ["horizontal", "vertical"] as const) for (const direction of ["ltr", "rtl"] as const) {
+    const fixture = page.getByTestId(`carousel-${orientation}${direction === "rtl" ? "-rtl" : ""}`);
+    const carousel = fixture.getByRole("region", { name: `${orientation} workspace`, exact: true });
+    const current = fixture.getByRole("status", { name: "Current slide", exact: true });
+    const previous = fixture.getByRole("button", { name: "Previous slide", exact: true });
+    const next = fixture.getByRole("button", { name: "Next slide", exact: true });
+    const track = carousel.locator(':scope > [data-slot="carousel-content"] > div');
+    const firstSlide = track.locator(':scope > [data-slot="carousel-item"]').first();
+    const previousBounds = (await previous.boundingBox())!;
+    const nextBounds = (await next.boundingBox())!;
+    await expect(carousel).toHaveCSS("direction", direction);
+    await expect(previous).toBeDisabled();
+    await expect(next).toBeEnabled();
+    if (orientation === "horizontal") {
+      await expect(track).toHaveCSS("margin-inline-start", "-16px");
+      await expect(firstSlide).toHaveCSS("padding-inline-start", "16px");
+      expect(previousBounds.x < nextBounds.x).toBe(direction === "ltr");
+      const nested = carousel.getByRole("region", { name: "Nested slides", exact: true });
+      for (const label of ["Nested previous", "Nested next"]) {
+        await expect(nested.getByRole("button", { name: label, exact: true }).locator("svg")).toHaveCSS("rotate", direction === "rtl" ? "180deg" : "none");
+      }
+      await expect(next.getByTestId("custom-next")).toHaveCSS("rotate", "none");
+    } else {
+      await expect(track).toHaveCSS("margin-top", "-16px");
+      await expect(firstSlide).toHaveCSS("padding-top", "16px");
+      expect(previousBounds.y).toBeLessThan(nextBounds.y);
+      for (const button of [previous, next]) await expect(button.locator("svg")).toHaveCSS("rotate", "none");
+    }
+    const previousKey = orientation === "vertical" ? "ArrowUp" : direction === "rtl" ? "ArrowRight" : "ArrowLeft";
+    const nextKey = orientation === "vertical" ? "ArrowDown" : direction === "rtl" ? "ArrowLeft" : "ArrowRight";
+    const input = fixture.getByRole("textbox", { name: "Slide input", exact: true });
+    await input.fill("ABCDE");
+    await input.press(nextKey);
+    await expect(current).toHaveText("0");
+    await expect(input).toHaveValue("ABCDE");
+    await carousel.press(previousKey);
+    await expect(current).toHaveText("0");
+    await carousel.press(nextKey);
+    await expect(current).toHaveText("1");
+    await expect(next).toBeDisabled();
+    await carousel.press(nextKey);
+    await expect(current).toHaveText("1");
+    await carousel.press(previousKey);
+    await expect(current).toHaveText("0");
+    await expect(previous).toBeDisabled();
+  }
+});
+
 for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) {
   test.describe(`runtime regressions ${mode} ${width}`, () => {
     test.use({ viewport: { width, height: 900 } });
@@ -248,11 +298,11 @@ for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) 
     });
 
     test("Carousel honors caller cancellation, composition and both orientation keys", async ({ page }) => {
-      for (const orientation of ["horizontal", "vertical"] as const) {
-        const fixture = page.getByTestId(`carousel-${orientation}`);
+      for (const orientation of ["horizontal", "vertical"] as const) for (const direction of ["ltr", "rtl"] as const) {
+        const fixture = page.getByTestId(`carousel-${orientation}${direction === "rtl" ? "-rtl" : ""}`);
         const carousel = fixture.getByRole("region", { name: `${orientation} workspace`, exact: true });
         const current = fixture.getByRole("status", { name: "Current slide", exact: true });
-        const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+        const nextKey = orientation === "vertical" ? "ArrowDown" : direction === "rtl" ? "ArrowLeft" : "ArrowRight";
         await fixture.getByRole("checkbox", { name: "Prevent carousel navigation", exact: true }).check();
         await carousel.press(nextKey);
         await expect(current).toHaveText("0");
@@ -261,7 +311,7 @@ for (const mode of ["light", "dark"] as const) for (const width of [390, 1440]) 
         await expect(current).toHaveText("0");
         await carousel.press(nextKey);
         await expect(current).toHaveText("1");
-        await carousel.press(orientation === "horizontal" ? "ArrowLeft" : "ArrowUp");
+        await carousel.press(orientation === "vertical" ? "ArrowUp" : direction === "rtl" ? "ArrowRight" : "ArrowLeft");
         await expect(current).toHaveText("0");
       }
     });

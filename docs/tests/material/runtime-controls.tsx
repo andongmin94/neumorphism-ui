@@ -28,7 +28,7 @@ function SaveFixture() {
   </section>;
 }
 
-function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertical" }) {
+function KeyboardCarousel({ orientation, direction = "ltr" }: { orientation: "horizontal" | "vertical"; direction?: "ltr" | "rtl" }) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [index, setIndex] = React.useState(0);
   const [preventNavigation, setPreventNavigation] = React.useState(false);
@@ -43,18 +43,18 @@ function KeyboardCarousel({ orientation }: { orientation: "horizontal" | "vertic
     api.on("select", update);
     return () => { api.off("select", update); };
   }, [api]);
-  return <section data-testid={`carousel-${orientation}`} className="grid min-w-0 gap-4">
+  return <section data-testid={`carousel-${orientation}${direction === "rtl" ? "-rtl" : ""}`} dir={direction} className="grid min-w-0 gap-4">
     <label><input type="checkbox" checked={preventNavigation} onChange={event => setPreventNavigation(event.target.checked)} />Prevent carousel navigation</label>
     <output aria-label="Current slide">{index}</output>
     <output aria-label="Navigation clicks">{JSON.stringify(clicks)}</output>
-    <Carousel aria-label={`${orientation} workspace`} tabIndex={0} orientation={orientation} setApi={setApi} onKeyDown={event => { if (preventNavigation) event.preventDefault(); }} className={orientation === "vertical" ? "h-[32rem]" : "w-full"}>
+    <Carousel aria-label={`${orientation} workspace`} tabIndex={0} orientation={orientation} opts={{ direction }} setApi={setApi} onKeyDown={event => { if (preventNavigation) event.preventDefault(); }} className={orientation === "vertical" ? "h-[32rem]" : "w-full"}>
       <CarouselContent className={orientation === "vertical" ? "h-[32rem]" : ""}>
         <CarouselItem><div className="grid min-w-0 gap-6 p-12">
           <Input aria-label="Slide input" defaultValue="ABCDE" />
           <Textarea aria-label="Slide notes" defaultValue="ABCDE" />
           <div role="textbox" aria-label="Editable slide text" contentEditable suppressContentEditableWarning>ABCDE</div>
           <Slider defaultValue={[25]} thumbLabels={["Slide amount"]} />
-          <Carousel aria-label="Nested slides" tabIndex={0} className="w-full max-w-52">
+          <Carousel aria-label="Nested slides" tabIndex={0} opts={{ direction }} className="w-full max-w-52">
             <CarouselContent><CarouselItem><p className="p-3">Nested one</p></CarouselItem><CarouselItem><p className="p-3">Nested two</p></CarouselItem></CarouselContent>
             <CarouselPrevious label="Nested previous" /><CarouselNext label="Nested next" />
           </Carousel>
@@ -132,7 +132,7 @@ function RuntimeControls() {
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><KeyboardCarousel orientation="horizontal" direction="rtl" /><KeyboardCarousel orientation="vertical" direction="rtl" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);

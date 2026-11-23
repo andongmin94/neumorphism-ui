@@ -324,7 +324,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     carousel: [
       "Use Carousel for a short ordered collection that people browse one slide at a time.",
-      "Name the carousel, place slides in CarouselContent and CarouselItem, and add labeled previous and next controls. Keep important content discoverable without automatic movement.",
+      "Name the carousel, place slides in CarouselContent and CarouselItem, and add labeled previous and next controls. Keep important content discoverable without automatic movement. For right-to-left layouts, set dir=\"rtl\" on Carousel or inherit an HTML dir=\"rtl\", and pair it with opts={{ direction: \"rtl\" }}. Horizontal arrow keys and controls follow that direction; vertical carousels keep ArrowUp/ArrowDown.",
       "Feature tour",
       "Browse dashboard, settings, and analytics slides using drag gestures or the previous and next controls.",
     ],
@@ -662,7 +662,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     carousel: [
       "짧고 순서가 있는 콘텐츠 모음을 슬라이드 단위로 탐색할 때 사용합니다.",
-      "캐러셀에 이름을 제공하고 CarouselContent와 CarouselItem에 슬라이드를 배치하세요. 이름이 있는 이전·다음 버튼을 추가하고 자동 이동 없이도 주요 내용을 찾을 수 있게 합니다.",
+      "캐러셀에 이름을 제공하고 CarouselContent와 CarouselItem에 슬라이드를 배치하세요. 이름이 있는 이전·다음 버튼을 추가하고 자동 이동 없이도 주요 내용을 찾을 수 있게 합니다. 오른쪽에서 왼쪽으로 배치할 때는 Carousel에 dir=\"rtl\"을 지정하거나 상위 HTML 요소에서 상속하고 opts={{ direction: \"rtl\" }}을 함께 설정하세요. 가로 방향키와 버튼은 해당 방향을 따르며 세로 캐러셀은 ArrowUp/ArrowDown을 유지합니다.",
       "기능 둘러보기",
       "대시보드, 설정, 분석 슬라이드를 드래그하거나 이전·다음 버튼으로 탐색합니다.",
     ],
@@ -1000,7 +1000,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     carousel: [
       "短い順序付きのコンテンツを、スライド単位で閲覧する場合に使います。",
-      "領域に名前を付け、CarouselContent と CarouselItem にスライドを置きます。名前付きの前後ボタンを加え、自動移動なしでも主要内容を見つけられるようにします。",
+      "領域に名前を付け、CarouselContent と CarouselItem にスライドを置きます。名前付きの前後ボタンを加え、自動移動なしでも主要内容を見つけられるようにします。 右から左への配置では、Carousel に dir=\"rtl\" を指定するか上位 HTML 要素から継承し、opts={{ direction: \"rtl\" }} を合わせて設定します。横方向の矢印キーと操作ボタンはその方向に従い、縦方向では ArrowUp/ArrowDown を使います。",
       "機能の紹介",
       "ダッシュボード、設定、分析のスライドをドラッグや前後の操作で閲覧します。",
     ],
@@ -1338,7 +1338,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     carousel: [
       "用于按幻灯片浏览简短、有顺序的内容集合。",
-      "为轮播命名，将内容放入 CarouselContent 和 CarouselItem。添加有名称的前后控件，确保无需自动移动也能发现重要内容。",
+      "为轮播命名，将内容放入 CarouselContent 和 CarouselItem。添加有名称的前后控件，确保无需自动移动也能发现重要内容。 从右向左布局时，在 Carousel 上设置 dir=\"rtl\" 或从上层 HTML 元素继承，并同时设置 opts={{ direction: \"rtl\" }}。水平方向键和控件遵循该方向；垂直轮播仍使用 ArrowUp/ArrowDown。",
       "功能导览",
       "通过拖动或上一项、下一项控件浏览仪表盘、设置与分析幻灯片。",
     ],

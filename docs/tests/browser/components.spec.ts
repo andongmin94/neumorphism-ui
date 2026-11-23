@@ -6,6 +6,37 @@ const expanded = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible
 const localized = ["ko", "ja", "zh"].flatMap(locale => ["form", "combobox"].map(slug => ({ locale, slug })));
 const cases = [...expanded.map(slug => ({ locale: "en", slug })), ...localized];
 
+for (const locale of ["en", "ko", "ja", "zh"]) {
+  test(`${locale}: hover-card profile links work without opening the preview`, async ({ page }, info) => {
+    await page.goto(`/${locale}/components/hover-card`);
+    const preview = page.locator("#preview");
+    await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+    const trigger = preview.locator('[data-component-stage] a[href^="#"]');
+    const profile = preview.getByRole("region", { name: "Alex Kim", exact: true });
+    const popup = page.locator('[data-slot="hover-card-content"]');
+    const href = await trigger.getAttribute("href");
+    expect(href).toBeTruthy();
+    await expect(profile).toHaveAttribute("id", href!.slice(1));
+    await expect(profile).toBeVisible();
+    await expect(popup).toHaveCount(0);
+
+    if (info.project.use.isMobile) await trigger.tap();
+    else await trigger.press("Enter");
+    await expect(page).toHaveURL(url => decodeURIComponent(url.hash) === href);
+    await expect(profile).toBeFocused();
+    await expect(profile).toBeVisible();
+
+    if (!info.project.use.isMobile) {
+      await trigger.hover();
+      await expect(popup).toBeVisible();
+      await page.mouse.move(0, 0);
+      await expect(popup).toBeHidden();
+    }
+    await expect(profile).toBeVisible();
+    await expect(profile).toHaveAttribute("id", href!.slice(1));
+  });
+}
+
 for (const { locale, slug } of cases) {
   test(`${locale}/${slug}: hydrated preview, source tab, and reflow`, async ({ page }, info) => {
     const errors: string[] = [];
