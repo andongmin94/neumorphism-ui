@@ -29,7 +29,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     ],
     accessibility: [
       "2つ目の視覚的コピーは aria-hidden にして同じ項目を二重に読み上げないようにします。",
-      "モーションが有効な場合は一時停止・再開ボタンを表示し、状態を aria-pressed で公開します。",
+      "モーションが有効な場合は一時停止・再開ボタンを表示します。aria-label は次に実行する操作に合わせて pauseLabel または resumeLabel に切り替わります。",
       "prefers-reduced-motion では最初の項目集合を折り返してすべて表示し、アニメーションを停止してコピーと操作ボタンを非表示にします。",
     ],
   },

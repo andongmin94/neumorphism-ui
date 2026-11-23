@@ -1,13 +1,15 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import ts from "@typescript/typescript6";
 import { consumerVersions } from "../scripts/consumer-versions.mjs";
+import { makeRegistry } from "../scripts/theme-output.mjs";
 
 const readJson = relative => JSON.parse(fs.readFileSync(new URL(relative, import.meta.url), "utf8"));
 const docs = readJson("../../docs/package.json");
 const registry = readJson("../package.json");
-const catalog = readJson("../catalog.json");
+const catalog = makeRegistry();
 
 function dependencyErrors(docsPackage, registryPackage, sourceCatalog) {
   const errors = [];
@@ -44,6 +46,23 @@ test("a stale consumer catalog or a docs-only upgrade cannot pass the version co
   const changedDocs = structuredClone(docs);
   changedDocs.dependencies["@base-ui/react"] = "^0.0.0";
   assert.match(dependencyErrors(changedDocs, registry, catalog).join("\n"), /@base-ui\/react: docs/);
+});
+
+test("generated install requirements follow runtime versions and reject undeclared packages", t => {
+  const changedRegistry = structuredClone(registry);
+  changedRegistry.dependencies.recharts = "3.99.0";
+  changedRegistry.dependencies["@base-ui/react"] = "^1.99.0";
+  const readFileSync = fs.readFileSync;
+  const packageFile = fileURLToPath(new URL("../package.json", import.meta.url));
+  t.mock.method(fs, "readFileSync", (file, ...options) =>
+    file === packageFile ? JSON.stringify(changedRegistry) : readFileSync(file, ...options));
+
+  const updated = makeRegistry();
+  assert.ok(updated.items.find(item => item.name === "chart").dependencies.includes("recharts@3.99.0"));
+  assert.ok(updated.items.find(item => item.name === "accordion").dependencies.includes("@base-ui/react@^1.99.0"));
+
+  delete changedRegistry.dependencies.recharts;
+  assert.throws(() => makeRegistry(), /chart: missing runtime dependency recharts/);
 });
 
 test("both installation matrices use the shared fixture versions and the current docs toolchain", () => {

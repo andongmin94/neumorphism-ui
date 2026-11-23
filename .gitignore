@@ -1,3 +1,6 @@
 **/node_modules/
 docs/test-results/
 docs/playwright-report/
+registry/registry.json
+registry/public/r/
+docs/public/r/

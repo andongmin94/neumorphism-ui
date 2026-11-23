@@ -114,12 +114,15 @@ until that preview passes.
 - `registry/src/components/blocks`: workspaces, charts and dashboard blocks.
 - `registry/src/lib`: shared utilities and analytical data model/copy.
 - `registry/src/theme.ts`: presets, settings validation and token generation.
-- `registry/catalog.json`: registry metadata and dependency declarations.
+- `registry/catalog.json`: registry metadata and dependency package names.
+- `registry/package.json`: runtime dependency versions used to generate installable requirements.
 - `docs`: Fumapress documentation; registry source is synchronized into its ignored `src/registry` build input.
 
-`registry/registry.json`, both `public/r` directories, `docs/src/theme.css`
-and the theme bootstrap module are generated. Do not edit generated output by
-hand. See [AGENTS.md](AGENTS.md) for branch, typography and source-ownership rules.
+`registry/registry.json` and both `public/r` directories are generated and ignored
+by Git. Build and synchronize them before serving or publishing; `check:generated`
+verifies their contents against source. `docs/src/theme.css` and the theme bootstrap
+module are also generated. Do not edit generated output by hand. See
+[AGENTS.md](AGENTS.md) for branch, typography and source-ownership rules.
 
 ## Registry directory
 

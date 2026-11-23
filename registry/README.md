@@ -9,10 +9,12 @@ presets, one base and two shared libraries: 80 catalog items in total**.
 owns workspaces, templates, eight chart recipes and the analytics dashboard.
 `src/lib` owns shared utilities plus the analytics model/copy. `src/theme.ts`
 owns preset data and token calculation. `catalog.json` owns metadata and dependency
-declarations.
+package names; `package.json` owns their runtime version requirements. The generator
+combines them into the installable dependency declarations.
 
-`registry.json`, `public/r`, and synchronized docs tokens/endpoints are generated.
-Do not edit generated output by hand.
+`registry.json`, `public/r`, and `../docs/public/r` are generated, ignored by Git,
+and rebuilt before serving or publishing. Synchronized docs tokens and the theme
+bootstrap module are also generated. Do not edit generated output by hand.
 
 ## Commands
 

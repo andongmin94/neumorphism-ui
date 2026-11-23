@@ -28,7 +28,15 @@ function itemVariables(settings, mode) {
 }
 export function makeRegistry() {
   const registry = JSON.parse(fs.readFileSync(`${root}catalog.json`, "utf8"));
+  const { dependencies } = JSON.parse(fs.readFileSync(`${root}package.json`, "utf8"));
   for (const item of registry.items) {
+    if (item.dependencies) {
+      item.dependencies = item.dependencies.map(name => {
+        const version = dependencies[name];
+        if (!version) throw new Error(`${item.name}: missing runtime dependency ${name}`);
+        return `${name}@${version}`;
+      });
+    }
     if (item.type === "registry:base") {
       item.cssVars = { theme, light: itemVariables(defaultThemeSettings, "light"), dark: itemVariables(defaultThemeSettings, "dark") };
       item.css = css;

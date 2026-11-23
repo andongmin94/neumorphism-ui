@@ -2306,7 +2306,7 @@ export const componentDocs = [
     ],
     accessibility: [
       "두 번째 시각적 복사본은 aria-hidden으로 제외해 스크린 리더가 같은 항목을 두 번 읽지 않게 합니다.",
-      "모션이 활성화되어 있을 때 일시 정지/재개 버튼을 제공하고 현재 상태를 aria-pressed로 노출합니다.",
+      "모션이 활성화되어 있을 때 일시 정지/재개 버튼을 제공합니다. 버튼의 aria-label은 다음에 실행할 동작에 따라 pauseLabel 또는 resumeLabel로 바뀝니다.",
       "prefers-reduced-motion에서는 첫 번째 항목 집합을 줄바꿈해 모두 표시하며, 애니메이션을 멈추고 복사본과 모션 제어 버튼을 숨깁니다.",
     ],
   },

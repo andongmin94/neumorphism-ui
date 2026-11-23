@@ -16,7 +16,8 @@ test("workflow type-checked code is generated from the actual live preview sourc
 });
 test("all presets and the installed base use Pretendard and Consolas consistently", () => {
   const base = makeRegistry().items.find(item => item.type === "registry:base");
-  assert.deepEqual(base.dependencies, ["pretendard@1.3.9"]);
+  const registry = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.deepEqual(base.dependencies, [`pretendard@${registry.dependencies.pretendard}`]);
   assert.equal(base.css["@font-face"], undefined);
   const css = fs.readFileSync(new URL("../../docs/src/app.css", import.meta.url), "utf8");
   assert.ok(css.includes('@import "pretendard/dist/web/variable/pretendardvariable.css";'));
