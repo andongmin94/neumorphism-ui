@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 function InputOTP({
   className,
   containerClassName,
+  onPasteCapture,
   ...props
 }: React.ComponentProps<typeof OTPInput> & {
   containerClassName?: string;
@@ -49,6 +50,10 @@ function InputOTP({
       spellCheck={false}
       className={cn("disabled:cursor-not-allowed", className)}
       {...props}
+      onPasteCapture={(event) => {
+        onPasteCapture?.(event);
+        if (event.currentTarget.readOnly) event.stopPropagation();
+      }}
     />
   );
 }

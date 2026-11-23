@@ -1,5 +1,28 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+test("runtime regressions: InputOTP preserves read-only codes and editable transformed paste", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  for (const [testId, value, changes] of [
+    ["otp-readonly-paste", "1234", "0"],
+    ["otp-editable-paste", "9876", "1"],
+  ] as const) {
+    const fixture = page.getByTestId(testId);
+    const input = fixture.getByRole("textbox");
+    await input.evaluate(element => {
+      const control = element as HTMLInputElement;
+      control.focus();
+      control.setSelectionRange(0, control.value.length);
+      const clipboardData = new DataTransfer();
+      clipboardData.setData("text/plain", "98-76");
+      control.dispatchEvent(new ClipboardEvent("paste", { clipboardData, bubbles: true, cancelable: true }));
+    });
+    await expect(input).toHaveValue(value);
+    await expect(fixture.locator('[data-slot="input-otp-slot"]')).toHaveText([...value]);
+    await expect(fixture.getByTestId("code-changes")).toHaveText(changes);
+    await expect(fixture.getByTestId("paste-captures")).toHaveText("1");
+  }
+});
+
 test("runtime regressions: InputOTP shows its placeholder only while empty", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   const fixture = page.getByTestId("otp-placeholder");

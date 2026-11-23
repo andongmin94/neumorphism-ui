@@ -110,13 +110,29 @@ function CodePlaceholder() {
   </section>;
 }
 
+function CodePasteFixture({ readOnly }: { readOnly: boolean }) {
+  const [value, setValue] = React.useState("1234");
+  const [changes, setChanges] = React.useState(0);
+  const [captures, setCaptures] = React.useState(0);
+  return <section data-testid={readOnly ? "otp-readonly-paste" : "otp-editable-paste"} className="grid gap-3">
+    <InputOTP maxLength={4} value={value} readOnly={readOnly} aria-label={readOnly ? "Read-only verification code" : "Editable verification code"}
+      pasteTransformer={text => text.replaceAll("-", "")}
+      onPasteCapture={() => setCaptures(current => current + 1)}
+      onChange={next => { setValue(next); setChanges(current => current + 1); }}>
+      <InputOTPGroup>{[0, 1, 2, 3].map(index => <InputOTPSlot key={index} index={index} />)}</InputOTPGroup>
+    </InputOTP>
+    <output data-testid="paste-captures">{captures}</output>
+    <output data-testid="code-changes">{changes}</output>
+  </section>;
+}
+
 function RuntimeControls() {
   React.useLayoutEffect(() => {
     const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);
