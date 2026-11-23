@@ -13,10 +13,10 @@ import type { getMessages } from "@/i18n/messages";
 import styles from "./theme-preview.module.css";
 
 const words = {
-  en: { demo: "Local preview only. No alert is sent.", saved: "Target", current: "Current price", paused: "Alerts paused", removed: "Alert removed. Save a target to recreate it.", invalid: "Enter a price greater than zero.", progress: "Of target", edit: "Set your target", reset: "Reset", unsaved: "Unsaved target", savedState: "Target saved", noTarget: "No target" },
-  ko: { demo: "로컬 미리보기입니다. 알림을 전송하지 않습니다.", saved: "목표 가격", current: "현재 가격", paused: "알림 일시 정지", removed: "알림을 삭제했습니다. 목표 가격을 저장하면 다시 만들 수 있습니다.", invalid: "0보다 큰 가격을 입력하세요.", progress: "목표 대비", edit: "목표 가격 설정", reset: "되돌리기", unsaved: "저장하지 않은 목표", savedState: "목표 저장됨", noTarget: "목표 없음" },
-  ja: { demo: "ローカルプレビューです。通知は送信されません。", saved: "目標価格", current: "現在価格", paused: "通知を一時停止", removed: "通知を削除しました。目標価格を保存すると再作成できます。", invalid: "0より大きい価格を入力してください。", progress: "目標比", edit: "目標価格を設定", reset: "元に戻す", unsaved: "未保存の目標", savedState: "目標を保存しました", noTarget: "目標なし" },
-  zh: { demo: "仅为本地预览，不会发送提醒。", saved: "目标价格", current: "当前价格", paused: "提醒已暂停", removed: "已删除提醒。保存目标价格即可重新创建。", invalid: "请输入大于零的价格。", progress: "目标比例", edit: "设置目标价格", reset: "还原", unsaved: "未保存的目标", savedState: "目标已保存", noTarget: "无目标" },
+  en: { demo: "Local preview only. No alert is sent.", saved: "Target", current: "Current price", paused: "Alerts paused", removed: "Alert removed. Save a target to recreate it.", invalid: "Enter a price of at least 0.01 with no more than two decimal places.", progress: "Of target", edit: "Set your target", reset: "Reset", unsaved: "Unsaved target", savedState: "Target saved", noTarget: "No target" },
+  ko: { demo: "로컬 미리보기입니다. 알림을 전송하지 않습니다.", saved: "목표 가격", current: "현재 가격", paused: "알림 일시 정지", removed: "알림을 삭제했습니다. 목표 가격을 저장하면 다시 만들 수 있습니다.", invalid: "0.01 이상의 가격을 소수점 둘째 자리까지 입력하세요.", progress: "목표 대비", edit: "목표 가격 설정", reset: "되돌리기", unsaved: "저장하지 않은 목표", savedState: "목표 저장됨", noTarget: "목표 없음" },
+  ja: { demo: "ローカルプレビューです。通知は送信されません。", saved: "目標価格", current: "現在価格", paused: "通知を一時停止", removed: "通知を削除しました。目標価格を保存すると再作成できます。", invalid: "0.01以上の価格を小数点以下2桁までで入力してください。", progress: "目標比", edit: "目標価格を設定", reset: "元に戻す", unsaved: "未保存の目標", savedState: "目標を保存しました", noTarget: "目標なし" },
+  zh: { demo: "仅为本地预览，不会发送提醒。", saved: "目标价格", current: "当前价格", paused: "提醒已暂停", removed: "已删除提醒。保存目标价格即可重新创建。", invalid: "请输入不低于0.01且最多保留两位小数的价格。", progress: "目标比例", edit: "设置目标价格", reset: "还原", unsaved: "未保存的目标", savedState: "目标已保存", noTarget: "无目标" },
 } as const;
 
 type Props = {
@@ -49,7 +49,7 @@ export function ThemePreview({ copy, locale, previewMode, style }: Props) {
   function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const price = Number(draft);
-    if (!Number.isFinite(price) || price <= 0) {
+    if (!Number.isFinite(price) || price <= 0 || !event.currentTarget.checkValidity()) {
       setInvalid(true);
       input.current?.focus();
       return;

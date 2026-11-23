@@ -10,6 +10,13 @@ const filterPosts: BlogPost[] = [
   { slug: "engineering", title: "Engineering post", summary: "Another category.", topic: "Engineering", publishedAt: "2026-10-01" },
 ];
 
+const chronologicalPosts: BlogPost[] = [
+  { slug: "seoul-morning", title: "Seoul morning", summary: "Published at 01:00 UTC.", topic: "Dates", publishedAt: "2026-11-23T10:00:00+09:00" },
+  { slug: "later-utc", title: "Later UTC", summary: "Published at 02:00 UTC.", topic: "Dates", publishedAt: "2026-11-23T02:00:00Z" },
+  { slug: "previous-date", title: "Previous date", summary: "A date-only publication.", topic: "Dates", publishedAt: "2026-11-22" },
+  { slug: "following-date", title: "Following date", summary: "A date-only publication.", topic: "Dates", publishedAt: "2026-11-24" },
+];
+
 function FilterRegression() {
   const [locale, setLocale] = React.useState<"en" | "ko">("en");
   return <main className="mx-auto grid max-w-4xl gap-8 px-6 py-8">
@@ -33,6 +40,7 @@ function Specimen() {
     document.documentElement.lang = locale;
   }, [mode, locale]);
   if (params.get("scenario") === "filters") return <FilterRegression />;
+  if (params.get("scenario") === "chronology") return <main className="mx-auto max-w-4xl px-6 py-8"><Blog posts={chronologicalPosts} /></main>;
   return <main className="mx-auto grid max-w-4xl gap-16 px-6 py-8">
     <div data-example><LinkHubExample locale={locale} /></div>
     <div data-long><LinkHub locale={locale}

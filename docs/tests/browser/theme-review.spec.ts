@@ -65,6 +65,35 @@ test("theme preview progress keeps its name while its actual value changes", asy
   await expect(preview).toContainText("78% of target");
 });
 
+test("theme preview rejects prices outside its minimum and cent increments without changing the saved target", async ({ page }) => {
+  await page.goto("/en/customize");
+  const preview = page.locator("[data-theme-price-preview]");
+  const input = preview.getByRole("spinbutton");
+  const save = preview.getByRole("button", { name: "Save", exact: true });
+  const cards = preview.locator('[data-price-metrics] [data-slot="card"]');
+  const target = cards.nth(1).locator("dd");
+  const progress = cards.nth(3).locator("dd");
+
+  for (const value of ["0.001", "210.001"]) {
+    await input.fill(value);
+    await save.click();
+    await expect(input).toHaveAttribute("aria-invalid", "true");
+    await expect(input).toBeFocused();
+    await expect(preview.getByRole("alert")).toHaveText("Enter a price of at least 0.01 with no more than two decimal places.");
+    await expect(target).toHaveText("$210.00");
+    await expect(progress).toHaveText("90%");
+    await expect(save).toBeEnabled();
+  }
+
+  await input.fill("240.25");
+  await save.click();
+  await expect(input).not.toHaveAttribute("aria-invalid", "true");
+  await expect(preview.getByRole("alert")).toHaveCount(0);
+  await expect(target).toHaveText("$240.25");
+  await expect(progress).toHaveText("78%");
+  await expect(save).toBeDisabled();
+});
+
 test("mobile theme sections and preset tiles remain reachable at narrow widths", async ({ page }, info) => {
   test.skip(!info.project.name.startsWith("mobile"), "Mobile theme navigation.");
   for (const locale of ["en", "ko", "ja", "zh"]) {

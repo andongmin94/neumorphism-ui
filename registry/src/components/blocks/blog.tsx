@@ -144,8 +144,8 @@ export function Blog({
             (b.readTimeMinutes ?? Number.MAX_SAFE_INTEGER);
         }
         return sort === "oldest"
-          ? a.publishedAt.localeCompare(b.publishedAt)
-          : b.publishedAt.localeCompare(a.publishedAt);
+          ? Date.parse(a.publishedAt) - Date.parse(b.publishedAt)
+          : Date.parse(b.publishedAt) - Date.parse(a.publishedAt);
       });
   }, [posts, query, sort, topic]);
 

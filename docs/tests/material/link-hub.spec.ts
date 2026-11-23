@@ -7,6 +7,18 @@ const labels = {
   zh: { group: "指南", all: "全部", copy: "复制邮箱", success: "邮箱地址已复制。", failure: "复制失败" },
 };
 
+test("runtime regressions: blog sorts timezone timestamps and date-only publications chronologically", async ({ page }) => {
+  await page.goto("/link-hub.html?scenario=chronology");
+  const blog = page.locator('[data-slot="blog"]');
+  const titles = blog.locator("article h3");
+  await expect(titles).toHaveText(["Following date", "Later UTC", "Seoul morning", "Previous date"]);
+  const sort = blog.getByRole("combobox", { name: "Sort posts" });
+  await sort.selectOption("oldest");
+  await expect(titles).toHaveText(["Previous date", "Seoul morning", "Later UTC", "Following date"]);
+  await sort.selectOption("newest");
+  await expect(titles).toHaveText(["Following date", "Later UTC", "Seoul morning", "Previous date"]);
+});
+
 test("runtime regressions: caller All categories and Blog label targets remain independent", async ({ page }) => {
   await page.goto("/link-hub.html?scenario=filters");
   const firstBlog = page.locator("[data-first-blog]");
