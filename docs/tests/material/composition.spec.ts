@@ -80,6 +80,32 @@ test("runtime regressions: ResizableHandle preserves custom children and the opt
   }
 });
 
+test("runtime regressions: ContextMenu labels name their groups and preserve native composition", async ({ page }) => {
+  await page.goto("/refinement.html");
+  const trigger = page.getByText("Context options", { exact: true });
+  const popup = page.locator('[data-slot="context-menu-content"]');
+  await trigger.click({ button: "right" });
+  const density = popup.getByRole("group", { name: "Density", exact: true });
+  const actions = popup.getByRole("group", { name: "Document actions", exact: true });
+  await expect(density).toBeVisible();
+  await expect(actions).toBeVisible();
+  const generatedId = await density.locator('[data-slot="context-menu-label"]').getAttribute("id");
+  expect(generatedId).toBeTruthy();
+  expect(generatedId).not.toBe("context-actions-label");
+  await expect(density).toHaveAttribute("aria-labelledby", generatedId!);
+  await expect(actions).toHaveAttribute("aria-labelledby", "context-actions-label");
+  const customLabel = actions.locator("span#context-actions-label");
+  await expect(customLabel).toHaveAttribute("data-ref-label", "linked");
+  await expect(customLabel).toHaveClass(/font-bold/);
+  await density.getByRole("menuitemradio", { name: "Compact", exact: true }).press("Enter");
+  await expect(popup).toBeHidden();
+  await expect(page.getByTestId("menu-value")).toHaveText("compact / No action");
+  await trigger.click({ button: "right" });
+  await expect(density).toBeVisible();
+  await expect(actions).toBeVisible();
+  await expect(density.getByRole("menuitemradio", { name: "Compact", exact: true })).toHaveAttribute("aria-checked", "true");
+});
+
 for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right"] as const) {
   test(`runtime regressions: ${dir} menus respect ${side} placement and keyboard direction`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });

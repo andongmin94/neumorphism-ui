@@ -306,7 +306,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "Use ContextMenu for commands related to an item or region opened from its context menu gesture.",
-      "Wrap the target with ContextMenuTrigger and compose labeled items in ContextMenuContent. Keep essential commands available through visible controls as well.",
+      "Wrap the target with ContextMenuTrigger and compose items in ContextMenuContent. Put ContextMenuLabel inside ContextMenuGroup or ContextMenuRadioGroup to name that group. Keep essential commands available through visible controls as well.",
       "Document context actions",
       "Open the document-tools context menu, try its local undo command, and toggle the advanced-settings checkbox.",
     ],
@@ -644,7 +644,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "항목이나 영역의 컨텍스트 메뉴 동작으로 관련 명령을 열 때 사용합니다.",
-      "대상을 ContextMenuTrigger로 감싸고 ContextMenuContent에 이름이 명확한 항목을 배치하세요. 중요한 명령은 보이는 버튼 등으로도 실행할 수 있게 제공합니다.",
+      "대상을 ContextMenuTrigger로 감싸고 ContextMenuContent에 항목을 배치하세요. ContextMenuLabel은 ContextMenuGroup 또는 ContextMenuRadioGroup 안에 넣어 그룹 이름을 연결합니다. 중요한 명령은 보이는 버튼 등으로도 실행할 수 있게 제공합니다.",
       "문서 컨텍스트 작업",
       "문서 도구 영역에서 메뉴를 열어 로컬 실행 취소를 선택하고 세부 설정 체크를 전환합니다.",
     ],
@@ -982,7 +982,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "項目や領域のコンテキスト操作から、関連コマンドを開く場合に使います。",
-      "対象を ContextMenuTrigger で囲み、ContextMenuContent に明確な名前の項目を置きます。重要なコマンドは通常の見える操作からも実行できるようにします。",
+      "対象を ContextMenuTrigger で囲み、ContextMenuContent に項目を置きます。ContextMenuLabel は ContextMenuGroup または ContextMenuRadioGroup 内に配置してグループに名前を付けます。重要なコマンドは通常の見える操作からも実行できるようにします。",
       "文書のコンテキスト操作",
       "文書ツールのメニューを開き、ローカルの元に戻す操作と詳細設定のチェックを試します。",
     ],
@@ -1320,7 +1320,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "用于从项目或区域的上下文手势打开相关命令。",
-      "使用 ContextMenuTrigger 包住目标，在 ContextMenuContent 中放入名称明确的项目。重要命令也应能通过可见的普通控件执行。",
+      "使用 ContextMenuTrigger 包住目标，在 ContextMenuContent 中放入项目。将 ContextMenuLabel 放在 ContextMenuGroup 或 ContextMenuRadioGroup 内，为该组提供名称。重要命令也应能通过可见的普通控件执行。",
       "文档上下文操作",
       "打开文档工具菜单，尝试本地撤销命令，并切换高级设置勾选项。",
     ],

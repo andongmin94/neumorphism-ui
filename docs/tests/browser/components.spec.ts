@@ -65,6 +65,70 @@ for (const { locale, slug } of cases) {
   });
 }
 
+for (const [locale, label] of [["en", "Document tools"], ["ko", "문서 도구"], ["ja", "文書ツール"], ["zh", "文档工具"]]) {
+  test(`${locale}: context-menu preview labels its action group`, async ({ page }) => {
+    await page.goto(`/${locale}/components/context-menu`);
+    const preview = page.locator("#preview");
+    await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+    await preview.locator('[data-slot="context-menu-trigger"]').click({ button: "right" });
+    const group = page.locator('[data-slot="context-menu-content"]').getByRole("group", { name: label, exact: true });
+    await expect(group).toBeVisible();
+    const labelId = await group.locator('[data-slot="context-menu-label"]').getAttribute("id");
+    expect(labelId).toBeTruthy();
+    await expect(group).toHaveAttribute("aria-labelledby", labelId!);
+    await expect(group.getByRole("menuitem")).toHaveCount(1);
+    const toggle = group.getByRole("menuitemcheckbox");
+    await toggle.press("Enter");
+    await expect(group).toBeHidden();
+    await preview.locator('[data-slot="context-menu-trigger"]').click({ button: "right" });
+    await expect(group).toBeVisible();
+    await expect(toggle).toHaveAttribute("aria-checked", "true");
+  });
+}
+
+test("local pagination removes unavailable boundary destinations and tab stops", async ({ page }) => {
+  await page.goto("/en/components/pagination");
+  const preview = page.locator("#preview");
+  await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+  const navigation = preview.locator('[data-slot="pagination"]');
+  const previous = navigation.locator('[data-slot="pagination-link"]').first();
+  const next = navigation.locator('[data-slot="pagination-link"]').last();
+  const current = navigation.locator('[aria-current="page"]');
+  const url = page.url();
+
+  await expect(current).toHaveText("2");
+  await expect(previous).toHaveAttribute("href", "#pagination-example");
+  await expect(next).toHaveAttribute("href", "#pagination-example");
+
+  for (const [number, boundary, opposite, tabKey] of [
+    ["1", previous, next, "Shift+Tab"],
+    ["3", next, previous, "Tab"],
+  ] as const) {
+    const pageLink = navigation.getByRole("link", { name: number, exact: true });
+    await pageLink.click();
+    await expect(current).toHaveText(number);
+    await expect(boundary).toHaveAttribute("aria-disabled", "true");
+    await expect(boundary).not.toHaveAttribute("href");
+    await expect(boundary).toHaveAttribute("tabindex", "-1");
+    await expect(opposite).toHaveAttribute("href", "#pagination-example");
+    await pageLink.press(tabKey);
+    expect(await navigation.evaluate(element => element.contains(document.activeElement))).toBe(false);
+
+    await boundary.click({ force: true });
+    await boundary.press("Enter");
+    const popup = page.waitForEvent("popup", { timeout: 500 }).then(() => true, () => false);
+    await boundary.click({ button: "middle", force: true });
+    expect(await popup).toBe(false);
+    await expect(page).toHaveURL(url);
+    await expect(current).toHaveText(number);
+
+    await opposite.click();
+    await expect(current).toHaveText("2");
+    await expect(boundary).toHaveAttribute("href", "#pagination-example");
+    await expect(boundary).not.toHaveAttribute("tabindex");
+  }
+});
+
 test("dropdown theme selection survives closing and reopening its menus", async ({ page }) => {
   await page.goto("/en/components/dropdown-menu");
   const trigger = page.locator("#preview").getByRole("button", { name: "Workspace menu", exact: true });

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem } from "@/components/ui/combobox";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuCheckboxItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuRadioGroup, ContextMenuRadioItem, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent, ContextMenuItem } from "@/components/ui/context-menu";
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuGroup, ContextMenuLabel, ContextMenuRadioGroup, ContextMenuRadioItem, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent, ContextMenuItem } from "@/components/ui/context-menu";
 import { buildThemeVariables, defaultThemeSettings, getThemePreset, type ThemePresetId } from "../../src/registry/theme";
 import "./styles.css";
 function Specimen() {
@@ -43,8 +43,8 @@ function Specimen() {
         </DropdownMenuContent></DropdownMenu>
         <output data-testid="menu-value" className="text-sm">{density} / {action}</output>
         <ContextMenu dir={dir}><ContextMenuTrigger className="grid min-h-20 place-items-center rounded-[var(--neu-radius-control)] border border-[var(--border)] text-sm">Context options</ContextMenuTrigger><ContextMenuContent side={menuSide}>
-          <ContextMenuRadioGroup value={density} onValueChange={setDensity}><ContextMenuRadioItem value="compact">Compact</ContextMenuRadioItem><ContextMenuRadioItem value="comfortable">Comfortable</ContextMenuRadioItem></ContextMenuRadioGroup>
-          <ContextMenuSub><ContextMenuSubTrigger>More options</ContextMenuSubTrigger><ContextMenuSubContent side={menuSide}><ContextMenuItem onClick={() => setAction("Copied")}>Copy link</ContextMenuItem></ContextMenuSubContent></ContextMenuSub>
+          <ContextMenuRadioGroup value={density} onValueChange={setDensity}><ContextMenuLabel>Density</ContextMenuLabel><ContextMenuRadioItem value="compact">Compact</ContextMenuRadioItem><ContextMenuRadioItem value="comfortable">Comfortable</ContextMenuRadioItem></ContextMenuRadioGroup>
+          <ContextMenuGroup><ContextMenuLabel id="context-actions-label" render={<span />} ref={node => { if (node) node.dataset.refLabel = "linked"; }} className={() => "font-bold"}>Document actions</ContextMenuLabel><ContextMenuSub><ContextMenuSubTrigger>More options</ContextMenuSubTrigger><ContextMenuSubContent side={menuSide}><ContextMenuItem onClick={() => setAction("Copied")}>Copy link</ContextMenuItem></ContextMenuSubContent></ContextMenuSub></ContextMenuGroup>
         </ContextMenuContent></ContextMenu>
       </section>
       <section className="grid content-start gap-4"><h2 className="font-semibold">Combobox selected mark</h2>

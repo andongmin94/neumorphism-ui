@@ -104,17 +104,18 @@ function ContextMenuLabel({
   className,
   inset,
   ...props
-}: React.ComponentProps<"div"> & { inset?: boolean }) {
+}: ContextMenuPrimitive.GroupLabel.Props & { inset?: boolean }) {
   return (
-    <div
+    <ContextMenuPrimitive.GroupLabel
       data-slot="context-menu-label"
       data-inset={inset}
-      role="presentation"
-      className={cn(
-        "px-2.5 py-1.5 text-xs font-semibold text-[var(--muted-foreground)] data-[inset=true]:ps-8",
-        className,
-      )}
       {...props}
+      className={(state) =>
+        cn(
+          "px-2.5 py-1.5 text-xs font-semibold text-[var(--muted-foreground)] data-[inset=true]:ps-8",
+          typeof className === "function" ? className(state) : className,
+        )
+      }
     />
   );
 }

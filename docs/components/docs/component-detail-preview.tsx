@@ -584,7 +584,8 @@ export function ComponentDetailPreview({
               <PaginationPrevious
                 aria-label={copy.pagination.previousLabel}
                 aria-disabled={paginationPage === 1}
-                href="#pagination-example"
+                href={paginationPage === 1 ? undefined : "#pagination-example"}
+                tabIndex={paginationPage === 1 ? -1 : undefined}
                 onClick={event => { event.preventDefault(); setPaginationPage(value => Math.max(1, value - 1)); }}
               >{copy.pagination.previous}</PaginationPrevious>
             </PaginationItem>
@@ -595,7 +596,8 @@ export function ComponentDetailPreview({
               <PaginationNext
                 aria-label={copy.pagination.nextLabel}
                 aria-disabled={paginationPage === 3}
-                href="#pagination-example"
+                href={paginationPage === 3 ? undefined : "#pagination-example"}
+                tabIndex={paginationPage === 3 ? -1 : undefined}
                 onClick={event => { event.preventDefault(); setPaginationPage(value => Math.min(3, value + 1)); }}
               >{copy.pagination.next}</PaginationNext>
             </PaginationItem>
