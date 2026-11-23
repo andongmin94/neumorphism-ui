@@ -100,7 +100,7 @@ export function DocsSearch() {
       // this window listener runs; never steal composition or an editable field.
       if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
       const target = event.target as HTMLElement | null;
-      const typing = Boolean(target?.closest("input, textarea, select, [contenteditable=true]"));
+      const typing = Boolean(target?.isContentEditable || target?.closest("input, textarea, select"));
       const modifier = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
       if (modifier || (!typing && !event.metaKey && !event.ctrlKey && !event.altKey && event.key === "/")) {
         event.preventDefault();

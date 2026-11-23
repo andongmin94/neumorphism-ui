@@ -264,7 +264,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "date-picker": [
       "Use DatePicker for compact date entry that opens a calendar from a field-like button.",
-      "Provide a label and connect value and onValueChange. Set localized text, date constraints, and supporting text; decide in your application how a cleared value and form reset behave.",
+      "Provide a label and connect value and onValueChange. Set localized text, date constraints, and supporting text; decide in your application how a cleared value and form reset behave. The trigger and calendar both use Gregorian dates; locale controls their language.",
       "Due date with reset",
       "Choose or clear a constrained due date, reset it to its initial value, and compare a disabled date picker.",
     ],
@@ -602,7 +602,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "date-picker": [
       "입력처럼 보이는 버튼에서 달력을 열어 날짜를 고르는 간결한 구성에 사용합니다.",
-      "레이블과 value, onValueChange를 제공하세요. 지역화한 문구와 날짜 제약, 도움말을 설정하고 값 지우기와 폼 초기화 동작은 앱에서 정합니다.",
+      "레이블과 value, onValueChange를 제공하세요. 지역화한 문구와 날짜 제약, 도움말을 설정하고 값 지우기와 폼 초기화 동작은 앱에서 정합니다. 버튼과 달력은 모두 그레고리력을 사용하며 locale은 표시 언어를 정합니다.",
       "마감일 선택과 초기화",
       "범위가 제한된 마감일을 선택하거나 지우고 초기값으로 되돌리며 비활성 상태도 비교합니다.",
     ],
@@ -940,7 +940,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "date-picker": [
       "フィールド型のボタンからカレンダーを開き、省スペースで日付を選ぶ場合に使います。",
-      "ラベル、value、onValueChange を提供します。地域別の文言、日付制約、補足を設定し、値のクリアやフォームのリセットはアプリで定義します。",
+      "ラベル、value、onValueChange を提供します。地域別の文言、日付制約、補足を設定し、値のクリアやフォームのリセットはアプリで定義します。ボタンとカレンダーはともにグレゴリオ暦を使い、locale は表示言語を指定します。",
       "期限の選択とリセット",
       "範囲内の期限を選択・クリアし、初期値へのリセットや無効状態を比較します。",
     ],
@@ -1278,7 +1278,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "date-picker": [
       "用于通过类似字段的按钮打开日历，以紧凑方式选择日期。",
-      "提供标签、value 与 onValueChange。设置本地化文案、日期约束及帮助文字，并在应用中定义清空和表单重置行为。",
+      "提供标签、value 与 onValueChange。设置本地化文案、日期约束及帮助文字，并在应用中定义清空和表单重置行为。按钮和日历均使用公历，locale 决定显示语言。",
       "截止日期与重置",
       "选择或清除受限范围内的截止日期，恢复初始值，并比较禁用状态。",
     ],

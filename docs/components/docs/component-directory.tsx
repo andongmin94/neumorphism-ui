@@ -57,8 +57,9 @@ export function ComponentDirectory() {
 
   React.useEffect(() => {
     function focusSearch(event: KeyboardEvent) {
+      if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
       const target = event.target as HTMLElement | null;
-      const isTyping = target?.closest("input, textarea, select, [contenteditable=true]");
+      const isTyping = target?.isContentEditable || target?.closest("input, textarea, select");
       if (event.key !== "/" || event.metaKey || event.ctrlKey || event.altKey || isTyping) return;
       event.preventDefault();
       searchRef.current?.focus();

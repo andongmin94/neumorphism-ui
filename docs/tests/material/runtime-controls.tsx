@@ -1,8 +1,11 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
+import type { Locale } from "@daypicker/react";
+import { faIR, th } from "@daypicker/react/locale";
 import { CmsWorkspace, type CmsPost } from "../../src/registry/components/blocks/cms";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "../../src/registry/components/ui/carousel";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
@@ -126,13 +129,20 @@ function CodePasteFixture({ readOnly }: { readOnly: boolean }) {
   </section>;
 }
 
+function LocalizedDatePicker({ locale, label }: { locale: Locale; label: string }) {
+  const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 10, 23));
+  return <form data-testid={`date-picker-${locale.code}`} className="max-w-sm" onSubmit={event => event.preventDefault()}>
+    <DatePicker label={label} name="date" value={date} onValueChange={setDate} locale={locale} />
+  </form>;
+}
+
 function RuntimeControls() {
   React.useLayoutEffect(() => {
     const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><KeyboardCarousel orientation="horizontal" direction="rtl" /><KeyboardCarousel orientation="vertical" direction="rtl" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><KeyboardCarousel orientation="horizontal" direction="rtl" /><KeyboardCarousel orientation="vertical" direction="rtl" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /><LocalizedDatePicker locale={faIR} label="Persian date" /><LocalizedDatePicker locale={th} label="Thai date" /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);

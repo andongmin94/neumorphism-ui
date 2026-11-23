@@ -1,5 +1,26 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+for (const { locale, label, initial, next, caption } of [
+  { locale: "fa-IR", label: "Persian date", initial: "۲۳ نوامبر ۲۰۲۶", next: "۲۴ نوامبر ۲۰۲۶", caption: "نوامبر 2026" },
+  { locale: "th", label: "Thai date", initial: "23 พ.ย. 2026", next: "24 พ.ย. 2026", caption: "พฤศจิกายน 2026" },
+]) {
+  test(`runtime regressions: ${locale} DatePicker keeps its label, calendar and form date Gregorian`, async ({ page }) => {
+    await page.goto("/runtime-controls.html?mode=light");
+    const fixture = page.getByTestId(`date-picker-${locale}`);
+    const trigger = fixture.getByRole("button", { name: `${label}: ${initial}`, exact: true });
+    await expect(trigger).toBeVisible();
+    await expect(fixture.locator('input[name="date"]')).toHaveValue("2026-11-23");
+    await trigger.click();
+    const popup = page.locator('[data-slot="popover-content"]');
+    await expect(popup.getByText(caption, { exact: true })).toBeVisible();
+    await expect(popup.locator('[data-day="2026-11-23"]')).toHaveAttribute("data-selected", "true");
+    await popup.locator('[data-day="2026-11-24"] button').click();
+    await expect(fixture.getByRole("button", { name: `${label}: ${next}`, exact: true })).toBeVisible();
+    await expect(fixture.locator('input[name="date"]')).toHaveValue("2026-11-24");
+    expect(await fixture.evaluate(form => new FormData(form as HTMLFormElement).get("date"))).toBe("2026-11-24");
+  });
+}
+
 test("runtime regressions: InputOTP preserves read-only codes and editable transformed paste", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   for (const [testId, value, changes] of [
