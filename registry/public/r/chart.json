@@ -4,7 +4,7 @@
   "title": "Chart",
   "description": "Responsive chart surfaces with exact-data disclosure and styled tooltips. Compose Recharts directly.",
   "dependencies": [
-    "recharts@3.10.1",
+    "recharts@3.11.0",
     "react-is@19.3.1"
   ],
   "registryDependencies": [
