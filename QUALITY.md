@@ -123,25 +123,12 @@ and advisory status must not be treated as the current release state. Do not
 remove the CLI, suppress the audit or downgrade to an obsolete shadcn version
 merely to make that gate pass.
 
-**Current dependency audit — 2026-11-01.** The local post-update audit, including
-development tools, reports Registry **4 Moderate, 2 Low, 0 High, 0 Critical**
-and Docs **0** vulnerabilities. These are the current local results; the older
-dated counts below describe historical runs. Final CI verification still requires
-the audit artifacts for the exact pushed commit.
-
-The six affected-package entries propagate from two underlying advisories:
-[minimatch](https://github.com/advisories/GHSA-g3hv-75wg-m249) and
-[deepmerge](https://github.com/advisories/GHSA-gcqx-w48m-w2h4). The development-tool
-chain `ts-morph@26.0.0 -> @ts-morph/common@0.27.0 -> minimatch@10.2.5` already
-existed before this update. The patched minimatch version, `11.0.1`, is outside
-common's `^10.0.1` requirement; a fix within declared ranges needs upstream
-ts-morph/shadcn support. No patched deepmerge version is published. Keep both
-findings visible and the existing audit gate unchanged.
-
-The same review confirmed shared Base UI **1.9.0** is latest. Resizable is updated
-to **4.16.0**, shadcn to **4.23.0**, and Wrangler to **4.156.0**. The old Miniflare
-override is removed because Wrangler's new Miniflare dependency directly requires
-Undici **7.30.1**. These version changes do not resolve the two advisories above.
+Check npm's stable `latest` releases for direct dependencies and the separately
+pinned Next.js and Vite React plugin consumer tools. Keep shared docs/registry
+requirements aligned and update Fumadocs core together with its Base UI alias.
+Resolve transitive updates within upstream dependency ranges, then regenerate
+the registry before validation. Current direct releases can still include
+transitive advisories; use the exact commit's CI audit artifacts to assess them.
 
 Documentation uses Fumapress and Vite to generate static output. Wrangler provides
 local Cloudflare emulation and deployment of that output; it is not a
@@ -234,12 +221,11 @@ The advisory describes prototype poisoning in `mergeObject()` for versions
 4.2.0–4.3.1 in that historical report
 ([GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4)).
 
-The audit output suggests a major `shadcn` version change, but that suggestion
-alone does not prove the vulnerable transitive package is removed or patched.
-Do not force a major CLI upgrade or override `deepmerge` blindly. Reassess the
-resolved dependency graph and exercise registry generation, source contracts,
-and fresh Vite/Next installations before accepting a remediation. Keep the Low
-finding visible until a verifiable safe resolution is available.
+The [deepmerge advisory](https://github.com/advisories/GHSA-gcqx-w48m-w2h4)
+was withdrawn on 2026-11-16; this historical report does not establish a current
+vulnerability. Reassess the resolved dependency graph and current advisory status,
+and exercise registry generation, source contracts and fresh Vite/Next
+installations before accepting a dependency remediation.
 
 ### Follow-up: repeated second-provider round trips
 

@@ -1,6 +1,6 @@
-@vitejs/plugin-rsc@0.5.38
-Source: https://github.com/vitejs/vite-plugin-react/blob/2e8512f98a4fc1b302af760c9d41900c2fa66d0a/LICENSE
-Published npm gitHead: 2e8512f98a4fc1b302af760c9d41900c2fa66d0a
+@vitejs/plugin-rsc@0.5.39
+Source: https://github.com/vitejs/vite-plugin-react/blob/123c153e93c240cf30873e005a0a0a5217f1a3d8/LICENSE
+Published npm gitHead: 123c153e93c240cf30873e005a0a0a5217f1a3d8
 MIT License
 
 Copyright (c) 2019-present, Yuxi (Evan) You and Vite contributors
@@ -25,7 +25,7 @@ SOFTWARE.
 
 
 Vendored React Server Components license
-Source: @vitejs/plugin-rsc@0.5.38/dist/vendor/react-server-dom/LICENSE
+Source: @vitejs/plugin-rsc@0.5.39/dist/vendor/react-server-dom/LICENSE
 MIT License
 
 Copyright (c) Meta Platforms, Inc. and affiliates.

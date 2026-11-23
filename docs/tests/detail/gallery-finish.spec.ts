@@ -11,7 +11,7 @@ for (const [locale, copy] of Object.entries(labels)) {
   test(`gallery has readable references and width-fitted previews: ${locale}`, async ({ page }, info) => {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
-    for (const width of [...new Set([info.project.use.viewport!.width, 768, 320])]) {
+    for (const width of new Set([info.project.use.viewport!.width, 768, 320])) {
       await page.setViewportSize({ width, height: 1000 });
       await page.goto(`/${locale}/templates`);
       await page.evaluate(() => document.fonts.ready);
