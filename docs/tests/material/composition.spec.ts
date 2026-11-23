@@ -127,10 +127,13 @@ test("runtime regressions: ContextMenu labels name their groups and preserve nat
   await expect(density.getByRole("menuitemradio", { name: "Compact", exact: true })).toHaveAttribute("aria-checked", "true");
 });
 
-for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right"] as const) {
-  test(`runtime regressions: ${dir} menus respect ${side} placement and keyboard direction`, async ({ page }) => {
+for (const scope of ["global", "local"] as const) for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right"] as const) {
+  test(`runtime regressions: ${scope} ${dir} menus respect ${side} placement and keyboard direction`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(`/refinement.html?dir=${dir}&side=${side}`);
+    await page.goto(`/refinement.html?dir=${dir}&side=${side}&scope=${scope}`);
+    await expect(page.locator("html")).toHaveCSS("direction", scope === "local" ? "ltr" : dir);
+    await expect(page.locator("body")).toHaveCSS("direction", scope === "local" ? "ltr" : dir);
+    await expect(page.locator("main")).toHaveCSS("direction", dir);
     const opensRight = side === "right" || dir === "ltr";
     const dataSide = side === "right" ? "right" : "inline-end";
     const openKey = dir === "rtl" ? "ArrowLeft" : "ArrowRight";
@@ -156,11 +159,27 @@ for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right
       }
 
       await expect(popup).toBeVisible();
+      await expect(popup).toHaveCSS("direction", dir);
+      await expect(popup.locator("..")).toHaveCSS("direction", dir);
+      expect(await popup.evaluate(element => element.closest("main"))).toBeNull();
+      if (kind === "dropdown") {
+        const anchor = (await page.getByRole("button", { name: "Display options", exact: true }).boundingBox())!;
+        const menu = (await popup.boundingBox())!;
+        expect(Math.abs(anchor.width - menu.width)).toBeGreaterThan(4);
+        expect(Math.abs(dir === "rtl" ? anchor.x + anchor.width - menu.x - menu.width : anchor.x - menu.x)).toBeLessThanOrEqual(1);
+      }
+      const selected = popup.getByRole("menuitemradio", { name: "Comfortable", exact: true });
+      const row = (await selected.boundingBox())!;
+      const mark = (await selected.locator("svg").boundingBox())!;
+      expect(dir === "rtl" ? mark.x > row.x + row.width / 2 : mark.x < row.x + row.width / 2).toBe(true);
       const trigger = popup.getByRole("menuitem", { name: "More options", exact: true });
+      await expect(trigger.locator("svg")).toHaveCSS("rotate", dir === "rtl" ? "180deg" : "none");
       await trigger.focus();
       await trigger.press(openKey);
       const submenu = page.locator(`[data-slot="${kind}-menu-sub-content"]`);
       await expect(submenu).toBeVisible();
+      await expect(submenu).toHaveCSS("direction", dir);
+      await expect(submenu.locator("..")).toHaveCSS("direction", dir);
       await expect(submenu).toHaveAttribute("data-side", dataSide);
       const anchor = (await trigger.boundingBox())!;
       const menu = (await submenu.boundingBox())!;
@@ -180,6 +199,37 @@ for (const dir of ["ltr", "rtl"] as const) for (const side of ["default", "right
       await expect(popup).toBeHidden();
       await expect(page.getByTestId("menu-value")).toContainText("Copied");
     }
+  });
+}
+
+for (const dir of ["ltr", "rtl"] as const) {
+  test(`runtime regressions: local ${dir} Combobox preserves popup direction and keyboard choice`, async ({ page }) => {
+    await page.goto(`/refinement.html?dir=${dir}&scope=local`);
+    await expect(page.locator("html")).toHaveCSS("direction", "ltr");
+    await expect(page.locator("body")).toHaveCSS("direction", "ltr");
+    const input = page.getByRole("combobox", { name: "Choose city", exact: true });
+    await expect(input).toHaveCSS("direction", dir);
+    await input.click();
+    const popup = page.locator('[data-slot="combobox-content"]');
+    await expect(popup).toBeVisible();
+    await expect(popup).toHaveCSS("direction", dir);
+    await expect(popup.locator("..")).toHaveCSS("direction", dir);
+    expect(await popup.evaluate(element => element.closest("main"))).toBeNull();
+    const selected = popup.getByRole("option", { name: "Seoul", exact: true });
+    await expect(selected).toHaveAttribute("aria-selected", "true");
+    const row = (await selected.boundingBox())!;
+    const mark = (await selected.locator("svg").boundingBox())!;
+    expect(dir === "rtl" ? mark.x > row.x + row.width / 2 : mark.x < row.x + row.width / 2).toBe(true);
+    await input.fill("Tokyo");
+    const next = popup.getByRole("option", { name: "Tokyo", exact: true });
+    await expect(next).toBeVisible();
+    await input.press("ArrowDown");
+    await expect(next).toHaveAttribute("data-highlighted", "");
+    await input.press("Enter");
+    await expect(popup).toBeHidden();
+    await expect(input).toHaveValue("Tokyo");
+    await expect(input).toBeFocused();
+    await expect(page.getByTestId("city-value")).toHaveText("Tokyo");
   });
 }
 

@@ -72,7 +72,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "dropdown-menu": [
       "Use DropdownMenu to collect commands behind a button, including optional checked settings and destructive actions.",
-      "Pair DropdownMenuTrigger with DropdownMenuContent. Group related items and connect checkbox or radio items to application state when they represent a preference.",
+      "Pair DropdownMenuTrigger with DropdownMenuContent. Group related items and connect checkbox or radio items to application state when they represent a preference. For RTL regions, combine Base UI DirectionProvider direction=\"rtl\" with an HTML dir=\"rtl\" ancestor; popup content keeps that direction.",
       "Workspace actions",
       "Explore page commands, a controlled depth-guide checkbox, a theme submenu with radio choices, and a destructive workspace item.",
     ],
@@ -252,7 +252,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     combobox: [
       "Use Combobox when people need to search a list before choosing a value.",
-      "Provide items, a ComboboxLabel, and ComboboxInput. Compose content with an empty state and a list that renders a uniquely identified ComboboxItem for each result.",
+      "Provide items, a ComboboxLabel, and ComboboxInput. Compose content with an empty state and a list that renders a uniquely identified ComboboxItem for each result. For RTL regions, combine Base UI DirectionProvider direction=\"rtl\" with an HTML dir=\"rtl\" ancestor; popup content keeps that direction.",
       "Search for a city",
       "Filter a short city list by typing and display an empty message when nothing matches.",
     ],
@@ -288,7 +288,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     menubar: [
       "Use Menubar for application commands organized into persistent menus such as File and View.",
-      "Place MenubarMenu groups inside a named Menubar, each with a trigger and content. Connect command items to actions and checked items to persistent application preferences.",
+      "Place MenubarMenu groups inside a named Menubar, each with a trigger and content. Connect command items to actions and checked items to persistent application preferences. For RTL regions, combine Base UI DirectionProvider direction=\"rtl\" with an HTML dir=\"rtl\" ancestor; popup content keeps that direction.",
       "File and view menus",
       "Create a local document message from File and toggle its visibility from a checked View item.",
     ],
@@ -306,7 +306,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "Use ContextMenu for commands related to an item or region opened from its context menu gesture.",
-      "Wrap the target with ContextMenuTrigger and compose items in ContextMenuContent. Put ContextMenuLabel inside ContextMenuGroup or ContextMenuRadioGroup to name that group. Keep essential commands available through visible controls as well.",
+      "Wrap the target with ContextMenuTrigger and compose items in ContextMenuContent. Put ContextMenuLabel inside ContextMenuGroup or ContextMenuRadioGroup to name that group. Keep essential commands available through visible controls as well. For RTL regions, combine ContextMenu dir=\"rtl\" with an HTML dir=\"rtl\" ancestor; portaled menus keep that direction.",
       "Document context actions",
       "Open the document-tools context menu, try its local undo command, and toggle the advanced-settings checkbox.",
     ],
@@ -410,7 +410,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "dropdown-menu": [
       "여러 명령을 버튼 하나로 묶거나 체크 설정과 삭제 같은 동작을 함께 제공할 때 사용합니다.",
-      "DropdownMenuTrigger와 DropdownMenuContent를 짝지으세요. 관련 명령은 그룹으로 묶고 체크·라디오 항목이 설정을 나타낸다면 앱 상태와 연결합니다.",
+      "DropdownMenuTrigger와 DropdownMenuContent를 짝지으세요. 관련 명령은 그룹으로 묶고 체크·라디오 항목이 설정을 나타낸다면 앱 상태와 연결합니다. RTL 영역에는 Base UI의 DirectionProvider direction=\"rtl\"과 상위 HTML dir=\"rtl\"을 함께 설정하세요. 팝업도 같은 방향을 유지합니다.",
       "워크스페이스 작업 메뉴",
       "페이지 명령, 제어 상태의 깊이 가이드 체크, 테마 라디오 하위 메뉴, 워크스페이스 삭제 항목을 살펴봅니다.",
     ],
@@ -590,7 +590,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     combobox: [
       "목록을 검색하면서 값을 골라야 할 때 사용합니다.",
-      "items, ComboboxLabel, ComboboxInput을 제공하세요. 결과가 없을 때의 안내와 ComboboxList를 구성하고 각 결과를 고유한 ComboboxItem으로 렌더링합니다.",
+      "items, ComboboxLabel, ComboboxInput을 제공하세요. 결과가 없을 때의 안내와 ComboboxList를 구성하고 각 결과를 고유한 ComboboxItem으로 렌더링합니다. RTL 영역에는 Base UI의 DirectionProvider direction=\"rtl\"과 상위 HTML dir=\"rtl\"을 함께 설정하세요. 팝업도 같은 방향을 유지합니다.",
       "도시 검색과 선택",
       "입력으로 도시 목록을 좁히고 일치하는 항목이 없으면 안내를 표시합니다.",
     ],
@@ -626,7 +626,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     menubar: [
       "파일, 보기처럼 항상 보이는 이름 아래 앱 명령을 묶을 때 사용합니다.",
-      "이름이 있는 Menubar 안에 트리거와 콘텐츠를 가진 MenubarMenu를 두세요. 일반 항목은 명령에, 체크 항목은 유지되는 앱 설정에 연결합니다.",
+      "이름이 있는 Menubar 안에 트리거와 콘텐츠를 가진 MenubarMenu를 두세요. 일반 항목은 명령에, 체크 항목은 유지되는 앱 설정에 연결합니다. RTL 영역에는 Base UI의 DirectionProvider direction=\"rtl\"과 상위 HTML dir=\"rtl\"을 함께 설정하세요. 팝업도 같은 방향을 유지합니다.",
       "파일과 보기 메뉴",
       "파일 메뉴에서 로컬 문서 생성 안내를 표시하고 보기 메뉴의 체크 항목으로 표시 여부를 전환합니다.",
     ],
@@ -644,7 +644,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "항목이나 영역의 컨텍스트 메뉴 동작으로 관련 명령을 열 때 사용합니다.",
-      "대상을 ContextMenuTrigger로 감싸고 ContextMenuContent에 항목을 배치하세요. ContextMenuLabel은 ContextMenuGroup 또는 ContextMenuRadioGroup 안에 넣어 그룹 이름을 연결합니다. 중요한 명령은 보이는 버튼 등으로도 실행할 수 있게 제공합니다.",
+      "대상을 ContextMenuTrigger로 감싸고 ContextMenuContent에 항목을 배치하세요. ContextMenuLabel은 ContextMenuGroup 또는 ContextMenuRadioGroup 안에 넣어 그룹 이름을 연결합니다. 중요한 명령은 보이는 버튼 등으로도 실행할 수 있게 제공합니다. RTL 영역에는 ContextMenu dir=\"rtl\"과 상위 HTML dir=\"rtl\"을 함께 설정하세요. 포털 메뉴도 같은 방향을 유지합니다.",
       "문서 컨텍스트 작업",
       "문서 도구 영역에서 메뉴를 열어 로컬 실행 취소를 선택하고 세부 설정 체크를 전환합니다.",
     ],
@@ -748,7 +748,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "dropdown-menu": [
       "複数のコマンド、チェック設定、削除などの操作を一つのボタンにまとめる場合に使います。",
-      "DropdownMenuTrigger と DropdownMenuContent を組み合わせます。関連項目をグループ化し、設定を表すチェック・ラジオ項目はアプリの状態に接続します。",
+      "DropdownMenuTrigger と DropdownMenuContent を組み合わせます。関連項目をグループ化し、設定を表すチェック・ラジオ項目はアプリの状態に接続します。 RTL 領域では Base UI の DirectionProvider direction=\"rtl\" と上位 HTML 要素の dir=\"rtl\" を併用します。ポップアップも同じ方向を保ちます。",
       "ワークスペースの操作",
       "ページ操作、制御された深度ガイド、テーマのラジオ選択サブメニュー、削除を確認します。",
     ],
@@ -928,7 +928,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     combobox: [
       "候補を検索してから値を選ぶ場合に使います。",
-      "items、ComboboxLabel、ComboboxInput を提供します。空の結果と ComboboxList を構成し、各結果を固有の ComboboxItem として表示します。",
+      "items、ComboboxLabel、ComboboxInput を提供します。空の結果と ComboboxList を構成し、各結果を固有の ComboboxItem として表示します。 RTL 領域では Base UI の DirectionProvider direction=\"rtl\" と上位 HTML 要素の dir=\"rtl\" を併用します。ポップアップも同じ方向を保ちます。",
       "都市の検索と選択",
       "入力で都市の候補を絞り込み、一致しない場合は案内を表示します。",
     ],
@@ -964,7 +964,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     menubar: [
       "ファイルや表示など、常時見えるメニューにアプリのコマンドを整理する場合に使います。",
-      "名前付きの Menubar 内に、トリガーと内容を持つ MenubarMenu を置きます。通常項目を操作に、チェック項目をアプリの設定に接続します。",
+      "名前付きの Menubar 内に、トリガーと内容を持つ MenubarMenu を置きます。通常項目を操作に、チェック項目をアプリの設定に接続します。 RTL 領域では Base UI の DirectionProvider direction=\"rtl\" と上位 HTML 要素の dir=\"rtl\" を併用します。ポップアップも同じ方向を保ちます。",
       "ファイルと表示メニュー",
       "ファイルメニューでローカルの作成結果を表示し、表示メニューのチェックで表示を切り替えます。",
     ],
@@ -982,7 +982,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "項目や領域のコンテキスト操作から、関連コマンドを開く場合に使います。",
-      "対象を ContextMenuTrigger で囲み、ContextMenuContent に項目を置きます。ContextMenuLabel は ContextMenuGroup または ContextMenuRadioGroup 内に配置してグループに名前を付けます。重要なコマンドは通常の見える操作からも実行できるようにします。",
+      "対象を ContextMenuTrigger で囲み、ContextMenuContent に項目を置きます。ContextMenuLabel は ContextMenuGroup または ContextMenuRadioGroup 内に配置してグループに名前を付けます。重要なコマンドは通常の見える操作からも実行できるようにします。 RTL 領域では ContextMenu dir=\"rtl\" と上位 HTML 要素の dir=\"rtl\" を併用します。ポータルのメニューも同じ方向を保ちます。",
       "文書のコンテキスト操作",
       "文書ツールのメニューを開き、ローカルの元に戻す操作と詳細設定のチェックを試します。",
     ],
@@ -1086,7 +1086,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "dropdown-menu": [
       "用于将多条命令、勾选设置或删除操作收纳在一个按钮后。",
-      "组合 DropdownMenuTrigger 与 DropdownMenuContent，并对相关项目分组。表示偏好的复选或单选项目需连接到应用状态。",
+      "组合 DropdownMenuTrigger 与 DropdownMenuContent，并对相关项目分组。表示偏好的复选或单选项目需连接到应用状态。 在 RTL 区域中，同时设置 Base UI 的 DirectionProvider direction=\"rtl\" 和上层 HTML 元素的 dir=\"rtl\"；弹出内容会保留该方向。",
       "工作区操作菜单",
       "查看页面命令、受控深度辅助线勾选项、主题单选子菜单和工作区删除项目。",
     ],
@@ -1266,7 +1266,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     combobox: [
       "用于先搜索候选列表，再选择值的场景。",
-      "提供 items、ComboboxLabel 和 ComboboxInput。组合空结果提示与 ComboboxList，将每个结果渲染成唯一的 ComboboxItem。",
+      "提供 items、ComboboxLabel 和 ComboboxInput。组合空结果提示与 ComboboxList，将每个结果渲染成唯一的 ComboboxItem。 在 RTL 区域中，同时设置 Base UI 的 DirectionProvider direction=\"rtl\" 和上层 HTML 元素的 dir=\"rtl\"；弹出内容会保留该方向。",
       "搜索与选择城市",
       "输入文字以筛选城市，没有匹配结果时显示提示。",
     ],
@@ -1302,7 +1302,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     menubar: [
       "用于将应用命令归入始终可见的文件、视图等菜单。",
-      "在命名的 Menubar 中放入包含触发器和内容的 MenubarMenu。普通项目连接命令，勾选项目连接应用偏好状态。",
+      "在命名的 Menubar 中放入包含触发器和内容的 MenubarMenu。普通项目连接命令，勾选项目连接应用偏好状态。 在 RTL 区域中，同时设置 Base UI 的 DirectionProvider direction=\"rtl\" 和上层 HTML 元素的 dir=\"rtl\"；弹出内容会保留该方向。",
       "文件与视图菜单",
       "从文件菜单显示本地文档创建消息，通过视图菜单的勾选项切换其显示。",
     ],
@@ -1320,7 +1320,7 @@ const guides: Record<Locale, Record<string, GuideCopy>> = {
     ],
     "context-menu": [
       "用于从项目或区域的上下文手势打开相关命令。",
-      "使用 ContextMenuTrigger 包住目标，在 ContextMenuContent 中放入项目。将 ContextMenuLabel 放在 ContextMenuGroup 或 ContextMenuRadioGroup 内，为该组提供名称。重要命令也应能通过可见的普通控件执行。",
+      "使用 ContextMenuTrigger 包住目标，在 ContextMenuContent 中放入项目。将 ContextMenuLabel 放在 ContextMenuGroup 或 ContextMenuRadioGroup 内，为该组提供名称。重要命令也应能通过可见的普通控件执行。 在 RTL 区域中，同时设置 ContextMenu dir=\"rtl\" 和上层 HTML 元素的 dir=\"rtl\"；门户菜单会保留该方向。",
       "文档上下文操作",
       "打开文档工具菜单，尝试本地撤销命令，并切换高级设置勾选项。",
     ],

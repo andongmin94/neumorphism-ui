@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu";
+import { useDirection } from "@base-ui/react/direction-provider";
 
 import { cn, mergeClassName } from "@/lib/utils";
 
@@ -33,9 +34,11 @@ function DropdownMenuContent({
   sideOffset = 8,
   ...props
 }: DropdownMenuContentProps) {
+  const direction = useDirection();
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Positioner
+        dir={direction}
         align={align}
         alignOffset={alignOffset}
         collisionPadding={8}
@@ -44,6 +47,7 @@ function DropdownMenuContent({
         sideOffset={sideOffset}
       >
         <DropdownMenuPrimitive.Popup
+          dir={direction}
           data-slot="dropdown-menu-content"
           className={mergeClassName<DropdownMenuPrimitive.Popup.State>(
             "max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
@@ -222,9 +226,11 @@ function DropdownMenuSubContent({
   sideOffset = 8,
   ...props
 }: DropdownMenuContentProps) {
+  const direction = useDirection();
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Positioner
+        dir={direction}
         align={align}
         alignOffset={alignOffset}
         collisionPadding={8}
@@ -233,6 +239,7 @@ function DropdownMenuSubContent({
         sideOffset={sideOffset}
       >
         <DropdownMenuPrimitive.Popup
+          dir={direction}
           data-slot="dropdown-menu-sub-content"
           className={mergeClassName<DropdownMenuPrimitive.Popup.State>(
             "max-h-[var(--available-height)] max-w-[min(24rem,var(--available-width))] min-w-36 origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto overscroll-contain rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",

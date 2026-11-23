@@ -12,6 +12,7 @@ function Specimen() {
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") === "dark" ? "dark" : "light";
   const dir = query.get("dir") === "rtl" ? "rtl" : "ltr";
+  const localDirection = query.get("scope") === "local";
   const menuSide = query.get("side") === "right" ? "right" : undefined;
   const preset = getThemePreset((query.get("preset") ?? "air") as ThemePresetId);
   const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 8, 15));
@@ -22,9 +23,9 @@ function Specimen() {
   React.useLayoutEffect(() => {
     for (const [name, value] of Object.entries(buildThemeVariables({ ...defaultThemeSettings, ...preset.defaults, presetId: preset.id }, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
-    document.documentElement.dir = dir;
-  }, [mode, preset, dir]);
-  return <DirectionProvider direction={dir}><main className="mx-auto max-w-5xl px-4 py-8">
+    document.documentElement.dir = localDirection ? "ltr" : dir;
+  }, [mode, preset, dir, localDirection]);
+  return <DirectionProvider direction={dir}><main dir={dir} className="mx-auto max-w-5xl px-4 py-8">
     <h1 className="mb-8 text-2xl font-semibold tracking-tight">Calendar and menu anatomy</h1>
     <div className="grid min-w-0 gap-8 md:grid-cols-2">
       <section className="grid min-w-0 content-start gap-4"><h2 className="font-semibold">Calendar in a 228px container</h2>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ContextMenu as ContextMenuPrimitive } from "@base-ui/react/context-menu";
-import { DirectionProvider } from "@base-ui/react/direction-provider";
+import { DirectionProvider, useDirection } from "@base-ui/react/direction-provider";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -63,9 +63,11 @@ function ContextMenuContent({
   sticky,
   ...props
 }: ContextMenuContentProps) {
+  const direction = useDirection();
   return (
     <ContextMenuPortal>
       <ContextMenuPrimitive.Positioner
+        dir={direction}
         align={align}
         alignOffset={alignOffset}
         arrowPadding={arrowPadding}
@@ -80,6 +82,7 @@ function ContextMenuContent({
         className="isolate z-50 outline-none"
       >
         <ContextMenuPrimitive.Popup
+          dir={direction}
           data-slot="context-menu-content"
           {...props}
           className={(state) =>
