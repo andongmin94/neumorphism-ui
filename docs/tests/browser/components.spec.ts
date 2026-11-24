@@ -102,13 +102,33 @@ for (const { locale, slug } of cases) {
   });
 }
 
-for (const [locale, label] of [["en", "Document tools"], ["ko", "문서 도구"], ["ja", "文書ツール"], ["zh", "文档工具"]]) {
-  test(`${locale}: context-menu preview labels its action group`, async ({ page }) => {
+for (const [locale, label, prompt] of [
+  ["en", "Document tools", "Right-click, or focus the target and press Shift+F10 to choose an action."],
+  ["ko", "문서 도구", "오른쪽 클릭하거나 대상에 초점을 맞춘 뒤 Shift+F10을 눌러 작업을 선택하세요."],
+  ["ja", "文書ツール", "右クリックするか、対象にフォーカスして Shift+F10 を押し、操作を選択してください。"],
+  ["zh", "文档工具", "右键单击，或聚焦目标后按 Shift+F10 选择操作。"],
+]) {
+  test(`${locale}: context-menu preview supports keyboard access and labels its action group`, async ({ page }) => {
     await page.goto(`/${locale}/components/context-menu`);
     const preview = page.locator("#preview");
     await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
-    await preview.locator('[data-slot="context-menu-trigger"]').click({ button: "right" });
+    const trigger = preview.locator('[data-slot="context-menu-trigger"]');
     const group = page.locator('[data-slot="context-menu-content"]').getByRole("group", { name: label, exact: true });
+    await expect(preview.getByRole("status")).toHaveText(prompt);
+    const restingShadow = await trigger.evaluate(node => getComputedStyle(node).boxShadow);
+    const panel = preview.getByRole("tabpanel");
+    await panel.focus();
+    await expect(panel).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(trigger).toBeFocused();
+    await expect(trigger).not.toHaveCSS("box-shadow", restingShadow);
+    await page.keyboard.press("Shift+F10");
+    await expect(group).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(group).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await trigger.click({ button: "right" });
     await expect(group).toBeVisible();
     const labelId = await group.locator('[data-slot="context-menu-label"]').getAttribute("id");
     expect(labelId).toBeTruthy();
@@ -117,9 +137,16 @@ for (const [locale, label] of [["en", "Document tools"], ["ko", "문서 도구"]
     const toggle = group.getByRole("menuitemcheckbox");
     await toggle.press("Enter");
     await expect(group).toBeHidden();
-    await preview.locator('[data-slot="context-menu-trigger"]').click({ button: "right" });
+    await trigger.click({ button: "right" });
     await expect(group).toBeVisible();
     await expect(toggle).toHaveAttribute("aria-checked", "true");
+    await page.keyboard.press("Escape");
+    await expect(group).toBeHidden();
+    await preview.getByRole("tab").nth(1).click();
+    const source = await preview.locator("pre").innerText();
+    expect(source).toContain("<ContextMenuTrigger tabIndex={0}");
+    expect(source).toContain("focus-visible:ring-2 focus-visible:ring-[var(--ring)]");
+    expect(source).toContain(prompt);
   });
 }
 

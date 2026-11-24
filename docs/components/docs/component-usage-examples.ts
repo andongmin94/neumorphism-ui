@@ -226,11 +226,11 @@ import { useState } from "react";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 
 export default function Example() {
-  const [message, setMessage] = useState("Right-click the document.");
+  const [message, setMessage] = useState("Right-click the document, or focus it and press Shift+F10.");
   return (
     <div>
       <ContextMenu>
-        <ContextMenuTrigger className="block p-6">Document</ContextMenuTrigger>
+        <ContextMenuTrigger tabIndex={0} className="block p-6 focus-visible:ring-2 focus-visible:ring-[var(--ring)]">Document</ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuItem onClick={() => setMessage("Document duplicated.")}>Duplicate</ContextMenuItem>
         </ContextMenuContent>
