@@ -67,20 +67,22 @@ test("Clay's default light focus outline contrasts with the preview surface", as
   await expect(input).toBeFocused();
   await expect(input).toHaveCSS("outline-style", "solid");
   await expect(input).toHaveCSS("outline-width", "2px");
-  const colors = await input.evaluate(element => [
-    getComputedStyle(element).outlineColor,
-    getComputedStyle(element.closest("[data-theme-price-preview]")!).backgroundColor,
-  ]);
-  const luminances = colors.map(color => {
-    const rgb = color.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
-    expect(rgb, color).not.toBeNull();
-    const [r, g, b] = rgb!.slice(1).map(value => {
-      const channel = Number(value) / 255;
-      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-    });
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  const contrast = await input.evaluate(element => {
+    const context = document.createElement("canvas").getContext("2d")!;
+    context.fillStyle = getComputedStyle(element.closest("[data-theme-price-preview]")!).backgroundColor;
+    context.fillRect(0, 0, 1, 1);
+    const background = context.getImageData(0, 0, 1, 1).data;
+    context.fillStyle = getComputedStyle(element).outlineColor;
+    context.fillRect(0, 0, 1, 1);
+    const outline = context.getImageData(0, 0, 1, 1).data;
+    const luminance = (channels: Uint8ClampedArray) => [...channels].slice(0, 3).map(channel => {
+      const value = channel / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    }).reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+    const a = luminance(outline), b = luminance(background);
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
   });
-  expect((Math.max(...luminances) + 0.05) / (Math.min(...luminances) + 0.05)).toBeGreaterThanOrEqual(3);
+  expect(contrast).toBeGreaterThanOrEqual(3);
 });
 
 test("theme preview progress keeps its name while its actual value changes", async ({ page }) => {
