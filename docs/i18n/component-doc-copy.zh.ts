@@ -63,7 +63,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     ],
     accessibility: [
       "为 Carousel 提供 aria-label 或 aria-labelledby 说明区域用途。",
-      "每个幻灯片使用 group 与 carousel slide 语义，并在边界处让导航按钮暴露 disabled 状态。",
+      "每个幻灯片使用 group 与 carousel slide 语义，并在边界处让导航按钮暴露 disabled 状态。可以用 disabled 禁用按钮，但 false 不能解除边界限制。",
       "横向轮播支持左右键，纵向轮播支持上下键。",
     ],
   },
@@ -592,7 +592,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "Base UI 会让 Tooltip 在 hover 和 keyboard focus 时打开，并支持用 Escape 关闭。",
     ],
   },
-"alert-dialog": {"summary":"对不可撤销操作进行明确确认的对话框。","description":"对不可撤销操作进行明确确认的对话框。 先放置取消按钮。异步操作成功后再关闭受控对话框。","props":["设置受控状态或初始状态。","选择打开时的焦点目标。","处理同步确认，异步操作应控制打开状态。"],"accessibility":["先放置取消按钮。异步操作成功后再关闭受控对话框。","修改 render 或 className 时保留标签关联和可见焦点。"]},
+"alert-dialog": {"summary":"对不可撤销操作进行明确确认的对话框。","description":"对不可撤销操作进行明确确认的对话框。 先放置取消按钮。AlertDialogAction 是不会等待处理函数的 Close。异步操作应使用普通 Button 和受控 open 状态，成功后再显式关闭。","props":["设置受控状态或初始状态。","选择打开时的焦点目标。","同步确认并立即关闭。异步操作应使用普通 Button。"],"accessibility":["先放置取消按钮。AlertDialogAction 是不会等待处理函数的 Close。异步操作应使用普通 Button 和受控 open 状态，成功后再显式关闭。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "popover": {"summary":"依附按钮、保留上下文的设置面板。","description":"依附按钮、保留上下文的设置面板。 提供 PopoverTitle 和说明，并检查键盘关闭操作。","props":["设置受控状态或初始状态。","设置面板相对于触发器的方向与对齐方式。","组合现有元素、事件和 ref。"],"accessibility":["提供 PopoverTitle 和说明，并检查键盘关闭操作。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "hover-card": {"summary":"补充说明链接目标的预览卡片。","description":"补充说明链接目标的预览卡片。 不要把必要信息或操作只放在悬停内容中。原始链接仍应含义明确。","props":["设置受控状态或初始状态。","打开与关闭的延迟，单位为毫秒。","设置考虑视口边界的面板位置或间距。"],"accessibility":["不要把必要信息或操作只放在悬停内容中。原始链接仍应含义明确。","修改 render 或 className 时保留标签关联和可见焦点。"]},
 "sheet": {"summary":"从视口边缘打开的可滚动操作面板。","description":"从视口边缘打开的可滚动操作面板。 包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","props":["选择面板从屏幕的哪一侧出现。","关闭按钮的可访问名称。","通过 open 控制打开状态，或通过 defaultOpen 设置初始打开状态。","打开状态变化时，接收新状态和 eventDetails。","true 会限制焦点并阻止背景指针操作和滚动。false 允许背景交互；trap-focus 仅限制焦点。"],"accessibility":["包含 SheetTitle 和说明。小屏幕上也应能到达关闭按钮及最后一个字段。","修改 render 或 className 时保留标签关联和可见焦点。"]},

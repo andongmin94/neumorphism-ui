@@ -373,6 +373,13 @@ test("runtime regressions: Carousel buttons preserve caller children, compose cl
       await expect(next.locator('svg[aria-hidden="true"]')).toHaveCount(1);
     }
     await expect(previous).toBeDisabled();
+    const lock = fixture.getByRole("checkbox", { name: "Lock navigation buttons", exact: true });
+    await lock.check();
+    await expect(previous).toBeDisabled();
+    await expect(next).toBeDisabled();
+    await lock.uncheck();
+    await expect(previous).toBeDisabled();
+    await expect(next).toBeEnabled();
     await next.click();
     await expect(current).toHaveText("1");
     await expect(clicks).toHaveText('{"previous":0,"next":1}');

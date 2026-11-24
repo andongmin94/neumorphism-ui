@@ -63,7 +63,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     ],
     accessibility: [
       "Carousel に aria-label または aria-labelledby で領域の目的を指定します。",
-      "各スライドは group と carousel slide の説明を使用し、端では移動ボタンが disabled を公開します。",
+      "各スライドは group と carousel slide の説明を使用し、端では移動ボタンが disabled を公開します。disabled でボタンを無効にできますが、false で移動できない境界を解除することはできません。",
       "横方向は左右キー、縦方向は上下キーで移動できます。",
     ],
   },
@@ -618,7 +618,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "Base UI は hover だけでなくキーボード focus でも Tooltip を開き、Escape で閉じます。",
     ],
   },
-"alert-dialog": {"summary":"取り消せない操作を明示的に確認するダイアログ。","description":"取り消せない操作を明示的に確認するダイアログ。 取消を先に配置してください。非同期処理では成功後に制御されたダイアログを閉じます。","props":["制御状態または初期状態を指定します。","開いた時のフォーカス対象を指定します。","同期確認を処理します。非同期処理では状態を制御します。"],"accessibility":["取消を先に配置してください。非同期処理では成功後に制御されたダイアログを閉じます。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
+"alert-dialog": {"summary":"取り消せない操作を明示的に確認するダイアログ。","description":"取り消せない操作を明示的に確認するダイアログ。 取消を先に配置してください。AlertDialogAction は処理を待たずに閉じる Close です。非同期処理には通常の Button と制御された open を使い、成功後に明示的に閉じます。","props":["制御状態または初期状態を指定します。","開いた時のフォーカス対象を指定します。","同期確認を処理してすぐに閉じます。非同期処理には通常の Button を使用します。"],"accessibility":["取消を先に配置してください。AlertDialogAction は処理を待たずに閉じる Close です。非同期処理には通常の Button と制御された open を使い、成功後に明示的に閉じます。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "popover": {"summary":"ボタンに隣接して文脈を保つ設定パネル。","description":"ボタンに隣接して文脈を保つ設定パネル。 PopoverTitle と説明を提供し、キーボードで閉じられることを確認します。","props":["制御状態または初期状態を指定します。","トリガーを基準にパネルの方向と配置を指定します。","既存の要素、イベント、ref を合成します。"],"accessibility":["PopoverTitle と説明を提供し、キーボードで閉じられることを確認します。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "hover-card": {"summary":"リンク先を補足するプレビューカード。","description":"リンク先を補足するプレビューカード。 重要な情報や操作をホバーだけに置かず、元のリンクだけで目的が分かるようにします。","props":["制御状態または初期状態を指定します。","開閉の遅延時間（ミリ秒）です。","画面境界を考慮した位置または間隔を設定します。"],"accessibility":["重要な情報や操作をホバーだけに置かず、元のリンクだけで目的が分かるようにします。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},
 "sheet": {"summary":"画面の端から開くスクロール可能な操作パネル。","description":"画面の端から開くスクロール可能な操作パネル。 SheetTitle と説明を含め、小さな画面でも閉じるボタンと最後の入力に到達できるようにします。","props":["パネルを表示する画面の端を選択します。","閉じるボタンのアクセス可能な名前です。","open で開閉状態を制御し、defaultOpen で初期の開閉状態を指定します。","開閉状態が変わると、新しい状態と eventDetails を受け取ります。","true はフォーカスを閉じ込め、背景のポインター操作とスクロールを防ぎます。false は背景操作を許可し、trap-focus はフォーカスだけを閉じ込めます。"],"accessibility":["SheetTitle と説明を含め、小さな画面でも閉じるボタンと最後の入力に到達できるようにします。","render や className を変更する際もラベルと可視フォーカスを保ちます。"]},

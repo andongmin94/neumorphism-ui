@@ -1334,7 +1334,7 @@ export const componentDocs = [
   "title": "Alert Dialog",
   "category": "actions-overlays",
   "summary": "되돌릴 수 없는 작업을 명시적으로 확인하는 대화상자.",
-  "description": "되돌릴 수 없는 작업을 명시적으로 확인하는 대화상자. Cancel을 먼저 배치하세요. 비동기 작업은 성공 후 controlled 상태를 닫으세요.",
+  "description": "되돌릴 수 없는 작업을 명시적으로 확인하는 대화상자. Cancel을 먼저 배치하세요. AlertDialogAction은 클릭하면 바로 닫히는 Close입니다. 비동기 작업은 일반 Button과 controlled open을 사용하고 성공 후 직접 닫으세요.",
   "importCode": "\"use client\";\n\nimport * as React from \"react\";\nimport { Button } from \"@/components/ui/button\";\nimport { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from \"@/components/ui/alert-dialog\";",
   "usageCode": "export default function Example() {\n  const [message, setMessage] = React.useState(\"\");\n  return (<div className=\"grid gap-3\"><AlertDialog><AlertDialogTrigger render={<Button variant=\"destructive\" />}>{\"초안 삭제\"}</AlertDialogTrigger><AlertDialogContent><AlertDialogTitle>{\"초안을 삭제할까요?\"}</AlertDialogTitle><AlertDialogDescription>{\"이 작업은 되돌릴 수 없습니다. 계속하려면 직접 확인하세요.\"}</AlertDialogDescription><AlertDialogFooter><AlertDialogCancel>{\"돌아가기\"}</AlertDialogCancel><AlertDialogAction onClick={() => setMessage(\"초안을 삭제했습니다.\")}>{\"초안 삭제\"}</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog><p role=\"status\" className=\"text-sm text-[var(--muted-foreground)]\">{message}</p></div>);\n}",
   "props": [
@@ -1354,11 +1354,11 @@ export const componentDocs = [
       "component": "AlertDialogAction",
       "name": "onClick",
       "type": "React.MouseEventHandler",
-      "description": "확인 버튼의 동기 동작입니다. 비동기 저장에는 controlled 상태를 사용하세요."
+      "description": "동기 확인을 실행하고 즉시 닫습니다. 비동기 작업에는 일반 Button을 사용합니다."
     }
   ],
   "accessibility": [
-    "Cancel을 먼저 배치하세요. 비동기 작업은 성공 후 controlled 상태를 닫으세요.",
+    "Cancel을 먼저 배치하세요. AlertDialogAction은 클릭하면 바로 닫히는 Close입니다. 비동기 작업은 일반 Button과 controlled open을 사용하고 성공 후 직접 닫으세요.",
     "render나 className을 바꿀 때 라벨 연결과 포커스 표시를 유지하세요."
   ]
 },
@@ -2235,7 +2235,7 @@ export const componentDocs = [
     ],
     accessibility: [
       "Carousel에 aria-label 또는 aria-labelledby로 영역의 목적을 지정합니다.",
-      "각 slide는 group과 carousel slide 설명을 사용하고 이전·다음 버튼은 현재 위치에 따라 disabled 상태를 노출합니다.",
+      "각 slide는 group과 carousel slide 설명을 사용하고 이전·다음 버튼은 현재 위치에 따라 disabled 상태를 노출합니다. disabled로 버튼을 추가로 비활성화할 수 있지만 false로 이동 불가 상태를 해제할 수는 없습니다.",
       "가로 Carousel은 좌우 방향키, 세로 Carousel은 상하 방향키로 이동할 수 있습니다.",
     ],
   },

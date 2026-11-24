@@ -203,6 +203,7 @@ function CarouselPrevious({
   label = "Previous slide",
   variant = "soft",
   size = "icon",
+  disabled,
   onClick,
   ...props
 }: CarouselButtonProps) {
@@ -220,7 +221,7 @@ function CarouselPrevious({
           : "top-2 left-1/2 -translate-x-1/2",
         className,
       )}
-      disabled={!canScrollPrev}
+      disabled={disabled || !canScrollPrev}
       onClick={(event) => {
         onClick?.(event);
         if (!event.defaultPrevented) scrollPrev();
@@ -238,6 +239,7 @@ function CarouselNext({
   label = "Next slide",
   variant = "soft",
   size = "icon",
+  disabled,
   onClick,
   ...props
 }: CarouselButtonProps) {
@@ -255,7 +257,7 @@ function CarouselNext({
           : "bottom-2 left-1/2 -translate-x-1/2",
         className,
       )}
-      disabled={!canScrollNext}
+      disabled={disabled || !canScrollNext}
       onClick={(event) => {
         onClick?.(event);
         if (!event.defaultPrevented) scrollNext();

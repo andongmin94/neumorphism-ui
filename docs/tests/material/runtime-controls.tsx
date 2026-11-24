@@ -38,6 +38,7 @@ function KeyboardCarousel({ orientation, direction = "ltr" }: { orientation: "ho
   const [api, setApi] = React.useState<CarouselApi>();
   const [index, setIndex] = React.useState(0);
   const [preventNavigation, setPreventNavigation] = React.useState(false);
+  const [locked, setLocked] = React.useState(false);
   const [clicks, setClicks] = React.useState({ previous: 0, next: 0 });
   const recordClick = (event: React.MouseEvent<HTMLButtonElement>, direction: "previous" | "next") => {
     setClicks(current => ({ ...current, [direction]: current[direction] + 1 }));
@@ -51,6 +52,7 @@ function KeyboardCarousel({ orientation, direction = "ltr" }: { orientation: "ho
   }, [api]);
   return <section data-testid={`carousel-${orientation}${direction === "rtl" ? "-rtl" : ""}`} dir={direction} className="grid min-w-0 gap-4">
     <label><input type="checkbox" checked={preventNavigation} onChange={event => setPreventNavigation(event.target.checked)} />Prevent carousel navigation</label>
+    <label><input type="checkbox" checked={locked} onChange={event => setLocked(event.target.checked)} />Lock navigation buttons</label>
     <output aria-label="Current slide">{index}</output>
     <output aria-label="Navigation clicks">{JSON.stringify(clicks)}</output>
     <Carousel aria-label={`${orientation} workspace`} tabIndex={0} orientation={orientation} opts={{ direction }} setApi={setApi} onKeyDown={event => { if (preventNavigation) event.preventDefault(); }} className={orientation === "vertical" ? "h-[32rem]" : "w-full"}>
@@ -67,10 +69,10 @@ function KeyboardCarousel({ orientation, direction = "ltr" }: { orientation: "ho
         </div></CarouselItem>
         <CarouselItem><p className="p-12">Second slide</p></CarouselItem>
       </CarouselContent>
-      <CarouselPrevious onClick={event => recordClick(event, "previous")}>
+      <CarouselPrevious disabled={locked} onClick={event => recordClick(event, "previous")}>
         {orientation === "horizontal" ? <span data-testid="custom-previous" aria-hidden="true">Back</span> : undefined}
       </CarouselPrevious>
-      <CarouselNext onClick={event => recordClick(event, "next")}>
+      <CarouselNext disabled={locked} onClick={event => recordClick(event, "next")}>
         {orientation === "horizontal" ? <svg data-testid="custom-next" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h16m-6-6 6 6-6 6" /></svg> : undefined}
       </CarouselNext>
     </Carousel>
