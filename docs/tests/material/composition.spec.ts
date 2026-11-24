@@ -366,6 +366,24 @@ for (const dir of ["ltr", "rtl"] as const) {
   });
 }
 
+test("runtime regressions: Combobox respects available width below its preferred minimum", async ({ page }) => {
+  await page.setViewportSize({ width: 192, height: 840 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/refinement.html?scope=local&overlay=combobox");
+  const input = page.getByRole("combobox", { name: "Choose a city", exact: true });
+  await input.fill("Tokyo");
+  const popup = page.locator('[data-slot="combobox-content"]');
+  await expect(popup).toBeVisible();
+  await expect.poll(() => popup.evaluate(element => {
+    const bounds = element.getBoundingClientRect();
+    return Math.max(bounds.width - parseFloat(getComputedStyle(element).maxWidth), -bounds.left, bounds.right - innerWidth);
+  })).toBeLessThanOrEqual(1);
+  await input.press("ArrowDown");
+  await input.press("Enter");
+  await expect(input).toHaveValue("Tokyo");
+  await expect(popup).toBeHidden();
+});
+
 test("runtime regressions: Carousel buttons preserve caller children, compose clicks and honor cancellation", async ({ page }) => {
   await page.goto("/runtime-controls.html?mode=light");
   for (const orientation of ["horizontal", "vertical"] as const) {

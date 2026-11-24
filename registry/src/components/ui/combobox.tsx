@@ -15,7 +15,7 @@ type ComboboxContentProps = Primitive.Popup.Props & { sideOffset?: number; align
 function ComboboxContent({ className, sideOffset = 8, align = "start", ...props }: ComboboxContentProps) {
   const direction = useDirection();
   return <Primitive.Portal><Primitive.Positioner dir={direction} collisionPadding={8} sideOffset={sideOffset} align={align} className="z-50 outline-none">
-    <Primitive.Popup dir={direction} data-slot="combobox-content" className={mergeClassName<Primitive.Popup.State>("flex max-h-[var(--available-height)] w-[var(--anchor-width)] min-w-48 max-w-[var(--available-width)] flex-col overflow-hidden rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-sm text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0", className)} {...props} />
+    <Primitive.Popup dir={direction} data-slot="combobox-content" className={mergeClassName<Primitive.Popup.State>("flex max-h-[var(--available-height)] w-[var(--anchor-width)] min-w-[min(12rem,var(--available-width))] max-w-[var(--available-width)] flex-col overflow-hidden rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] p-1.5 text-sm text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0", className)} {...props} />
   </Primitive.Positioner></Primitive.Portal>;
 }
 function ComboboxList({ className, ...props }: Primitive.List.Props) {

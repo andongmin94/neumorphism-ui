@@ -1824,6 +1824,20 @@ export const componentDocs = [
       "type": "boolean",
       "defaultValue": "false",
       "description": "복수 항목 선택을 허용하고 선택 값을 배열로 전달합니다."
+    },
+    {
+      "component": "ComboboxContent",
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\"",
+      "defaultValue": "\"start\"",
+      "description": "입력 요소를 기준으로 팝업을 정렬합니다."
+    },
+    {
+      "component": "ComboboxContent",
+      "name": "sideOffset",
+      "type": "number",
+      "defaultValue": "8",
+      "description": "입력 요소와 팝업 사이의 간격(px)입니다. 팝업 너비는 사용 가능한 공간으로 제한됩니다."
     }
   ],
   "accessibility": [
