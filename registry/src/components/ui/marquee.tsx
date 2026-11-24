@@ -47,7 +47,7 @@ function Marquee({
       <style>{`
         @keyframes neumorphism-marquee-scroll {
           from { transform: translate3d(0, 0, 0); }
-          to { transform: translate3d(var(--neu-marquee-scroll-end), 0, 0); }
+          to { transform: translate3d(var(--marquee-scroll-end), 0, 0); }
         }
         @media (prefers-reduced-motion: reduce) {
           [data-slot="marquee-track"] { animation: none !important; transform: none !important; width: 100%; min-width: 0; }
@@ -59,7 +59,7 @@ function Marquee({
       <div data-slot="marquee-viewport" className="min-w-0 flex-1 overflow-hidden [container-type:inline-size]">
         <div
           data-slot="marquee-track"
-          className="flex w-max items-center will-change-transform [--neu-marquee-scroll-end:-50%] rtl:[--neu-marquee-scroll-end:50%]"
+          className="flex w-max items-center will-change-transform [--marquee-scroll-end:-50%] rtl:[--marquee-scroll-end:50%]"
           style={{
             animation: `neumorphism-marquee-scroll ${duration}s linear infinite`,
             animationPlayState: paused ? "paused" : "running",
