@@ -79,7 +79,7 @@ export function BlogPost({
 
       <div className="grid gap-10">
         {post.sections.map((section, index) => {
-          const headingId = post.slug + "-section-" + (index + 1);
+          const headingId = encodeURIComponent(post.slug) + "-section-" + (index + 1);
           return (
             <section key={section.heading} aria-labelledby={headingId} className="grid gap-4">
               <h2 id={headingId} className="text-2xl font-semibold tracking-tight sm:text-3xl">

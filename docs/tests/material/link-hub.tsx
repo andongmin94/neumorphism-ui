@@ -2,11 +2,13 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { LinkHub, LinkHubExample } from "../../src/registry/components/blocks/link-hub";
 import { Blog, type BlogPost } from "../../src/registry/components/blocks/blog";
+import { BlogPost as BlogReader } from "../../src/registry/components/blocks/blog-post";
+import { Portfolio } from "../../src/registry/components/blocks/portfolio";
 import { buildThemeVariables, defaultThemeSettings } from "../../src/registry/theme";
 import "./styles.css";
 
 const filterPosts: BlogPost[] = [
-  { slug: "all-category", title: "All category post", summary: "A caller-owned category.", topic: "All", publishedAt: "2026-10-02" },
+  { slug: "field notes?draft#한글", title: "All category post", summary: "A caller-owned category.", topic: "All", publishedAt: "2026-10-02" },
   { slug: "engineering", title: "Engineering post", summary: "Another category.", topic: "Engineering", publishedAt: "2026-10-01" },
 ];
 
@@ -27,6 +29,11 @@ function FilterRegression() {
       { group: "All", title: "All category link", href: "#all-link" },
       { group: "Guides", title: "Guide link", href: "#guide-link" },
     ]} /></div>
+    <div data-reader><BlogReader locale={locale} post={{
+      ...filterPosts[0], publishedLabel: "Oct 2", readTime: "2 min", intro: "Caller article.",
+      sections: [{ heading: "Caller section", paragraphs: ["A caller-owned paragraph."] }],
+    }} /></div>
+    <div data-private-portfolio><Portfolio locale={locale} profile={{ name: "Private profile", role: "Designer", intro: [] }} projects={[]} /></div>
   </main>;
 }
 

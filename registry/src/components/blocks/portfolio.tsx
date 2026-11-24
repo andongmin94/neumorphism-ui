@@ -90,6 +90,7 @@ export function Portfolio({
   className,
 }: PortfolioProps) {
   const t = copy[locale];
+  const hasContact = Boolean(profile.email || profile.github || profile.linkedin);
 
   return (
     <div
@@ -103,7 +104,7 @@ export function Portfolio({
         </a>
         <nav aria-label={t.contact} className="flex items-center gap-4 text-sm">
           <a href="#portfolio-work" className="hover:underline">{t.work}</a>
-          <a href="#portfolio-contact" className="hover:underline">{t.contact}</a>
+          {hasContact && <a href="#portfolio-contact" className="hover:underline">{t.contact}</a>}
         </nav>
       </header>
 
@@ -161,7 +162,7 @@ export function Portfolio({
           </div>
         </section>
 
-        <section id="portfolio-contact" aria-labelledby="portfolio-contact-title" className="grid gap-4 border-t border-[var(--border)] pt-5 text-sm">
+        {hasContact && <section id="portfolio-contact" aria-labelledby="portfolio-contact-title" className="grid gap-4 border-t border-[var(--border)] pt-5 text-sm">
           <h3 id="portfolio-contact-title" className="text-xl font-semibold">{t.contact}</h3>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
           {profile.email ? (
@@ -178,7 +179,7 @@ export function Portfolio({
             </a>
           ) : null}
           </div>
-        </section>
+        </section>}
       </div>
 
       <footer className="flex items-center justify-between gap-4 border-t border-[var(--border)] py-4 text-xs text-[var(--muted-foreground)]">

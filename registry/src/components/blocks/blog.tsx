@@ -102,7 +102,7 @@ const copy = {
 } as const;
 
 function postHref(basePath: string, slug: string) {
-  return basePath.replace(/\/$/, "") + "/" + slug;
+  return basePath.replace(/\/$/, "") + "/" + encodeURIComponent(slug);
 }
 
 export function Blog({

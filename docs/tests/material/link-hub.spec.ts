@@ -91,7 +91,17 @@ test("runtime regressions: caller All categories and Blog label targets remain i
     await expect(all.nth(1)).toHaveAttribute("aria-pressed", "true");
   }
   await expect(firstBlog.locator("article")).toHaveCount(1);
-  await expect(firstBlog.getByRole("link", { name: "All category post" })).toBeVisible();
+  const postLink = firstBlog.getByRole("link", { name: "All category post" });
+  await expect(postLink).toBeVisible();
+  const slug = "field notes?draft#한글";
+  await expect(postLink).toHaveAttribute("href", "/blog/" + encodeURIComponent(slug));
+  const reader = page.locator("[data-reader]");
+  const section = reader.getByRole("region", { name: "Caller section", exact: true });
+  await expect(section).toBeVisible();
+  await expect(section.getByRole("heading")).toHaveAttribute("id", encodeURIComponent(slug) + "-section-1");
+  const portfolio = page.locator("[data-private-portfolio]");
+  await expect(portfolio.locator('a[href="#portfolio-contact"]')).toHaveCount(0);
+  await expect(portfolio.locator("#portfolio-contact")).toHaveCount(0);
   await expect(hub.getByRole("link")).toHaveCount(1);
   await expect(hub.getByRole("link", { name: "All category link" })).toBeVisible();
 
