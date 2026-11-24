@@ -29,6 +29,7 @@
 
 import * as React from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -333,14 +334,16 @@ function SidebarTrigger({
   );
 }
 
-function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
-  return (
-    <main
-      data-slot="sidebar-inset"
-      className={cn("flex min-h-0 min-w-0 flex-1 flex-col", className)}
-      {...props}
-    />
-  );
+function SidebarInset({ className, render, ...props }: useRender.ComponentProps<"main">) {
+  return useRender({
+    defaultTagName: "main",
+    render,
+    props: {
+      "data-slot": "sidebar-inset",
+      className: cn("flex min-h-0 min-w-0 flex-1 flex-col", className),
+      ...props,
+    },
+  });
 }
 
 function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {

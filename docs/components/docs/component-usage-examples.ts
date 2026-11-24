@@ -676,7 +676,7 @@ export default function Example() {
       </Sidebar>
       <SidebarInset>
         <header className="p-4"><SidebarTrigger /></header>
-        <main className="p-4">Your projects</main>
+        <div className="p-4">Your projects</div>
       </SidebarInset>
     </SidebarProvider>
   );

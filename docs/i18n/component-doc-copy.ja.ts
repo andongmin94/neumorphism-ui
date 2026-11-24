@@ -42,6 +42,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "配置する側と surface 表現を選びます。",
       "折りたたみボタンのアクセシブル名をローカライズします。",
       "現在位置の表示と icon 折りたたみ時の tooltip を提供します。",
+      "既定の main はページの主要コンテンツ領域です。別の main 内に埋め込む例では render={<div />} を使用します。",
     ],
     accessibility: [
       "ナビゲーションリンクには実際の移動先と読み取れる名前を与え、現在位置には isActive を使用します。",

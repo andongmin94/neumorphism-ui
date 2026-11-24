@@ -3,7 +3,7 @@ import path from "node:path";
 import { test, expect } from "@playwright/test";
 
 const expanded = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible", "toggle", "toggle-group", "toolbar", "field", "fieldset", "form", "number-field", "meter", "combobox", "command", "context-menu", "drawer", "input-otp", "carousel", "resizable", "sidebar", "image-card", "marquee"];
-const localized = ["ko", "ja", "zh"].flatMap(locale => ["form", "combobox"].map(slug => ({ locale, slug })));
+const localized = ["ko", "ja", "zh"].flatMap(locale => ["form", "combobox", "sidebar"].map(slug => ({ locale, slug })));
 const cases = [...expanded.map(slug => ({ locale: "en", slug })), ...localized];
 
 for (const [locale, loading] of [["en", "Loading content"], ["ko", "콘텐츠 로딩 중"], ["ja", "コンテンツを読み込み中"], ["zh", "正在加载内容"]]) {
@@ -62,11 +62,16 @@ for (const { locale, slug } of cases) {
     await expect(page.locator("h1")).toBeVisible();
     const preview = page.locator("#preview");
     await expect(preview.locator('[role="tabpanel"]').first()).toBeVisible();
+    if (slug === "sidebar") {
+      await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+      await expect(page.locator("main")).toHaveCount(1);
+    }
     await page.evaluate(() => document.fonts.ready);
     const tabs = preview.getByRole("tab");
     await tabs.nth(1).click();
     await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
     await expect(preview.locator("pre")).toBeVisible();
+    if (slug === "sidebar") await expect(preview.locator("pre")).toContainText("<SidebarInset render={<div");
     await tabs.nth(0).click();
     await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "true");
     await preview.scrollIntoViewIfNeeded();

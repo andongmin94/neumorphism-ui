@@ -42,6 +42,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "选择侧边栏方向和表面样式。",
       "本地化折叠按钮的无障碍名称。",
       "标记当前目标，并在图标折叠时提供 tooltip。",
+      "默认的 main 是页面的主要内容区域。在另一个 main 中嵌入示例时，请使用 render={<div />}。",
     ],
     accessibility: [
       "导航链接应有真实目标和可读名称，并用 isActive 表示当前位置。",

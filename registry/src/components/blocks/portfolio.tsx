@@ -107,7 +107,7 @@ export function Portfolio({
         </nav>
       </header>
 
-      <main className="grid gap-10 py-8 sm:py-10">
+      <div className="grid gap-10 py-8 sm:py-10">
         <section aria-labelledby="portfolio-title" className="grid gap-4">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
             {t.practice}{profile.location ? " / " + profile.location : ""}
@@ -179,7 +179,7 @@ export function Portfolio({
           ) : null}
           </div>
         </section>
-      </main>
+      </div>
 
       <footer className="flex items-center justify-between gap-4 border-t border-[var(--border)] py-4 text-xs text-[var(--muted-foreground)]">
         <p>© 2026 {profile.name}</p>

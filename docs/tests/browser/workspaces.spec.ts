@@ -9,6 +9,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     for (const slug of ["settings", "data-manager", "link-hub", "portfolio", "blog", "blog-post", "cms"]) {
       await page.goto(`/${locale}/templates/${slug}`);
       await expect(page.locator(`[data-template="${slug}"]`)).toBeVisible();
+      if (slug === "portfolio") await expect(page.locator("main")).toHaveCount(1);
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.locator('#installed-source details').first().locator('summary').click();

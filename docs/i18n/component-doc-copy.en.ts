@@ -42,6 +42,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Chooses the side and surface presentation.",
       "Localizes the accessible name of the collapse toggle.",
       "Marks the active destination and provides a tooltip when icon-collapsed.",
+      "The default main is the page’s primary content area. Use render={<div />} for examples embedded within another main.",
     ],
     accessibility: [
       "Navigation links need real destinations and readable names; use isActive for the current location.",
