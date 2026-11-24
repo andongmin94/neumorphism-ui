@@ -1,5 +1,19 @@
 import { expect, test } from "@playwright/test";
 
+test("runtime regressions: release summaries distinguish zero activity from zero update share", async ({ page }) => {
+  for (const { query, total, share, cells } of [
+    { query: "zero-release", total: "0", share: "—", cells: ["R0", "0", "0", "—"] },
+    { query: "zero-updates", total: "100", share: "0.0%", cells: ["R1", "100", "0", "0.0%"] },
+  ]) {
+    await page.goto(`/audit-polish.html?mode=light&${query}`);
+    const chart = page.locator('[data-chart="release-activity"]');
+    await expect(chart.getByText(`Total activity ${total} · Update share ${share}`, { exact: true })).toBeVisible();
+    await expect(chart.locator('[data-slot="chart-plot"]')).toHaveCount(1);
+    await chart.locator("summary").click();
+    await expect(chart.locator("tbody tr").locator("th, td")).toHaveText(cells);
+  }
+});
+
 test("runtime regressions: ChartLegend respects caller formatter and content", async ({ page }) => {
   await page.goto("/audit-polish.html?mode=light&legend");
   const fixture = page.getByTestId("legend-customization");

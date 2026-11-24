@@ -36,6 +36,9 @@ function Specimen() {
   const params = new URLSearchParams(location.search);
   const locale = (["en", "ko", "ja", "zh"] as const).find(value => value === params.get("locale")) ?? "en";
   const mode = params.get("mode") === "dark" ? "dark" : "light";
+  const releaseData = params.has("zero-release") ? [{ release: "R0", installs: 0, updates: 0 }]
+    : params.has("zero-updates") ? [{ release: "R1", installs: 100, updates: 0 }]
+    : [{ release: "R1", installs: 148, updates: 62 }, { release: "R2", installs: 232, updates: 104 }];
   const [empty, setEmpty] = React.useState(false);
   const [budget, setBudget] = React.useState(300);
   const [code, setCode] = React.useState("");
@@ -61,7 +64,7 @@ function Specimen() {
     <div className="grid min-w-0 gap-6 lg:grid-cols-2">
       <BuildDurationChart locale={locale} data={empty ? [] : [{label:"B1",coldSeconds:210,cachedSeconds:108},{label:"B2",coldSeconds:250,cachedSeconds:100}]} />
       <ServiceLatencyChart locale={locale} budgetMs={budget} data={empty ? [] : [{label:"caller-owned",p50Ms:80,p95Ms:210},{label:"B",p50Ms:130,p95Ms:470}]} />
-      <ReleaseActivityChart locale={locale} data={empty ? [] : [{release:"R1",installs:148,updates:62},{release:"R2",installs:232,updates:104}]} />
+      <ReleaseActivityChart locale={locale} data={empty ? [] : releaseData} />
       <DeliveryCapacityChart locale={locale} data={empty ? [] : [{period:"S1",planned:32,delivered:28},{period:"S2",planned:36,delivered:39}]} />
     </div>
     <InstallDiagnosticsChart locale={locale} data={empty ? [] : [{stage:"caller-stage",durationMs:120},{stage:"download",durationMs:840}]} />

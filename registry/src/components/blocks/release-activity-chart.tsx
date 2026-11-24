@@ -93,7 +93,7 @@ export function ReleaseActivityChart({
       data-chart="release-activity"
       title={t.title}
       description={t.description}
-      summary={data.length ? `${t.total} ${total.toLocaleString(locale)} · ${t.updateShare} ${total ? ((updates / total) * 100).toFixed(1) : "0.0"}%` : t.empty}
+      summary={data.length ? `${t.total} ${total.toLocaleString(locale)} · ${t.updateShare} ${total ? ((updates / total) * 100).toFixed(1) + "%" : "—"}` : t.empty}
       actions={
         <label className="grid gap-1.5 text-xs">
           {t.view}
