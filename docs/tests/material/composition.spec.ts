@@ -1,5 +1,40 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+for (const direction of ["ltr", "rtl"] as const) {
+  test(`runtime regressions: Calendar around ${direction} keeps navigation beside its caption`, async ({ page }) => {
+    await page.goto("/runtime-controls.html?mode=light");
+    const fixture = page.getByTestId(`calendar-around-${direction}`);
+    const calendar = fixture.locator('[data-slot="calendar"]');
+    const caption = calendar.getByRole("status");
+    const previous = calendar.getByRole("button", { name: "Go to the Previous Month", exact: true });
+    const next = calendar.getByRole("button", { name: "Go to the Next Month", exact: true });
+    await expect(caption).toHaveText("November 2026");
+    const captionBox = (await caption.boundingBox())!;
+    const previousBox = (await previous.boundingBox())!;
+    const nextBox = (await next.boundingBox())!;
+    for (const button of [previousBox, nextBox]) {
+      expect(Math.abs(button.y + button.height / 2 - captionBox.y - captionBox.height / 2)).toBeLessThanOrEqual(3);
+    }
+    const start = direction === "ltr" ? previousBox : nextBox;
+    const end = direction === "ltr" ? nextBox : previousBox;
+    expect(start.x + start.width).toBeLessThanOrEqual(captionBox.x);
+    expect(end.x).toBeGreaterThanOrEqual(captionBox.x + captionBox.width);
+
+    await next.click();
+    await expect(caption).toHaveText("December 2026");
+    await previous.click();
+    await expect(caption).toHaveText("November 2026");
+    const selected = calendar.locator('[data-day="2026-11-23"] button');
+    const following = calendar.locator('[data-day="2026-11-24"] button');
+    await selected.focus();
+    await selected.press(direction === "rtl" ? "ArrowLeft" : "ArrowRight");
+    await expect(following).toBeFocused();
+    await following.press("Enter");
+    await expect(calendar.locator('[data-day="2026-11-24"]')).toHaveAttribute("data-selected", "true");
+    await expect(fixture.getByTestId("calendar-selection")).toHaveText("24");
+  });
+}
+
 for (const { locale, label, initial, next, caption } of [
   { locale: "fa-IR", label: "Persian date", initial: "۲۳ نوامبر ۲۰۲۶", next: "۲۴ نوامبر ۲۰۲۶", caption: "نوامبر 2026" },
   { locale: "th", label: "Thai date", initial: "23 พ.ย. 2026", next: "24 พ.ย. 2026", caption: "พฤศจิกายน 2026" },

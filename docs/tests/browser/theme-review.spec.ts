@@ -134,6 +134,101 @@ test("mobile theme sections and preset tiles remain reachable at narrow widths",
   }
 });
 
+test("theme copy feedback follows the current generated CSS and retains manual retry", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async () => {} },
+    });
+  });
+  await page.clock.install();
+  await page.goto("/en/customize");
+  const controls = page.locator("#theme-settings");
+  await expect(controls).toHaveAttribute("aria-busy", "false");
+  await page.clock.pauseAt(Date.now() + 1000);
+  const css = page.locator("#theme-output").getByRole("group", { name: "Generated neumorphism theme CSS", exact: true });
+  const copy = css.locator(".copy-button");
+  const label = "Copy: Generated neumorphism theme CSS";
+
+  await copy.click();
+  await expect(copy).toHaveAccessibleName("Copied");
+  const radius = controls.getByRole("slider", { name: "Surface radius", exact: true });
+  await radius.focus();
+  await radius.press("End");
+  await expect(css.locator("pre")).toContainText("--neu-radius-surface: 32px;");
+  await expect(copy).toHaveAccessibleName(label);
+
+  await page.evaluate(() => {
+    navigator.clipboard.writeText = async () => { throw new Error("Clipboard unavailable"); };
+  });
+  await copy.click();
+  const manual = css.getByRole("textbox", { name: "Text to copy manually" });
+  await expect(manual).toBeVisible();
+  expect((await manual.inputValue()).trimEnd()).toBe((await css.locator("pre").textContent())!.trimEnd());
+  await expect(css.getByRole("alert")).toBeVisible();
+  await controls.getByRole("button", { name: "Sage", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-custom-theme", "sage");
+  await expect(copy).toHaveAccessibleName(label);
+  await expect(css.getByRole("alert")).toHaveCount(0);
+  await expect(manual).toHaveCount(0);
+
+  await page.evaluate(() => { navigator.clipboard.writeText = async () => {}; });
+  await copy.click();
+  await expect(copy).toHaveAccessibleName("Copied");
+  await page.clock.runFor(1800);
+  await expect(copy).toHaveAccessibleName(label);
+});
+
+for (const outcome of ["success", "failure"] as const) {
+  test(`theme copy ignores a late ${outcome} from superseded CSS`, async ({ page }) => {
+    type ClipboardWindow = typeof window & {
+      pendingCopies: { text: string; resolve: () => void; reject: (reason: Error) => void }[];
+    };
+    await page.addInitScript(() => {
+      const pendingCopies: ClipboardWindow["pendingCopies"] = [];
+      Object.defineProperty(window, "pendingCopies", { value: pendingCopies });
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: {
+          writeText: (text: string) => new Promise<void>((resolve, reject) => {
+            pendingCopies.push({ text, resolve, reject });
+          }),
+        },
+      });
+    });
+    await page.clock.install();
+    await page.goto("/en/customize");
+    const controls = page.locator("#theme-settings");
+    await expect(controls).toHaveAttribute("aria-busy", "false");
+    await page.clock.pauseAt(Date.now() + 1000);
+    const css = page.locator("#theme-output").getByRole("group", { name: "Generated neumorphism theme CSS", exact: true });
+    const copy = css.locator(".copy-button");
+    const original = (await css.locator("pre").textContent())!.trimEnd();
+    await copy.click();
+    await expect.poll(() => page.evaluate(() => (window as ClipboardWindow).pendingCopies.length)).toBe(1);
+    await controls.getByRole("button", { name: "Sage", exact: true }).click();
+    await expect(css.locator("pre")).not.toHaveText(original);
+    const current = (await css.locator("pre").textContent())!.trimEnd();
+    await copy.click();
+    await expect.poll(() => page.evaluate(() => (window as ClipboardWindow).pendingCopies.length)).toBe(2);
+    expect(await page.evaluate(() => (window as ClipboardWindow).pendingCopies.map(write => write.text.trimEnd()))).toEqual([original, current]);
+
+    await page.evaluate(() => { (window as ClipboardWindow).pendingCopies[1].resolve(); });
+    await expect(copy).toHaveAccessibleName("Copied");
+    await page.evaluate(result => {
+      const previous = (window as ClipboardWindow).pendingCopies[0];
+      if (result === "success") previous.resolve();
+      else previous.reject(new Error("Previous copy failed"));
+    }, outcome);
+    await page.clock.runFor(50);
+    await expect(copy).toHaveAccessibleName("Copied");
+    await expect(css.getByRole("alert")).toHaveCount(0);
+    await expect(css.getByRole("textbox")).toHaveCount(0);
+    await page.clock.runFor(1800);
+    await expect(copy).toHaveAccessibleName("Copy: Generated neumorphism theme CSS");
+  });
+}
+
 test("pill controls keep theme code contained, scrollable and copyable", async ({ page }, info) => {
   await page.addInitScript(() => {
     let copied = "";

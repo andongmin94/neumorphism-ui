@@ -12,22 +12,33 @@ type CopyButtonProps = {
 
 export function CopyButton({ text, label }: CopyButtonProps) {
   const { messages } = useLocale();
-  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const [result, setResult] = useState<{ text: string; status: "copied" | "failed" } | null>(null);
+  const latestCopy = useRef<object | undefined>(undefined);
   const resetTimer = useRef<number | undefined>(undefined);
+  const status = result?.text === text ? result.status : "idle";
   const copied = status === "copied";
   const failed = status === "failed";
   const resolvedLabel = label ?? messages.common.copyCommand;
 
-  useEffect(() => () => window.clearTimeout(resetTimer.current), []);
+  useEffect(() => () => {
+    latestCopy.current = undefined;
+    window.clearTimeout(resetTimer.current);
+  }, []);
 
   async function copy() {
+    const request = {};
+    latestCopy.current = request;
     window.clearTimeout(resetTimer.current);
+    let status: "copied" | "failed" = "copied";
     try {
       await navigator.clipboard.writeText(text);
-      setStatus("copied");
-      resetTimer.current = window.setTimeout(() => setStatus("idle"), 1800);
     } catch {
-      setStatus("failed");
+      status = "failed";
+    }
+    if (latestCopy.current !== request) return;
+    setResult({ text, status });
+    if (status === "copied") {
+      resetTimer.current = window.setTimeout(() => setResult(null), 1800);
     }
   }
 
