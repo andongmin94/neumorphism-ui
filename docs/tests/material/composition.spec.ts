@@ -35,6 +35,50 @@ for (const direction of ["ltr", "rtl"] as const) {
   });
 }
 
+for (const direction of ["ltr", "rtl"] as const) {
+  for (const navLayout of ["default", "after"] as const) {
+    test(`runtime regressions: Calendar ${navLayout} ${direction} follows visual navigation order`, async ({ page }) => {
+      await page.goto("/runtime-controls.html?mode=light");
+      const calendar = page.getByTestId(`calendar-${navLayout}-${direction}`).locator('[data-slot="calendar"]');
+      const previous = calendar.getByRole("button", { name: "Go to the Previous Month", exact: true });
+      const next = calendar.getByRole("button", { name: "Go to the Next Month", exact: true });
+      await expect(calendar.getByRole("status")).toHaveText("November 2026");
+      for (const [button, pointsRight] of [[previous, direction === "rtl"], [next, direction === "ltr"]] as const) {
+        const delta = await button.locator("svg polygon").evaluate((polygon: SVGPolygonElement) => {
+          const transform = polygon.getScreenCTM()!;
+          const edge = polygon.points.getItem(0).matrixTransform(transform);
+          const tip = polygon.points.getItem(1).matrixTransform(transform);
+          return tip.x - edge.x;
+        });
+        expect(Math.abs(delta)).toBeGreaterThan(0);
+        expect(delta > 0).toBe(pointsRight);
+      }
+      if (navLayout === "after") {
+        const month = calendar.getByRole("combobox", { name: "Choose the Month", exact: true });
+        const year = calendar.getByRole("combobox", { name: "Choose the Year", exact: true });
+        const controls = await Promise.all([month, year, previous, next].map(control => control.boundingBox()));
+        for (let i = 1; i < controls.length; i++) {
+          const before = controls[i - 1]!;
+          const after = controls[i]!;
+          expect(direction === "ltr" ? after.x - before.x - before.width : before.x - after.x - after.width).toBeGreaterThanOrEqual(-1);
+          expect(Math.abs(before.y + before.height / 2 - after.y - after.height / 2)).toBeLessThanOrEqual(3);
+        }
+        await month.focus();
+        for (const control of [year, previous, next]) {
+          await page.keyboard.press("Tab");
+          await expect(control).toBeFocused();
+        }
+        await page.keyboard.press("Enter");
+      } else {
+        await next.click();
+      }
+      await expect(calendar.getByRole("status")).toHaveText("December 2026");
+      await previous.click();
+      await expect(calendar.getByRole("status")).toHaveText("November 2026");
+    });
+  }
+}
+
 for (const { locale, label, initial, next, caption } of [
   { locale: "fa-IR", label: "Persian date", initial: "۲۳ نوامبر ۲۰۲۶", next: "۲۴ نوامبر ۲۰۲۶", caption: "نوامبر 2026" },
   { locale: "th", label: "Thai date", initial: "23 พ.ย. 2026", next: "24 พ.ย. 2026", caption: "พฤศจิกายน 2026" },
@@ -644,3 +688,100 @@ test("all presets retain composition geometry at a 320px reflow width", async ({
     }
   }
 });
+
+for (const dir of ["ltr", "rtl"] as const) {
+  for (const kind of ["popover", "hover-card", "tooltip", "navigation-menu"] as const) {
+    test(`runtime regressions: local ${dir} ${kind} preserves portaled start alignment`, async ({ page }) => {
+      await page.goto(`/refinement.html?scope=local&dir=${dir}&overlay=${kind}`);
+      await expect(page.locator("html")).toHaveCSS("direction", "ltr");
+      await expect(page.locator("body")).toHaveCSS("direction", "ltr");
+      const trigger = page.getByTestId("overlay-trigger");
+      await expect(trigger).toHaveCSS("direction", dir);
+      if (kind === "popover") await trigger.press("Enter");
+      else if (kind === "navigation-menu") await trigger.press("ArrowDown");
+      else await trigger.focus();
+      const popup = page.getByTestId("overlay-popup");
+      await expect(popup).toBeVisible();
+      await expect(popup).toHaveCSS("direction", dir);
+      await expect(popup.locator("..")).toHaveCSS("direction", dir);
+      expect(await popup.evaluate(element => element.closest("main"))).toBeNull();
+      await expect(popup).toHaveAttribute("data-align", "start");
+      await expect.poll(async () => {
+        const anchor = (await trigger.boundingBox())!;
+        const panel = (await popup.boundingBox())!;
+        return Math.abs(dir === "rtl" ? anchor.x + anchor.width - panel.x - panel.width : anchor.x - panel.x);
+      }).toBeLessThanOrEqual(1);
+      const anchor = (await trigger.boundingBox())!;
+      const panel = (await popup.boundingBox())!;
+      expect(Math.abs(anchor.width - panel.width)).toBeGreaterThan(4);
+      expect(anchor.x).toBeGreaterThan(panel.width);
+      expect(1200 - anchor.x - anchor.width).toBeGreaterThan(panel.width);
+      if (kind === "popover") {
+        await popup.getByRole("button", { name: "Dismiss popover" }).press("Enter");
+        await expect(trigger).toBeFocused();
+      } else if (kind === "navigation-menu") {
+        await popup.getByRole("link", { name: "Visit destination" }).press("Enter");
+        await expect(page.getByTestId("overlay-action")).toHaveText("navigated");
+      } else await trigger.press("Escape");
+      await expect(popup).toBeHidden();
+    });
+  }
+
+  for (const kind of ["dialog", "sheet", "alert-dialog", "drawer"] as const) {
+    test(`runtime regressions: local ${dir} ${kind} keeps content and close controls in its direction`, async ({ page }) => {
+      await page.goto(`/refinement.html?scope=local&dir=${dir}&overlay=${kind}`);
+      await expect(page.locator("body")).toHaveCSS("direction", "ltr");
+      const trigger = page.getByTestId("overlay-trigger");
+      await trigger.press("Enter");
+      const popup = page.getByTestId("overlay-popup");
+      await expect(popup).toBeVisible();
+      await expect(popup).toHaveCSS("direction", dir);
+      expect(await popup.evaluate(element => element.closest("main"))).toBeNull();
+      const close = popup.getByRole("button", { name: kind === "alert-dialog" ? "Confirm alert" : `Dismiss ${kind}` });
+      if (kind === "dialog" || kind === "sheet") {
+        const header = popup.locator('[data-slot="dialog-header"]');
+        await expect(header).toHaveCSS("text-align", "start");
+        const panel = (await popup.boundingBox())!;
+        const control = (await close.boundingBox())!;
+        expect(dir === "rtl" ? control.x < panel.x + panel.width / 2 : control.x > panel.x + panel.width / 2).toBe(true);
+        if (kind === "dialog") await expect(header).toHaveCSS("padding-inline-end", "48px");
+        else await expect(popup).toHaveAttribute("data-side", "right");
+      } else if (kind === "drawer") {
+        await expect(popup.locator('[data-slot="drawer-header"]')).toHaveCSS("text-align", "start");
+      }
+      await close.press("Enter");
+      await expect(popup).toBeHidden();
+      await expect(trigger).toBeFocused();
+      if (kind === "alert-dialog") await expect(page.getByTestId("overlay-action")).toHaveText("confirmed");
+    });
+  }
+
+  test(`runtime regressions: local ${dir} toast uses the logical end edge and outward dismissal`, async ({ page }) => {
+    await page.goto(`/refinement.html?scope=local&dir=${dir}&overlay=toast`);
+    await expect(page.locator("body")).toHaveCSS("direction", "ltr");
+    const trigger = page.getByTestId("overlay-trigger");
+    await trigger.click();
+    const viewport = page.locator('[aria-label="Scoped notifications"]');
+    const toast = viewport.locator('[data-slot="toast"]');
+    await expect(toast).toBeVisible();
+    await expect(toast).toHaveCSS("direction", dir);
+    expect(await toast.evaluate(element => element.closest("main"))).toBeNull();
+    const bounds = (await toast.boundingBox())!;
+    expect(Math.abs(dir === "rtl" ? bounds.x - 16 : 1200 - bounds.x - bounds.width - 16)).toBeLessThanOrEqual(1);
+    const close = toast.getByRole("button", { name: "Dismiss notification" });
+    const control = (await close.boundingBox())!;
+    expect(dir === "rtl" ? control.x < bounds.x + bounds.width / 2 : control.x > bounds.x + bounds.width / 2).toBe(true);
+    await close.press("Enter");
+    await expect(toast).toBeHidden();
+    await trigger.click();
+    await expect(toast).toBeVisible();
+    const next = (await toast.boundingBox())!;
+    const x = next.x + next.width / 2;
+    const y = next.y + next.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + (dir === "rtl" ? -100 : 100), y, { steps: 10 });
+    await page.mouse.up();
+    await expect(toast).toBeHidden();
+  });
+}

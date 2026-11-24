@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@base-ui/react/direction-provider";
 import { Dialog as Primitive } from "@base-ui/react/dialog";
 import { Button } from "./button";
 import { Dialog, DialogOverlay, DialogPortal, DialogTitle, DialogDescription, DialogHeader, DialogFooter } from "./dialog";
@@ -20,12 +21,13 @@ const sides = {
 } as const;
 type SheetContentProps = Primitive.Popup.Props & { side?: keyof typeof sides; closeLabel?: string };
 function SheetContent({ className, side = "right", closeLabel = "Close", children, ...props }: SheetContentProps) {
+  const direction = useDirection();
   return <DialogPortal><DialogOverlay />
-    <Primitive.Popup data-slot="sheet-content" data-side={side} className={mergeClassName<Primitive.Popup.State>(
+    <Primitive.Popup dir={direction} data-slot="sheet-content" data-side={side} className={mergeClassName<Primitive.Popup.State>(
       `fixed z-50 flex flex-col gap-6 overflow-y-auto overscroll-contain border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-6 pt-16 text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none ${sides[side]}`, className,
     )} {...props}>
       {children}
-      <Primitive.Close render={<Button size="icon" variant="soft" />} className="absolute top-4 right-4" aria-label={closeLabel}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m6 6 12 12M6 18 18 6" /></svg></Primitive.Close>
+      <Primitive.Close render={<Button size="icon" variant="soft" />} className="absolute top-4 end-4" aria-label={closeLabel}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m6 6 12 12M6 18 18 6" /></svg></Primitive.Close>
     </Primitive.Popup>
   </DialogPortal>;
 }

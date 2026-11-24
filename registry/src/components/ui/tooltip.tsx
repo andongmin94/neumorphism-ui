@@ -1,6 +1,7 @@
 "use client";
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+import { useDirection } from "@base-ui/react/direction-provider";
 
 import { mergeClassName } from "@/lib/utils";
 
@@ -38,9 +39,11 @@ function TooltipContent({
   sideOffset = 8,
   ...props
 }: TooltipPrimitive.Popup.Props & TooltipPositionerProps) {
+  const direction = useDirection();
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner
+        dir={direction}
         align={align}
         alignOffset={alignOffset}
         className="isolate z-50 outline-none"
@@ -48,6 +51,7 @@ function TooltipContent({
         sideOffset={sideOffset}
       >
         <TooltipPrimitive.Popup
+          dir={direction}
           data-slot="tooltip-content"
           className={mergeClassName<TooltipPrimitive.Popup.State>(
             "w-max max-w-64 origin-[var(--transform-origin)] rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] px-3 py-2 text-xs font-medium text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",

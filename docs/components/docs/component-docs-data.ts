@@ -1835,6 +1835,13 @@ export const componentDocs = [
       "name": "disabled / locale / startMonth / endMonth",
       "type": "DayPickerProps",
       "description": "비활성 날짜, 언어, 이동 가능한 월을 지정합니다."
+    },
+    {
+      "component": "Calendar",
+      "name": "navLayout",
+      "type": "\"around\" | \"after\"",
+      "defaultValue": "undefined",
+      "description": "around는 월 제목의 양쪽에, after는 제목 뒤에 이전·다음 버튼을 배치합니다. 드롭다운 제목에는 둘 중 하나를 지정해 Tab 순서와 시각적 순서를 맞추세요."
     }
   ],
   "accessibility": [

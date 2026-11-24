@@ -1,6 +1,7 @@
 "use client";
 
 import { Popover as Primitive } from "@base-ui/react/popover";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { mergeClassName } from "@/lib/utils";
 
 const Popover = Primitive.Root;
@@ -14,10 +15,11 @@ type PopoverContentProps = Primitive.Popup.Props & {
 };
 
 function PopoverContent({ className, side = "bottom", align = "center", sideOffset = 10, ...props }: PopoverContentProps) {
+  const direction = useDirection();
   return (
     <Primitive.Portal>
-      <Primitive.Positioner side={side} align={align} sideOffset={sideOffset} className="z-50 outline-none">
-        <Primitive.Popup
+      <Primitive.Positioner dir={direction} side={side} align={align} sideOffset={sideOffset} className="z-50 outline-none">
+        <Primitive.Popup dir={direction}
           data-slot="popover-content"
           className={mergeClassName<Primitive.Popup.State>(
             "grid w-80 max-w-[calc(100vw-2rem)] max-h-[var(--available-height)] gap-3 overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] p-5 text-sm text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none origin-[var(--transform-origin)] transition-[opacity,transform] duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:scale-95 data-[ending-style]:opacity-0",

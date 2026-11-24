@@ -2,12 +2,45 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverTrigger, PopoverContent, PopoverTitle, PopoverDescription, PopoverClose } from "@/components/ui/popover";
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport } from "@/components/ui/navigation-menu";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
+import { ToastProvider, Toaster, useToast } from "@/components/ui/toast";
 import { Calendar } from "@/components/ui/calendar";
 import { Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem } from "@/components/ui/combobox";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuCheckboxItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuGroup, ContextMenuLabel, ContextMenuRadioGroup, ContextMenuRadioItem, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent, ContextMenuItem } from "@/components/ui/context-menu";
 import { buildThemeVariables, defaultThemeSettings, getThemePreset, type ThemePresetId } from "../../src/registry/theme";
 import "./styles.css";
+
+function ScopedToast() {
+  const manager = useToast();
+  return <><Button data-testid="overlay-trigger" onClick={() => manager.add({ title: "Scoped notification", description: "Notification content follows its region." })}>Show notification</Button><Toaster label="Scoped notifications" /></>;
+}
+
+function OverlayDirections({ dir, kind }: { dir: "ltr" | "rtl"; kind: string }) {
+  const [action, setAction] = React.useState("none");
+  return <DirectionProvider direction={dir}><main dir={dir} className="mx-auto grid max-w-3xl justify-items-center gap-10 px-8 py-40">
+    <h1>Portaled direction</h1>
+    {kind === "popover" && <Popover><PopoverTrigger data-testid="overlay-trigger" render={<Button className="w-40" />}>Open popover</PopoverTrigger><PopoverContent data-testid="overlay-popup" align="start"><PopoverTitle>Popover direction</PopoverTitle><PopoverDescription>Content follows its local region.</PopoverDescription><PopoverClose render={<Button />}>Dismiss popover</PopoverClose></PopoverContent></Popover>}
+    {kind === "hover-card" && <HoverCard><HoverCardTrigger data-testid="overlay-trigger" href="#overlay-destination" delay={0} className="inline-flex w-40 justify-center p-3">Preview region</HoverCardTrigger><HoverCardContent data-testid="overlay-popup" align="start"><strong>Hover card direction</strong><p>Content follows its local region.</p></HoverCardContent></HoverCard>}
+    {kind === "tooltip" && <TooltipProvider delay={0}><Tooltip><TooltipTrigger data-testid="overlay-trigger" render={<Button className="w-40" />}>Show tooltip</TooltipTrigger><TooltipContent data-testid="overlay-popup" align="start" side="bottom">Content follows its local region.</TooltipContent></Tooltip></TooltipProvider>}
+    {kind === "navigation-menu" && <NavigationMenu aria-label="Scoped navigation"><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger data-testid="overlay-trigger" className="w-40">Open destinations</NavigationMenuTrigger><NavigationMenuContent><NavigationMenuLink href="#overlay-destination" onClick={() => setAction("navigated")}>Visit destination</NavigationMenuLink></NavigationMenuContent></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport data-testid="overlay-popup" /></NavigationMenu>}
+    {kind === "dialog" && <Dialog><DialogTrigger data-testid="overlay-trigger" render={<Button />}>Open dialog</DialogTrigger><DialogContent data-testid="overlay-popup" closeLabel="Dismiss dialog"><DialogHeader><DialogTitle>Dialog direction</DialogTitle><DialogDescription>Content follows its local region.</DialogDescription></DialogHeader></DialogContent></Dialog>}
+    {kind === "sheet" && <Sheet><SheetTrigger data-testid="overlay-trigger" render={<Button />}>Open sheet</SheetTrigger><SheetContent data-testid="overlay-popup" closeLabel="Dismiss sheet"><SheetHeader><SheetTitle>Sheet direction</SheetTitle><SheetDescription>Content follows its local region.</SheetDescription></SheetHeader></SheetContent></Sheet>}
+    {kind === "alert-dialog" && <AlertDialog><AlertDialogTrigger data-testid="overlay-trigger" render={<Button />}>Open alert</AlertDialogTrigger><AlertDialogContent data-testid="overlay-popup"><AlertDialogTitle>Alert direction</AlertDialogTitle><AlertDialogDescription>Content follows its local region.</AlertDialogDescription><AlertDialogFooter><AlertDialogCancel>Cancel alert</AlertDialogCancel><AlertDialogAction onClick={() => setAction("confirmed")}>Confirm alert</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>}
+    {kind === "drawer" && <Drawer><DrawerTrigger data-testid="overlay-trigger" render={<Button />}>Open drawer</DrawerTrigger><DrawerContent data-testid="overlay-popup"><DrawerHeader><DrawerTitle>Drawer direction</DrawerTitle><DrawerDescription>Content follows its local region.</DrawerDescription></DrawerHeader><DrawerFooter><DrawerClose render={<Button />}>Dismiss drawer</DrawerClose></DrawerFooter></DrawerContent></Drawer>}
+    {kind === "toast" && <ToastProvider timeout={0}><ScopedToast /></ToastProvider>}
+    <output data-testid="overlay-action">{action}</output>
+    <p id="overlay-destination">Destination content</p>
+  </main></DirectionProvider>;
+}
+
 function Specimen() {
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") === "dark" ? "dark" : "light";
@@ -25,6 +58,7 @@ function Specimen() {
     document.documentElement.classList.toggle("dark", mode === "dark");
     document.documentElement.dir = localDirection ? "ltr" : dir;
   }, [mode, preset, dir, localDirection]);
+  if (query.has("overlay")) return <OverlayDirections dir={dir} kind={query.get("overlay")!} />;
   return <DirectionProvider direction={dir}><main dir={dir} className="mx-auto max-w-5xl px-4 py-8">
     <h1 className="mb-8 text-2xl font-semibold tracking-tight">Calendar and menu anatomy</h1>
     <div className="grid min-w-0 gap-8 md:grid-cols-2">

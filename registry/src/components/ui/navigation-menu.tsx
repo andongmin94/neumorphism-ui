@@ -1,6 +1,7 @@
 "use client";
 
 import { NavigationMenu as Primitive } from "@base-ui/react/navigation-menu";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { mergeClassName } from "@/lib/utils";
 
 function NavigationMenu<Value = any>({ className, ...props }: Primitive.Root.Props<Value>) {
@@ -21,7 +22,8 @@ function NavigationMenuLink({ className, ...props }: Primitive.Link.Props) {
 }
 type NavigationMenuViewportProps = Primitive.Popup.Props & Pick<Primitive.Positioner.Props, "side" | "align" | "sideOffset" | "alignOffset">;
 function NavigationMenuViewport({ className, side = "bottom", align = "start", sideOffset = 8, alignOffset = 0, ...props }: NavigationMenuViewportProps) {
-  return <Primitive.Portal><Primitive.Positioner side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset} collisionPadding={16} className="z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[calc(100vw-2rem)] outline-none"><Primitive.Popup data-slot="navigation-menu-popup" className={mergeClassName<Primitive.Popup.State>("h-[var(--popup-height)] w-[var(--popup-width)] max-h-[var(--available-height)] max-w-[calc(100vw-2rem)] origin-[var(--transform-origin)] overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0", className)} {...props}><Primitive.Viewport /></Primitive.Popup></Primitive.Positioner></Primitive.Portal>;
+  const direction = useDirection();
+  return <Primitive.Portal><Primitive.Positioner dir={direction} side={side} align={align} sideOffset={sideOffset} alignOffset={alignOffset} collisionPadding={16} className="z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[calc(100vw-2rem)] outline-none"><Primitive.Popup dir={direction} data-slot="navigation-menu-popup" className={mergeClassName<Primitive.Popup.State>("h-[var(--popup-height)] w-[var(--popup-width)] max-h-[var(--available-height)] max-w-[calc(100vw-2rem)] origin-[var(--transform-origin)] overflow-y-auto rounded-[var(--neu-radius-overlay)] border border-[color:var(--neu-edge)] bg-[var(--popover)] text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] outline-none transition-opacity duration-[var(--neu-duration)] motion-reduce:transition-none data-[starting-style]:opacity-0 data-[ending-style]:opacity-0", className)} {...props}><Primitive.Viewport /></Primitive.Popup></Primitive.Positioner></Primitive.Portal>;
 }
 
 export { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport };

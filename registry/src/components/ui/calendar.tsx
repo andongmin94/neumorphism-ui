@@ -12,10 +12,10 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
     className={cn("w-fit min-w-0 max-w-full rounded-[var(--neu-radius-surface)] border border-transparent bg-[var(--neu-surface)] p-4 font-sans text-[var(--foreground)] [box-shadow:var(--neu-shadow-raised-sm)] [--cell-size:clamp(1.75rem,7.5vw,2.25rem)]", props.showWeekNumber ? "[--calendar-columns:8]" : "[--calendar-columns:7]", className)}
     classNames={{
       months: "relative flex max-w-full flex-wrap justify-center gap-6",
-      month: cn("flex min-w-0 max-w-full grow flex-col gap-3 w-[calc(var(--cell-size)*var(--calendar-columns))]", props.navLayout === "around" && "relative"),
-      month_caption: "flex h-10 items-center justify-center px-10",
+      month: cn("flex min-w-0 max-w-full grow flex-col gap-3 w-[calc(var(--cell-size)*var(--calendar-columns))]", props.navLayout && "relative"),
+      month_caption: cn("flex h-10 items-center", props.navLayout === "after" ? "justify-start pe-20" : "justify-center px-10"),
       caption_label: "min-w-0 text-center text-sm font-semibold leading-5 text-balance",
-      nav: "pointer-events-none absolute inset-x-0 top-0 flex h-10 items-center justify-between",
+      nav: cn("pointer-events-none absolute top-0 flex h-10 items-center rtl:[&_svg]:rotate-180", props.navLayout === "after" ? "end-0 gap-1" : "inset-x-0 justify-between"),
       button_previous: cn("pointer-events-auto grid size-9 place-items-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-35 aria-disabled:opacity-35 [&>svg]:size-4", props.navLayout === "around" && "absolute start-0 top-0 z-10"),
       button_next: cn("pointer-events-auto grid size-9 place-items-center rounded-[var(--neu-radius-control)] border border-transparent bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none hover:[box-shadow:var(--neu-shadow-hover)] active:[box-shadow:var(--neu-shadow-inset)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-35 aria-disabled:opacity-35 [&>svg]:size-4", props.navLayout === "around" && "absolute end-0 top-0 z-10"),
       chevron: "fill-current",
