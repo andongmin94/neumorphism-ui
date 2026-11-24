@@ -547,10 +547,10 @@ export const componentDocCopyJa = defineComponentDocCopy({
     summary:
       "小さな画面では横方向にスクロールする semantic なデータテーブル。",
     description:
-      "native table、caption、thead、tbody、tfoot、tr、th、td を組み合わせます。外側の container が overflow-x-auto とニューモーフィックな raised サーフェスを提供します。",
+      "native table、caption、thead、tbody、tfoot、tr、th、td を組み合わせます。外側の container が overflow-x-auto とニューモーフィックな raised サーフェスを提供します。ヘッダーとキャプションは読み方向の開始側に揃え、チェックボックスのセルは終了側の余白を減らします。",
     props: [
       "caption と table section を配置します。",
-      "外側のスクロール領域の props です。role=\"region\"、アクセシブルな名前、tabIndex=0 を指定してキーボードでスクロールできる入口を提供します。",
+      "外側のスクロール領域の props です。role=\"region\"、アクセシブルな名前、tabIndex=0 を指定してキーボードでスクロールできる入口を提供します。外側の領域には可視フォーカスの表示があります。",
       "table の目的とデータ範囲を説明します。",
       "header が説明する cell の方向を指定します。",
       "hover と区別できる持続的な選択背景を適用します。",

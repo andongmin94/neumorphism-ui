@@ -18,7 +18,7 @@ function Table({ className, containerProps, ...props }: React.ComponentProps<"ta
       {...containerProps}
       data-slot="table-container"
       style={{ ...scrollEdges, ...containerProps?.style }}
-      className={cn("relative w-full overflow-x-auto rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)]", containerProps?.className)}
+      className={cn("relative w-full min-w-0 overflow-x-auto rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] [box-shadow:var(--neu-shadow-raised-sm)] outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-[-2px] focus-visible:outline-[color:var(--ring)]", containerProps?.className)}
     >
       <table
         data-slot="table"
@@ -83,7 +83,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-11 px-4 text-left align-middle text-xs font-semibold whitespace-nowrap text-[var(--muted-foreground)] [&:has([role=checkbox])]:pr-0",
+        "h-11 px-4 text-start align-middle text-xs font-semibold whitespace-nowrap text-[var(--muted-foreground)] [&:has([role=checkbox],input[type=checkbox]:not([role]))]:pe-0",
         className,
       )}
       {...props}
@@ -96,7 +96,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-4 align-middle text-[var(--foreground)] [&:has([role=checkbox])]:pr-0 [&_[data-slot=badge]]:whitespace-nowrap",
+        "p-4 align-middle text-[var(--foreground)] [&:has([role=checkbox],input[type=checkbox]:not([role]))]:pe-0 [&_[data-slot=badge]]:whitespace-nowrap",
         className,
       )}
       {...props}
@@ -109,7 +109,7 @@ function TableCaption({ className, ...props }: React.ComponentProps<"caption">) 
     <caption
       data-slot="table-caption"
       className={cn(
-        "caption-bottom px-4 py-3 text-left text-sm text-[var(--muted-foreground)]",
+        "caption-bottom px-4 py-3 text-start text-sm text-[var(--muted-foreground)]",
         className,
       )}
       {...props}

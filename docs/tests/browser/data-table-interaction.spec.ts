@@ -37,3 +37,29 @@ test("compiled documentation updates the caller-owned table across combined oper
   await table.scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath("table-recovered.png") });
 });
+
+
+test("table checkbox spacing follows reading direction and the scroll region shows focus", async ({ page }) => {
+  await page.goto("/en/components/data-table");
+  const preview = page.locator("#preview");
+  const region = preview.getByRole("region", { name: "Workspace projects — illustrative data", exact: true });
+  const selectionHead = region.locator("thead th").first();
+  const selectionCell = region.locator("tbody td").first();
+  const statusHead = region.getByRole("columnheader", { name: "Status", exact: true });
+  await expect(selectionHead.locator('input[type="checkbox"]')).toBeVisible();
+  await expect(selectionCell.locator('input[type="checkbox"]')).toBeVisible();
+  for (const direction of ["ltr", "rtl"] as const) {
+    await region.evaluate((element, dir) => element.setAttribute("dir", dir), direction);
+    await expect(statusHead).toHaveCSS("text-align", "start");
+    await expect(region.locator("caption")).toHaveCSS("text-align", "start");
+    for (const cell of [selectionHead, selectionCell]) {
+      await expect(cell).toHaveCSS("padding-inline-start", "16px");
+      await expect(cell).toHaveCSS("padding-inline-end", "0px");
+      await expect(cell).toHaveCSS(direction === "rtl" ? "padding-left" : "padding-right", "0px");
+    }
+  }
+  await region.focus();
+  await expect(region).toBeFocused();
+  await expect(region).toHaveCSS("outline-width", "2px");
+  await expect(region).toHaveCSS("outline-style", "solid");
+});

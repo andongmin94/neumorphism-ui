@@ -547,10 +547,10 @@ export const componentDocCopyEn = defineComponentDocCopy({
     summary:
       "A semantic data table that scrolls horizontally on smaller screens.",
     description:
-      "Composes native table, caption, thead, tbody, tfoot, tr, th, and td elements. An outer container provides overflow-x-auto and a neumorphic raised surface.",
+      "Composes native table, caption, thead, tbody, tfoot, tr, th, and td elements. An outer container provides overflow-x-auto and a neumorphic raised surface. Headers and captions align to the reading start, and checkbox cells reduce padding at the reading end.",
     props: [
       "Arranges the caption and table sections.",
-      "Props for the outer scroll region. Set role=\"region\", an accessible name, and tabIndex=0 to provide a keyboard scrolling entry point.",
+      "Props for the outer scroll region. Set role=\"region\", an accessible name, and tabIndex=0 to provide a keyboard scrolling entry point. The wrapper includes a visible keyboard focus indicator.",
       "Describes the purpose and data scope of the table.",
       "Specifies the direction of cells described by the header.",
       "Applies a persistent selection background distinct from hover.",

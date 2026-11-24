@@ -17,7 +17,7 @@ function DataTable<TFeatures extends DataTableFeatures, TData extends RowData>({
   const visibleTable = table as typeof table & Table_ColumnVisibility<TFeatures, TData>;
   return <section data-slot="data-table" className={cn("grid min-w-0 w-full gap-4", className)}>
     {children}
-    <Table containerProps={{ role: "region", "aria-label": caption, tabIndex: 0, className: "outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]" }}>
+    <Table containerProps={{ role: "region", "aria-label": caption, tabIndex: 0 }}>
       <TableCaption>{caption}</TableCaption>
       <TableHeader>{table.getHeaderGroups().map(group => <TableRow key={group.id}>{group.headers.map(header => {
         const column = header.column as typeof header.column & Column_RowSorting<TFeatures, TData>;

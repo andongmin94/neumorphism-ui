@@ -524,10 +524,10 @@ export const componentDocCopyZh = defineComponentDocCopy({
   table: {
     summary: "在小屏幕上可横向滚动的语义化数据表格。",
     description:
-      "组合原生 table、caption、thead、tbody、tfoot、tr、th 和 td 元素。外层 container 提供 overflow-x-auto 与拟物 raised 表面。",
+      "组合原生 table、caption、thead、tbody、tfoot、tr、th 和 td 元素。外层 container 提供 overflow-x-auto 与拟物 raised 表面。表头和标题沿阅读起始方向对齐，含复选框的单元格减少阅读结束方向的内边距。",
     props: [
       "排列 caption 和各个 table section。",
-      "外层滚动区域的属性。设置 role=\"region\"、无障碍名称和 tabIndex=0，为键盘滚动提供焦点入口。",
+      "外层滚动区域的属性。设置 role=\"region\"、无障碍名称和 tabIndex=0，为键盘滚动提供焦点入口。外层区域提供可见的键盘焦点指示。",
       "说明表格用途和数据范围。",
       "明确 header 所描述的 cell 方向。",
       "应用区别于悬停的持续选中背景。",

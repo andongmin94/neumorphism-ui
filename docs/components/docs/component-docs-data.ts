@@ -1118,7 +1118,7 @@ export const componentDocs = [
     category: "data-feedback",
     summary: "작은 화면에서 가로 스크롤되는 의미 있는 데이터 표.",
     description:
-      "native table 요소와 caption, thead, tbody, tfoot, tr, th, td를 조합합니다. 외부 container가 overflow-x-auto와 뉴모피즘 raised 표면을 제공합니다.",
+      "native table 요소와 caption, thead, tbody, tfoot, tr, th, td를 조합합니다. 외부 container가 overflow-x-auto와 뉴모피즘 raised 표면을 제공합니다. 헤더와 캡션은 읽기 시작 방향에 정렬하며, 체크박스가 있는 셀은 읽기 끝 방향의 패딩을 줄입니다.",
     importCode: "\"use client\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from \"@/components/ui/table\";",
     usageCode: "export default function Example() {\n    const copy = {\n        \"table\": {\n            \"caption\": \"관심 종목 · 10분 지연 데이터\",\n            \"symbol\": \"종목\",\n            \"price\": \"가격\",\n            \"change\": \"변동\",\n            \"status\": \"상태\",\n            \"open\": \"장중\",\n            \"selected\": \"선택됨\",\n            \"watch\": \"관심\"\n        }\n    };\n    return (<Table containerProps={{ role: \"region\", \"aria-label\": copy.table.caption, tabIndex: 0 }}>\n          <TableCaption>{copy.table.caption}</TableCaption>\n          <TableHeader>\n            <TableRow>\n              <TableHead>{copy.table.symbol}</TableHead>\n              <TableHead>{copy.table.price}</TableHead>\n              <TableHead>{copy.table.change}</TableHead>\n              <TableHead>{copy.table.status}</TableHead>\n            </TableRow>\n          </TableHeader>\n          <TableBody>\n            <TableRow>\n              <TableCell><strong>NVDA</strong></TableCell>\n              <TableCell>$181.92</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+2.41%</TableCell>\n              <TableCell>\n                <Badge variant=\"primary\">{copy.table.open}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow data-state=\"selected\">\n              <TableCell><strong>005930</strong></TableCell>\n              <TableCell>₩72,400</TableCell>\n              <TableCell className=\"font-semibold text-[var(--success)]\">+1.08%</TableCell>\n              <TableCell>\n                <Badge variant=\"soft\">{copy.table.selected}</Badge>\n              </TableCell>\n            </TableRow>\n            <TableRow>\n              <TableCell><strong>TSLA</strong></TableCell>\n              <TableCell>$318.27</TableCell>\n              <TableCell className=\"font-semibold text-[var(--destructive)]\">−0.64%</TableCell>\n              <TableCell>\n                <Badge variant=\"outline\">{copy.table.watch}</Badge>\n              </TableCell>\n            </TableRow>\n          </TableBody>\n        </Table>);\n}",
     props: [
@@ -1133,7 +1133,7 @@ export const componentDocs = [
         component: "Table",
         name: "containerProps",
         type: 'React.ComponentProps<"div">',
-        description: "바깥 스크롤 영역의 속성입니다. role=\"region\", 접근 가능한 이름, tabIndex=0을 지정해 키보드 스크롤 진입점을 제공합니다.",
+        description: "바깥 스크롤 영역의 속성입니다. role=\"region\", 접근 가능한 이름, tabIndex=0을 지정해 키보드 스크롤 진입점을 제공합니다. 스크롤 영역에는 기본 focus-visible 표시가 적용됩니다.",
       },
       {
         component: "TableCaption",
