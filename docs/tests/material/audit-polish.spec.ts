@@ -1,5 +1,42 @@
 import { expect, test } from "@playwright/test";
 
+for (const direction of ["ltr", "rtl"]) {
+  test(`runtime regressions: Marquee keeps its named ${direction} content visible throughout the loop`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`/audit-polish.html?mode=light&marquee&direction=${direction}`);
+    const marquee = page.getByRole("group", { name: "Supported technologies", exact: true });
+    await expect(marquee).toBeVisible();
+    const track = marquee.locator('[data-slot="marquee-track"]');
+    await expect(track).toHaveCSS("direction", direction);
+    const frames = await track.evaluate(async element => {
+      await document.fonts.ready;
+      const animation = element.getAnimations()[0];
+      animation.pause();
+      await animation.ready;
+      const duration = Number(animation.effect!.getTiming().duration);
+      const viewport = element.parentElement!.getBoundingClientRect();
+      return [0, 0.5, 0.9].map(progress => {
+        animation.currentTime = duration * progress;
+        const strips = Array.from(element.children, child => child.getBoundingClientRect()).sort((a, b) => a.left - b.left);
+        return {
+          progress,
+          left: strips[0].left,
+          right: strips[1].right,
+          gap: strips[1].left - strips[0].right,
+          viewportLeft: viewport.left,
+          viewportRight: viewport.right,
+        };
+      });
+    });
+    expect(Math.abs(frames[1].left - frames[0].left)).toBeGreaterThan((frames[0].viewportRight - frames[0].viewportLeft) / 4);
+    for (const frame of frames) {
+      expect(frame.left, `${direction} start at ${frame.progress}`).toBeLessThanOrEqual(frame.viewportLeft + 1);
+      expect(frame.right, `${direction} end at ${frame.progress}`).toBeGreaterThanOrEqual(frame.viewportRight - 1);
+      expect(frame.gap, `${direction} gap at ${frame.progress}`).toBeLessThanOrEqual(1);
+    }
+  });
+}
+
 test("runtime regressions: release summaries distinguish zero activity from zero update share", async ({ page }) => {
   for (const { query, total, share, cells } of [
     { query: "zero-release", total: "0", share: "—", cells: ["R0", "0", "0", "—"] },

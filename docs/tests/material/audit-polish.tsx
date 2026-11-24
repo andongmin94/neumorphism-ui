@@ -8,6 +8,7 @@ import { ReleaseActivityChart } from "../../src/registry/components/blocks/relea
 import { DeliveryCapacityChart } from "../../src/registry/components/blocks/delivery-capacity-chart";
 import { InstallDiagnosticsChart } from "../../src/registry/components/blocks/install-diagnostics-chart";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Marquee } from "@/components/ui/marquee";
 import { buildThemeVariables, defaultThemeSettings } from "../../src/registry/theme";
 import "./styles.css";
 
@@ -48,6 +49,9 @@ function Specimen() {
     document.documentElement.lang = locale;
   }, [mode, locale]);
   if (params.has("legend")) return <main className="mx-auto max-w-xl p-5"><LegendCustomization /></main>;
+  if (params.has("marquee")) return <main dir={params.get("direction") === "rtl" ? "rtl" : "ltr"} className="mx-auto max-w-xl p-5">
+    <Marquee label="Supported technologies" items={["Accessible", "Composable", "Local source"]} />
+  </main>;
   return <main className="mx-auto grid max-w-5xl gap-8 px-4 py-8">
     <section data-testid="otp" className="grid gap-4">
       <label htmlFor="code">Verification code</label>

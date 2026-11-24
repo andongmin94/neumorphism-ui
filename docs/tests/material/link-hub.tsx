@@ -30,6 +30,16 @@ function FilterRegression() {
   </main>;
 }
 
+function ClipboardRegression() {
+  const [email, setEmail] = React.useState("first@example.com");
+  const [locale, setLocale] = React.useState<"en" | "ko">("en");
+  return <main className="mx-auto grid max-w-4xl gap-8 px-6 py-8">
+    <label>Contact email<input type="email" value={email} onChange={event => setEmail(event.target.value)} /></label>
+    <button type="button" onClick={() => setLocale(current => current === "en" ? "ko" : "en")}>Switch locale</button>
+    <LinkHub profile={{ name: "Clipboard regression" }} links={[]} contactEmail={email} locale={locale} />
+  </main>;
+}
+
 function Specimen() {
   const params = new URLSearchParams(location.search);
   const locale = (["en", "ko", "ja", "zh"] as const).find(value => value === params.get("locale")) ?? "en";
@@ -40,6 +50,7 @@ function Specimen() {
     document.documentElement.lang = locale;
   }, [mode, locale]);
   if (params.get("scenario") === "filters") return <FilterRegression />;
+  if (params.get("scenario") === "clipboard") return <ClipboardRegression />;
   if (params.get("scenario") === "chronology") return <main className="mx-auto max-w-4xl px-6 py-8"><Blog posts={chronologicalPosts} /></main>;
   return <main className="mx-auto grid max-w-4xl gap-16 px-6 py-8">
     <div data-example><LinkHubExample locale={locale} /></div>

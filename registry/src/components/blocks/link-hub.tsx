@@ -95,7 +95,8 @@ function LinkHub({
     [links],
   );
   const [group, setGroup] = React.useState<string | null>(null);
-  const [copyState, setCopyState] = React.useState("");
+  const [copyResult, setCopyResult] = React.useState<{ email: string; status: "copied" | "copyFailed" } | null>(null);
+  const latestCopy = React.useRef<object | undefined>(undefined);
 
   React.useEffect(() => {
     if (group !== null && !groups.includes(group)) setGroup(null);
@@ -107,12 +108,15 @@ function LinkHub({
 
   async function copyEmail() {
     if (!contactEmail) return;
+    const request = {};
+    latestCopy.current = request;
+    let status: "copied" | "copyFailed" = "copied";
     try {
       await navigator.clipboard.writeText(contactEmail);
-      setCopyState(t.copied);
     } catch {
-      setCopyState(t.copyFailed);
+      status = "copyFailed";
     }
+    if (latestCopy.current === request) setCopyResult({ email: contactEmail, status });
   }
 
   return (
@@ -218,7 +222,7 @@ function LinkHub({
             {t.copy}
           </Button>
           <p role="status" className="min-h-5 text-xs text-[var(--muted-foreground)]">
-            {copyState}
+            {copyResult?.email === contactEmail ? t[copyResult.status] : ""}
           </p>
         </section>
       ) : null}

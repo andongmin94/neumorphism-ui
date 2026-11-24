@@ -36,6 +36,7 @@ function Marquee({
   return (
     <div
       data-slot="marquee"
+      role="group"
       aria-label={label}
       className={cn(
         "flex w-full min-w-0 items-center gap-3 rounded-[var(--neu-radius-surface)] border border-[color:var(--neu-edge)] bg-[var(--neu-surface)] p-3",
@@ -46,7 +47,7 @@ function Marquee({
       <style>{`
         @keyframes neumorphism-marquee-scroll {
           from { transform: translate3d(0, 0, 0); }
-          to { transform: translate3d(-50%, 0, 0); }
+          to { transform: translate3d(var(--neu-marquee-scroll-end), 0, 0); }
         }
         @media (prefers-reduced-motion: reduce) {
           [data-slot="marquee-track"] { animation: none !important; transform: none !important; width: 100%; min-width: 0; }
@@ -58,7 +59,7 @@ function Marquee({
       <div data-slot="marquee-viewport" className="min-w-0 flex-1 overflow-hidden [container-type:inline-size]">
         <div
           data-slot="marquee-track"
-          className="flex w-max items-center will-change-transform"
+          className="flex w-max items-center will-change-transform [--neu-marquee-scroll-end:-50%] rtl:[--neu-marquee-scroll-end:50%]"
           style={{
             animation: `neumorphism-marquee-scroll ${duration}s linear infinite`,
             animationPlayState: paused ? "paused" : "running",

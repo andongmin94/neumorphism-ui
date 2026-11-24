@@ -7,6 +7,61 @@ const labels = {
   zh: { group: "指南", all: "全部", copy: "复制邮箱", success: "邮箱地址已复制。", failure: "复制失败" },
 };
 
+for (const outcome of ["success", "failure"] as const) {
+  test(`runtime regressions: LinkHub ${outcome} feedback follows the email, locale and latest request`, async ({ page }) => {
+    type ClipboardWindow = typeof window & {
+      pendingCopies: { text: string; resolve: () => void; reject: (reason: Error) => void }[];
+    };
+    await page.addInitScript(() => {
+      const pendingCopies: ClipboardWindow["pendingCopies"] = [];
+      Object.defineProperty(window, "pendingCopies", { value: pendingCopies });
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: {
+          writeText: (text: string) => new Promise<void>((resolve, reject) => {
+            pendingCopies.push({ text, resolve, reject });
+          }),
+        },
+      });
+    });
+    await page.goto("/link-hub.html?scenario=clipboard");
+    const hub = page.locator('[data-slot="link-hub"]');
+    const feedback = hub.getByRole("status").last();
+    const email = page.getByRole("textbox", { name: "Contact email" });
+    await hub.getByRole("button", { name: labels.en.copy, exact: true }).click();
+    await expect.poll(() => page.evaluate(() => (window as ClipboardWindow).pendingCopies.length)).toBe(1);
+    await page.evaluate(result => {
+      const copy = (window as ClipboardWindow).pendingCopies[0];
+      if (result === "success") copy.resolve();
+      else copy.reject(new Error("Clipboard denied"));
+    }, outcome);
+    await expect(feedback).toContainText(labels.en[outcome]);
+    await page.getByRole("button", { name: "Switch locale" }).click();
+    await expect(feedback).toContainText(labels.ko[outcome]);
+    await email.fill("second@example.com");
+    await expect(feedback).toBeEmpty();
+
+    await hub.getByRole("button", { name: labels.ko.copy, exact: true }).click();
+    await expect.poll(() => page.evaluate(() => (window as ClipboardWindow).pendingCopies.length)).toBe(2);
+    await email.fill("third@example.com");
+    await hub.getByRole("button", { name: labels.ko.copy, exact: true }).click();
+    await expect.poll(() => page.evaluate(() => (window as ClipboardWindow).pendingCopies.length)).toBe(3);
+    expect(await page.evaluate(() => (window as ClipboardWindow).pendingCopies.map(copy => copy.text))).toEqual([
+      "first@example.com", "second@example.com", "third@example.com",
+    ]);
+    await page.evaluate(() => { (window as ClipboardWindow).pendingCopies[2].resolve(); });
+    await expect(feedback).toHaveText(labels.ko.success);
+    await page.evaluate(result => {
+      const previous = (window as ClipboardWindow).pendingCopies[1];
+      if (result === "success") previous.resolve();
+      else previous.reject(new Error("Previous clipboard request denied"));
+    }, outcome);
+    await page.getByRole("button", { name: "Switch locale" }).click();
+    await expect(feedback).toHaveText(labels.en.success);
+    await expect(hub.getByText("third@example.com", { exact: true })).toBeVisible();
+  });
+}
+
 test("runtime regressions: blog sorts timezone timestamps and date-only publications chronologically", async ({ page }) => {
   await page.goto("/link-hub.html?scenario=chronology");
   const blog = page.locator('[data-slot="blog"]');
