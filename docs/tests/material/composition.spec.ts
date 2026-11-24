@@ -722,6 +722,10 @@ for (const dir of ["ltr", "rtl"] as const) {
       } else if (kind === "navigation-menu") {
         await popup.getByRole("link", { name: "Visit destination" }).press("Enter");
         await expect(page.getByTestId("overlay-action")).toHaveText("navigated");
+        // Native links keep the menu open unless closeOnClick is enabled.
+        await expect(popup).toBeVisible();
+        await popup.getByRole("link", { name: "Visit destination" }).press("Escape");
+        await expect(trigger).toBeFocused();
       } else await trigger.press("Escape");
       await expect(popup).toBeHidden();
     });
@@ -768,6 +772,9 @@ for (const dir of ["ltr", "rtl"] as const) {
     expect(await toast.evaluate(element => element.closest("main"))).toBeNull();
     const bounds = (await toast.boundingBox())!;
     expect(Math.abs(dir === "rtl" ? bounds.x - 16 : 1200 - bounds.x - bounds.width - 16)).toBeLessThanOrEqual(1);
+    // Base UI exposes dismiss controls to assistive technology after focus enters.
+    await page.keyboard.press("F6");
+    await expect(viewport).toBeFocused();
     const close = toast.getByRole("button", { name: "Dismiss notification" });
     const control = (await close.boundingBox())!;
     expect(dir === "rtl" ? control.x < bounds.x + bounds.width / 2 : control.x > bounds.x + bounds.width / 2).toBe(true);
