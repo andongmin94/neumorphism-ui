@@ -38,7 +38,7 @@ export function ChartContainer({
         </div>
         {actions}
       </header>
-      {summary != null && <p className="text-sm font-medium tabular-nums">{summary}</p>}
+      {summary != null && <div data-slot="chart-summary" className="min-w-0 text-sm font-medium tabular-nums">{summary}</div>}
       {empty ? (
         <div role="status" className="grid h-64 place-items-center rounded-[var(--neu-radius-surface)] border border-dashed border-[var(--border)] p-6 text-center text-sm text-[var(--muted-foreground)]">{emptyLabel}</div>
       ) : (

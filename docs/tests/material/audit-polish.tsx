@@ -22,7 +22,7 @@ function LegendCustomization() {
     <label>Legend renderer<select value={renderer} onChange={event => setRenderer(event.target.value)}>
       <option value="default">Default</option><option value="formatter">Formatter</option><option value="element">Custom element</option><option value="function">Custom function</option>
     </select></label>
-    <ChartContainer title="Legend customization" description="Caller-owned labels and rendering." tableLabel="View data" table={<table><caption>Visits</caption><tbody><tr><td>10</td></tr></tbody></table>}>
+    <ChartContainer title="Legend customization" description="Caller-owned labels and rendering." summary={<dl><dt>Visit total</dt><dd>10</dd></dl>} tableLabel="View data" table={<table><caption>Visits</caption><tbody><tr><td>10</td></tr></tbody></table>}>
       <BarChart data={[{ visits: 10 }]}>
         <ChartLegend reference={{ value: "Budget", color: "var(--destructive)" }}
           formatter={renderer === "formatter" ? value => `Localized ${value}` : undefined}

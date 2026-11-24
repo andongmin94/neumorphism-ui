@@ -2108,11 +2108,36 @@ export const componentDocs = [
       "description": "기록이 없을 때 표시할 상태입니다."
     },
     {
+      "component": "ChartContainer",
+      "name": "children",
+      "type": "ReactElement",
+      "required": true,
+      "description": "반응형 컨테이너에 렌더링할 Recharts 차트입니다."
+    },
+    {
+      "component": "ChartContainer",
+      "name": "summary / actions",
+      "type": "ReactNode",
+      "description": "플롯 위의 요약과 제목 옆의 조작 요소입니다."
+    },
+    {
       "component": "ChartTooltip",
       "name": "props",
       "type": "Recharts Tooltip props",
       "required": false,
-      "description": "기본 툴팁 옵션을 그대로 전달합니다."
+      "description": "뉴모피즘 스타일을 기본으로 적용하고 Recharts 옵션을 전달합니다. 애니메이션은 기본적으로 꺼져 있습니다."
+    },
+    {
+      "component": "ChartLegend",
+      "name": "reference",
+      "type": "{ value: string; color: string; dashArray?: string }",
+      "description": "기본 범례에 기준선 항목을 추가합니다."
+    },
+    {
+      "component": "ChartLegend",
+      "name": "content",
+      "type": "Recharts Legend content",
+      "description": "사용자 정의 렌더러로 기본 범례를 대체합니다. reference 항목의 렌더링도 사용자 정의 렌더러가 담당합니다."
     }
   ],
   "accessibility": [

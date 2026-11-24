@@ -54,6 +54,10 @@ test("runtime regressions: release summaries distinguish zero activity from zero
 test("runtime regressions: ChartLegend respects caller formatter and content", async ({ page }) => {
   await page.goto("/audit-polish.html?mode=light&legend");
   const fixture = page.getByTestId("legend-customization");
+  const summary = fixture.locator('[data-slot="chart-summary"]');
+  await expect(summary.locator("dl > dt")).toHaveText("Visit total");
+  await expect(summary.locator("dl > dd")).toHaveText("10");
+  expect(await summary.evaluate(element => element.tagName)).toBe("DIV");
   const renderer = fixture.getByRole("combobox", { name: "Legend renderer" });
   const legend = fixture.locator('[data-slot="chart-legend"]');
   await expect(legend.locator("li")).toHaveText(["Visits", "Budget"]);
