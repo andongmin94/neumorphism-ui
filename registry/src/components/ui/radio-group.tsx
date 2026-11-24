@@ -98,6 +98,8 @@ function RadioGroup({
         ref={setRef}
         role="radiogroup"
         aria-orientation={orientation}
+        aria-required={required || undefined}
+        aria-disabled={disabled || undefined}
         data-slot="radio-group"
         data-orientation={orientation}
         className={cn(
@@ -125,6 +127,7 @@ interface RadioGroupItemProps
 function RadioGroupItem({
   className,
   disabled,
+  required,
   onChange,
   value,
   ...props
@@ -151,7 +154,7 @@ function RadioGroupItem({
         value={value}
         checked={isChecked}
         disabled={isDisabled}
-        required={context.required}
+        required={required || context.required}
         onChange={(event) => {
           onChange?.(event);
 

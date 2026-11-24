@@ -14,7 +14,7 @@ interface CheckboxProps
   checked?: CheckedState;
   defaultChecked?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onCheckedChange?: (checked: CheckedState) => void;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 function Checkbox({

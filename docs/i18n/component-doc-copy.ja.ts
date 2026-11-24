@@ -280,7 +280,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     props: [
       "制御された checked 状態または mixed 状態です。",
       "非制御時の初期 checked 状態です。",
-      "checked 状態が変わったときに呼び出されます。",
+      "ユーザー操作後の実際の checked 状態を boolean で通知します。mixed 状態は checked で指定します。",
       "input とポインターによる操作を無効にします。",
       "form 送信に使用する native checkbox 属性です。",
     ],
@@ -430,13 +430,13 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "選択値が変わったときに呼び出されます。",
       "layout の向きと aria-orientation を設定します。",
       "すべての項目で共有する native radio name です。",
-      "すべての項目に input の制約を設定します。",
+      "すべての項目に input の制約を設定します。項目の required={false} でグループの必須制約は解除できません。",
       "項目が選択されたときに group へ渡す値です。",
     ],
     accessibility: [
       "RadioGroup の root には aria-label または aria-labelledby でアクセシブルな group 名を指定してください。",
       "各 RadioGroupItem の id と Label の htmlFor を関連付けてください。",
-      "実際の radio input により、native form 送信とキーボードによる選択動作が維持されます。",
+      "実際の radio input により、native form 送信とキーボードによる選択動作が維持されます。必須選択はグループの aria-required と各 input の required に反映されます。",
     ],
   },
   "scroll-area": {
@@ -553,7 +553,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "外側のスクロール領域の props です。role=\"region\"、アクセシブルな名前、tabIndex=0 を指定してキーボードでスクロールできる入口を提供します。",
       "table の目的とデータ範囲を説明します。",
       "header が説明する cell の方向を指定します。",
-      "選択された行の inset 状態を有効にします。",
+      "hover と区別できる持続的な選択背景を適用します。",
       "native table cell の span 範囲です。",
     ],
     accessibility: [

@@ -1,10 +1,20 @@
 import { test, expect } from "@playwright/test";
 
 test("compiled documentation updates the caller-owned table across combined operations", async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/en/components/data-table");
   const table = page.locator("#preview");
   await table.getByRole("checkbox", { name: "Select Atlas", exact: true }).check();
   await expect(table.getByTestId("selected-rows")).toContainText(": 1");
+  const selectedRow = table.locator('tbody tr[data-state="selected"]');
+  const otherRow = table.locator('tbody tr:not([data-state="selected"])').first();
+  await expect(selectedRow).toHaveCount(1);
+  await otherRow.hover();
+  const selectedColor = await selectedRow.evaluate(element => getComputedStyle(element).backgroundColor);
+  const hoverColor = await otherRow.evaluate(element => getComputedStyle(element).backgroundColor);
+  expect(selectedColor).not.toBe(hoverColor);
+  await selectedRow.hover();
+  await expect(selectedRow).toHaveCSS("background-color", selectedColor);
   await table.getByRole("button", { name: "Next", exact: true }).click();
   await expect(table.getByText("Foxtrot", { exact: true })).toBeVisible();
   await table.getByRole("button", { name: "Seats", exact: true }).click();

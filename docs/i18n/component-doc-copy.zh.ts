@@ -272,7 +272,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     props: [
       "受控的选中或混合状态。",
       "非受控模式下的初始选中状态。",
-      "选中状态变化时调用。",
+      "用户操作后以 boolean 通知实际选中状态。混合状态通过 checked 指定。",
       "禁用输入和指针操作。",
       "用于表单提交的原生 checkbox 属性。",
     ],
@@ -414,13 +414,13 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "选中值变化时调用。",
       "设置排列方向和 aria-orientation。",
       "各项目共享的原生 radio name。",
-      "设置所有项目的输入限制。",
+      "设置所有项目的输入限制。项目的 required={false} 不能解除组的必选约束。",
       "项目被选中时传给组合的值。",
     ],
     accessibility: [
       "在 RadioGroup 根元素上通过 aria-label 或 aria-labelledby 提供整个组合的名称。",
       "将每个 RadioGroupItem 的 id 与 Label 的 htmlFor 关联。",
-      "由于使用真实的 radio input，会保留浏览器表单提交和键盘选择行为。",
+      "由于使用真实的 radio input，会保留浏览器表单提交和键盘选择行为。组的 aria-required 和各 input 的 required 会体现必选状态。",
     ],
   },
   "scroll-area": {
@@ -530,7 +530,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "外层滚动区域的属性。设置 role=\"region\"、无障碍名称和 tabIndex=0，为键盘滚动提供焦点入口。",
       "说明表格用途和数据范围。",
       "明确 header 所描述的 cell 方向。",
-      "启用选中行的 inset 状态。",
+      "应用区别于悬停的持续选中背景。",
       "设置原生 table cell 的合并范围。",
     ],
     accessibility: [

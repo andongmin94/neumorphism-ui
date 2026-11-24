@@ -280,7 +280,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
     props: [
       "The controlled checked or mixed state.",
       "The initial checked state for uncontrolled usage.",
-      "Called when the checked state changes.",
+      "Reports the actual boolean checked state after user interaction. Pass the mixed state through checked.",
       "Disables input and pointer interaction.",
       "Native checkbox attributes used for form submission.",
     ],
@@ -430,13 +430,13 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Called when the selected value changes.",
       "Sets the layout direction and aria-orientation.",
       "The native radio name shared by all items.",
-      "Sets input constraints for all items.",
+      "Sets input constraints for all items. An item's required={false} cannot remove the group's required constraint.",
       "The value passed to the group when the item is selected.",
     ],
     accessibility: [
       "Give the RadioGroup root an accessible group name with aria-label or aria-labelledby.",
       "Connect each RadioGroupItem id to Label htmlFor.",
-      "Real radio inputs preserve native form submission and keyboard selection behavior.",
+      "Real radio inputs preserve native form submission and keyboard selection behavior. Required selection is reflected by the group's aria-required and each input's required attribute.",
     ],
   },
   "scroll-area": {
@@ -553,7 +553,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Props for the outer scroll region. Set role=\"region\", an accessible name, and tabIndex=0 to provide a keyboard scrolling entry point.",
       "Describes the purpose and data scope of the table.",
       "Specifies the direction of cells described by the header.",
-      "Enables the inset state for a selected row.",
+      "Applies a persistent selection background distinct from hover.",
       "The native span range for a table cell.",
     ],
     accessibility: [

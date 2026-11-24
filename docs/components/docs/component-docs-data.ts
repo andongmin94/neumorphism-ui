@@ -385,8 +385,8 @@ export const componentDocs = [
       {
         component: "Checkbox",
         name: "onCheckedChange",
-        type: '(checked: boolean | "indeterminate") => void',
-        description: "체크 상태가 바뀔 때 호출됩니다.",
+        type: "(checked: boolean) => void",
+        description: "사용자 조작으로 변경된 실제 체크 여부를 boolean으로 전달합니다. 혼합 상태는 checked에 지정합니다.",
       },
       {
         component: "Checkbox",
@@ -824,7 +824,7 @@ export const componentDocs = [
         name: "disabled / required",
         type: "boolean",
         defaultValue: "false",
-        description: "모든 항목의 입력 제약을 설정합니다.",
+        description: "모든 항목의 입력 제약을 설정합니다. required인 그룹은 개별 항목에 required={false}를 전달해도 필수 선택 상태를 유지합니다.",
       },
       {
         component: "RadioGroupItem",
@@ -837,7 +837,7 @@ export const componentDocs = [
     accessibility: [
       "RadioGroup root에는 aria-label 또는 aria-labelledby로 그룹 전체의 이름을 제공합니다.",
       "각 RadioGroupItem은 id와 Label htmlFor를 연결합니다.",
-      "실제 radio input을 사용하므로 브라우저의 폼 제출과 키보드 선택 동작을 유지합니다.",
+      "실제 radio input을 사용하므로 브라우저의 폼 제출과 키보드 선택 동작을 유지합니다. 필수 선택 여부는 그룹의 aria-required와 각 input의 required에 반영됩니다.",
     ],
   },
   {
@@ -1151,7 +1151,7 @@ export const componentDocs = [
         component: "TableRow",
         name: "data-state",
         type: '"selected" | string',
-        description: "선택된 행의 inset 상태를 활성화합니다.",
+        description: "선택된 행에 hover와 구분되는 지속적인 선택 배경을 적용합니다.",
       },
       {
         component: "TableCell",

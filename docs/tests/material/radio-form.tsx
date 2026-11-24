@@ -26,9 +26,9 @@ function Specimen() {
       <label className="flex items-center gap-2"><RadioGroupItem form={formOwner} value="compact" />Compact</label>
       <label className="flex items-center gap-2"><RadioGroupItem form={formOwner} value="roomy" />Roomy</label>
     </RadioGroup>
-    <RadioGroup aria-label="Delivery" name="delivery">
-      <label className="flex items-center gap-2"><RadioGroupItem form={formOwner} value="email" />Email</label>
-      <label className="flex items-center gap-2"><RadioGroupItem form={formOwner} value="sms" />SMS</label>
+    <RadioGroup aria-label="Delivery" name="delivery" required>
+      <label className="flex items-center gap-2"><RadioGroupItem form={formOwner} value="email" required={false} />Email</label>
+      <label className="flex items-center gap-2"><RadioGroupItem form={formOwner} value="sms" required={false} />SMS</label>
     </RadioGroup>
   </>;
 

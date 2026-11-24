@@ -19,11 +19,16 @@ for (const owner of ["ancestor", "external"] as const) for (const mode of ["ligh
     await expect(compact).toBeChecked();
     await expect(email).not.toBeChecked();
     await expect(sms).not.toBeChecked();
+    await expect(delivery).toHaveAttribute("aria-required", "true");
+    await expect(email).toHaveJSProperty("required", true);
+    await expect(sms).toHaveJSProperty("required", true);
+    expect(await form.evaluate(element => (element as HTMLFormElement).checkValidity())).toBe(false);
 
     await roomy.check();
     await sms.check();
     await expect(roomy).toBeChecked();
     await expect(sms).toBeChecked();
+    expect(await form.evaluate(element => (element as HTMLFormElement).checkValidity())).toBe(true);
     expect(await form.evaluate(element => Object.fromEntries(new FormData(element as HTMLFormElement)))).toEqual({
       density: "roomy", delivery: "sms",
     });
@@ -35,6 +40,7 @@ for (const owner of ["ancestor", "external"] as const) for (const mode of ["ligh
     await expect(roomy).not.toBeChecked();
     await expect(email).not.toBeChecked();
     await expect(sms).not.toBeChecked();
+    expect(await form.evaluate(element => (element as HTMLFormElement).checkValidity())).toBe(false);
     expect(await form.evaluate(element => Object.fromEntries(new FormData(element as HTMLFormElement)))).toEqual({
       density: "compact",
     });
@@ -56,6 +62,7 @@ for (const owner of ["ancestor", "external"] as const) for (const mode of ["ligh
     await page.getByRole("button", { name: "Rerender specimen" }).click();
     await expect(compact).toBeChecked();
     await expect(email).not.toBeChecked();
+    expect(await form.evaluate(element => (element as HTMLFormElement).checkValidity())).toBe(false);
     expect(await form.evaluate(element => Object.fromEntries(new FormData(element as HTMLFormElement)))).toEqual({
       density: "compact",
     });
