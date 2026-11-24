@@ -6,6 +6,26 @@ const expanded = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible
 const localized = ["ko", "ja", "zh"].flatMap(locale => ["form", "combobox", "sidebar"].map(slug => ({ locale, slug })));
 const cases = [...expanded.map(slug => ({ locale: "en", slug })), ...localized];
 
+test("alert titles and descriptions wrap long identifiers without horizontal overflow", async ({ page }) => {
+  await page.goto("/en/components/alert");
+  const preview = page.locator("#preview");
+  await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+  const alerts = preview.locator('[data-slot="alert"]');
+  await expect(alerts).toHaveCount(3);
+  for (const alert of await alerts.all()) {
+    await alert.evaluate(element => {
+      (element as HTMLElement).style.maxWidth = "180px";
+      element.querySelector('[data-slot="alert-title"]')!.textContent = "workspace_" + "identifier".repeat(10);
+      element.querySelector('[data-slot="alert-description"]')!.textContent = "https://example.test/" + "unbroken".repeat(20);
+    });
+    const title = alert.locator('[data-slot="alert-title"]');
+    const description = alert.locator('[data-slot="alert-description"]');
+    for (const part of [alert, title, description]) {
+      expect(await part.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
 for (const [locale, loading] of [["en", "Loading content"], ["ko", "콘텐츠 로딩 중"], ["ja", "コンテンツを読み込み中"], ["zh", "正在加载内容"]]) {
   test(`${locale}: skeleton preview and source expose localized loading status`, async ({ page }) => {
     await page.goto(`/${locale}/components/skeleton`);

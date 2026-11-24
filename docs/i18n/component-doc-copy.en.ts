@@ -173,9 +173,9 @@ export const componentDocCopyEn = defineComponentDocCopy({
   },
   alert: {
     summary:
-      "A message that communicates important status and outcomes on a raised surface.",
+      "A readable message surface for important status and outcomes.",
     description:
-      "A composable Alert that aligns an icon, title, and description. It provides default, success, and destructive variants, each combining color with border and text contrast.",
+      "A composable Alert that aligns an icon, title, and description. The default, success, and destructive variants retain a shared readable text surface and tint the supplied icon to distinguish status. Communicate the status in the title and description too. Long identifiers and URLs wrap in narrow containers.",
     props: [
       "Selects the semantic meaning and visual treatment of the message.",
       "Arranges the icon, AlertTitle, and AlertDescription.",
@@ -406,7 +406,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
     summary:
       "Progress status rendered as a primary fill inside an inset track.",
     description:
-      "Uses Base UI Progress progressbar semantics. value is required; pass null for an indeterminate state. min and max define the range, and valid values are normalized within it.",
+      "Uses Base UI Progress progressbar semantics. value is required; pass null for an indeterminate state. min and max define the range, and valid values are normalized within it. The track and indicator are rendered automatically; children are not accepted. Place visible labels outside the bar.",
     props: [
       "The current progress value, clamped between min and max. Pass null when progress is unknown.",
       "The lower bound. Non-finite numbers are replaced with 0.",

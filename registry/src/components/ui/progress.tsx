@@ -10,7 +10,7 @@ function Progress({
   min = 0,
   max = 100,
   ...props
-}: ProgressPrimitive.Root.Props) {
+}: Omit<ProgressPrimitive.Root.Props, "children">) {
   const normalizedMin =
     typeof min === "number" && Number.isFinite(min) ? min : 0;
   const normalizedMax =

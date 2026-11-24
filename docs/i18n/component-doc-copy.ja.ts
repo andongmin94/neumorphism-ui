@@ -173,9 +173,9 @@ export const componentDocCopyJa = defineComponentDocCopy({
   },
   alert: {
     summary:
-      "重要な状態や結果を raised サーフェス上で伝えるメッセージ。",
+      "重要な状態や結果を読みやすく伝えるメッセージサーフェス。",
     description:
-      "アイコン、タイトル、説明を整列できる組み合わせ可能な Alert です。default、success、destructive の各 variant で、色だけでなく border とテキストのコントラストも組み合わせて意味を示します。",
+      "アイコン、タイトル、説明を整列できる組み合わせ可能な Alert です。default、success、destructive は共通の読みやすいサーフェスを維持し、指定したアイコンの色で状態を区別します。タイトルと説明でも状態を伝えてください。長い識別子や URL は狭い領域でも折り返します。",
     props: [
       "メッセージの意味と視覚的な表現を選択します。",
       "アイコン、AlertTitle、AlertDescription を配置します。",
@@ -406,7 +406,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
     summary:
       "inset track 内の primary fill で進捗を示すステータス。",
     description:
-      "Base UI Progress の progressbar semantics を使用します。value は必須で、null を渡すと indeterminate 状態になります。min と max で範囲を指定し、有効な value をその範囲内に正規化します。",
+      "Base UI Progress の progressbar semantics を使用します。value は必須で、null を渡すと indeterminate 状態になります。min と max で範囲を指定し、有効な value をその範囲内に正規化します。トラックとインジケーターは自動で描画し、children は受け付けません。可視ラベルは外側に配置してください。",
     props: [
       "min から max の範囲に制限される現在の進捗値です。進捗が不明な場合は null を渡します。",
       "範囲の最小値です。有限の数値でない場合は 0 を使用します。",

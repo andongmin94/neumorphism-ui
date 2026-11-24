@@ -171,9 +171,9 @@ export const componentDocCopyZh = defineComponentDocCopy({
     ],
   },
   alert: {
-    summary: "通过 raised 表面传达重要状态和操作结果的消息。",
+    summary: "以易读的消息表面传达重要状态和操作结果。",
     description:
-      "用于排列图标、标题和说明的组合式 Alert。提供 default、success、destructive 三种变体，所有变体都同时使用边框和文字对比度，而不只依赖颜色。",
+      "用于排列图标、标题和说明的组合式 Alert。default、success、destructive 保持统一的易读文字表面，并通过所提供的图标颜色区分状态。标题和说明也应传达状态。长标识符和 URL 在狭窄容器中也可换行。",
     props: [
       "选择消息的语义和视觉状态。",
       "排列图标、AlertTitle 和 AlertDescription。",
@@ -391,7 +391,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
   progress: {
     summary: "以 inset 轨道和 primary 填充显示完成进度。",
     description:
-      "使用 Base UI Progress 的 progressbar 语义。value 为必填项，传入 null 表示 indeterminate 状态。min 和 max 定义范围，有效的 value 会被限制在此范围内。",
+      "使用 Base UI Progress 的 progressbar 语义。value 为必填项，传入 null 表示 indeterminate 状态。min 和 max 定义范围，有效的 value 会被限制在此范围内。轨道和指示器自动渲染，不接受 children。可见标签应放在进度条外部。",
     props: [
       "当前进度值，会被限制在 min 与 max 之间。进度未知时传入 null。",
       "范围的最小值。非有限数值会被替换为 0。",
