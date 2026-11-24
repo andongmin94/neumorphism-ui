@@ -72,6 +72,36 @@ test("runtime regressions: ChartLegend respects caller formatter and content", a
   await expect(legend.locator("li")).toHaveText(["Visits", "Budget"]);
 });
 
+
+test("runtime regressions: narrow Tabs keep Home and End focus within the list", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/tabs-clarity.html?locale=en&mode=light");
+  await page.evaluate(() => document.fonts.ready);
+  const long = page.getByTestId("long");
+  const list = long.getByRole("tablist");
+  const first = list.getByRole("tab").first();
+  const last = list.getByRole("tab").last();
+  expect(await list.evaluate(element => element.scrollWidth - element.clientWidth)).toBeGreaterThan(0);
+  await first.focus();
+  for (const [key, target, selected] of [
+    ["End", last, first],
+    ["Home", first, last],
+  ] as const) {
+    await page.keyboard.press(key);
+    await expect(target).toBeFocused();
+    await expect(selected).toHaveAttribute("aria-selected", "true");
+    await expect.poll(async () => {
+      const outer = (await list.boundingBox())!;
+      const inner = (await target.boundingBox())!;
+      return Math.max(outer.x - inner.x, inner.x + inner.width - outer.x - outer.width);
+    }).toBeLessThanOrEqual(1);
+    await page.keyboard.press("Enter");
+    await expect(target).toHaveAttribute("aria-selected", "true");
+  }
+  await expect(long.getByRole("tabpanel", { name: "A complete long preview label" })).toHaveText("First panel");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+});
+
 const labels = {
   en: ["Build duration", "Service latency", "Release activity", "Delivery capacity", "Installation diagnostics"],
   ko: ["빌드 시간", "서비스 지연 시간", "릴리스 활동", "계획·완료 수량", "설치 단계 진단"],
