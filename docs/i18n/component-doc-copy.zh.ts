@@ -544,10 +544,11 @@ export const componentDocCopyZh = defineComponentDocCopy({
     description:
       "基于 Base UI Tabs，将 active trigger 呈现为 raised 表面，将 list 呈现为 inset track。支持受控与非受控值、自动或手动激活，以及横向和纵向排列。",
     props: [
-      "通过 value 控制活动标签页，或通过 defaultValue 设置初始值。可使用字符串、数字等值；null 表示没有活动标签页。",
+      "通过 value 控制当前选项卡，或通过 defaultValue 设置初始值。defaultValue 的默认值为 0；省略时若没有匹配的可用选项卡，则选择第一个可用选项卡。null 表示没有选中的选项卡。",
       "接收新值和 eventDetails，也会通知非受控 Tabs 的自动选择变化。没有可激活的标签页时，值可能为 null。",
       "设置 list 方向和 Arrow 键导航轴。",
       "决定用 Arrow 键移动 focus 时是否同时激活 panel。",
+      "设置方向键焦点是否在首尾选项卡之间循环。",
       "与所关联 TabsContent 共享的唯一值。",
       "用于打开该 panel 的 trigger 值。",
     ],

@@ -568,10 +568,11 @@ export const componentDocCopyEn = defineComponentDocCopy({
     description:
       "Built on Base UI Tabs with the active trigger rendered as a raised surface and the list as an inset track. Supports controlled and uncontrolled values, automatic or manual activation, and horizontal or vertical orientation.",
     props: [
-      "Controls the active tab with value or sets its initial value with defaultValue. Values may be strings, numbers, or other types; null leaves no tab active.",
+      "Controls the active tab with value or sets its initial value with defaultValue. The defaultValue defaults to 0; if omitted and no enabled tab matches, Base UI selects the first enabled tab. Null leaves no tab active.",
       "Receives the new value and eventDetails, including automatic selection changes in uncontrolled Tabs. The value can be null when no tab can be activated.",
       "Sets the list orientation and Arrow key navigation axis.",
       "Determines whether moving focus with Arrow keys also activates the panel.",
+      "Whether arrow-key focus wraps between the first and last tabs.",
       "A unique value shared with the associated TabsContent.",
       "The trigger value that opens the panel.",
     ],

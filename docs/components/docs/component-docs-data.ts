@@ -887,7 +887,7 @@ export const componentDocs = [
       {
         component: "Select",
         name: "value / defaultValue",
-        type: "string | string[]",
+        type: "string | number | readonly string[]",
         description: "controlled 또는 초기 uncontrolled 선택 값입니다.",
       },
       {
@@ -1181,7 +1181,7 @@ export const componentDocs = [
         name: "value / defaultValue",
         type: "any | null",
         defaultValue: "0",
-        description: "value로 활성 tab을 제어하거나 defaultValue로 초기값을 지정합니다. 문자열·숫자 등을 사용하며 null이면 활성 tab이 없습니다.",
+        description: "value로 활성 tab을 제어하거나 defaultValue로 초기값을 지정합니다. 0은 defaultValue의 기본값이며, 생략 시 해당 값의 탭이 없으면 첫 활성화 가능한 탭을 선택합니다. null이면 활성 tab이 없습니다.",
       },
       {
         component: "Tabs",
@@ -1202,6 +1202,13 @@ export const componentDocs = [
         type: "boolean",
         defaultValue: "false",
         description: "Arrow 키로 focus를 옮길 때 panel도 함께 활성화할지 결정합니다.",
+      },
+      {
+        component: "TabsList",
+        name: "loopFocus",
+        type: "boolean",
+        defaultValue: "true",
+        description: "Arrow 키로 마지막 탭에서 첫 탭으로, 첫 탭에서 마지막 탭으로 포커스를 순환할지 결정합니다.",
       },
       {
         component: "TabsTrigger",
@@ -1471,6 +1478,7 @@ export const componentDocs = [
       "component": "SheetContent",
       "name": "closeLabel",
       "type": "string",
+      "defaultValue": "\"Close\"",
       "description": "닫기 버튼의 접근 가능한 이름입니다."
     },
     {

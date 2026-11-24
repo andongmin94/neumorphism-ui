@@ -568,10 +568,11 @@ export const componentDocCopyJa = defineComponentDocCopy({
     description:
       "Base UI Tabs を基盤に、active trigger を raised サーフェス、list を inset track として表示します。制御・非制御の値、自動・手動 activation、水平・垂直 orientation に対応します。",
     props: [
-      "value でアクティブなタブを制御し、defaultValue で初期値を指定します。文字列・数値などを使え、null の場合はどのタブもアクティブになりません。",
+      "value でアクティブなタブを制御し、defaultValue で初期値を指定します。defaultValue の既定値は 0 で、省略時に一致する有効なタブがなければ最初の有効なタブを選択します。null の場合はタブを選択しません。",
       "新しい値と eventDetails を受け取ります。非制御 Tabs の自動選択変更も通知され、アクティブにできるタブがない場合は null になることがあります。",
       "list の向きと Arrow キーによる移動軸を設定します。",
       "Arrow キーで focus を移したときに panel も有効化するかを決定します。",
+      "矢印キーで最初と最後のタブの間をフォーカスが循環するかどうかを指定します。",
       "関連する TabsContent と共有する一意の値です。",
       "その panel を開く trigger の値です。",
     ],

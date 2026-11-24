@@ -27,7 +27,7 @@ function TabsList({ className, ...props }: TabsPrimitive.List.Props) {
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={mergeClassName<TabsPrimitive.List.State>(
-        "relative inline-flex h-11 min-w-0 shrink-0 max-w-full w-fit items-center justify-start overflow-x-auto gap-1 rounded-[var(--neu-radius-control)] border border-[color:var(--border)] bg-[var(--neu-surface-low)] p-1 [box-shadow:inset_0_1px_2px_var(--neu-shadow-dark)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:max-w-[50%] [&[data-orientation=vertical]>[data-slot=tabs-trigger]]:flex-none",
+        "relative inline-flex h-11 min-w-0 shrink-0 max-w-full w-fit items-center justify-start overflow-x-auto scroll-px-1 gap-1 rounded-[var(--neu-radius-control)] border border-[color:var(--border)] bg-[var(--neu-surface-low)] p-1 [box-shadow:inset_0_1px_2px_var(--neu-shadow-dark)] data-[orientation=vertical]:h-fit data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:max-w-[50%] [&[data-orientation=vertical]>[data-slot=tabs-trigger]]:flex-none",
         className,
       )}
       {...props}
