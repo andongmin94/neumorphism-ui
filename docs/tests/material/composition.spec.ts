@@ -758,8 +758,20 @@ for (const dir of ["ltr", "rtl"] as const) {
       await expect.poll(async () => {
         const anchor = (await trigger.boundingBox())!;
         const panel = (await popup.boundingBox())!;
-        return Math.abs(dir === "rtl" ? anchor.x + anchor.width - panel.x - panel.width : anchor.x - panel.x);
+        const offset = Math.abs(dir === "rtl" ? anchor.x + anchor.width - panel.x - panel.width : anchor.x - panel.x);
+        const expected = kind === "popover" || kind === "hover-card" ? anchor.width / 20 : 0;
+        return Math.abs(offset - expected);
       }).toBeLessThanOrEqual(1);
+      if (kind === "popover" || kind === "hover-card") {
+        await expect.poll(async () => {
+          const anchor = (await trigger.boundingBox())!;
+          const panel = (await popup.boundingBox())!;
+          const gap = await popup.getAttribute("data-side") === "top"
+            ? anchor.y - panel.y - panel.height
+            : panel.y - anchor.y - anchor.height;
+          return Math.abs(gap - anchor.width / 10);
+        }).toBeLessThanOrEqual(1);
+      }
       const anchor = (await trigger.boundingBox())!;
       const panel = (await popup.boundingBox())!;
       expect(Math.abs(anchor.width - panel.width)).toBeGreaterThan(4);

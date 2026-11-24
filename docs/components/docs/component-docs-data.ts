@@ -1385,6 +1385,13 @@ export const componentDocs = [
       "description": "트리거를 기준으로 패널의 방향과 정렬을 지정합니다."
     },
     {
+      "component": "PopoverContent",
+      "name": "sideOffset / alignOffset",
+      "type": "number | ((data) => number)",
+      "defaultValue": "10 / 0",
+      "description": "트리거와 패널 사이의 간격 및 정렬 축의 이동량(px)입니다. 함수는 Base UI의 anchor·positioner 크기와 side, align을 받습니다."
+    },
+    {
       "component": "PopoverTrigger",
       "name": "render",
       "type": "React.ReactElement | function",
@@ -1419,9 +1426,17 @@ export const componentDocs = [
     },
     {
       "component": "HoverCardContent",
-      "name": "sideOffset",
-      "type": "number",
-      "description": "화면 경계를 고려한 패널 위치와 간격입니다."
+      "name": "side / align",
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | \"inline-start\" | \"inline-end\" / \"start\" | \"center\" | \"end\"",
+      "defaultValue": "\"bottom\" / \"center\"",
+      "description": "트리거를 기준으로 카드의 방향과 정렬을 지정합니다."
+    },
+    {
+      "component": "HoverCardContent",
+      "name": "sideOffset / alignOffset",
+      "type": "number | ((data) => number)",
+      "defaultValue": "10 / 0",
+      "description": "트리거와 카드 사이의 간격 및 정렬 축의 이동량(px)입니다. 함수는 Base UI의 anchor·positioner 크기와 side, align을 받습니다."
     }
   ],
   "accessibility": [

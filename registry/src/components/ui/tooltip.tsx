@@ -54,7 +54,7 @@ function TooltipContent({
           dir={direction}
           data-slot="tooltip-content"
           className={mergeClassName<TooltipPrimitive.Popup.State>(
-            "w-max max-w-64 origin-[var(--transform-origin)] rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] px-3 py-2 text-xs font-medium text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "w-max max-w-[min(16rem,var(--available-width))] [overflow-wrap:anywhere] origin-[var(--transform-origin)] rounded-[var(--neu-radius-small)] border border-[color:var(--neu-edge)] bg-[var(--popover)] [background-image:var(--neu-fill-raised)] px-3 py-2 text-xs font-medium text-[var(--popover-foreground)] [box-shadow:var(--neu-shadow-floating)] transition-[transform,opacity] duration-[var(--neu-duration)] motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
             className,
           )}
           {...props}
