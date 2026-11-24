@@ -8,12 +8,16 @@ for (const mode of ["light", "dark"]) for (const width of [320, 390, 1440]) {
       await expect(page.getByRole("heading", { name: "Micro design finish", exact: true })).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
     });
-    test("MD-01 keeps both pagination targets operable in a 228px host", async ({ page }, info) => {
+    test("MD-01 keeps both pagination targets operable in a 216px host", async ({ page }, info) => {
       const area = page.getByTestId("pagination-case");
-      await area.evaluate(e => { (e as HTMLElement).style.width = "228px"; });
+      await area.evaluate(e => { (e as HTMLElement).style.width = "216px"; });
+      const ellipsisItem = area.locator('[data-slot="pagination-item"]').filter({ has: page.locator('[data-slot="pagination-ellipsis"]') });
+      await expect(ellipsisItem).toBeHidden();
       const previous = area.getByRole("link", { name: "Go to previous page" });
       const next = area.getByRole("link", { name: "Go to next page" });
       for (const control of [previous, next]) { await expect(control).toBeVisible(); expect((await control.boundingBox())!.width).toBeGreaterThanOrEqual(40); }
+      const firstRow = (await previous.boundingBox())!.y;
+      for (const link of await area.getByRole("link").all()) expect(Math.abs((await link.boundingBox())!.y - firstRow)).toBeLessThanOrEqual(1);
       await next.click(); await expect(area.locator('[aria-current="page"]')).toHaveText("3");
       await previous.focus(); await page.keyboard.press("Enter"); await expect(area.locator('[aria-current="page"]')).toHaveText("2");
       expect(await area.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);

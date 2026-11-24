@@ -380,12 +380,12 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "为 pagination navigation 区域提供无障碍名称。",
       "目标页面的实际 URL。",
       "设置当前页样式和 aria-current=page。",
-      "替换默认的翻页文案。",
+      "替换默认的翻页文案。在较窄的容器中，文案会在视觉上隐藏，保留方向图标。",
     ],
     accessibility: [
       "每个页面都应使用带有真实 href 的链接，以保留浏览器导航和在新标签页中打开的能力。",
       "只为一个当前页设置 isActive，从而应用 aria-current=page。",
-      "Previous 和 Next 带有默认 aria-label；如需本地化，应显式覆盖。",
+      "Previous 和 Next 带有默认 aria-label；如需本地化，应显式覆盖。在非常窄的容器中隐藏省略项，为翻页链接留出空间。",
     ],
   },
   progress: {

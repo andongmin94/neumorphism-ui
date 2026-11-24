@@ -394,12 +394,12 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "The accessible name of the pagination navigation region.",
       "The actual URL of the target page.",
       "Applies the current-page style and aria-current=page.",
-      "Replaces the default navigation label.",
+      "Replaces the default navigation label. In narrow containers, the text is visually hidden and the direction icon remains.",
     ],
     accessibility: [
       "Each page should be a link with a real href to preserve browser navigation and opening in a new tab.",
       "Set isActive on exactly one current page to apply aria-current=page.",
-      "Previous and Next include default aria-label values; override them when localization is required.",
+      "Previous and Next include default aria-label values; override them when localization is required. In very narrow containers, the ellipsis item is hidden to leave room for navigation links.",
     ],
   },
   progress: {

@@ -394,12 +394,12 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "pagination navigation 領域のアクセシブルな名前です。",
       "移動先ページの実際の URL です。",
       "現在のページ用スタイルと aria-current=page を適用します。",
-      "既定のナビゲーションラベルを置き換えます。",
+      "既定のナビゲーションラベルを置き換えます。狭いコンテナではテキストを視覚的に隠し、方向アイコンを残します。",
     ],
     accessibility: [
       "ブラウザーのナビゲーションや新しい tab で開く動作を維持するため、各ページには実際の href を持つ link を使用してください。",
       "現在のページ1つだけに isActive を設定し、aria-current=page を適用してください。",
-      "Previous と Next には既定の aria-label があります。ローカライズが必要な場合は上書きしてください。",
+      "Previous と Next には既定の aria-label があります。ローカライズが必要な場合は上書きしてください。非常に狭いコンテナでは省略表示の項目を隠し、移動リンクのためのスペースを確保します。",
     ],
   },
   progress: {

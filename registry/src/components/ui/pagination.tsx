@@ -31,7 +31,7 @@ function PaginationContent({
 }
 
 function PaginationItem({ className, ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" className={cn("flex min-w-0", className)} {...props} />;
+  return <li data-slot="pagination-item" className={cn("flex min-w-0 @max-[17rem]/pagination:has-[>[data-slot=pagination-ellipsis]]:hidden", className)} {...props} />;
 }
 
 type PaginationLinkProps = React.ComponentProps<"a"> & {
@@ -103,7 +103,7 @@ function PaginationEllipsis({
       aria-hidden="true"
       data-slot="pagination-ellipsis"
       className={cn(
-        "inline-flex size-10 items-center justify-center text-sm text-[var(--muted-foreground)] @max-[17rem]/pagination:hidden",
+        "inline-flex size-10 items-center justify-center text-sm text-[var(--muted-foreground)]",
         className,
       )}
       {...props}

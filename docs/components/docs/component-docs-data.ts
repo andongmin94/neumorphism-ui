@@ -724,13 +724,13 @@ export const componentDocs = [
         name: "children",
         type: "React.ReactNode",
         defaultValue: '"Previous" / "Next"',
-        description: "기본 이동 문구를 교체합니다.",
+        description: "기본 이동 문구를 교체합니다. 좁은 컨테이너에서는 문구를 시각적으로 숨기고 방향 아이콘을 유지합니다.",
       },
     ],
     accessibility: [
       "각 페이지는 실제 href가 있는 링크여야 브라우저 탐색과 새 탭 열기를 유지합니다.",
       "현재 페이지 하나에만 isActive를 지정해 aria-current=page를 설정합니다.",
-      "Previous와 Next에는 기본 aria-label이 있으며 지역화가 필요하면 덮어씁니다.",
+      "Previous와 Next에는 기본 aria-label이 있으며 지역화가 필요하면 덮어씁니다. 매우 좁은 컨테이너에서는 생략 표시 항목을 숨겨 이동 링크가 공간을 확보합니다.",
     ],
   },
   {
