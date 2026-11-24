@@ -12,6 +12,33 @@ test("runtime regressions: CMS labels control their own instance when post IDs a
   await expect(second.getByRole("switch")).toBeFocused();
 });
 
+test("runtime regressions: CMS save keeps the editor on its own post until the request settles", async ({ page }) => {
+  await page.goto("/cms-ref-controls.html?mode=light&pending");
+  const cms = page.getByTestId("pending-cms");
+  const title = cms.getByRole("textbox", { name: "Title", exact: true });
+  const create = cms.getByRole("button", { name: "New post", exact: true });
+  const other = cms.getByRole("button", { name: /^Another persisted post/ });
+  const save = cms.getByRole("button", { name: "Save", exact: true });
+  await title.fill("Draft awaiting save");
+  await save.click();
+  await expect(cms.getByRole("button", { name: "Saving…", exact: true })).toBeDisabled();
+  await expect(title).toBeDisabled();
+  await expect(create).toBeDisabled();
+  await expect(other).toBeDisabled();
+  await cms.getByRole("button", { name: "Reject pending save" }).click();
+  await expect(cms.getByRole("alert")).toContainText("Save");
+  await expect(title).toHaveValue("Draft awaiting save");
+  await expect(title).toBeEnabled();
+  await expect(other).toBeEnabled();
+  await expect(save).toBeEnabled();
+  await save.click();
+  await expect(other).toBeDisabled();
+  await cms.getByRole("button", { name: "Resolve pending save" }).click();
+  await expect(cms.getByRole("status")).toHaveText("Saved.");
+  await other.click();
+  await expect(title).toHaveValue("Another persisted post");
+});
+
 test("runtime regressions: CommandEmpty reports initially empty and refreshed empty collections", async ({ page }) => {
   await page.goto("/cms-ref-controls.html?mode=light");
   const command = page.getByTestId("empty-command");

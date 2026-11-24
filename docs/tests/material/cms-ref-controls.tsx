@@ -26,6 +26,21 @@ function PersistedCms() {
   </section>;
 }
 
+function PendingCms() {
+  const finish = React.useRef<((success: boolean) => void) | null>(null);
+  return <section data-testid="pending-cms" className="grid gap-4">
+    <CmsWorkspace initialPosts={[existingPost, { ...existingPost, id: "local-post-2", title: "Another persisted post" }]}
+      onSave={() => new Promise<void>((resolve, reject) => {
+        finish.current = success => {
+          if (success) resolve();
+          else reject(new Error("Save rejected"));
+        };
+      })} />
+    <Button onClick={() => finish.current?.(false)}>Reject pending save</Button>
+    <Button onClick={() => finish.current?.(true)}>Resolve pending save</Button>
+  </section>;
+}
+
 function SavedDataManager() {
   const [savedRequest, setSavedRequest] = React.useState<ManagedRecord | null>(null);
   const [deletedIds, setDeletedIds] = React.useState<string[]>([]);
@@ -122,6 +137,7 @@ function CmsRefControls() {
   }, []);
   return <main className="mx-auto grid max-w-5xl gap-12 p-5">
     <h1>CMS persistence and ref regressions</h1>
+    {new URLSearchParams(location.search).has("pending") && <PendingCms />}
     <PersistedCms />
     <section data-testid="second-cms"><CmsWorkspace initialPosts={[existingPost]} /></section>
     <RefControls />

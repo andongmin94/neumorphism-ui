@@ -287,7 +287,7 @@ export function CmsWorkspace({
           <h2 className="text-2xl font-bold leading-tight tracking-tight">{t.title}</h2>
           <p className="mt-2 text-sm leading-relaxed text-[var(--muted-foreground)]">{t.intro}</p>
         </div>
-        <Button type="button" onClick={createPost}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="size-4 shrink-0"><path d="M12 5v14M5 12h14" /></svg>{t.newPost}</Button>
+        <Button type="button" disabled={pending} onClick={createPost}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="size-4 shrink-0"><path d="M12 5v14M5 12h14" /></svg>{t.newPost}</Button>
       </header>
 
       <dl data-slot="workspace-metrics" className="grid min-w-0 grid-cols-3 gap-3 @min-[36rem]/workspace:gap-5">
@@ -348,8 +348,9 @@ export function CmsWorkspace({
                   <button
                     type="button"
                     aria-pressed={post.id === selectedId}
+                    disabled={pending}
                     onClick={() => { setSelectedId(post.id); setFailure(false); setFeedback(""); }}
-                    className="grid w-full grid-cols-[minmax(0,1fr)_auto] gap-3 px-4 py-3 text-left outline-none hover:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] aria-pressed:bg-[var(--neu-surface-low)] aria-pressed:[box-shadow:var(--neu-shadow-inset-sm)]"
+                    className="grid w-full grid-cols-[minmax(0,1fr)_auto] gap-3 px-4 py-3 text-left outline-none hover:not-disabled:bg-[var(--neu-surface-soft)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring)] disabled:cursor-not-allowed disabled:opacity-60 aria-pressed:bg-[var(--neu-surface-low)] aria-pressed:[box-shadow:var(--neu-shadow-inset-sm)]"
                   >
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-semibold">{displayTitle(post, t.untitled)}</span>
@@ -433,7 +434,7 @@ export function CmsWorkspace({
           ) : (
             <div className="grid min-h-[28rem] place-content-center justify-items-center gap-3 p-6 text-center">
               <p className="text-sm text-[var(--muted-foreground)]">{t.noPosts}</p>
-              <Button type="button" onClick={createPost}>{t.newPost}</Button>
+              <Button type="button" disabled={pending} onClick={createPost}>{t.newPost}</Button>
             </div>
           )}
         </section>
