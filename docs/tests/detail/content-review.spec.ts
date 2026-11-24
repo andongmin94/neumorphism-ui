@@ -3,10 +3,10 @@ import { readFileSync } from "node:fs";
 import { chartGalleryCopy } from "../../i18n/chart-gallery-copy";
 
 const content = {
-  en: { project: "Dispatch queue", article: "Keep a draft after a failed save", section: "Separate the draft from the saved copy", blog: "Return keyboard focus after closing a dialog", topic: "Engineering", search: "Search posts", cms: "September editor update", title: "Title", save: "Save", saved: "Saved.", fail: "Fail the next save", separator: "Component documentation" },
-  ko: { project: "배차 대기 목록", article: "저장에 실패해도 초안은 유지하기", section: "초안과 저장된 사본 구분하기", blog: "대화상자를 닫은 뒤 키보드 포커스 돌려주기", topic: "개발", search: "글 검색", cms: "9월 편집기 업데이트", title: "제목", save: "저장", saved: "저장했습니다.", fail: "다음 저장 실패 재현", separator: "컴포넌트 문서" },
-  ja: { project: "配車待ち一覧", article: "保存に失敗しても下書きを残す", section: "下書きと保存済みの内容を分ける", blog: "ダイアログを閉じた後にフォーカスを戻す", topic: "開発", search: "記事を検索", cms: "9月の編集機能アップデート", title: "タイトル", save: "保存", saved: "保存しました。", fail: "次の保存を失敗させる", separator: "コンポーネントの説明" },
-  zh: { project: "配送调度列表", article: "保存失败后保留草稿", section: "区分草稿与已保存的副本", blog: "关闭对话框后恢复键盘焦点", topic: "开发", search: "搜索文章", cms: "九月编辑器更新", title: "标题", save: "保存", saved: "已保存。", fail: "模拟下次保存失败", separator: "组件文档" },
+  en: { project: "Dispatch queue", article: "Recover a draft after a failed save", section: "Separate the draft from the saved copy", blog: "Return keyboard focus after closing a dialog", topic: "Engineering", search: "Search posts", cms: "September editor update", title: "Title", save: "Save", saved: "Saved.", fail: "Fail the next save", separator: "Component documentation" },
+  ko: { project: "배차 대기 목록", article: "저장 실패 후 초안 복구하기", section: "초안과 저장된 사본 구분하기", blog: "대화상자를 닫은 뒤 키보드 포커스 돌려주기", topic: "개발", search: "글 검색", cms: "9월 편집기 업데이트", title: "제목", save: "저장", saved: "저장했습니다.", fail: "다음 저장 실패 재현", separator: "컴포넌트 문서" },
+  ja: { project: "配車待ち一覧", article: "保存失敗後の下書きを復元する", section: "下書きと保存済みの内容を分ける", blog: "ダイアログを閉じた後にフォーカスを戻す", topic: "開発", search: "記事を検索", cms: "9月の編集機能アップデート", title: "タイトル", save: "保存", saved: "保存しました。", fail: "次の保存を失敗させる", separator: "コンポーネントの説明" },
+  zh: { project: "配送调度列表", article: "保存失败后恢复草稿", section: "区分草稿与已保存的副本", blog: "关闭对话框后恢复键盘焦点", topic: "开发", search: "搜索文章", cms: "九月编辑器更新", title: "标题", save: "保存", saved: "已保存。", fail: "模拟下次保存失败", separator: "组件文档" },
 } as const;
 
 async function fits(page: Page) {

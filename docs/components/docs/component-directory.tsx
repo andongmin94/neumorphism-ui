@@ -83,7 +83,7 @@ export function ComponentDirectory() {
           <p>{messages.directory.description}</p>
         </div>
 
-        <label className="component-directory-search">
+        <div className="component-directory-search">
           <svg aria-hidden="true" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-3.5-3.5" />
@@ -100,7 +100,7 @@ export function ComponentDirectory() {
           ) : (
             <kbd>/</kbd>
           )}
-        </label>
+        </div>
       </div>
 
       <div className="component-directory-browser">

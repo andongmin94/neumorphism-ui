@@ -21,6 +21,38 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     }
     expect(errors).toEqual([]);
   });
+  test(`${locale}: blog articles open their matching reader and return to the archive`, async ({ page }) => {
+    const archivePath = `/${locale}/templates/blog`;
+    const slugs = ["draft-after-failed-save", "dialog-keyboard-focus", "compact-control-icons"];
+    await page.goto(archivePath);
+    for (const [index, slug] of slugs.entries()) {
+      const card = page.locator('[data-template="blog"] ol > li').nth(index);
+      const titleLink = card.getByRole('link');
+      const title = await titleLink.innerText();
+      const summary = await card.locator('p').innerText();
+      const publishedAt = await card.locator('time').getAttribute('datetime');
+      const publishedLabel = await card.locator('time').innerText();
+      const articlePath = `${archivePath}/${slug}`;
+      await expect(titleLink).toHaveAttribute('href', articlePath);
+      await titleLink.click();
+      await expect(page).toHaveURL(articlePath);
+      await expect(page).toHaveTitle(`${title} | Neumorphism UI`);
+      const reader = page.locator('[data-slot="blog-post"]');
+      await expect(reader.getByRole('heading', { level: 1, name: title, exact: true })).toBeVisible();
+      await expect(reader.getByText(summary, { exact: true })).toBeVisible();
+      await expect(reader.locator('time')).toHaveAttribute('datetime', publishedAt!);
+      await expect(reader.locator('time')).toHaveText(publishedLabel);
+      await expect(reader.locator('[data-slot="blog-post-lead"]')).not.toBeEmpty();
+      const returnLinks = reader.locator(`a[href="${archivePath}"]`);
+      await expect(returnLinks).toHaveCount(2);
+      await returnLinks.nth(index % 2).click();
+      await expect(page).toHaveURL(archivePath);
+      await expect(page.locator('[data-template="blog"] ol > li')).toHaveCount(3);
+    }
+    await page.goto(`/${locale}/templates/blog-post`);
+    await page.locator(`[data-template="blog-post"] a[href="${archivePath}"]`).first().click();
+    await expect(page).toHaveURL(archivePath);
+  });
   for (const slug of ["navigation-menu", "menubar"]) test(`${locale}/${slug}: preview and source`, async ({ page }) => {
     await page.goto(`/${locale}/components/${slug}`); const preview = page.locator('#preview');
     await expect(preview.getByRole('tabpanel')).toBeVisible();
@@ -33,7 +65,7 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
 test('blog post documentation renders article sections', async ({ page }) => {
   await page.goto('/en/templates/blog-post');
   const preview = page.locator('[data-template="blog-post"]');
-  await expect(preview.getByRole('heading', { name: 'Keep a draft after a failed save', exact: true })).toBeVisible();
+  await expect(preview.getByRole('heading', { name: 'Recover a draft after a failed save', exact: true })).toBeVisible();
   await expect(preview.getByRole('heading', { name: 'Separate the draft from the saved copy', exact: true })).toBeVisible();
   await expect(preview.getByRole('listitem')).toHaveCount(3);
 });

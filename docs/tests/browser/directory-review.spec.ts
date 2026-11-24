@@ -3,10 +3,12 @@ import { expect, test } from "@playwright/test";
 test("directory slash respects canceled keys, composition, and native editable targets", async ({ page }) => {
   await page.goto("/en/components");
   await expect(page.getByRole("button", { name: /Search documentation/i })).toBeEnabled();
-  const search = page.locator(".component-directory-search input");
+  const search = page.getByRole("textbox", { name: "Search components", exact: true });
   await search.fill("button");
   await expect.poll(() => page.locator(".component-directory-card").count()).toBeLessThan(56);
-  await search.fill("");
+  await page.getByRole("button", { name: "Reset filters", exact: true }).click();
+  await expect(search).toHaveValue("");
+  await expect(search).toBeFocused();
   await expect(page.locator(".component-directory-card")).toHaveCount(56);
 
   const category = page.locator(".component-directory-categories button").first();

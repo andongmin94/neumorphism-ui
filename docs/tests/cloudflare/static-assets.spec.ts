@@ -89,6 +89,11 @@ test("removed star snapshot, build marker and missing routes keep their HTTP sem
   const missing = await request.get("/missing-cloudflare-route");
   expect(missing.status()).toBe(404);
   expect(missing.headers()["content-type"]).toContain("text/html");
+  for (const locale of ["en", "ko", "ja", "zh"]) {
+    const missingArticle = await request.get(`/${locale}/templates/blog/nonexistent-article`);
+    expect(missingArticle.status()).toBe(404);
+    expect(missingArticle.headers()["content-type"]).toContain("text/html");
+  }
 });
 
 test("page redirects and hashed asset cache headers match static hosting", async ({ request }) => {
