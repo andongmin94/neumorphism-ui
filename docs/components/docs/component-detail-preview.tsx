@@ -627,7 +627,7 @@ export function ComponentDetailPreview({
               <span>{copy.progress.waiting}</span>
               <strong>—</strong>
             </div>
-            <Progress aria-label={copy.progress.waiting} value={null} />
+            <Progress aria-label={copy.progress.waiting} aria-valuetext={copy.progress.waiting} value={null} />
           </div>
         </PreviewStack>
       );

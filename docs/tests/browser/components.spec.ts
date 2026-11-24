@@ -22,6 +22,22 @@ for (const [locale, loading] of [["en", "Loading content"], ["ko", "콘텐츠 �
   });
 }
 
+for (const [locale, waiting] of [["en", "Waiting for data"], ["ko", "데이터 대기 중"], ["ja", "データを待機中"], ["zh", "等待数据"]]) {
+  test(`${locale}: indeterminate progress preview and source use localized value text`, async ({ page }) => {
+    await page.goto(`/${locale}/components/progress`);
+    const preview = page.locator("#preview");
+    await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+    const progress = preview.getByRole("progressbar", { name: waiting, exact: true });
+    await expect(progress).toHaveAttribute("data-indeterminate", "");
+    await expect(progress).toHaveAttribute("aria-valuetext", waiting);
+    await expect(progress).not.toHaveAttribute("aria-valuenow");
+    await preview.getByRole("tab").nth(1).click();
+    const source = await preview.locator("pre").innerText();
+    expect(source).toContain("aria-valuetext={copy.progress.waiting}");
+    expect(source).toContain(`"waiting": "${waiting}"`);
+  });
+}
+
 for (const locale of ["en", "ko", "ja", "zh"]) {
   test(`${locale}: hover-card profile links work without opening the preview`, async ({ page }, info) => {
     await page.goto(`/${locale}/components/hover-card`);
