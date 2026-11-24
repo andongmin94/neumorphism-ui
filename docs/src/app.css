@@ -111,9 +111,11 @@ a {
   color: var(--foreground);
 }
 
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 .sr-only {
@@ -5415,7 +5417,7 @@ body {
 
 .docs-content-section p,
 .docs-content-section li,
-.component-doc-section p {
+.component-doc-section p:not([data-component-stage] p) {
   color: var(--docs-text-soft);
   font-size: 0.88rem;
   line-height: 1.75;

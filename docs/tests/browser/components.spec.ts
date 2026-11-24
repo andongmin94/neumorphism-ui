@@ -80,7 +80,7 @@ for (const [locale, inputError, textareaError] of [
   ["ja", "有効なメールアドレスを入力してください。", "メモの内容をもう少し詳しく入力してください。"],
   ["zh", "请输入有效的电子邮件地址。", "请为笔记补充更多详细信息。"],
 ]) {
-  test(`${locale}: invalid input and textarea previews describe their errors`, async ({ page }) => {
+  test(`${locale}: invalid input and textarea previews describe and visually identify their errors`, async ({ page }) => {
     for (const [slug, error] of [["input", inputError], ["textarea", textareaError]]) {
       await page.goto(`/${locale}/components/${slug}`);
       const preview = page.locator("#preview");
@@ -90,6 +90,30 @@ for (const [locale, inputError, textareaError] of [
       const description = preview.locator(`#docs-${slug}-error`);
       await expect(description).toBeVisible();
       await expect(description).toHaveText(error);
+      await preview.locator(slug).first().focus();
+      await page.keyboard.press("Tab");
+      await expect(field).toBeFocused();
+      await expect(field).toHaveCSS("outline-style", "solid");
+      await expect(field).toHaveCSS("outline-width", "2px");
+      const colors = await field.evaluate(element => {
+        const context = document.createElement("canvas").getContext("2d")!;
+        const rgba = (color: string) => {
+          context.clearRect(0, 0, 1, 1);
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+          return [...context.getImageData(0, 0, 1, 1).data];
+        };
+        const style = getComputedStyle(element);
+        const helper = document.getElementById(element.getAttribute("aria-describedby")!)!;
+        return {
+          error: rgba(style.getPropertyValue("--neu-error-text")),
+          outline: rgba(style.outlineColor),
+          helper: rgba(getComputedStyle(helper).color),
+        };
+      });
+      expect(colors.error[3]).toBe(255);
+      expect(colors.outline).toEqual(colors.error);
+      expect(colors.helper).toEqual(colors.error);
       await preview.getByRole("tab").nth(1).click();
       const source = await preview.locator("pre").innerText();
       expect(source).toContain(`aria-describedby="docs-${slug}-error"`);
@@ -98,6 +122,28 @@ for (const [locale, inputError, textareaError] of [
     }
   });
 }
+
+test("component buttons retain their focus spacing and documentation links keep a visible outline", async ({ page }) => {
+  await page.goto("/en/components/button");
+  const preview = page.locator("#preview");
+  await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+  await preview.getByRole("tabpanel").focus();
+  await page.keyboard.press("Tab");
+  const button = preview.getByRole("button", { name: "Default", exact: true }).first();
+  await expect(button).toBeFocused();
+  await expect(button).toHaveCSS("outline-style", "solid");
+  await expect(button).toHaveCSS("outline-width", "2px");
+  await expect(button).toHaveCSS("outline-offset", "3px");
+
+  const navigation = page.locator(".component-doc-quicknav a:visible, .docs-toc a:visible");
+  await navigation.first().focus();
+  await page.keyboard.press("Tab");
+  const link = navigation.nth(1);
+  await expect(link).toBeFocused();
+  await expect(link).toHaveCSS("outline-style", "solid");
+  await expect(link).toHaveCSS("outline-width", "2px");
+  await expect(link).toHaveCSS("outline-offset", "2px");
+});
 
 for (const locale of ["en", "ko", "ja", "zh"]) {
   test(`${locale}: hover-card profile links work without opening the preview`, async ({ page }, info) => {
