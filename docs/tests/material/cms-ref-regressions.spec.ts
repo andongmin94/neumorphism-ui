@@ -26,7 +26,7 @@ test("runtime regressions: CMS save keeps the editor on its own post until the r
   await expect(create).toBeDisabled();
   await expect(other).toBeDisabled();
   await cms.getByRole("button", { name: "Reject pending save" }).click();
-  await expect(cms.getByRole("alert")).toContainText("Save");
+  await expect(cms.getByRole("alert")).toContainText("Changes were not saved.");
   await expect(title).toHaveValue("Draft awaiting save");
   await expect(title).toBeEnabled();
   await expect(other).toBeEnabled();
