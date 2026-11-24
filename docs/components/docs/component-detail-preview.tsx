@@ -776,8 +776,9 @@ export function ComponentDetailPreview({
       return (
         <div
           className="component-preview-skeleton-card"
-          aria-label={copy.skeleton.loading}
+          role="status"
         >
+          <span className="sr-only">{copy.skeleton.loading}</span>
           <Skeleton className="component-preview-skeleton-cover" />
           <div className="component-preview-skeleton-body">
             <div className="component-preview-row">

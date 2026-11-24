@@ -6,6 +6,22 @@ const expanded = ["alert-dialog", "popover", "hover-card", "sheet", "collapsible
 const localized = ["ko", "ja", "zh"].flatMap(locale => ["form", "combobox"].map(slug => ({ locale, slug })));
 const cases = [...expanded.map(slug => ({ locale: "en", slug })), ...localized];
 
+for (const [locale, loading] of [["en", "Loading content"], ["ko", "콘텐츠 로딩 중"], ["ja", "コンテンツを読み込み中"], ["zh", "正在加载内容"]]) {
+  test(`${locale}: skeleton preview and source expose localized loading status`, async ({ page }) => {
+    await page.goto(`/${locale}/components/skeleton`);
+    const preview = page.locator("#preview");
+    await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+    const status = preview.getByRole("status");
+    await expect(status).toBeVisible();
+    await expect(status).toMatchAriaSnapshot(`- status: ${loading}`);
+    await preview.getByRole("tab").nth(1).click();
+    const source = await preview.locator("pre").innerText();
+    expect(source).toContain('role="status"');
+    expect(source).toContain('<span className="sr-only">{copy.skeleton.loading}</span>');
+    expect(source).toContain(`"loading": "${loading}"`);
+  });
+}
+
 for (const locale of ["en", "ko", "ja", "zh"]) {
   test(`${locale}: hover-card profile links work without opening the preview`, async ({ page }, info) => {
     await page.goto(`/${locale}/components/hover-card`);
