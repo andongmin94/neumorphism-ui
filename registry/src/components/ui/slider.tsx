@@ -11,6 +11,8 @@ type SliderProps<Value extends number | readonly number[] = number | readonly nu
    * Provide one label for a single-value slider and one per thumb for a range.
    */
   thumbLabels?: readonly string[];
+  /** Formats each thumb's value for assistive technology. */
+  getAriaValueText?: SliderPrimitive.Thumb.Props["getAriaValueText"];
 };
 
 function Slider<Value extends number | readonly number[]>({
@@ -20,6 +22,7 @@ function Slider<Value extends number | readonly number[]>({
   max = 100,
   orientation = "horizontal",
   thumbLabels,
+  getAriaValueText,
   value,
   ...props
 }: SliderProps<Value>) {
@@ -68,6 +71,7 @@ function Slider<Value extends number | readonly number[]>({
         {values.map((_, index) => (
           <SliderPrimitive.Thumb
             aria-label={thumbLabels?.[index]}
+            getAriaValueText={getAriaValueText}
             data-slot="slider-thumb"
             key={index}
             index={index}

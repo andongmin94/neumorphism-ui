@@ -493,6 +493,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "键盘和指针调整的步长。",
       "设置 track 方向和键盘操作轴。",
       "按值的顺序传给每个真实 thumb input 的无障碍名称。",
+      "直接传递 Base UI 原生 thumb 回调，可在实际 input 的值说明中包含本地化单位或换算后的金额。",
       "在调整过程中或结束时调用。value/defaultValue 为数值时传递 number，为数组时保留其数组类型。",
       "禁用所有 thumb 的交互。",
     ],
@@ -500,6 +501,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "Slider 根元素通过 aria-label 或 aria-labelledby 提供组合名称，thumbLabels 则按值的顺序为各调节点命名。",
       "Base UI 负责每个 thumb 的 role=slider、当前值、最小值与最大值，以及 Arrow、Page、Home、End 键行为。",
       "单值提供一个名称；范围值应在 thumbLabels 中使用“最小值”“最大值”等可区分的名称。",
+      "显示内容包含货币或单位时，请用 getAriaValueText 提供与实际值一致的说明。Root 上的 aria-valuetext 不会传递给 thumb input。",
     ],
   },
   switch: {

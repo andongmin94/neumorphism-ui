@@ -19,6 +19,7 @@ export function SliderValueTypes() {
         onValueChange={setRange}
         onValueCommitted={setRange}
         thumbLabels={["Minimum", "Maximum"]}
+        getAriaValueText={(formattedValue, value, index) => `${index + 1}: ${formattedValue} (${value.toFixed(0)} units)`}
       />
       <Slider
         defaultValue={40}

@@ -514,6 +514,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "キーボードとポインターで調整するときの増分です。",
       "track の向きとキーボード操作の軸を設定します。",
       "実際の thumb input に値の順序で渡すアクセシブルな名前です。",
+      "Base UI の thumb コールバックをそのまま渡します。実際の input の値の説明に、地域に合った単位や換算した金額を含められます。",
       "調整中または調整完了時に呼び出されます。value/defaultValue が数値なら number、配列ならその配列型を維持して渡します。",
       "すべての thumb の操作を無効にします。",
     ],
@@ -521,6 +522,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "Slider group には aria-label または aria-labelledby で名前を付け、各 control point の名前を値の順序で thumbLabels に渡してください。",
       "Base UI が各 thumb の role=slider、現在値、最小値、最大値、および Arrow、Page、Home、End キーの動作を管理します。",
       "単一値には1つの thumbLabels 項目を、range には最小値・最大値のように区別できる名前を指定してください。",
+      "表示に通貨や単位を含める場合は、getAriaValueText で実際の値に合った説明を指定してください。Root の aria-valuetext は thumb input に渡されません。",
     ],
   },
   switch: {

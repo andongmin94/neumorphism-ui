@@ -502,9 +502,11 @@ export function ComponentDetailPreview({
           >
             <Input
               aria-invalid
+              aria-describedby="docs-input-error"
               defaultValue="wrong-address"
               id="docs-input-invalid"
             />
+            <p id="docs-input-error" className="text-sm text-[var(--neu-error-text)]">{copy.input.error}</p>
           </PreviewField>
           <PreviewField
             htmlFor="docs-input-disabled"
@@ -794,7 +796,8 @@ export function ComponentDetailPreview({
         </div>
       );
 
-    case "slider":
+    case "slider": {
+      const priceFormatter = new Intl.NumberFormat(locale, { style: "currency", currency: "KRW", maximumFractionDigits: 0 });
       return (
         <PreviewStack>
           <div className="component-preview-progress">
@@ -811,6 +814,7 @@ export function ComponentDetailPreview({
                 copy.slider.minimumPrice,
                 copy.slider.maximumPrice,
               ]}
+              getAriaValueText={(_, value) => priceFormatter.format(value * 1000)}
               value={sliderValue}
               onValueChange={setSliderValue}
             />
@@ -826,6 +830,7 @@ export function ComponentDetailPreview({
           </div>
         </PreviewStack>
       );
+    }
 
     case "switch":
       return (
@@ -942,9 +947,11 @@ export function ComponentDetailPreview({
           >
             <Textarea
               aria-invalid
+              aria-describedby="docs-textarea-error"
               defaultValue={copy.textarea.invalidValue}
               id="docs-textarea-invalid"
             />
+            <p id="docs-textarea-error" className="text-sm text-[var(--neu-error-text)]">{copy.textarea.error}</p>
           </PreviewField>
           <PreviewField
             htmlFor="docs-textarea-disabled"

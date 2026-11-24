@@ -38,6 +38,67 @@ for (const [locale, waiting] of [["en", "Waiting for data"], ["ko", "데이터 �
   });
 }
 
+for (const [locale, minimumLabel, maximumLabel] of [
+  ["en", "Minimum price", "Maximum price"],
+  ["ko", "최저 가격", "최고 가격"],
+  ["ja", "最低価格", "最高価格"],
+  ["zh", "最低价格", "最高价格"],
+]) {
+  test(`${locale}: range slider preview and source describe the displayed currency values`, async ({ page }) => {
+    await page.goto(`/${locale}/components/slider`);
+    const preview = page.locator("#preview");
+    await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+    const minimum = preview.getByRole("slider", { name: minimumLabel, exact: true });
+    const maximum = preview.getByRole("slider", { name: maximumLabel, exact: true });
+    const currency = new Intl.NumberFormat(locale, { style: "currency", currency: "KRW", maximumFractionDigits: 0 });
+    await expect(minimum).toHaveAttribute("aria-valuenow", "32");
+    await expect(minimum).toHaveAttribute("aria-valuetext", currency.format(32000));
+    await expect(maximum).toHaveAttribute("aria-valuenow", "72");
+    await expect(maximum).toHaveAttribute("aria-valuetext", currency.format(72000));
+
+    await minimum.press("ArrowRight");
+    await expect(minimum).toHaveAttribute("aria-valuenow", "33");
+    await expect(minimum).toHaveAttribute("aria-valuetext", currency.format(33000));
+    await expect(maximum).toHaveAttribute("aria-valuetext", currency.format(72000));
+    await expect(preview.getByText("₩33K – ₩72K", { exact: true })).toBeVisible();
+    await maximum.press("ArrowLeft");
+    await expect(maximum).toHaveAttribute("aria-valuenow", "71");
+    await expect(maximum).toHaveAttribute("aria-valuetext", currency.format(71000));
+    await expect(preview.getByText("₩33K – ₩71K", { exact: true })).toBeVisible();
+
+    await preview.getByRole("tab").nth(1).click();
+    const source = await preview.locator("pre").innerText();
+    expect(source).toContain(`new Intl.NumberFormat("${locale}",`);
+    expect(source).toContain('currency: "KRW"');
+    expect(source).toContain("getAriaValueText={(_, value) => priceFormatter.format(value * 1000)}");
+  });
+}
+
+for (const [locale, inputError, textareaError] of [
+  ["en", "Enter a valid email address.", "Add more detail to this note."],
+  ["ko", "올바른 이메일 주소를 입력하세요.", "메모에 내용을 더 자세히 작성하세요."],
+  ["ja", "有効なメールアドレスを入力してください。", "メモの内容をもう少し詳しく入力してください。"],
+  ["zh", "请输入有效的电子邮件地址。", "请为笔记补充更多详细信息。"],
+]) {
+  test(`${locale}: invalid input and textarea previews describe their errors`, async ({ page }) => {
+    for (const [slug, error] of [["input", inputError], ["textarea", textareaError]]) {
+      await page.goto(`/${locale}/components/${slug}`);
+      const preview = page.locator("#preview");
+      await expect(preview.locator(".component-example")).toHaveAttribute("aria-busy", "false");
+      const field = preview.locator(`${slug}[aria-invalid="true"]`);
+      await expect(field).toHaveAccessibleDescription(error);
+      const description = preview.locator(`#docs-${slug}-error`);
+      await expect(description).toBeVisible();
+      await expect(description).toHaveText(error);
+      await preview.getByRole("tab").nth(1).click();
+      const source = await preview.locator("pre").innerText();
+      expect(source).toContain(`aria-describedby="docs-${slug}-error"`);
+      expect(source).toContain(`<p id="docs-${slug}-error"`);
+      expect(source).toContain(`"error": "${error}"`);
+    }
+  });
+}
+
 for (const locale of ["en", "ko", "ja", "zh"]) {
   test(`${locale}: hover-card profile links work without opening the preview`, async ({ page }, info) => {
     await page.goto(`/${locale}/components/hover-card`);

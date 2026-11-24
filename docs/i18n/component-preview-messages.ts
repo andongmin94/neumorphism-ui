@@ -80,6 +80,7 @@ const ko = {
   input: {
     email: "이메일",
     invalid: "오류 상태",
+    error: "올바른 이메일 주소를 입력하세요.",
     disabled: "비활성",
     readOnlyWorkspace: "읽기 전용 워크스페이스",
   },
@@ -192,6 +193,7 @@ const ko = {
     investmentNoteValue: "실적 발표 이후 거래량과 지지선을 다시 확인한다.",
     validationState: "오류 상태",
     invalidValue: "너무 짧은 메모",
+    error: "메모에 내용을 더 자세히 작성하세요.",
     disabled: "비활성",
     disabledValue: "공유된 메모는 편집할 수 없습니다.",
   },
@@ -297,6 +299,7 @@ const en: ComponentPreviewMessages = {
   input: {
     email: "Email",
     invalid: "Invalid",
+    error: "Enter a valid email address.",
     disabled: "Disabled",
     readOnlyWorkspace: "Read-only workspace",
   },
@@ -410,6 +413,7 @@ const en: ComponentPreviewMessages = {
       "Review trading volume and support levels after the earnings report.",
     validationState: "Validation state",
     invalidValue: "This note is too short",
+    error: "Add more detail to this note.",
     disabled: "Disabled",
     disabledValue: "Shared notes cannot be edited.",
   },
@@ -503,6 +507,7 @@ const zh: ComponentPreviewMessages = {
   input: {
     email: "电子邮箱",
     invalid: "错误状态",
+    error: "请输入有效的电子邮件地址。",
     disabled: "已禁用",
     readOnlyWorkspace: "只读工作区",
   },
@@ -615,6 +620,7 @@ const zh: ComponentPreviewMessages = {
     investmentNoteValue: "财报发布后重新确认成交量和支撑位。",
     validationState: "错误状态",
     invalidValue: "笔记内容太短",
+    error: "请为笔记补充更多详细信息。",
     disabled: "已禁用",
     disabledValue: "无法编辑共享笔记。",
   },
@@ -710,6 +716,7 @@ const ja: ComponentPreviewMessages = {
   input: {
     email: "メール",
     invalid: "エラー状態",
+    error: "有効なメールアドレスを入力してください。",
     disabled: "無効",
     readOnlyWorkspace: "読み取り専用ワークスペース",
   },
@@ -822,6 +829,7 @@ const ja: ComponentPreviewMessages = {
     investmentNoteValue: "決算発表後に出来高と支持線を再確認する。",
     validationState: "エラー状態",
     invalidValue: "メモが短すぎます",
+    error: "メモの内容をもう少し詳しく入力してください。",
     disabled: "無効",
     disabledValue: "共有メモは編集できません。",
   },

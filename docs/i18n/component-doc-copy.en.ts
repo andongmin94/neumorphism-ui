@@ -514,6 +514,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "The increment used for keyboard and pointer adjustment.",
       "Sets the track direction and keyboard axis.",
       "Accessible names passed to the actual thumb inputs in value order.",
+      "Forwards the native Base UI thumb callback. Include localized units or scaled currency amounts in the actual input's value description.",
       "Runs during adjustment or when it finishes. Numeric value/defaultValue produces a number; array values preserve their array type.",
       "Disables interaction for every thumb.",
     ],
@@ -521,6 +522,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Name the Slider group with aria-label or aria-labelledby, and pass each control-point name to thumbLabels in value order.",
       "Base UI manages role=slider, current, minimum, and maximum values, plus Arrow, Page, Home, and End key behavior for every thumb.",
       "Provide one thumbLabels entry for a single value, or distinct names such as minimum and maximum for a range.",
+      "When the display includes currency or units, use getAriaValueText to describe the actual value. A root aria-valuetext is not forwarded to the thumb inputs.",
     ],
   },
   switch: {
