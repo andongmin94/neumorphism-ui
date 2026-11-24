@@ -1322,6 +1322,13 @@ export const componentDocs = [
         defaultValue: "8",
         description: "trigger와 popup 사이의 간격(px)입니다. 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다.",
       },
+      {
+        component: "TooltipContent",
+        name: "alignOffset",
+        type: "number | ((data) => number)",
+        defaultValue: "0",
+        description: "정렬 축의 오프셋(px)입니다. 함수는 sideOffset과 동일한 위치 계산 데이터를 받습니다.",
+      },
     ],
     accessibility: [
       "Tooltip은 trigger의 접근 가능한 이름을 대신하지 않으므로 아이콘 버튼에는 별도 aria-label이 필요합니다.",
@@ -2049,6 +2056,20 @@ export const componentDocs = [
       "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | \"inline-start\" | \"inline-end\" / \"start\" | \"center\" | \"end\" / number | ((data) => number)",
       "defaultValue": "\"bottom\" / \"start\" / 8",
       "description": "팝업의 방향과 정렬, 트리거와의 간격(px)을 지정합니다. sideOffset 함수는 anchor·positioner의 width와 height, side, align을 받아 간격을 반환합니다."
+    },
+    {
+      "component": "NavigationMenuViewport",
+      "name": "alignOffset",
+      "type": "number | ((data) => number)",
+      "defaultValue": "0",
+      "description": "정렬 축의 오프셋(px)입니다. 함수는 sideOffset과 동일한 위치 계산 데이터를 받습니다."
+    },
+    {
+      "component": "NavigationMenuLink",
+      "name": "closeOnClick",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "링크를 선택할 때 메뉴를 닫을지 지정합니다."
     }
   ],
   "accessibility": [

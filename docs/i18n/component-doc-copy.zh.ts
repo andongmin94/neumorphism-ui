@@ -150,7 +150,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
     ],
   },
 "chart": {"summary":"响应式图表面板、提示框和精确数据表。","description":"直接组合Recharts轴和系列。数据标记保持平面和清晰，只在周围面板应用拟态阴影。","props":["可读的标题和说明。","相同数据源的表格及展开标签。","无记录时显示的状态。","在响应式容器中渲染的 Recharts 图表。","图表上方的摘要及标题旁的操作控件。","默认应用拟态样式，并传入 Recharts 选项。默认禁用动画。","在默认图例中添加参考线条目。","使用自定义渲染器替换默认图例。参考线条目也由该渲染器负责。"],"accessibility":["使用accessibilityLayer、线型和标签，并提供原始数据表。","示例禁用动画。自定义系列的动画由应用负责。"]},
-"navigation-menu": {"summary":"结合链接和弹出面板、支持键盘的网站导航。","description":"保留Base UI导航行为，用内凹表面表示打开状态。在根组件内放置一个NavigationMenuViewport。","props":["通过 value 控制打开项目的值，或通过 defaultValue 设置初始值。null 会关闭菜单。","接收打开项目的值和 eventDetails。菜单关闭时值为 null。","通过render组合框架链接。","设置弹出层的方向、对齐方式及与触发器的距离（px）。sideOffset 函数接收 anchor 和 positioner 的 width、height，以及 side 和 align，并返回距离。"],"accessibility":["目标使用实际href链接，并给nav提供名称。","测试Tab、方向键和Escape，保留焦点样式。"]},
+"navigation-menu": {"summary":"结合链接和弹出面板、支持键盘的网站导航。","description":"保留Base UI导航行为，用内凹表面表示打开状态。在根组件内放置一个NavigationMenuViewport。","props":["通过 value 控制打开项目的值，或通过 defaultValue 设置初始值。null 会关闭菜单。","接收打开项目的值和 eventDetails。菜单关闭时值为 null。","通过render组合框架链接。","设置弹出层的方向、对齐方式及与触发器的距离（px）。sideOffset 函数接收 anchor 和 positioner 的 width、height，以及 side 和 align，并返回距离。","沿对齐轴的偏移量（px）。函数接收与 sideOffset 相同的定位数据。","激活链接时关闭菜单。"],"accessibility":["目标使用实际href链接，并给nav提供名称。","测试Tab、方向键和Escape，保留焦点样式。"]},
 "menubar": {"summary":"通过方向键移动的应用命令菜单。","description":"Menubar管理焦点移动，现有Dropdown Menu部件管理弹出与选择行为。","props":["设置键盘导航方向。","禁用菜单触发器。","可勾选项目的受控状态。"],"accessibility":["用于应用命令而非普通页面链接，并为menubar提供名称。","方向键在菜单间移动，禁用项不能执行。"]},
   accordion: {
     summary: "可单独或同时展开多个区块的折叠内容组。",
@@ -585,6 +585,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "将 tooltip trigger 行为组合到按钮或链接上。",
       "相对于 trigger 设置 popup 的位置。",
       "trigger 与 popup 之间的距离（px）。函数接收 anchor 和 positioner 的 width、height，以及 side 和 align，并返回距离。",
+      "沿对齐轴的偏移量（px）。函数接收与 sideOffset 相同的定位数据。",
     ],
     accessibility: [
       "Tooltip 不能替代 trigger 的无障碍名称，因此图标按钮仍需单独提供 aria-label。",

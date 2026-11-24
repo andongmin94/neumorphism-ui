@@ -789,7 +789,7 @@ for (const dir of ["ltr", "rtl"] as const) {
         const anchor = (await trigger.boundingBox())!;
         const panel = (await popup.boundingBox())!;
         const offset = Math.abs(dir === "rtl" ? anchor.x + anchor.width - panel.x - panel.width : anchor.x - panel.x);
-        const expected = kind === "popover" || kind === "hover-card" ? anchor.width / 20 : 0;
+        const expected = kind === "navigation-menu" ? 8 : anchor.width / 20;
         return Math.abs(offset - expected);
       }).toBeLessThanOrEqual(1);
       if (kind === "popover" || kind === "hover-card") {
@@ -815,8 +815,13 @@ for (const dir of ["ltr", "rtl"] as const) {
         await expect(page.getByTestId("overlay-action")).toHaveText("navigated");
         // Native links keep the menu open unless closeOnClick is enabled.
         await expect(popup).toBeVisible();
-        await popup.getByRole("link", { name: "Visit destination" }).press("Escape");
-        await expect(trigger).toBeFocused();
+        const longLink = popup.getByRole("link", { name: "workspace_".repeat(12), exact: true });
+        await expect(longLink).toBeVisible();
+        for (const element of [popup, longLink]) {
+          expect(await element.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
+        }
+        await longLink.press("Enter");
+        await expect(popup).toBeHidden();
       } else await trigger.press("Escape");
       await expect(popup).toBeHidden();
     });
