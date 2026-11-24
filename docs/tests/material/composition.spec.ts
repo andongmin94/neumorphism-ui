@@ -139,6 +139,18 @@ for (const { locale, label, initial, next, caption, direction } of [
     await expect(fixture.getByRole("button", { name: `${label}: ${next}`, exact: true })).toBeVisible();
     await expect(fixture.locator('input[name="date"]')).toHaveValue("2026-11-24");
     expect(await fixture.evaluate(form => new FormData(form as HTMLFormElement).get("date"))).toBe("2026-11-24");
+    const currentTrigger = fixture.getByRole("button", { name: `${label}: ${next}`, exact: true });
+    const disable = fixture.getByRole("checkbox", { name: "Disable date picker" });
+    await currentTrigger.click();
+    await expect(popup).toBeVisible();
+    await disable.evaluate((element: HTMLInputElement) => element.click());
+    await expect(currentTrigger).toBeDisabled();
+    await expect(popup).toBeHidden();
+    expect(await fixture.evaluate(form => new FormData(form as HTMLFormElement).get("date"))).toBeNull();
+    await disable.uncheck();
+    await expect(currentTrigger).toBeEnabled();
+    await expect(popup).toBeHidden();
+    await expect(fixture.locator('input[name="date"]')).toHaveValue("2026-11-24");
   });
 }
 

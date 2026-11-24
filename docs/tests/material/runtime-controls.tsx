@@ -136,8 +136,10 @@ function CodePasteFixture({ readOnly }: { readOnly: boolean }) {
 
 function LocalizedDatePicker({ locale, label, direction }: { locale: Locale; label: string; direction: "ltr" | "rtl" }) {
   const [date, setDate] = React.useState<Date | undefined>(new Date(2026, 10, 23));
+  const [disabled, setDisabled] = React.useState(false);
   return <DirectionProvider direction={direction}><form dir={direction} data-testid={`date-picker-${locale.code}`} className="max-w-sm" onSubmit={event => event.preventDefault()}>
-    <DatePicker label={label} name="date" value={date} onValueChange={setDate} locale={locale} />
+    <DatePicker label={label} name="date" value={date} onValueChange={setDate} locale={locale} disabled={disabled} />
+    <label className="flex gap-2"><input type="checkbox" checked={disabled} onChange={event => setDisabled(event.target.checked)} />Disable date picker</label>
   </form></DirectionProvider>;
 }
 

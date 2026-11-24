@@ -1882,15 +1882,48 @@ export const componentDocs = [
   "props": [
     {
       "component": "DatePicker",
-      "name": "value / onValueChange",
-      "type": "Date | undefined / callback",
-      "description": "현재 날짜와 변경 콜백입니다. 빈 값은 undefined입니다."
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "description": "트리거와 팝오버의 접근 가능한 이름입니다. 트리거에는 선택된 날짜도 포함됩니다."
     },
     {
       "component": "DatePicker",
-      "name": "label / name / describedBy",
+      "name": "value",
+      "type": "Date | undefined",
+      "description": "상위 컴포넌트가 제어하는 날짜입니다. 빈 값은 undefined입니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "onValueChange",
+      "type": "(value: Date | undefined) => void",
+      "required": true,
+      "description": "날짜를 선택하거나 지울 때 호출되는 변경 콜백입니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "id / name / describedBy",
       "type": "string",
-      "description": "버튼 이름, 폼 필드 이름, 설명 요소 ID입니다."
+      "description": "트리거의 ID, 숨겨진 폼 입력의 이름, 설명 요소의 ID입니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "placeholder / clearLabel",
+      "type": "string",
+      "defaultValue": "\"Select date\" / \"Clear date\"",
+      "description": "빈 상태와 지우기 버튼의 지역화된 문구입니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "locale",
+      "type": "Partial<Locale>",
+      "description": "DayPicker의 로케일입니다. 날짜 표시는 그레고리력을 사용합니다."
+    },
+    {
+      "component": "DatePicker",
+      "name": "disabled / invalid",
+      "type": "boolean",
+      "description": "비활성화하면 팝오버가 닫히고 입력이 제출되지 않습니다. invalid는 오류 상태를 표시합니다."
     },
     {
       "component": "DatePicker",
