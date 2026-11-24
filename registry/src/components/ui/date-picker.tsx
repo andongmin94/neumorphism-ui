@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useDirection } from "@base-ui/react/direction-provider";
 import type { Locale, Matcher } from "@daypicker/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ function dateOnly(value: Date) {
 }
 
 function DatePicker({ label, value, onValueChange, id, name, className, placeholder = "Select date", clearLabel = "Clear date", disabled = false, invalid, describedBy, locale, disabledDates, startMonth, endMonth }: DatePickerProps) {
+  const direction = useDirection();
   const [open, setOpen] = React.useState(false);
   const trigger = React.useRef<HTMLButtonElement>(null);
   const display = value?.toLocaleDateString(locale?.code ?? "en-US", { calendar: "gregory", year: "numeric", month: "short", day: "numeric" });
@@ -43,7 +45,7 @@ function DatePicker({ label, value, onValueChange, id, name, className, placehol
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto gap-0 p-1">
         <PopoverTitle className="sr-only">{label}</PopoverTitle>
-        <Calendar mode="single" required autoFocus selected={value} defaultMonth={value ?? startMonth} onSelect={date => { onValueChange(date); setOpen(false); }} locale={locale} disabled={disabledDates} startMonth={startMonth} endMonth={endMonth} className="border-0 [box-shadow:none]" />
+        <Calendar dir={direction} mode="single" required autoFocus selected={value} defaultMonth={value ?? startMonth} onSelect={date => { onValueChange(date); setOpen(false); }} locale={locale} disabled={disabledDates} startMonth={startMonth} endMonth={endMonth} className="border-0 [box-shadow:none]" />
       </PopoverContent>
     </Popover>
     {value && <Button variant="ghost" size="icon" disabled={disabled} aria-label={clearLabel} onClick={() => { onValueChange(undefined); trigger.current?.focus(); }}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18" /></svg></Button>}
