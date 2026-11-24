@@ -5,6 +5,7 @@ import type { Locale } from "@daypicker/react";
 import { faIR, th } from "@daypicker/react/locale";
 import { CmsWorkspace, type CmsPost } from "../../src/registry/components/blocks/cms";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "../../src/registry/components/ui/carousel";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -146,13 +147,31 @@ function CalendarNavigation({ direction, navLayout }: { direction: "ltr" | "rtl"
   </section>;
 }
 
+function NestedAccordion() {
+  return <section data-testid="nested-accordion" className="max-w-md">
+    <Accordion>
+      <AccordionItem value="outer" data-testid="outer-accordion-item">
+        <AccordionTrigger>Outer details</AccordionTrigger>
+        <AccordionContent keepMounted>
+          <Accordion defaultValue={["inner"]}>
+            <AccordionItem value="inner">
+              <AccordionTrigger>Inner details</AccordionTrigger>
+              <AccordionContent>Nested details stay open independently.</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </section>;
+}
+
 function RuntimeControls() {
   React.useLayoutEffect(() => {
     const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
     for (const [name, value] of Object.entries(buildThemeVariables(defaultThemeSettings, mode))) document.documentElement.style.setProperty(name, value);
     document.documentElement.classList.toggle("dark", mode === "dark");
   }, []);
-  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><KeyboardCarousel orientation="horizontal" direction="rtl" /><KeyboardCarousel orientation="vertical" direction="rtl" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /><LocalizedDatePicker locale={faIR} label="Persian date" direction="rtl" /><LocalizedDatePicker locale={th} label="Thai date" direction="ltr" /><CalendarNavigation direction="ltr" navLayout="around" /><CalendarNavigation direction="rtl" navLayout="around" /><CalendarNavigation direction="ltr" navLayout="after" /><CalendarNavigation direction="rtl" navLayout="after" /><CalendarNavigation direction="ltr" /><CalendarNavigation direction="rtl" /></main>;
+  return <main className="mx-auto grid max-w-5xl gap-12 p-5"><h1>Runtime composition regressions</h1><SaveFixture /><KeyboardCarousel orientation="horizontal" /><KeyboardCarousel orientation="vertical" /><KeyboardCarousel orientation="horizontal" direction="rtl" /><KeyboardCarousel orientation="vertical" direction="rtl" /><ResizableHandles /><OrientedToolbars /><CodePlaceholder /><CodePasteFixture readOnly /><CodePasteFixture readOnly={false} /><LocalizedDatePicker locale={faIR} label="Persian date" direction="rtl" /><LocalizedDatePicker locale={th} label="Thai date" direction="ltr" /><CalendarNavigation direction="ltr" navLayout="around" /><CalendarNavigation direction="rtl" navLayout="around" /><CalendarNavigation direction="ltr" navLayout="after" /><CalendarNavigation direction="rtl" navLayout="after" /><CalendarNavigation direction="ltr" /><CalendarNavigation direction="rtl" /><NestedAccordion /></main>;
 }
 
 createRoot(document.getElementById("root")!).render(<RuntimeControls />);

@@ -1,5 +1,39 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+test("runtime regressions: nested accordion styling follows each item's own open state", async ({ page }) => {
+  await page.goto("/runtime-controls.html?mode=light");
+  const fixture = page.getByTestId("nested-accordion");
+  const outer = fixture.getByTestId("outer-accordion-item");
+  const outerTrigger = fixture.getByRole("button", { name: "Outer details", exact: true });
+  const innerTrigger = fixture.getByRole("button", { name: "Inner details", exact: true, includeHidden: true });
+  await expect(outerTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(innerTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(innerTrigger).toBeHidden();
+  await expect(outer).toHaveCSS("box-shadow", "none");
+  await expect(outer).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+
+  await outerTrigger.click();
+  await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(innerTrigger).toBeVisible();
+  await expect(outer).not.toHaveCSS("box-shadow", "none");
+  await expect(outer).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+
+  await outerTrigger.click();
+  await expect(outerTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(innerTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(innerTrigger).toBeHidden();
+  await expect(outer).toHaveCSS("box-shadow", "none");
+  await expect(outer).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+
+  await outerTrigger.click();
+  await expect(innerTrigger).toBeVisible();
+  await expect(innerTrigger).toHaveAttribute("aria-expanded", "true");
+  await innerTrigger.click();
+  await expect(innerTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(outerTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(outer).not.toHaveCSS("box-shadow", "none");
+});
+
 for (const direction of ["ltr", "rtl"] as const) {
   test(`runtime regressions: Calendar around ${direction} keeps navigation beside its caption`, async ({ page }) => {
     await page.goto("/runtime-controls.html?mode=light");

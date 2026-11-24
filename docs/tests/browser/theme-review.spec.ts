@@ -54,6 +54,35 @@ test("failed preference writes and removal cannot restore stale saved settings",
   expect(errors).toEqual([]);
 });
 
+test("Clay's default light focus outline contrasts with the preview surface", async ({ page }) => {
+  await page.goto("/en/customize");
+  const controls = page.locator("#theme-settings");
+  await expect(controls).toHaveAttribute("aria-busy", "false");
+  await controls.getByRole("button", { name: "Clay", exact: true }).click();
+  const preview = page.locator("[data-theme-price-preview]");
+  await expect(preview).toHaveAttribute("data-preview-mode", "light");
+  await preview.getByRole("link", { name: "View chart", exact: true }).focus();
+  await page.keyboard.press("Shift+Tab");
+  const input = preview.getByRole("spinbutton");
+  await expect(input).toBeFocused();
+  await expect(input).toHaveCSS("outline-style", "solid");
+  await expect(input).toHaveCSS("outline-width", "2px");
+  const colors = await input.evaluate(element => [
+    getComputedStyle(element).outlineColor,
+    getComputedStyle(element.closest("[data-theme-price-preview]")!).backgroundColor,
+  ]);
+  const luminances = colors.map(color => {
+    const rgb = color.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+    expect(rgb, color).not.toBeNull();
+    const [r, g, b] = rgb!.slice(1).map(value => {
+      const channel = Number(value) / 255;
+      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  });
+  expect((Math.max(...luminances) + 0.05) / (Math.min(...luminances) + 0.05)).toBeGreaterThanOrEqual(3);
+});
+
 test("theme preview progress keeps its name while its actual value changes", async ({ page }) => {
   await page.goto("/en/customize");
   const preview = page.locator("[data-theme-price-preview]");

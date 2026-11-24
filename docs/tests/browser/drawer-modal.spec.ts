@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import tailwindcss from "@tailwindcss/vite";
 import { createServer, type ViteDevServer } from "vite";
+import { buildThemeVariables, defaultThemeSettings } from "../../../registry/src/theme";
 
 let server: ViteDevServer;
 let origin: string;
@@ -51,6 +52,37 @@ test.afterAll(async () => {
       await rm(cacheDirectory, { recursive: true, force: true, maxRetries: 3 });
     }
   }
+});
+
+test("a white custom accent keeps the default Dialog close icon visible on hover", async ({ page }, info) => {
+  test.skip(Boolean(info.project.use.hasTouch), "Hover colors apply to mouse-capable pointers.");
+  await page.goto(`${origin}?component=dialog`);
+  await page.evaluate(tokens => {
+    for (const [name, value] of Object.entries(tokens)) document.documentElement.style.setProperty(name, value);
+  }, buildThemeVariables({ ...defaultThemeSettings, accent: "#ffffff" }, "light"));
+  const trigger = page.getByRole("button", { name: "Open dialog", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Overlay modal behavior" });
+  const close = dialog.getByRole("button", { name: "Close", exact: true });
+  await close.hover();
+  expect(await close.evaluate(element => element.matches(":hover"))).toBe(true);
+  const colors = await close.evaluate(element => [
+    getComputedStyle(element.querySelector("svg")!).stroke,
+    getComputedStyle(element).backgroundColor,
+  ]);
+  const luminances = colors.map(color => {
+    const rgb = color.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+    expect(rgb, color).not.toBeNull();
+    const [r, g, b] = rgb!.slice(1).map(value => {
+      const channel = Number(value) / 255;
+      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  });
+  expect((Math.max(...luminances) + 0.05) / (Math.min(...luminances) + 0.05)).toBeGreaterThanOrEqual(3);
+  await close.click();
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
 });
 
 for (const kind of ["drawer", "dialog", "sheet"] as const) {
