@@ -390,6 +390,12 @@ export const componentDocs = [
       },
       {
         component: "Checkbox",
+        name: "onChange",
+        type: "React.ChangeEventHandler<HTMLInputElement>",
+        description: "실제 native checkbox의 change event를 받습니다. onCheckedChange보다 먼저 호출됩니다.",
+      },
+      {
+        component: "Checkbox",
         name: "disabled",
         type: "boolean",
         defaultValue: "false",
@@ -1045,8 +1051,22 @@ export const componentDocs = [
       {
         component: "Slider",
         name: "onValueChange / onValueCommitted",
-        type: "(value: number | readonly number[]) => void",
-        description: "조정 중 또는 조정이 끝났을 때 호출됩니다. value/defaultValue가 숫자면 number, 배열이면 해당 배열 타입을 유지해 전달합니다.",
+        type: "(value: Value, eventDetails) => void",
+        description: "조정 중 또는 값 변경이 확정될 때 호출됩니다. 값은 숫자 또는 해당 배열 타입을 유지합니다. 각각 ChangeEventDetails와 CommitEventDetails를 받으며, 값이 바뀌지 않았거나 변경이 취소되면 commit 콜백은 호출되지 않습니다.",
+      },
+      {
+        component: "Slider",
+        name: "thumbAlignment",
+        type: '"center" | "edge" | "edge-client-only"',
+        defaultValue: '"edge"',
+        description: "최솟값·최댓값에서 thumb의 중심 또는 가장자리를 control 경계에 맞춥니다. edge-client-only는 edge와 같지만 hydration 후에 표시합니다.",
+      },
+      {
+        component: "Slider",
+        name: "thumbCollisionBehavior",
+        type: '"push" | "swap" | "none"',
+        defaultValue: '"push"',
+        description: "포인터로 thumb를 이동할 때 충돌하면 다른 thumb를 밀거나, 위치를 교환하거나, 교차를 금지합니다.",
       },
       {
         component: "Slider",
@@ -1553,19 +1573,28 @@ export const componentDocs = [
       "component": "Toggle",
       "name": "pressed / defaultPressed",
       "type": "boolean",
+      "defaultValue": "false",
       "description": "제어 상태 또는 최초 상태를 지정합니다."
     },
     {
       "component": "Toggle",
       "name": "size",
       "type": "\"sm\" | \"default\" | \"lg\"",
+      "defaultValue": "\"default\"",
       "description": "컨트롤 크기를 선택합니다."
     },
     {
       "component": "Toggle",
       "name": "disabled",
       "type": "boolean",
+      "defaultValue": "false",
       "description": "사용자 조작을 비활성화합니다."
+    },
+    {
+      "component": "Toggle",
+      "name": "onPressedChange",
+      "type": "(pressed: boolean, eventDetails) => void",
+      "description": "눌림 상태가 바뀔 때 새 값과 변경 이벤트 정보를 받습니다."
     }
   ],
   "accessibility": [
@@ -1592,13 +1621,28 @@ export const componentDocs = [
       "component": "ToggleGroup",
       "name": "multiple",
       "type": "boolean",
+      "defaultValue": "false",
       "description": "복수 항목 선택을 허용합니다."
     },
     {
       "component": "ToggleGroup",
       "name": "orientation",
       "type": "\"horizontal\" | \"vertical\"",
+      "defaultValue": "\"horizontal\"",
       "description": "배치 방향과 키보드 이동 방향입니다."
+    },
+    {
+      "component": "ToggleGroup",
+      "name": "onValueChange",
+      "type": "(value: Value[], eventDetails) => void",
+      "description": "선택된 항목의 값 배열과 변경 이벤트 정보를 받습니다."
+    },
+    {
+      "component": "ToggleGroup",
+      "name": "loopFocus",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "방향키로 처음과 마지막 항목 사이에서 포커스를 순환합니다."
     }
   ],
   "accessibility": [
@@ -1730,6 +1774,7 @@ export const componentDocs = [
       "component": "Form",
       "name": "validationMode",
       "type": "\"onSubmit\" | \"onBlur\" | \"onChange\"",
+      "defaultValue": "\"onSubmit\"",
       "description": "검증을 실행할 시점을 선택합니다."
     }
   ],
