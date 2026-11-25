@@ -709,8 +709,7 @@ export const componentDocs = [
         component: "PaginationLink",
         name: "href",
         type: "string",
-        required: true,
-        description: "대상 페이지의 실제 URL입니다.",
+        description: "이동 가능한 페이지의 실제 URL입니다. 이동할 수 없는 이전·다음 항목에는 생략합니다.",
       },
       {
         component: "PaginationLink",
@@ -728,7 +727,7 @@ export const componentDocs = [
       },
     ],
     accessibility: [
-      "각 페이지는 실제 href가 있는 링크여야 브라우저 탐색과 새 탭 열기를 유지합니다.",
+      "각 페이지는 실제 href가 있는 링크여야 브라우저 탐색과 새 탭 열기를 유지합니다. 이동할 수 없는 이전·다음 항목은 href를 생략하고 aria-disabled와 tabIndex=-1을 지정하거나 비대화형 텍스트로 표시합니다. aria-disabled만으로는 링크 이동이 차단되지 않습니다.",
       "현재 페이지 하나에만 isActive를 지정해 aria-current=page를 설정합니다.",
       "Previous와 Next에는 기본 aria-label이 있으며 지역화가 필요하면 덮어씁니다. 매우 좁은 컨테이너에서는 생략 표시 항목을 숨겨 이동 링크가 공간을 확보합니다.",
     ],
@@ -2079,6 +2078,13 @@ export const componentDocs = [
       "type": "boolean",
       "defaultValue": "false",
       "description": "링크를 선택할 때 메뉴를 닫을지 지정합니다."
+    },
+    {
+      "component": "NavigationMenuLink",
+      "name": "active",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "현재 페이지의 링크를 선택 표면으로 표시하고 aria-current=page를 설정합니다."
     }
   ],
   "accessibility": [
@@ -2099,7 +2105,8 @@ export const componentDocs = [
       "component": "Menubar",
       "name": "orientation",
       "type": "\"horizontal\" | \"vertical\"",
-      "description": "키보드 이동 방향을 지정합니다."
+      "defaultValue": "\"horizontal\"",
+      "description": "트리거 배치와 키보드 이동 방향을 지정합니다. 가로는 좌우, 세로는 상하 방향키를 사용합니다."
     },
     {
       "component": "MenubarTrigger",

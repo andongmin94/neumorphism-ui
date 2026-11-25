@@ -37,6 +37,27 @@ for (const direction of ["ltr", "rtl"]) {
   });
 }
 
+test("runtime regressions: Menubar orientation matches visual layout and keyboard navigation", async ({ page }) => {
+  for (const orientation of ["horizontal", "vertical"] as const) {
+    await page.goto(`/audit-polish.html?mode=light&menubar&orientation=${orientation}`);
+    const menu = page.getByRole("menubar");
+    const file = menu.getByRole("menuitem", { name: "File", exact: true });
+    const view = menu.getByRole("menuitem", { name: "View", exact: true });
+    await expect(menu).toHaveAttribute("aria-orientation", orientation);
+    await expect(menu).toHaveCSS("flex-direction", orientation === "vertical" ? "column" : "row");
+    const fileBox = (await file.boundingBox())!;
+    const viewBox = (await view.boundingBox())!;
+    if (orientation === "vertical") {
+      expect(viewBox.y).toBeGreaterThanOrEqual(fileBox.y + fileBox.height);
+    } else {
+      expect(viewBox.x).toBeGreaterThanOrEqual(fileBox.x + fileBox.width);
+    }
+    await file.focus();
+    await file.press(orientation === "vertical" ? "ArrowDown" : "ArrowRight");
+    await expect(view).toBeFocused();
+  }
+});
+
 test("runtime regressions: release summaries distinguish zero activity from zero update share", async ({ page }) => {
   for (const { query, total, share, cells } of [
     { query: "zero-release", total: "0", share: "—", cells: ["R0", "0", "0", "—"] },

@@ -150,8 +150,8 @@ export const componentDocCopyJa = defineComponentDocCopy({
     ],
   },
 "chart": {"summary":"レスポンシブなチャート表面、ツールチップと正確なデータ表。","description":"Rechartsの軸と系列を直接組み合わせます。データは平面的に読みやすくし、周囲の表面に深度を付けます。","props":["読みやすいタイトルと説明。","同じ元データの表と開閉ラベル。","記録がない場合の表示。","レスポンシブコンテナに描画するRechartsチャート。","プロット上の要約とタイトル横の操作要素。","既定のニューモーフィズムスタイルを適用し、Rechartsオプションを渡します。アニメーションは既定で無効です。","既定の凡例に基準線の項目を追加します。","既定の凡例をカスタムレンダラーで置き換えます。基準線の項目もカスタムレンダラーが描画します。"],"accessibility":["accessibilityLayer、線の形、ラベル、元データの表を併用してください。","例ではアニメーションを無効にします。独自の系列のモーションはアプリで管理します。"]},
-"navigation-menu": {"summary":"リンクとポップアップによるキーボード対応のサイトナビゲーション。","description":"Base UIの動作を保ち、開いた状態を inset で表します。ルート内に NavigationMenuViewport を一つ配置します。","props":["value で開いている項目の値を制御し、defaultValue で初期値を指定します。null でメニューが閉じます。","開いている項目の値と eventDetails を受け取ります。メニューが閉じると値は null です。","renderでフレームワークのリンクを使います。","ポップアップの方向、配置、トリガーとの間隔（px）を指定します。sideOffset 関数は anchor・positioner の width と height、side、align を受け取り、間隔を返します。","配置軸のオフセット（px）です。関数は sideOffset と同じ位置計算データを受け取ります。","リンクを選択したときにメニューを閉じます。"],"accessibility":["移動先には実際のhrefを使い、navに名前を付けてください。","Tab、方向キー、Escapeとフォーカス表示を確認してください。"]},
-"menubar": {"summary":"方向キーで移動するアプリケーションのコマンドメニュー。","description":"Menubarがフォーカス移動を担当し、既存のDropdown Menu部品がポップアップを担当します。","props":["キーボード移動の方向。","トリガーを無効にします。","チェック項目の制御状態。"],"accessibility":["ページ移動ではなくコマンドに使用し、menubarに名前を付けます。","方向キーでメニューを移動します。無効な項目は実行できません。"]},
+"navigation-menu": {"summary":"リンクとポップアップによるキーボード対応のサイトナビゲーション。","description":"Base UIの動作を保ち、開いた状態を inset で表します。ルート内に NavigationMenuViewport を一つ配置します。","props":["value で開いている項目の値を制御し、defaultValue で初期値を指定します。null でメニューが閉じます。","開いている項目の値と eventDetails を受け取ります。メニューが閉じると値は null です。","renderでフレームワークのリンクを使います。","ポップアップの方向、配置、トリガーとの間隔（px）を指定します。sideOffset 関数は anchor・positioner の width と height、side、align を受け取り、間隔を返します。","配置軸のオフセット（px）です。関数は sideOffset と同じ位置計算データを受け取ります。","リンクを選択したときにメニューを閉じます。","現在のページのリンクに選択状態のスタイルと aria-current=page を設定します。"],"accessibility":["移動先には実際のhrefを使い、navに名前を付けてください。","Tab、方向キー、Escapeとフォーカス表示を確認してください。"]},
+"menubar": {"summary":"方向キーで移動するアプリケーションのコマンドメニュー。","description":"Menubarがフォーカス移動を担当し、既存のDropdown Menu部品がポップアップを担当します。","props":["トリガーの配置とキーボード移動の方向を指定します。水平では左右キー、垂直では上下キーを使います。","トリガーを無効にします。","チェック項目の制御状態。"],"accessibility":["ページ移動ではなくコマンドに使用し、menubarに名前を付けます。","方向キーでメニューを移動します。無効な項目は実行できません。"]},
   accordion: {
     summary:
       "1つずつ、または複数のセクションを同時に展開できるディスクロージャーグループ。",
@@ -392,12 +392,12 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "nav、ul、li、anchor の semantics を維持する組み合わせ可能な pagination です。active page、previous／next link、省略範囲の indicator を提供します。",
     props: [
       "pagination navigation 領域のアクセシブルな名前です。",
-      "移動先ページの実際の URL です。",
+      "移動可能なページの実際の URL です。移動できない前後の項目では省略します。",
       "現在のページ用スタイルと aria-current=page を適用します。",
       "既定のナビゲーションラベルを置き換えます。狭いコンテナではテキストを視覚的に隠し、方向アイコンを残します。",
     ],
     accessibility: [
-      "ブラウザーのナビゲーションや新しい tab で開く動作を維持するため、各ページには実際の href を持つ link を使用してください。",
+      "各ページには実際の href を持つリンクを使用してください。移動できない前後の項目は href を省略し、aria-disabled と tabIndex=-1 を指定するか、操作できないテキストで表示します。aria-disabled だけではリンクの移動を防げません。",
       "現在のページ1つだけに isActive を設定し、aria-current=page を適用してください。",
       "Previous と Next には既定の aria-label があります。ローカライズが必要な場合は上書きしてください。非常に狭いコンテナでは省略表示の項目を隠し、移動リンクのためのスペースを確保します。",
     ],

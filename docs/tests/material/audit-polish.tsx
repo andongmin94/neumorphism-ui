@@ -9,6 +9,7 @@ import { DeliveryCapacityChart } from "../../src/registry/components/blocks/deli
 import { InstallDiagnosticsChart } from "../../src/registry/components/blocks/install-diagnostics-chart";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Marquee } from "@/components/ui/marquee";
+import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem } from "@/components/ui/menubar";
 import { buildThemeVariables, defaultThemeSettings } from "../../src/registry/theme";
 import "./styles.css";
 
@@ -48,6 +49,12 @@ function Specimen() {
     document.documentElement.classList.toggle("dark", mode === "dark");
     document.documentElement.lang = locale;
   }, [mode, locale]);
+  if (params.has("menubar")) return <main className="mx-auto max-w-xl p-5">
+    <Menubar orientation={params.get("orientation") === "vertical" ? "vertical" : "horizontal"}>
+      <MenubarMenu><MenubarTrigger>File</MenubarTrigger><MenubarContent><MenubarItem>New file</MenubarItem></MenubarContent></MenubarMenu>
+      <MenubarMenu><MenubarTrigger>View</MenubarTrigger><MenubarContent><MenubarItem>Refresh view</MenubarItem></MenubarContent></MenubarMenu>
+    </Menubar>
+  </main>;
   if (params.has("legend")) return <main className="mx-auto max-w-xl p-5"><LegendCustomization /></main>;
   if (params.has("marquee")) return <main dir={params.get("direction") === "rtl" ? "rtl" : "ltr"} className="mx-auto max-w-xl p-5">
     <Marquee label="Supported technologies" items={["Accessible", "Composable", "Local source"]} />
