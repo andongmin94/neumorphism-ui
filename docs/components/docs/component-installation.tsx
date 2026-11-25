@@ -267,7 +267,7 @@ export function ComponentInstallation({ slug, command }: { slug: string; command
                   </div>
                   <div className="component-source-file">
                     <div className="component-source-file-heading">
-                      <span>app/globals.css</span>
+                      <span>components.json: tailwind.css</span>
                       <small>{dependency.name}.json / cssVars + css</small>
                     </div>
                     <DynamicCode lang="css"

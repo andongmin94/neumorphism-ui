@@ -193,17 +193,17 @@ const ko = {
     manualIntro:
       "아직 설정하지 않은 단계만 순서대로 적용하세요. 이미 설치한 공통 스타일, 테마와 직접 수정한 유틸리티는 유지하세요.",
     packages: "외부 패키지",
-    packagesBody: "컴포넌트가 직접 사용하는 외부 패키지를 먼저 설치합니다.",
+    packagesBody: "공통 base, 컴포넌트 및 Registry 의존성에 필요한 외부 패키지 중 아직 없는 것을 설치합니다.",
     noPackages: "추가 npm 패키지가 필요하지 않습니다.",
     baseTokens: "Base 토큰",
-    baseTokensBody: "공통 스타일을 처음 설정할 때만 아래 Air 토큰과 utility layer를 globals.css에 병합하세요. base나 사용자 테마를 이미 적용했다면 이 단계를 건너뛰어 기존 테마를 유지하세요.",
+    baseTokensBody: "공통 스타일을 처음 설정할 때만 components.json의 tailwind.css에 지정된 전역 CSS 파일(예: Next.js의 app/globals.css 또는 Vite의 src/index.css)에 아래 Air 토큰과 utility layer를 병합하세요. base나 사용자 테마를 이미 적용했다면 이 단계를 건너뛰어 기존 테마를 유지하세요.",
     fontStyles: "폰트 스타일시트",
     fontStylesBody: "Next.js의 app/layout.tsx 또는 src/app/layout.tsx, Vite의 src/main.tsx에서 아래 CSS를 한 번 가져옵니다.",
     localDependencies: "로컬 의존성",
     localDependenciesBody: "Registry 컴포넌트가 공유하는 로컬 의존성입니다.",
     componentSource: "컴포넌트 소스",
     componentSourceBody:
-      "마지막으로 컴포넌트 소스를 UI 디렉터리에 저장합니다.",
+      "각 파일을 표시된 설치 경로에 저장합니다. 경로는 기본 @/ 별칭 기준이며, 다른 별칭을 사용하는 프로젝트에서는 경로와 import를 함께 맞춥니다.",
     loading: "Registry에서 현재 소스를 불러오는 중입니다…",
   },
   themeStudio: {
@@ -468,11 +468,11 @@ const en: Messages = {
     manualIntro:
       "Follow only the steps you have not already completed. Keep your installed shared styles, selected theme and customized utilities.",
     packages: "External packages",
-    packagesBody: "Install packages used directly by the component first.",
+    packagesBody: "Install the missing packages required by the shared base, the component and its registry dependencies.",
     noPackages: "No additional npm packages are required.",
     baseTokens: "Base tokens",
     baseTokensBody:
-      "Merge these Air tokens and utility layers into globals.css only when setting up the shared styles for the first time. Skip this step if you already have the base or a custom theme, so your current theme stays intact.",
+      "Only when setting up shared styles for the first time, merge these Air tokens and utility layers into the global stylesheet specified by tailwind.css in components.json (for example, app/globals.css in Next.js or src/index.css in Vite). Skip this step if you already have the base or a custom theme, so your current theme stays intact.",
     fontStyles: "Font stylesheet",
     fontStylesBody: "Import this CSS once in app/layout.tsx or src/app/layout.tsx for Next.js, or src/main.tsx for Vite.",
     localDependencies: "Local dependencies",
@@ -480,7 +480,7 @@ const en: Messages = {
       "Local dependencies shared by Registry components.",
     componentSource: "Component source",
     componentSourceBody:
-      "Finally, save the component source in your UI directory.",
+      "Save each file at its displayed target. Paths assume the default @/ alias; if your project uses different aliases, adapt both file paths and imports.",
     loading: "Loading the current source from the Registry…",
   },
   themeStudio: {
@@ -725,16 +725,16 @@ const zh: Messages = {
     manualIntro:
       "请按顺序完成尚未配置的步骤。保留已安装的共享样式、所选主题和自定义工具函数。",
     packages: "外部包",
-    packagesBody: "先安装组件直接使用的外部包。",
+    packagesBody: "安装共享 base、组件及 Registry 依赖所需的尚未安装的外部包。",
     noPackages: "无需额外 npm 包。",
     baseTokens: "Base token",
-    baseTokensBody: "仅在首次配置共享样式时，将这些 Air token 和 utility layer 合并到 globals.css。若已安装 base 或自定义主题，请跳过此步骤以保留当前主题。",
+    baseTokensBody: "仅在首次配置共享样式时，将这些 Air token 和 utility layer 合并到 components.json 中 tailwind.css 指定的全局样式表（例如 Next.js 的 app/globals.css 或 Vite 的 src/index.css）。若已安装 base 或自定义主题，请跳过此步骤以保留当前主题。",
     fontStyles: "字体样式表",
     fontStylesBody: "在 Next.js 的 app/layout.tsx 或 src/app/layout.tsx，或 Vite 的 src/main.tsx 中导入一次此 CSS。",
     localDependencies: "本地依赖",
     localDependenciesBody: "Registry 组件共享的本地依赖。",
     componentSource: "组件源码",
-    componentSourceBody: "最后将组件源码保存到 UI 目录。",
+    componentSourceBody: "将每个文件保存到显示的安装路径。路径以默认 @/ 别名为准；如果使用其他别名，请同时调整文件路径与 import。",
     loading: "正在从 Registry 加载当前源码…",
   },
   themeStudio: {
@@ -990,18 +990,18 @@ const ja: Messages = {
       "まだ設定していない手順だけを順番に適用してください。導入済みの共有スタイル、選択したテーマ、カスタマイズしたユーティリティは維持してください。",
     packages: "外部パッケージ",
     packagesBody:
-      "コンポーネントが直接使用する外部パッケージを先に導入します。",
+      "共有 base、コンポーネント、Registry の依存関係に必要な未導入の外部パッケージをインストールします。",
     noPackages: "追加の npm パッケージは不要です。",
     baseTokens: "Base token",
     baseTokensBody:
-      "共有スタイルを初めて設定する場合にだけ、この Air token と utility layer を globals.css に統合してください。base またはカスタムテーマを導入済みなら、この手順を省略して現在のテーマを維持してください。",
+      "共有スタイルを初めて設定する場合にだけ、この Air token と utility layer を components.json の tailwind.css で指定したグローバルスタイルシート（例：Next.js の app/globals.css または Vite の src/index.css）に統合してください。base またはカスタムテーマを導入済みなら、この手順を省略して現在のテーマを維持してください。",
     fontStyles: "フォントスタイルシート",
     fontStylesBody: "Next.js の app/layout.tsx または src/app/layout.tsx、Vite の src/main.tsx でこの CSS を一度読み込みます。",
     localDependencies: "ローカル依存関係",
     localDependenciesBody: "Registry コンポーネントが共有するローカル依存関係です。",
     componentSource: "コンポーネントソース",
     componentSourceBody:
-      "最後にコンポーネントソースを UI ディレクトリへ保存します。",
+      "各ファイルを表示されたインストール先に保存します。パスは既定の @/ エイリアスを前提としています。異なるエイリアスを使う場合は、ファイルのパスと import の両方を調整してください。",
     loading: "Registry から現在のソースを読み込んでいます…",
   },
   themeStudio: {

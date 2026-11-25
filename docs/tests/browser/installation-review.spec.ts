@@ -72,6 +72,12 @@ for (const locale of ["ko", "en", "ja", "zh"]) {
     await expect(installation.locator(".component-manual-meta")).toBeVisible();
     await expect(installation.getByRole("group").filter({ hasText: 'import "pretendard/dist/web/variable/pretendardvariable.css";' })).toBeVisible();
     await expect(installation.locator(".component-manual-step").filter({ hasText: "src/app/layout.tsx" })).toContainText("src/main.tsx");
+    const baseTokens = installation.locator(".component-manual-step").filter({
+      has: page.locator(".component-source-file-heading > span", { hasText: /^components\.json: tailwind\.css$/ }),
+    });
+    await expect(baseTokens).toBeVisible();
+    await expect(baseTokens).toContainText("src/index.css");
+    await expect(baseTokens).toContainText("app/globals.css");
   });
 }
 
