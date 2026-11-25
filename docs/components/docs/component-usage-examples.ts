@@ -145,7 +145,7 @@ export default function Example() {
     <ChartContainer title="Daily visits" description="Visits by day." tableLabel="View data"
       table={<table><caption>Daily visits</caption><thead><tr><th scope="col">Day</th><th scope="col">Visits</th></tr></thead><tbody>{data.map(row => <tr key={row.day}><th scope="row">{row.day}</th><td>{row.visits}</td></tr>)}</tbody></table>}>
       <BarChart data={data} accessibilityLayer>
-        <XAxis dataKey="day" />
+        <XAxis dataKey="day" tick={{ fill: "var(--muted-foreground)" }} />
         <ChartTooltip />
         <Bar dataKey="visits" name="Visits" fill="var(--primary)" />
       </BarChart>

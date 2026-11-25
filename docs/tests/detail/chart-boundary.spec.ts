@@ -41,6 +41,7 @@ for (const entry of pages) {
     const plot = page.locator('[data-slot="chart-plot"]').first();
     const surface = plot.locator("svg.recharts-surface");
     await expect(surface).toBeVisible();
+    await expect(surface.locator(".recharts-cartesian-axis-tick-value").first()).toHaveAttribute("fill", "var(--muted-foreground)");
     for (const width of [page.viewportSize()!.width, 320, 820]) {
       await page.setViewportSize({ width, height: 1000 });
       await expect.poll(async () => {

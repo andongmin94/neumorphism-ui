@@ -146,6 +146,11 @@ test('link hub documentation filters destinations', async ({ page }) => {
 
 test('settings documentation exercises failed save and retry', async ({ page }) => {
   await page.goto('/en/templates/settings'); const preview = page.locator('[data-template="settings"]');
+  const updates = preview.getByRole('switch', { name: 'Project updates', exact: true });
+  await expect(updates).toBeEnabled();
+  await expect(updates).toBeChecked();
+  await preview.getByText('Project updates', { exact: true }).click();
+  await expect(updates).not.toBeChecked();
   const input = preview.getByRole('textbox', { name: 'Display name', exact: true }); await input.fill('Preview User');
   await preview.getByRole('checkbox', { name: 'Fail the next save', exact: true }).check();
   await preview.getByRole('button', { name: 'Save changes', exact: true }).click(); await expect(preview.getByRole('alert')).toBeVisible();

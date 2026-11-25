@@ -78,8 +78,8 @@ test("global search keeps one icon after source Command anatomy changes", async 
   const input = dialog.locator("[data-slot=command-input]");
   await expect(input).toBeVisible();
   await input.fill("slider");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("Enter");
+  await expect(dialog.getByRole("option", { selected: true })).toHaveAttribute("data-href", "/en/components/slider");
+  await input.press("Enter");
   await expect(page).toHaveURL(/\/en\/components\/slider/);
 });
 

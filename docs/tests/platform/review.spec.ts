@@ -109,6 +109,16 @@ test("keyboard operation, visible focus, and overlay focus recovery", async ({ p
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
+
+  await page.goto("/en/components/context-menu");
+  await expect(page.locator("#preview .component-example")).toHaveAttribute("aria-busy", "false");
+  const contextTrigger = page.locator('#preview [data-slot="context-menu-trigger"]');
+  await contextTrigger.press("Shift+F10");
+  const contextMenu = page.getByRole("menu");
+  await expect(contextMenu).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(contextMenu).toBeHidden();
+  await expect(contextTrigger).toBeFocused();
 });
 
 test("reduced motion, responsive reflow, and forced colors", async ({ page }, info) => {
