@@ -109,13 +109,6 @@ Aggregate installation remains a separate signal from the independent-item matri
 
 ## Release requirements
 
-Bundled `react-remove-scroll-bar@2.3.8` declares MIT and lists Anton Korzunov as
-author in its published package metadata. Its source is
-`https://github.com/theKashey/react-remove-scroll-bar`. The installed package has
-no LICENSE file, and its recorded npm `gitHead` could not be resolved during the
-notice review. The original copyright and license text for that version remain
-unverified; these metadata observations do not establish legal verification.
-
 Run the full dependency audit for both registry and docs, including development
 tools. The blocking CI gate must retain failures at the configured severity.
 Use audit artifacts for the exact source commit as evidence; historical results
@@ -141,7 +134,7 @@ the same source and design. Preview loading failures offer a localized page relo
 action, and the emitted initial-asset budget guards simple pages against unrelated
 preview dependencies.
 
-Before shadcn directory submission, also verify the live domain/deployed commit and full README initialization path. Directory metadata and individual-item installation coverage are now source-controlled and automated. License/attribution remains a separate legal release gate and must not be invented from repository ownership.
+Before shadcn directory submission, also verify the live domain/deployed commit and full README initialization path. Directory metadata and individual-item installation coverage are now source-controlled and automated.
 
 Next product work should focus on broad state/accessibility review and any remaining
 high-value components/templates revealed by real application composition. Review

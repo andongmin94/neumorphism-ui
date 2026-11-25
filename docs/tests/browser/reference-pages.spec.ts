@@ -33,5 +33,4 @@ test("registry architecture documents generated ownership", async ({ page }) => 
 test("verification page names the independent installation gate", async ({ page }) => {
   await page.goto("/en/docs/verification");
   await expect(page.getByText("The independent matrix derives every file-bearing item from the built catalog.", { exact: true })).toBeVisible();
-  await expect(page.getByText("License and attribution are a separate legal release gate; they are not inferred from repository ownership.", { exact: true })).toBeVisible();
 });

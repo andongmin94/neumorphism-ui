@@ -57,7 +57,7 @@ export const referenceDocCopy = {
       default: ["Pushes to main, pull requests and manual runs without comprehensive enabled check registry lint/build/contracts, documentation lint/types/build and clean generation.", "Documentation interactions run in desktop-light and mobile-dark Chromium. Representative Vite and Next.js consumers run with consumer:verify --smoke.", "High or critical dependency audit findings block CI, including findings in development tools."],
       comprehensive: ["Run the full consumer checks and independent-item checks locally before broad releases, or manually run Verify with comprehensive enabled.", "The independent matrix derives every file-bearing item from the built catalog.", "Templates build in fresh Next.js projects; other items build independently in both Next.js and Vite.", "The manual workflow shards the independent matrix across three jobs and adds Firefox/WebKit consumer checks and the detail/material presentation suites."],
       deployed: ["The Published registry workflow waits until build-info.json matches the triggering main commit.", "Only three Chromium smoke scenarios and three representative registry endpoints are checked against the deployed site. Full installation and browser matrices run locally or in the manual comprehensive workflow.", "Failure evidence is retained in CI artifacts; local browser evidence is written under docs/test-results."],
-      release: ["A passing local or CI build does not claim shadcn directory approval or deployed-domain equivalence.", "Live-domain verification must match the exact deployed commit and public registry endpoints.", "License and attribution are a separate legal release gate; they are not inferred from repository ownership."],
+      release: ["A passing local or CI build does not claim shadcn directory approval or deployed-domain equivalence.", "Live-domain verification must match the exact deployed commit and public registry endpoints."],
     },
     credits: {
       ...referenceSearchCopy.en["credits"],
@@ -111,7 +111,7 @@ export const referenceDocCopy = {
       default: ["main 푸시, 풀 리퀘스트와 comprehensive를 켜지 않은 수동 실행은 레지스트리 린트·빌드·규칙 검사, 문서 린트·타입·빌드와 생성 일치를 확인합니다.", "문서 상호작용은 Chromium의 데스크톱 라이트·모바일 다크에서 검사합니다. 대표 Vite·Next.js 소비자 설치는 consumer:verify --smoke로 검사합니다.", "개발 도구를 포함한 의존성 감사에서 높음 또는 심각 수준의 취약점이 발견되면 CI를 차단합니다."],
       comprehensive: ["넓은 범위의 릴리스 전에는 전체 소비자·독립 항목 검사를 로컬에서 실행하거나 Verify 워크플로를 comprehensive 옵션으로 수동 실행합니다.", "독립 설치 대상은 빌드된 목록에서 파일을 포함하는 모든 항목으로 정합니다.", "템플릿은 새 Next.js 프로젝트에서, 나머지 항목은 Next.js와 Vite에서 각각 독립 빌드합니다.", "수동 워크플로는 독립 설치 대상을 세 작업으로 나누고 Firefox·WebKit 소비자 검사와 detail·material 화면 검사를 추가합니다."],
       deployed: ["Published registry 워크플로는 build-info.json이 실행을 유발한 main 커밋과 일치할 때까지 기다립니다.", "배포 사이트에서는 Chromium 핵심 시나리오 세 개와 대표 레지스트리 엔드포인트 세 개만 검사합니다. 전체 설치·브라우저 조합은 로컬 또는 수동 전체 검증에서 실행합니다.", "실패 근거는 CI 아티팩트에 보관하며 로컬 브라우저 근거는 docs/test-results에 기록합니다."],
-      release: ["로컬이나 CI 빌드가 통과해도 shadcn 디렉터리 승인이나 실제 배포 도메인과의 동등성을 뜻하지 않습니다.", "실제 도메인 검사는 정확한 배포 커밋과 공개 레지스트리 엔드포인트가 일치해야 합니다.", "라이선스와 출처 표시는 별도 릴리스 조건이며 저장소 소유권만으로 충족됐다고 판단하지 않습니다."],
+      release: ["로컬이나 CI 빌드가 통과해도 shadcn 디렉터리 승인이나 실제 배포 도메인과의 동등성을 뜻하지 않습니다.", "실제 도메인 검사는 정확한 배포 커밋과 공개 레지스트리 엔드포인트가 일치해야 합니다."],
     },
     credits: {
       ...referenceSearchCopy.ko["credits"],
@@ -165,7 +165,7 @@ export const referenceDocCopy = {
       default: ["mainへのプッシュ、プルリクエストとcomprehensiveを有効にしない手動実行では、レジストリのリント・ビルド・規則、文書のリント・型・ビルドと生成一致を確認します。", "文書操作はデスクトップのライト・モバイルのダーク表示でChromiumを使って検査します。代表的なVite・Next.jsの利用側検査にはconsumer:verify --smokeを使います。", "開発ツールを含む依存関係監査で高または重大な脆弱性が見つかるとCIをブロックします。"],
       comprehensive: ["広範なリリース前には利用側・独立項目の全検査をローカルで実行するか、Verifyをcomprehensiveオプションで手動実行します。", "独立インストールの対象はビルドされた一覧の、ファイルを持つ全項目です。", "テンプレートは新しいNext.jsプロジェクトで、その他の項目はNext.jsとViteで独立してビルドします。", "手動ワークフローは独立インストールを三つのジョブに分割し、Firefox・WebKitの利用側検査とdetail・materialの画面検査を追加します。"],
       deployed: ["Published registryはbuild-info.jsonが起動元のmainコミットと一致するまで待機します。", "公開サイトではChromiumの主要シナリオ三つと代表的なレジストリエンドポイント三つだけを検査します。全インストール・ブラウザ検査はローカルまたは手動の包括的検証で行います。", "失敗の根拠はCIのアーティファクトに保存し、ローカルのブラウザ検査結果はdocs/test-resultsに記録します。"],
-      release: ["ローカルまたはCIのビルド成功は、shadcnディレクトリの承認や公開ドメインとの同等性を意味しません。", "公開ドメインの検査は正確なデプロイコミットと公開レジストリエンドポイントが一致する必要があります。", "ライセンスと出典表示は別のリリース条件であり、リポジトリの所有権から推測しません。"],
+      release: ["ローカルまたはCIのビルド成功は、shadcnディレクトリの承認や公開ドメインとの同等性を意味しません。", "公開ドメインの検査は正確なデプロイコミットと公開レジストリエンドポイントが一致する必要があります。"],
     },
     credits: {
       ...referenceSearchCopy.ja["credits"],
@@ -219,7 +219,7 @@ export const referenceDocCopy = {
       default: ["main推送、拉取请求和未开启comprehensive的手动运行会检查注册表代码规范、构建与规则，文档代码规范、类型与构建，以及生成一致性。", "文档交互使用Chromium的桌面明亮与移动深色模式检查。代表性的Vite与Next.js使用方安装通过consumer:verify --smoke检查。", "依赖审计若发现高危或严重漏洞会阻止CI通过，包括开发工具中的漏洞。"],
       comprehensive: ["广泛发布前，请在本地执行完整使用方与独立条目检查，或手动运行Verify并开启comprehensive。", "独立安装矩阵从已构建目录中选取所有含文件条目。", "模板在全新Next.js项目中构建，其他条目在Next.js与Vite中分别独立构建。", "手动工作流将独立安装矩阵分成三个任务，并增加Firefox、WebKit使用方检查和detail、material界面检查。"],
       deployed: ["Published registry工作流会等待build-info.json与触发运行的main提交一致。", "已部署站点只检查三个Chromium核心场景与三个代表性注册表端点。完整安装与浏览器矩阵在本地或手动完整验证中运行。", "失败依据保存在CI产物中，本地浏览器检查依据写入docs/test-results。"],
-      release: ["本地或CI构建通过，不代表shadcn目录批准或与已部署域名等价。", "实际域名检查必须匹配准确的部署提交与公开注册表端点。", "许可证与来源标注是独立发布条件，不能从仓库所有权推断已经满足。"],
+      release: ["本地或CI构建通过，不代表shadcn目录批准或与已部署域名等价。", "实际域名检查必须匹配准确的部署提交与公开注册表端点。"],
     },
     credits: {
       ...referenceSearchCopy.zh["credits"],
