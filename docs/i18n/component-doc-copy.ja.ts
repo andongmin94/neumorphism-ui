@@ -580,6 +580,7 @@ export const componentDocCopyJa = defineComponentDocCopy({
       "TabsList には aria-label または aria-labelledby で tab group の名前を指定してください。",
       "Base UI が tab、tablist、tabpanel role と、aria-controls および aria-selected の関連付けを管理します。",
       "panel を即時に切り替えられる場合にのみ、TabsList の activateOnFocus を使用してください。",
+      "水平のリストはタブが収まらない場合にスクロールできます。リストより長いラベルは折り返し、フォーカスされたタブ全体を表示します。",
     ],
   },
   textarea: {

@@ -580,6 +580,7 @@ export const componentDocCopyEn = defineComponentDocCopy({
       "Name the tab group on TabsList with aria-label or aria-labelledby.",
       "Base UI manages tab, tablist, and tabpanel roles and the aria-controls and aria-selected relationships.",
       "Use activateOnFocus on TabsList only when panel switching is immediate.",
+      "Horizontal lists scroll when tabs exceed their available width. Individual labels wider than the list wrap so the focused tab stays fully visible.",
     ],
   },
   textarea: {

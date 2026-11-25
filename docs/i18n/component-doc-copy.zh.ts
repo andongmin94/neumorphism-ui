@@ -556,6 +556,7 @@ export const componentDocCopyZh = defineComponentDocCopy({
       "通过 aria-label 或 aria-labelledby 为 TabsList 提供 tab 组合名称。",
       "Base UI 负责 tab、tablist、tabpanel role 以及 aria-controls、aria-selected 关联。",
       "仅当 panel 可以立即切换时，才使用 TabsList 的 activateOnFocus。",
+      "横向列表在选项卡超出可用宽度时滚动。宽于列表的单个标签会换行，使获得焦点的选项卡完整可见。",
     ],
   },
   textarea: {

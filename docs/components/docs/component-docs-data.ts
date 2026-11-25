@@ -1229,6 +1229,7 @@ export const componentDocs = [
       "TabsList에 aria-label 또는 aria-labelledby로 tab 묶음의 이름을 제공합니다.",
       "Base UI가 tab, tablist, tabpanel 역할과 aria-controls, aria-selected 연결을 관리합니다.",
       "panel 전환이 즉시 가능할 때만 TabsList의 activateOnFocus를 사용합니다.",
+      "가로 목록은 탭을 모두 표시할 공간이 없으면 스크롤됩니다. 목록보다 긴 개별 탭 라벨은 줄바꿈되어 포커스된 탭 전체를 볼 수 있습니다.",
     ],
   },
   {
